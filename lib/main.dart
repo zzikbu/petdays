@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const Scaffold(
+        resizeToAvoidBottomInset: false,
         body: SignUpNicknamePage(),
       ),
     );

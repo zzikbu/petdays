@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/pallete.dart';
+import 'package:pet_log/sign_up/sing_up_pet_info_page.dart';
 
 class SignUpNicknamePage extends StatefulWidget {
   const SignUpNicknamePage({super.key});
@@ -35,92 +36,107 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Pallete.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Pallete.white,
       ),
-      resizeToAvoidBottomInset: false,
-      body: Stack(
+      body: Column(
         children: [
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StepProgressIndicator(
-                    totalSteps: 3,
-                    currentStep: 1,
-                    selectedColor: Pallete.black,
-                    unselectedColor: Pallete.lightGray,
-                  ),
-                  SizedBox(height: 30),
-                  Text(
-                    '닉네임을 입력해주세요',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 24,
-                      color: Pallete.black,
-                      letterSpacing: -0.6,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    '최대 여섯글자까지 입력가능합니다.',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
-                      color: Pallete.mediumGray,
-                      letterSpacing: -0.6,
-                    ),
-                  ),
-                  SizedBox(height: 80),
-                  TextField(
-                    controller: _nicknameController,
-                    maxLength: 6, // 최대 글자 수를 6으로 제한
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20,
-                      letterSpacing: -0.5,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: '홍길동',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Pretendard',
-                        fontSize: 20,
-                        letterSpacing: -0.5,
-                        fontWeight: FontWeight.w500,
-                        color: Pallete.lightGray,
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Pallete.black, width: 2), // 활성화
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide:
-                            BorderSide(color: Pallete.black, width: 2), // 비활성화
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              ),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
+            ),
+            child: StepProgressIndicator(
+              totalSteps: 3,
+              currentStep: 1,
+              selectedColor: Pallete.black,
+              unselectedColor: Pallete.lightGray,
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: NextButton(
-              isActive: _isButtonActive,
-              onTap: () {
-                print("다음 버튼 눌림");
-              },
-              buttonText: "다음",
+          SizedBox(
+            height: 30,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 24,
             ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '닉네임을 입력해주세요',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                    color: Pallete.black,
+                    letterSpacing: -0.6,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '최대 여섯글자까지 입력가능합니다.',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Pallete.mediumGray,
+                    letterSpacing: -0.6,
+                  ),
+                ),
+                SizedBox(height: 80),
+                TextField(
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  controller: _nicknameController,
+                  maxLength: 6, // 최대 글자 수를 6으로 제한
+                  cursorColor: Pallete.mainGreen,
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    letterSpacing: -0.5,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: '홍길동',
+                    hintStyle: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 20,
+                      letterSpacing: -0.5,
+                      fontWeight: FontWeight.w500,
+                      color: Pallete.lightGray,
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Pallete.black,
+                        width: 2,
+                      ), // 활성화
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Pallete.black,
+                        width: 2,
+                      ), // 비활성화
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Spacer(),
+          NextButton(
+            isActive: _isButtonActive,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SingUpPetInfoPage()),
+              );
+            },
+            buttonText: "다음",
           ),
         ],
       ),
