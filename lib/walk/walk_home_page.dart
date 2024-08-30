@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_log/pallete.dart';
+import 'package:pet_log/walk/walk_detail.page.dart';
 
 class WalkHomePage extends StatelessWidget {
   const WalkHomePage({super.key});
@@ -29,140 +30,150 @@ class WalkHomePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.only(bottom: 20),
-                height: 130,
-                decoration: BoxDecoration(
-                  color: Pallete.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Pallete.subGreen.withOpacity(0.05),
-                      offset: Offset(8, 8),
-                      blurRadius: 8,
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WalkDetailPage(),
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 14),
-                    SizedBox(
-                      height: 36,
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(left: 14, right: 10),
-                        scrollDirection: Axis.horizontal, // 수평
-                        itemBuilder: (context, index) {
-                          return Container(
-                            width: 36,
-                            margin: EdgeInsets.only(right: 4),
-                            child: CircleAvatar(
-                              backgroundColor: Colors.red,
-                            ),
-                          );
-                        },
-                        itemCount: 10,
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 20),
+                  height: 130,
+                  decoration: BoxDecoration(
+                    color: Pallete.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Pallete.subGreen.withOpacity(0.05),
+                        offset: Offset(8, 8),
+                        blurRadius: 8,
                       ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 14,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "날짜",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 14),
+                      SizedBox(
+                        height: 36,
+                        child: ListView.builder(
+                          padding: EdgeInsets.only(left: 14, right: 10),
+                          scrollDirection: Axis.horizontal, // 수평
+                          itemBuilder: (context, index) {
+                            return Container(
+                              width: 36,
+                              margin: EdgeInsets.only(right: 4),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.red,
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "2024.08.16 금",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Pallete.black,
-                                letterSpacing: -0.4,
-                              ),
-                            ),
-                          ],
+                            );
+                          },
+                          itemCount: 10,
                         ),
-                        SizedBox(
-                          width: 32,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "거리",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 18,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "날짜",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Pallete.mediumGray,
+                                  letterSpacing: -0.35,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "10.2KM",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Pallete.black,
-                                letterSpacing: -0.4,
+                              SizedBox(height: 4),
+                              Text(
+                                "2024.08.16 금",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Pallete.black,
+                                  letterSpacing: -0.4,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 32,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "시간",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                            ],
+                          ),
+                          SizedBox(
+                            width: 32,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "거리",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Pallete.mediumGray,
+                                  letterSpacing: -0.35,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "114분",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Pallete.black,
-                                letterSpacing: -0.4,
+                              SizedBox(height: 4),
+                              Text(
+                                "10.2KM",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Pallete.black,
+                                  letterSpacing: -0.4,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+                            ],
+                          ),
+                          SizedBox(
+                            width: 32,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "시간",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Pallete.mediumGray,
+                                  letterSpacing: -0.35,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "114분",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  color: Pallete.black,
+                                  letterSpacing: -0.4,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
-            itemCount: 9, // 이미지 개수
+            itemCount: 9,
           ),
         ),
       ),
