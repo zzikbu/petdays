@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pet_log/walk/walk_map_page.dart';
 
 import '../components/next_button.dart';
 import '../pallete.dart';
@@ -41,7 +42,7 @@ class WalkSelectPetPage extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                     color: Pallete.mediumGray,
-                    letterSpacing: -0.6,
+                    letterSpacing: -0.4,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -92,7 +93,7 @@ class WalkSelectPetPage extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             fontSize: 20,
                             color: Pallete.black,
-                            letterSpacing: -0.6,
+                            letterSpacing: -0.5,
                           ),
                         ),
                       ],
@@ -105,9 +106,12 @@ class WalkSelectPetPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: NextButton(
-        isActive: false,
+        isActive: true,
         onTap: () {
-          print("시작하기 눌림");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WalkMapPage()),
+          );
         },
         buttonText: "시작하기",
       ),
