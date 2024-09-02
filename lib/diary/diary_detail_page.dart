@@ -11,11 +11,18 @@ class DiaryDetailPage extends StatefulWidget {
 }
 
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
-  bool _isTapped = false;
+  bool _isLike = false;
+  bool _isLock = true;
 
-  void _toggleTap() {
+  void _likeTap() {
     setState(() {
-      _isTapped = !_isTapped;
+      _isLike = !_isLike;
+    });
+  }
+
+  void _lockTap() {
+    setState(() {
+      _isLock = !_isLock;
     });
   }
 
@@ -28,8 +35,12 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
         backgroundColor: Pallete.background,
         actions: [
           GestureDetector(
-            onTap: () {},
-            child: SvgPicture.asset('assets/icons/ic_lock_big.svg'),
+            onTap: () {
+              _lockTap();
+            },
+            child: _isLock
+                ? SvgPicture.asset('assets/icons/ic_lock_big.svg')
+                : SvgPicture.asset('assets/icons/ic_unlock_big.svg'),
           ),
           SizedBox(width: 14),
           Padding(
@@ -122,12 +133,12 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               ),
               SizedBox(height: 10),
               GestureDetector(
-                onTap: _toggleTap,
+                onTap: _likeTap,
                 child: Container(
                   height: 42,
                   width: 116,
                   decoration: BoxDecoration(
-                    color: _isTapped ? Pallete.darkGray : Pallete.white,
+                    color: _isLike ? Pallete.darkGray : Pallete.white,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: Pallete.lightGray,
@@ -142,7 +153,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                         Icon(
                           Icons.pets,
                           size: 24,
-                          color: _isTapped ? Pallete.white : Pallete.lightGray,
+                          color: _isLike ? Pallete.white : Pallete.lightGray,
                         ),
                         SizedBox(width: 12),
                         Text(
@@ -151,8 +162,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
-                            color:
-                                _isTapped ? Pallete.white : Pallete.lightGray,
+                            color: _isLike ? Pallete.white : Pallete.lightGray,
                             letterSpacing: -0.5,
                           ),
                         ),
