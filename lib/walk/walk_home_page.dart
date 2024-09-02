@@ -92,7 +92,7 @@ class WalkHomePage extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                                letterSpacing: -0.4,
                               ),
                             ),
                             SizedBox(height: 4),
@@ -121,18 +121,34 @@ class WalkHomePage extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                                letterSpacing: -0.4,
                               ),
                             ),
                             SizedBox(height: 4),
-                            Text(
-                              "10.2KM",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Pallete.black,
-                                letterSpacing: -0.4,
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '10.2',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16, // 기본 폰트 크기
+                                      color: Pallete.black,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: 'KM',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12, // 작은 폰트 크기
+                                      color: Pallete.black,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -150,18 +166,34 @@ class WalkHomePage extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
                                 color: Pallete.mediumGray,
-                                letterSpacing: -0.35,
+                                letterSpacing: -0.4,
                               ),
                             ),
                             SizedBox(height: 4),
-                            Text(
-                              "114분",
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                color: Pallete.black,
-                                letterSpacing: -0.4,
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '114',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      color: Pallete.black,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '분',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 12,
+                                      color: Pallete.black,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
