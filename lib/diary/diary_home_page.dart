@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/pallete.dart';
 
 class DiaryHomePage extends StatelessWidget {
@@ -39,10 +40,10 @@ class DiaryHomePage extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => WalkDetailPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DiaryDetailPage()),
+                );
               },
               child: Stack(
                 children: [
@@ -53,9 +54,8 @@ class DiaryHomePage extends StatelessWidget {
                       color: Pallete.mainGreen,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Pallete.feedBoder,
+                        color: Pallete.feedBorder,
                         width: 1,
-                        style: BorderStyle.solid,
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -76,17 +76,17 @@ class DiaryHomePage extends StatelessWidget {
                         color: Pallete.white.withOpacity(0.94),
                         border: Border(
                           left: BorderSide(
-                            color: Pallete.feedBoder,
+                            color: Pallete.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
                           right: BorderSide(
-                            color: Pallete.feedBoder,
+                            color: Pallete.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
                           bottom: BorderSide(
-                            color: Pallete.feedBoder,
+                            color: Pallete.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),

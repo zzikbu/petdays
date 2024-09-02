@@ -13,5 +13,5 @@ class Pallete {
   static const darkGray = Color(0xFF343834);
   static const mediumGray = Color(0xFF777777);
   static const lightGray = Color(0xFFD9D9D9);
-  static const feedBoder = Color(0xFFE0E0E0);
+  static const feedBorder = Color(0xFFE0E0E0);
 }
