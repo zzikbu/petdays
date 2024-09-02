@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/pallete.dart';
+import 'package:pet_log/search/search_page.dart';
 
 class DiaryHomePage extends StatelessWidget {
   const DiaryHomePage({super.key});
@@ -28,7 +29,12 @@ class DiaryHomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SearchPage()),
+                );
+              },
               child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
             ),
           ),
