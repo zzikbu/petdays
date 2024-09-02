@@ -61,8 +61,11 @@ class WalkDetailPage extends StatelessWidget {
               height: 20,
             ),
             Container(
+              decoration: BoxDecoration(
+                color: Pallete.lightGray,
+                borderRadius: BorderRadius.circular(8),
+              ),
               height: 200,
-              color: Pallete.lightGray,
             )
           ],
         ),
