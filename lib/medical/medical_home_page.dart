@@ -3,10 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/pallete.dart';
 import 'package:pet_log/search/search_page.dart';
+import 'package:pet_log/select_pet_page.dart';
 
 import 'medical_detail_page.dart';
-
-// import 'diary_write_page.dart';
 
 class MedicalHomePage extends StatelessWidget {
   const MedicalHomePage({super.key});
@@ -156,10 +155,12 @@ class MedicalHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => DiaryWritePage()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SelectPetPage(isFromMedicalPage: true),
+            ),
+          );
         },
         backgroundColor: Pallete.darkGray,
         elevation: 0, // 그림자 제거

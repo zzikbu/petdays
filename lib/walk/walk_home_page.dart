@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_log/pallete.dart';
 import 'package:pet_log/walk/walk_detail_page.dart';
-import 'package:pet_log/walk/walk_select_pet_page.dart';
+import 'package:pet_log/select_pet_page.dart';
 
 class WalkHomePage extends StatelessWidget {
   const WalkHomePage({super.key});
@@ -212,7 +212,11 @@ class WalkHomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WalkSelectPetPage()),
+            MaterialPageRoute(
+              builder: (context) => SelectPetPage(
+                isFromMedicalPage: false,
+              ),
+            ),
           );
         },
         backgroundColor: Pallete.darkGray,

@@ -1,25 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/pallete.dart';
 
 import '../components/next_button.dart';
 import '../components/textfield_with_title.dart';
 
-class DiaryWritePage extends StatefulWidget {
-  const DiaryWritePage({super.key});
-
-  @override
-  State<DiaryWritePage> createState() => _DiaryWritePageState();
-}
-
-class _DiaryWritePageState extends State<DiaryWritePage> {
-  bool _isLock = true;
-
-  void _lockTap() {
-    setState(() {
-      _isLock = !_isLock;
-    });
-  }
+class MedicalWritePage extends StatelessWidget {
+  const MedicalWritePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +15,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
         scrolledUnderElevation: 0,
         backgroundColor: Pallete.background,
         title: Text(
-          "성장일기",
+          "진료기록",
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
@@ -38,19 +24,6 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
             letterSpacing: -0.5,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                _lockTap();
-              },
-              child: _isLock
-                  ? SvgPicture.asset('assets/icons/ic_lock_big.svg')
-                  : SvgPicture.asset('assets/icons/ic_unlock_big.svg'),
-            ),
-          ),
-        ],
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
@@ -87,12 +60,27 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
               ),
               SizedBox(height: 40),
               TextFieldWithTitle(
-                labelText: '제목',
-                hintText: '제목을 입력해주세요',
+                labelText: '진료일 *',
+                hintText: '2000-08-07 형식으로 입력해주세요',
+              ),
+              SizedBox(height: 40),
+              TextFieldWithTitle(
+                labelText: '이유 *',
+                hintText: '병원에 간 이유를 입력해주세요',
+              ),
+              SizedBox(height: 40),
+              TextFieldWithTitle(
+                labelText: '병원',
+                hintText: '병원 이름을 입력해주세요',
+              ),
+              SizedBox(height: 40),
+              TextFieldWithTitle(
+                labelText: '수의사',
+                hintText: '수의사 이름을 입력해주세요',
               ),
               SizedBox(height: 40),
               Text(
-                '내용',
+                '메모',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
@@ -108,7 +96,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                   cursorColor: Pallete.subGreen,
                   maxLines: null,
                   decoration: InputDecoration(
-                    hintText: '내용을 입력해주세요',
+                    hintText: '특이사항이나 메모를 입력해주세요',
                     hintStyle: TextStyle(
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,

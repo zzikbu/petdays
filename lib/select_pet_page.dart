@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/walk/walk_map_page.dart';
 
-import '../components/next_button.dart';
-import '../pallete.dart';
+import 'components/next_button.dart';
+import 'medical/medical_write_page.dart';
+import 'pallete.dart';
 
-class WalkSelectPetPage extends StatelessWidget {
-  const WalkSelectPetPage({super.key});
+class SelectPetPage extends StatelessWidget {
+  final bool isFromMedicalPage;
+
+  const SelectPetPage({
+    super.key,
+    required this.isFromMedicalPage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +31,7 @@ class WalkSelectPetPage extends StatelessWidget {
               children: [
                 SizedBox(height: 20),
                 Text(
-                  '누구와 산책하나요?',
+                  isFromMedicalPage ? '누구와 병원에 갔나요?' : '누구와 산책하나요?',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
@@ -36,7 +42,7 @@ class WalkSelectPetPage extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '중복 선택이 가능합니다.',
+                  isFromMedicalPage ? '중복 선택이 불가능합니다.' : '중복 선택이 가능합니다.',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
@@ -87,7 +93,7 @@ class WalkSelectPetPage extends StatelessWidget {
                         ),
                         SizedBox(height: 2),
                         Text(
-                          '망고',
+                          '망고${index}',
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
@@ -110,7 +116,10 @@ class WalkSelectPetPage extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WalkMapPage()),
+            MaterialPageRoute(
+              builder: (context) =>
+                  isFromMedicalPage ? MedicalWritePage() : WalkMapPage(),
+            ),
           );
         },
         buttonText: "시작하기",
