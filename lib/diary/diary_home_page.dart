@@ -4,6 +4,8 @@ import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/pallete.dart';
 import 'package:pet_log/search/search_page.dart';
 
+import 'diary_write_page.dart';
+
 class DiaryHomePage extends StatelessWidget {
   const DiaryHomePage({super.key});
 
@@ -152,10 +154,10 @@ class DiaryHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => WalkSelectPetPage()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DiaryWritePage()),
+          );
         },
         backgroundColor: Pallete.darkGray,
         elevation: 0, // 그림자 제거

@@ -49,6 +49,8 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
             onTap: () => _showCupertinoPicker(context),
             child: AbsorbPointer(
               child: TextField(
+                autocorrect: false,
+                enableSuggestions: false,
                 controller: TextEditingController(text: widget.selectedValue),
                 decoration: InputDecoration(
                   hintText: widget.hintText,

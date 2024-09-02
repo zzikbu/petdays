@@ -58,16 +58,15 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
           child: Column(
             children: [
               SizedBox(height: 20),
-              Center(
-                child: Text(
-                  '다같이 애견카페 가서 놀은 날',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 22,
-                    color: Pallete.black,
-                    letterSpacing: -0.5,
-                  ),
+              Text(
+                '다같이 애견카페 가서 놀은 날',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 22,
+                  color: Pallete.black,
+                  letterSpacing: -0.5,
                 ),
               ),
               SizedBox(height: 20),

@@ -9,6 +9,7 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Pallete.background,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: Pallete.background,
         title: Container(
           height: 56,
@@ -24,6 +25,7 @@ class SearchPage extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 20),
               child: TextField(
+                autofocus: true,
                 autocorrect: false,
                 enableSuggestions: false,
                 cursorColor: Pallete.subGreen,
@@ -35,7 +37,7 @@ class SearchPage extends StatelessWidget {
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: '검색할 제목을 입력하세요',
+                  hintText: '검색할 제목을 입력해주세요',
                   hintStyle: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
