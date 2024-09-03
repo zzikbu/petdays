@@ -5,6 +5,7 @@ import 'package:pet_log/pallete.dart';
 import 'package:pet_log/search/search_page.dart';
 import 'package:pet_log/select_pet_page.dart';
 
+import '../dummy.dart';
 import 'medical_detail_page.dart';
 
 class MedicalHomePage extends StatelessWidget {
@@ -46,7 +47,7 @@ class MedicalHomePage extends StatelessWidget {
       body: Scrollbar(
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          itemCount: 1,
+          itemCount: dummyPets.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
@@ -61,7 +62,10 @@ class MedicalHomePage extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 20),
                     height: 220,
                     decoration: BoxDecoration(
-                      color: Pallete.mainGreen,
+                      image: DecorationImage(
+                        image: AssetImage(dummyPets[index]['image']!),
+                        fit: BoxFit.cover,
+                      ),
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: Pallete.feedBorder,

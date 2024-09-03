@@ -4,6 +4,7 @@ import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/pallete.dart';
 import 'package:pet_log/search/search_page.dart';
 
+import '../dummy.dart';
 import 'diary_write_page.dart';
 
 class DiaryHomePage extends StatelessWidget {
@@ -45,6 +46,7 @@ class DiaryHomePage extends StatelessWidget {
       body: Scrollbar(
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          itemCount: dummyPets.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
@@ -59,11 +61,15 @@ class DiaryHomePage extends StatelessWidget {
                     margin: EdgeInsets.only(bottom: 20),
                     height: 220,
                     decoration: BoxDecoration(
-                      color: Pallete.mainGreen,
+                      // color: Pallete.mainGreen,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: Pallete.feedBorder,
                         width: 1,
+                      ),
+                      image: DecorationImage(
+                        image: AssetImage(dummyPets[index]['image']!),
+                        fit: BoxFit.cover,
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -152,7 +158,6 @@ class DiaryHomePage extends StatelessWidget {
               ),
             );
           },
-          itemCount: 9,
         ),
       ),
       floatingActionButton: FloatingActionButton(

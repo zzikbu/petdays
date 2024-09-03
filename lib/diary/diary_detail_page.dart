@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../dummy.dart';
 import '../pallete.dart';
 
 class DiaryDetailPage extends StatefulWidget {
@@ -121,12 +122,17 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: 4,
+                itemCount: dummyPets.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
-                    color: Pallete.lightGray,
                     margin: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(dummyPets[index]['image']!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   );
                 },
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_log/walk/walk_map_page.dart';
 
 import 'components/next_button.dart';
+import 'dummy.dart';
 import 'medical/medical_write_page.dart';
 import 'pallete.dart';
 
@@ -65,7 +66,7 @@ class SelectPetPage extends StatelessWidget {
                   mainAxisSpacing: 14,
                   mainAxisExtent: 150, // 높이
                 ),
-                itemCount: 10,
+                itemCount: dummyPets.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 30,
@@ -87,13 +88,20 @@ class SelectPetPage extends StatelessWidget {
                     child: Column(
                       children: [
                         SizedBox(height: 10),
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Pallete.lightGray,
+                        Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: AssetImage(dummyPets[index]['image']!),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                         SizedBox(height: 2),
                         Text(
-                          '망고${index}',
+                          dummyPets[index]['name']!,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,

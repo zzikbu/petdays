@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/pallete.dart';
 
 import '../components/info_column.dart';
+import '../dummy.dart';
 
 class MedicalDetailPage extends StatelessWidget {
   const MedicalDetailPage({super.key});
@@ -67,12 +68,17 @@ class MedicalDetailPage extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: 3,
+                itemCount: dummyPets.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
-                    color: Pallete.lightGray,
                     margin: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(dummyPets[index]['image']!),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   );
                 },
               ),

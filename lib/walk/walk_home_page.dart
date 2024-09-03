@@ -4,6 +4,8 @@ import 'package:pet_log/pallete.dart';
 import 'package:pet_log/walk/walk_detail_page.dart';
 import 'package:pet_log/select_pet_page.dart';
 
+import '../dummy.dart';
+
 class WalkHomePage extends StatelessWidget {
   const WalkHomePage({super.key});
 
@@ -62,16 +64,21 @@ class WalkHomePage extends StatelessWidget {
                       child: ListView.builder(
                         padding: EdgeInsets.only(left: 14, right: 10),
                         scrollDirection: Axis.horizontal, // 수평
+                        itemCount: dummyPets.length,
                         itemBuilder: (context, index) {
                           return Container(
                             width: 36,
+                            height: 36,
                             margin: EdgeInsets.only(right: 4),
-                            child: CircleAvatar(
-                              backgroundColor: Pallete.lightGray,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: AssetImage(dummyPets[index]['image']!),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           );
                         },
-                        itemCount: 10,
                       ),
                     ),
                     SizedBox(
