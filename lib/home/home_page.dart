@@ -4,6 +4,7 @@ import 'package:pet_log/components/home_section_header.dart';
 import 'package:pet_log/medical/medical_home_page.dart';
 import 'package:pet_log/pallete.dart';
 import 'package:pet_log/walk/walk_home_page.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../diary/diary_home_page.dart';
 
@@ -20,11 +21,11 @@ class _HomePageState extends State<HomePage> {
   final CarouselSliderController _myPetCarouselSliderController =
       CarouselSliderController();
 
-  List colorList = [
-    Colors.white,
-    Colors.blue,
-    Colors.grey,
-    Colors.yellow,
+  List nameList = [
+    '보리',
+    '깜',
+    '나비',
+    '망고',
   ];
 
   @override
@@ -38,19 +39,19 @@ class _HomePageState extends State<HomePage> {
             Container(
               height: 260,
               color: Pallete.mainGreen,
-              child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 24, bottom: 42),
-                  child: CarouselSlider(
+              child: Column(
+                children: [
+                  SizedBox(height: 68),
+                  CarouselSlider(
                     carouselController: _myPetCarouselSliderController,
-                    items: colorList.map(
-                      (color) {
+                    items: nameList.map(
+                      (name) {
                         return Builder(
                           builder: (context) {
                             return Container(
                               margin: EdgeInsets.symmetric(horizontal: 24),
                               decoration: BoxDecoration(
-                                color: color,
+                                color: Pallete.white,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Padding(
@@ -92,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Text(
-                                          '보리',
+                                          name,
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
@@ -133,7 +134,22 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                ),
+                  SizedBox(height: 20),
+                  AnimatedSmoothIndicator(
+                    activeIndex: this.currentPetPageIndex,
+                    count: this.nameList.length,
+                    effect: JumpingDotEffect(
+                      spacing: 6.0,
+                      radius: 3.0,
+                      dotWidth: 6.0,
+                      dotHeight: 6.0,
+                      paintStyle: PaintingStyle.fill,
+                      strokeWidth: 0,
+                      dotColor: Pallete.white.withOpacity(0.5),
+                      activeDotColor: Pallete.white,
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: 40),
