@@ -128,9 +128,12 @@ class DiaryHomePage extends StatelessWidget {
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 2),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
                               child: Text(
-                                '다같이 애견카페 가서 놀은 날',
+                                '다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 ',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
