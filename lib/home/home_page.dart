@@ -161,7 +161,100 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 20),
+                  dummyPets.isEmpty
+                      ? Container(
+                          margin: EdgeInsets.only(bottom: 12),
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: Pallete.white,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Pallete.black.withOpacity(0.05),
+                                offset: Offset(8, 8),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              "산책 기록이 없습니다",
+                              style: TextStyle(
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                color: Pallete.mediumGray,
+                                letterSpacing: -0.4,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Column(
+                          children: List.generate(
+                            dummyPets.length > 3
+                                ? 3
+                                : dummyPets.length, // 최대 3개의 아이템 표시
+                            (index) {
+                              return Container(
+                                margin: EdgeInsets.only(bottom: 12),
+                                height: 70,
+                                decoration: BoxDecoration(
+                                  color: Pallete.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Pallete.black.withOpacity(0.05),
+                                      offset: Offset(8, 8),
+                                      blurRadius: 8,
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 14),
+                                    Text(
+                                      "2024.08.16 금",
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Pallete.black,
+                                        letterSpacing: -0.5,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.only(right: 14),
+                                        scrollDirection:
+                                            Axis.horizontal, // 수평 스크롤
+                                        itemCount: dummyPets.length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            width: 36,
+                                            height: 36,
+                                            margin: EdgeInsets.only(right: 4),
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                  dummyPets[index]['image']!,
+                                                ),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                  SizedBox(height: 28),
                   HomeSectionHeader(
                     title: '성장일기',
                     onTap: () {
@@ -183,6 +276,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
+                  SizedBox(height: 60),
                 ],
               ),
             ),

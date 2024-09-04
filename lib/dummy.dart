@@ -17,6 +17,14 @@ const List<Map<String, String>> dummyPets = [
   },
   {
     'image': 'assets/icons/dummy_pet_5.jpg',
-    'name': '나비',
+    'name': '나비1',
+  },
+  {
+    'image': 'assets/icons/dummy_pet_5.jpg',
+    'name': '나비2',
+  },
+  {
+    'image': 'assets/icons/dummy_pet_5.jpg',
+    'name': '나비3',
   },
 ];
