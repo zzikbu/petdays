@@ -60,17 +60,15 @@ class MedicalHomePage extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(bottom: 20),
-                    height: 220,
+                    height: 110,
+                    width: double.infinity,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(dummyPets[index]['image']!),
-                        fit: BoxFit.cover,
-                      ),
+                      color: Pallete.white,
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Pallete.feedBorder,
-                        width: 1,
-                      ),
+                      // border: Border.all(
+                      //   color: Pallete.feedBorder,
+                      //   width: 1,
+                      // ),
                       boxShadow: [
                         BoxShadow(
                           color: Pallete.black.withOpacity(0.05),
@@ -79,78 +77,86 @@ class MedicalHomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 20,
-                    child: Container(
-                      height: 88,
-                      decoration: BoxDecoration(
-                        color: Pallete.white.withOpacity(0.94),
-                        border: Border(
-                          left: BorderSide(
-                            color: Pallete.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          right: BorderSide(
-                            color: Pallete.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          bottom: BorderSide(
-                            color: Pallete.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 22, left: 14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/ic_unlock.svg',
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  '2024.08.14',
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Pallete.mediumGray,
-                                    letterSpacing: -0.35,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Pallete.lightGray,
+                                    width: 0.4,
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      dummyPets[index]['image']!,
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 2),
-                              child: Text(
-                                '다같이 애견카페 가서 놀은 날',
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                dummyPets[index]['name']!,
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18,
                                   color: Pallete.black,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                "2024.08.13",
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Pallete.mediumGray,
                                   letterSpacing: -0.4,
                                 ),
                               ),
+                            ],
+                          ),
+                          SizedBox(height: 14),
+                          Text(
+                            "구토 증상",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                              color: Pallete.black,
+                              letterSpacing: -0.5,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    top: 10,
+                    right: 16,
+                    child: Text(
+                      '*',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        color: Pallete.black,
+                        letterSpacing: -0.4,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             );
