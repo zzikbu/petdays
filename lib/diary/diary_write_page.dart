@@ -46,8 +46,8 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                 _lockTap();
               },
               child: _isLock
-                  ? SvgPicture.asset('assets/icons/ic_lock_big.svg')
-                  : SvgPicture.asset('assets/icons/ic_unlock_big.svg'),
+                  ? SvgPicture.asset('assets/icons/ic_lock.svg')
+                  : SvgPicture.asset('assets/icons/ic_unlock.svg'),
             ),
           ),
         ],

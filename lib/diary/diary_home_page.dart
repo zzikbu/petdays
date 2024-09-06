@@ -111,28 +111,11 @@ class DiaryHomePage extends StatelessWidget {
                         ),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 22, left: 14),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/icons/ic_unlock_small.svg',
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  '2024.08.14',
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Pallete.mediumGray,
-                                    letterSpacing: -0.35,
-                                  ),
-                                ),
-                              ],
-                            ),
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 2),
@@ -149,11 +132,62 @@ class DiaryHomePage extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.pets,
+                                  color: Pallete.darkGray,
+                                  size: 16,
+                                ),
+                                SizedBox(width: 4),
+                                Text(
+                                  '123',
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Pallete.darkGray,
+                                    letterSpacing: -0.4,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Container(
+                                  width: 1,
+                                  height: 10,
+                                  color: Pallete.mediumGray,
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  '2024.08.14',
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Pallete.mediumGray,
+                                    letterSpacing: -0.35,
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Container(
+                                  width: 1,
+                                  height: 10,
+                                  color: Pallete.mediumGray,
+                                ),
+                                SizedBox(width: 8),
+                                SvgPicture.asset(
+                                  'assets/icons/ic_unlock.svg',
+                                  width: 14,
+                                  height: 14,
+                                  color: Pallete.mediumGray,
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             );

@@ -118,7 +118,7 @@ class MedicalHomePage extends StatelessWidget {
                             Row(
                               children: [
                                 SvgPicture.asset(
-                                  'assets/icons/ic_unlock_small.svg',
+                                  'assets/icons/ic_unlock.svg',
                                 ),
                                 SizedBox(width: 4),
                                 Text(

@@ -359,17 +359,18 @@ class _HomePageState extends State<HomePage> {
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
-                                            fontSize: 14,
+                                            fontSize: 15,
                                             color: Pallete.black,
                                             letterSpacing: -0.4,
                                           ),
                                         ),
+                                        SizedBox(height: 2),
                                         Text(
                                           "2024.08.14",
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             color: Pallete.mediumGray,
                                             letterSpacing: -0.4,
                                           ),
@@ -496,7 +497,7 @@ class _HomePageState extends State<HomePage> {
                                                 style: TextStyle(
                                                   fontFamily: 'Pretendard',
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   color: Pallete.black,
                                                   letterSpacing: -0.5,
                                                 ),
@@ -505,7 +506,9 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           SizedBox(height: 18),
                                           Text(
-                                            "이틀 째 숨을 거칠게 쉬어서",
+                                            "이틀 째 숨을 거칠게 쉬어서 이틀 째 숨을 거칠게 쉬어서 이틀 째 숨을 거칠게 쉬어서",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w400,

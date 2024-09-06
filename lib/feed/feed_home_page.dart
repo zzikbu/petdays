@@ -186,28 +186,11 @@ class _FeedHomePageState extends State<FeedHomePage> {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 22, left: 14),
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/icons/ic_unlock_small.svg',
-                                  ),
-                                  SizedBox(width: 4),
-                                  Text(
-                                    '2024.08.14',
-                                    style: TextStyle(
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Pallete.mediumGray,
-                                      letterSpacing: -0.35,
-                                    ),
-                                  ),
-                                ],
-                              ),
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 2),
@@ -224,11 +207,49 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.pets,
+                                    color: Pallete.darkGray,
+                                    size: 16,
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    '123',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Pallete.darkGray,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // 여유 공간 추가
+                                  Container(
+                                    width: 1,
+                                    height: 10,
+                                    color: Pallete.mediumGray, // 구분선 색상
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '2024.08.14',
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Pallete.mediumGray,
+                                      letterSpacing: -0.35,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               );
