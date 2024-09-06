@@ -87,7 +87,7 @@ class DiaryHomePage extends StatelessWidget {
                     child: Container(
                       height: 88,
                       decoration: BoxDecoration(
-                        color: Pallete.white.withOpacity(0.94),
+                        color: Pallete.white.withOpacity(0.9),
                         border: Border(
                           left: BorderSide(
                             color: Pallete.feedBorder,
