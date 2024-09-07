@@ -4,9 +4,19 @@ import 'package:pet_log/pallete.dart';
 import '../components/next_button.dart';
 import '../components/textfield_with_title.dart';
 
-class MedicalWritePage extends StatelessWidget {
-  const MedicalWritePage({super.key});
+class MedicalWritePage extends StatefulWidget {
+  final bool isEditMode;
 
+  const MedicalWritePage({
+    super.key,
+    this.isEditMode = false,
+  });
+
+  @override
+  State<MedicalWritePage> createState() => _MedicalWritePageState();
+}
+
+class _MedicalWritePageState extends State<MedicalWritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,7 +139,7 @@ class MedicalWritePage extends StatelessWidget {
         onTap: () {
           print("작성하기 눌림");
         },
-        buttonText: "작성하기",
+        buttonText: widget.isEditMode ? "수정하기" : "작성하기",
       ),
     );
   }

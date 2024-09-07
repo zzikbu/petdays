@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../components/custom_dialog.dart';
 import '../dummy.dart';
 import '../pallete.dart';
 import 'diary_write_page.dart';
@@ -41,7 +42,36 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
         actions: [
           GestureDetector(
             onTap: () {
-              _lockTap();
+              if (_isLock) {
+                // 비공개 -> 공개
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: '성장일기 공개',
+                      message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
+                      onConfirm: () {
+                        _lockTap();
+                      },
+                    );
+                  },
+                );
+              } else {
+                // 공개 -> 비공개
+                // _isLock이 false일 때 바로 _lockTap() 호출
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: '성장일기 비공개',
+                      message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
+                      onConfirm: () {
+                        _lockTap();
+                      },
+                    );
+                  },
+                );
+              }
             },
             child: _isLock
                 ? SvgPicture.asset('assets/icons/ic_lock.svg')
@@ -66,8 +96,21 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       ),
                       PullDownMenuItem(
                         title: '삭제하기',
-                        onTap: () {},
                         isDestructive: true,
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return CustomDialog(
+                                title: '성장일기 삭제',
+                                message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                                onConfirm: () {
+                                  print('삭제됨');
+                                },
+                              );
+                            },
+                          );
+                        },
                       ),
                     ]
                   : [

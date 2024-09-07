@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/pallete.dart';
 
+import '../components/custom_dialog.dart';
 import '../components/info_column.dart';
 
 class WalkDetailPage extends StatelessWidget {
@@ -17,7 +18,20 @@ class WalkDetailPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: '산책 기록 삭제',
+                      message: '산책 기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                      onConfirm: () {
+                        print('삭제됨');
+                      },
+                    );
+                  },
+                );
+              },
               child: SvgPicture.asset('assets/icons/ic_delete.svg'),
             ),
           ),

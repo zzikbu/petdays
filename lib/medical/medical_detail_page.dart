@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/medical/medical_write_page.dart';
 import 'package:pet_log/pallete.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
+import '../components/custom_dialog.dart';
 import '../components/info_column.dart';
 import '../dummy.dart';
 
@@ -18,9 +21,44 @@ class MedicalDetailPage extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {},
-              child: SvgPicture.asset('assets/icons/ic_delete.svg'),
+            child: PullDownButton(
+              itemBuilder: (context) => [
+                PullDownMenuItem(
+                  title: '수정하기',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            MedicalWritePage(isEditMode: true),
+                      ),
+                    );
+                  },
+                ),
+                PullDownMenuItem(
+                  title: '삭제하기',
+                  isDestructive: true,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialog(
+                          title: '진료기록 삭제',
+                          message: '진료기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                          onConfirm: () {
+                            print('삭제됨');
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
+              buttonBuilder: (context, showMenu) => CupertinoButton(
+                onPressed: showMenu,
+                padding: EdgeInsets.zero,
+                child: SvgPicture.asset('assets/icons/ic_more.svg'),
+              ),
             ),
           ),
         ],
