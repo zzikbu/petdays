@@ -6,7 +6,12 @@ import '../components/next_button.dart';
 import '../components/textfield_with_title.dart';
 
 class DiaryWritePage extends StatefulWidget {
-  const DiaryWritePage({super.key});
+  final bool isEditMode;
+
+  const DiaryWritePage({
+    super.key,
+    this.isEditMode = false,
+  });
 
   @override
   State<DiaryWritePage> createState() => _DiaryWritePageState();
@@ -38,19 +43,21 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
             letterSpacing: -0.5,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                _lockTap();
-              },
-              child: _isLock
-                  ? SvgPicture.asset('assets/icons/ic_lock.svg')
-                  : SvgPicture.asset('assets/icons/ic_unlock.svg'),
-            ),
-          ),
-        ],
+        actions: !widget.isEditMode
+            ? [
+                Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: GestureDetector(
+                    onTap: () {
+                      _lockTap();
+                    },
+                    child: _isLock
+                        ? SvgPicture.asset('assets/icons/ic_lock.svg')
+                        : SvgPicture.asset('assets/icons/ic_unlock.svg'),
+                  ),
+                ),
+              ]
+            : [],
       ),
       body: Scrollbar(
         child: SingleChildScrollView(
@@ -141,7 +148,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
         onTap: () {
           print("작성하기 눌림");
         },
-        buttonText: "작성하기",
+        buttonText: widget.isEditMode ? "수정하기" : "작성하기",
       ),
     );
   }

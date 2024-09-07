@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pull_down_button/pull_down_button.dart';
 
 import '../dummy.dart';
 import '../pallete.dart';
+import 'diary_write_page.dart';
 
 class DiaryDetailPage extends StatefulWidget {
   const DiaryDetailPage({super.key});
@@ -14,6 +17,7 @@ class DiaryDetailPage extends StatefulWidget {
 class _DiaryDetailPageState extends State<DiaryDetailPage> {
   bool _isLike = false;
   bool _isLock = true;
+  bool _myDiary = true;
 
   void _likeTap() {
     setState(() {
@@ -46,9 +50,42 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
           SizedBox(width: 14),
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {},
-              child: SvgPicture.asset('assets/icons/ic_more.svg'),
+            child: PullDownButton(
+              itemBuilder: (context) => _myDiary
+                  ? [
+                      PullDownMenuItem(
+                        title: '수정하기',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DiaryWritePage(isEditMode: true)),
+                          );
+                        },
+                      ),
+                      PullDownMenuItem(
+                        title: '삭제하기',
+                        onTap: () {},
+                        isDestructive: true,
+                      ),
+                    ]
+                  : [
+                      PullDownMenuItem(
+                        title: '신고하기',
+                        onTap: () {},
+                      ),
+                      PullDownMenuItem(
+                        title: '차단하기',
+                        onTap: () {},
+                        isDestructive: true,
+                      ),
+                    ],
+              buttonBuilder: (context, showMenu) => CupertinoButton(
+                onPressed: showMenu,
+                padding: EdgeInsets.zero,
+                child: SvgPicture.asset('assets/icons/ic_more.svg'),
+              ),
             ),
           ),
         ],
