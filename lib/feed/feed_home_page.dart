@@ -23,6 +23,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
       appBar: AppBar(
         backgroundColor: Pallete.background,
         scrolledUnderElevation: 0,
+        centerTitle: true,
         title: Container(
           height: 48,
           width: 170,

@@ -165,7 +165,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   dummyPets.isEmpty
                       ? Container(
                           margin: EdgeInsets.only(bottom: 12),
@@ -285,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       if (dummyPets.isEmpty)
                         Container(
                           margin: EdgeInsets.only(bottom: 12),
@@ -398,7 +398,7 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       if (dummyPets.isEmpty)
                         Container(
                           margin: EdgeInsets.only(bottom: 12),

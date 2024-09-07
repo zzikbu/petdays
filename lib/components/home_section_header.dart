@@ -34,11 +34,11 @@ class HomeSectionHeader extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "더보기",
+                "더 보기",
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
-                  fontSize: 12,
+                  fontSize: 14,
                   color: Pallete.mediumGray,
                   letterSpacing: -0.3,
                 ),
