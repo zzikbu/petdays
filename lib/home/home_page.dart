@@ -46,74 +46,80 @@ class _HomePageState extends State<HomePage> {
                       (pet) {
                         return Builder(
                           builder: (context) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(horizontal: 24),
-                              decoration: BoxDecoration(
-                                color: Pallete.white,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 100,
-                                      height: 100,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Pallete.lightGray,
-                                          width: 0.4,
-                                        ),
-                                        image: DecorationImage(
-                                          image: AssetImage(dummyPets[this
-                                              .currentPetPageIndex]['image']!),
-                                          fit: BoxFit.cover,
+                            return GestureDetector(
+                              onTap: () {
+                                print(this.currentPetPageIndex);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 24),
+                                decoration: BoxDecoration(
+                                  color: Pallete.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Pallete.lightGray,
+                                            width: 0.4,
+                                          ),
+                                          image: DecorationImage(
+                                            image: AssetImage(dummyPets[
+                                                    this.currentPetPageIndex]
+                                                ['image']!),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(width: 30),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'D+2100',
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 22,
-                                            color: Pallete.black,
-                                            letterSpacing: -0.5,
+                                      SizedBox(width: 30),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'D+2100',
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 22,
+                                              color: Pallete.black,
+                                              letterSpacing: -0.5,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          dummyPets[this.currentPetPageIndex]
-                                              ['name']!,
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18,
-                                            color: Pallete.black,
-                                            letterSpacing: -0.5,
+                                          Text(
+                                            dummyPets[this.currentPetPageIndex]
+                                                ['name']!,
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 18,
+                                              color: Pallete.black,
+                                              letterSpacing: -0.5,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          '5살 치와와',
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                            color: Pallete.mediumGray,
-                                            letterSpacing: -0.4,
+                                          Text(
+                                            '5살 치와와',
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 14,
+                                              color: Pallete.mediumGray,
+                                              letterSpacing: -0.4,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -128,7 +134,6 @@ class _HomePageState extends State<HomePage> {
                       onPageChanged: (index, reason) {
                         setState(() {
                           currentPetPageIndex = index;
-                          print(index);
                         });
                       },
                     ),

@@ -3,14 +3,16 @@ import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/pallete.dart';
 
-class SingUpPetInfoPage extends StatefulWidget {
-  const SingUpPetInfoPage({super.key});
+import '../components/step_progress_indicator.dart';
+
+class SignUpPetInfoPage extends StatefulWidget {
+  const SignUpPetInfoPage({super.key});
 
   @override
-  _SingUpPetInfoPageState createState() => _SingUpPetInfoPageState();
+  _SignUpPetInfoPageState createState() => _SignUpPetInfoPageState();
 }
 
-class _SingUpPetInfoPageState extends State<SingUpPetInfoPage> {
+class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
   String? _selectedGender;
   String? _selectedNeutering;
 
@@ -22,6 +24,13 @@ class _SingUpPetInfoPageState extends State<SingUpPetInfoPage> {
       appBar: AppBar(
         backgroundColor: Pallete.white,
         scrolledUnderElevation: 0,
+      ),
+      bottomNavigationBar: NextButton(
+        isActive: false,
+        onTap: () {
+          print("시작하기 눌림");
+        },
+        buttonText: "시작하기",
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,45 +166,6 @@ class _SingUpPetInfoPageState extends State<SingUpPetInfoPage> {
           ),
         ],
       ),
-      bottomNavigationBar: NextButton(
-        isActive: false,
-        onTap: () {
-          print("시작하기 눌림");
-        },
-        buttonText: "시작하기",
-      ),
-    );
-  }
-}
-
-class StepProgressIndicator extends StatelessWidget {
-  final int totalSteps;
-  final int currentStep;
-  final Color selectedColor;
-  final Color unselectedColor;
-
-  StepProgressIndicator({
-    required this.totalSteps,
-    required this.currentStep,
-    required this.selectedColor,
-    required this.unselectedColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(totalSteps, (index) {
-        return Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              color: index < currentStep ? selectedColor : unselectedColor,
-            ),
-            margin: EdgeInsets.symmetric(horizontal: 2.0),
-            height: 3.0,
-          ),
-        );
-      }),
     );
   }
 }
