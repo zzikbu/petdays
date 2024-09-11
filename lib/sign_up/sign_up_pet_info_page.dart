@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
+import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
 import 'package:pet_log/pallete.dart';
 
 import '../components/step_progress_indicator.dart';
@@ -36,9 +37,13 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
         scrolledUnderElevation: 0,
       ),
       bottomNavigationBar: NextButton(
-        isActive: false,
+        isActive: true,
         onTap: () {
-          print("시작하기 눌림");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomBottomNavigationBar()),
+          );
         },
         buttonText: "시작하기",
       ),
@@ -86,9 +91,9 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                 shape: BoxShape.circle,
                                 border: Border.all(
                                   color: Pallete.lightGray,
-                                  width: 2.0, // 원형 테두리의 두께
+                                  width: 2.0,
                                 ),
-                                color: Colors.white, // 원형의 배경색
+                                color: Colors.white,
                               ),
                               child: Icon(
                                 Icons.pets,
