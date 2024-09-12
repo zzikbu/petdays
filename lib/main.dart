@@ -1,9 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
-import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
 
-void main() {
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
