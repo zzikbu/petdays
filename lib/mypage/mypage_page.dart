@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/service/auth_service.dart';
+import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:provider/provider.dart';
 
 import '../pallete.dart';
 
@@ -139,7 +143,28 @@ class MypagePage extends StatelessWidget {
               ),
               SizedBox(height: 20),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialog(
+                        title: '로그아웃',
+                        message: '로그아웃 하시겠습니까??',
+                        onConfirm: () {
+                          // 로그아웃
+                          context.read<AuthService>().signOut();
+
+                          // SignInPage로 이동
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SignInPage()),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
                 child: Text(
                   '로그아웃',
                   style: TextStyle(

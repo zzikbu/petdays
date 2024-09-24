@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
+import 'package:pet_log/service/auth_service.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -9,7 +12,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    // Provider를 이용하여 위젯 트리의 최상단에
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -22,13 +33,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final user = context.read<AuthService>().currentUser();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      // home: CustomBottomNavigationBar(),
-      home: SignInPage(),
+      theme: ThemeData(useMaterial3: true),
+      // 자동 로그인 분기 처리
+      home: user == null ? SignInPage() : CustomBottomNavigationBar(),
     );
   }
 }

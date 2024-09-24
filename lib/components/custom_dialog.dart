@@ -86,7 +86,7 @@ class CustomDialog extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       onConfirm();
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
                     },
                     child: Container(
                       height: 50,
