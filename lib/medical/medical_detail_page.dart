@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/medical/medical_write_page.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../components/custom_dialog.dart';
@@ -16,7 +16,7 @@ class MedicalDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         actions: [
           Padding(
@@ -63,7 +63,7 @@ class MedicalDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       body: Scrollbar(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),

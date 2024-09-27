@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../pallete.dart';
+import '../palette.dart';
 
 class TextFieldWithTitle extends StatefulWidget {
   final String labelText;
   final int? maxLength; // 옵셔널
   final String hintText;
   final TextInputType keyboardType;
+  final TextEditingController? controller;
 
   const TextFieldWithTitle({
     super.key,
@@ -14,6 +15,7 @@ class TextFieldWithTitle extends StatefulWidget {
     this.maxLength,
     required this.hintText,
     this.keyboardType = TextInputType.text, // 기본값 설정
+    this.controller,
   });
 
   @override
@@ -32,16 +34,17 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 18,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.45,
           ),
         ),
         TextField(
+          controller: widget.controller,
           autocorrect: false,
           enableSuggestions: false,
           maxLength: widget.maxLength,
           keyboardType: widget.keyboardType,
-          cursorColor: Pallete.subGreen,
+          cursorColor: Palette.subGreen,
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w400,
@@ -55,13 +58,13 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               fontWeight: FontWeight.w400,
               fontSize: 16,
               letterSpacing: -0.4,
-              color: Pallete.lightGray,
+              color: Palette.lightGray,
             ),
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Pallete.black, width: 2),
+              borderSide: BorderSide(color: Palette.black, width: 2),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Pallete.black, width: 2),
+              borderSide: BorderSide(color: Palette.black, width: 2),
             ),
           ),
         ),

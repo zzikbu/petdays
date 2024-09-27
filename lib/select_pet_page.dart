@@ -4,7 +4,7 @@ import 'package:pet_log/walk/walk_map_page.dart';
 import 'components/next_button.dart';
 import 'dummy.dart';
 import 'medical/medical_write_page.dart';
-import 'pallete.dart';
+import 'palette.dart';
 
 class SelectPetPage extends StatelessWidget {
   final bool isFromMedicalPage;
@@ -17,9 +17,9 @@ class SelectPetPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
       ),
       body: Column(
@@ -37,7 +37,7 @@ class SelectPetPage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
                     fontSize: 24,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.6,
                   ),
                 ),
@@ -48,7 +48,7 @@ class SelectPetPage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
-                    color: Pallete.mediumGray,
+                    color: Palette.mediumGray,
                     letterSpacing: -0.4,
                   ),
                 ),
@@ -71,15 +71,15 @@ class SelectPetPage extends StatelessWidget {
                   return Container(
                     height: 30,
                     decoration: BoxDecoration(
-                      color: Pallete.white,
+                      color: Palette.white,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: index == 2 ? Pallete.black : Colors.transparent,
+                        color: index == 2 ? Palette.black : Colors.transparent,
                         width: 2,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Pallete.black.withOpacity(0.05),
+                          color: Palette.black.withOpacity(0.05),
                           offset: Offset(8, 8),
                           blurRadius: 8,
                         ),
@@ -106,7 +106,7 @@ class SelectPetPage extends StatelessWidget {
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
                             fontSize: 20,
-                            color: Pallete.black,
+                            color: Palette.black,
                             letterSpacing: -0.5,
                           ),
                         ),

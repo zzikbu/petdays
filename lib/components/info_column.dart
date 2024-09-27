@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../pallete.dart';
+import '../palette.dart';
 
 class InfoColumn extends StatelessWidget {
   final String title;
@@ -23,7 +23,7 @@ class InfoColumn extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 14,
-            color: Pallete.mediumGray,
+            color: Palette.mediumGray,
             letterSpacing: -0.35,
           ),
         ),
@@ -34,7 +34,7 @@ class InfoColumn extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),

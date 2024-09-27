@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../pallete.dart';
+import '../palette.dart';
 
 class HomeSectionHeader extends StatelessWidget {
   final String title;
@@ -24,7 +24,7 @@ class HomeSectionHeader extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),
@@ -39,7 +39,7 @@ class HomeSectionHeader extends StatelessWidget {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
-                  color: Pallete.mediumGray,
+                  color: Palette.mediumGray,
                   letterSpacing: -0.3,
                 ),
               ),

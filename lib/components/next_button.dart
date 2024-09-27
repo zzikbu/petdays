@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../pallete.dart';
+import '../palette.dart';
 
 class NextButton extends StatelessWidget {
   final bool isActive;
@@ -16,14 +16,14 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = isActive ? Pallete.white : Pallete.subGreen;
+    Color textColor = isActive ? Palette.white : Palette.subGreen;
 
     return GestureDetector(
       onTap: isActive ? onTap : null,
       child: Container(
         height: 94,
         width: MediaQuery.of(context).size.width,
-        color: Pallete.mainGreen,
+        color: Palette.mainGreen,
         child: Align(
           alignment: Alignment.topCenter,
           child: Padding(

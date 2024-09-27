@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 
 class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
@@ -7,17 +7,17 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         title: Container(
           height: 56,
           decoration: BoxDecoration(
-            color: Pallete.white,
+            color: Palette.white,
             borderRadius: BorderRadius.circular(32),
             border: Border.all(
-              color: Pallete.feedBorder,
+              color: Palette.feedBorder,
               width: 1,
             ),
           ),
@@ -28,7 +28,7 @@ class SearchPage extends StatelessWidget {
                 autofocus: true,
                 autocorrect: false,
                 enableSuggestions: false,
-                cursorColor: Pallete.subGreen,
+                cursorColor: Palette.subGreen,
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
@@ -43,7 +43,7 @@ class SearchPage extends StatelessWidget {
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
                     letterSpacing: -0.4,
-                    color: Pallete.lightGray,
+                    color: Palette.lightGray,
                   ),
                 ),
               ),

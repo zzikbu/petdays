@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../diary/diary_detail_page.dart';
 import '../dummy.dart';
-import '../pallete.dart';
+import '../palette.dart';
 import '../search/search_page.dart';
 
 class FeedHomePage extends StatefulWidget {
@@ -19,9 +19,9 @@ class _FeedHomePageState extends State<FeedHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Container(
@@ -46,7 +46,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                     width: 80,
                     decoration: BoxDecoration(
                       color: isAllSelected
-                          ? Pallete.mainGreen
+                          ? Palette.mainGreen
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -58,7 +58,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           color:
-                              isAllSelected ? Pallete.white : Pallete.lightGray,
+                              isAllSelected ? Palette.white : Palette.lightGray,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -76,7 +76,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                     width: 80,
                     decoration: BoxDecoration(
                       color: !isAllSelected
-                          ? Pallete.mainGreen
+                          ? Palette.mainGreen
                           : Colors.transparent,
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -88,8 +88,8 @@ class _FeedHomePageState extends State<FeedHomePage> {
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           color: !isAllSelected
-                              ? Pallete.white
-                              : Pallete.lightGray,
+                              ? Palette.white
+                              : Palette.lightGray,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -140,7 +140,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: Pallete.feedBorder,
+                          color: Palette.feedBorder,
                           width: 1,
                         ),
                         image: DecorationImage(
@@ -149,7 +149,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Pallete.black.withOpacity(0.05),
+                            color: Palette.black.withOpacity(0.05),
                             offset: Offset(8, 8),
                             blurRadius: 8,
                           ),
@@ -163,20 +163,20 @@ class _FeedHomePageState extends State<FeedHomePage> {
                       child: Container(
                         height: 88,
                         decoration: BoxDecoration(
-                          color: Pallete.white.withOpacity(0.9),
+                          color: Palette.white.withOpacity(0.9),
                           border: Border(
                             left: BorderSide(
-                              color: Pallete.feedBorder,
+                              color: Palette.feedBorder,
                               width: 1,
                               style: BorderStyle.solid,
                             ),
                             right: BorderSide(
-                              color: Pallete.feedBorder,
+                              color: Palette.feedBorder,
                               width: 1,
                               style: BorderStyle.solid,
                             ),
                             bottom: BorderSide(
-                              color: Pallete.feedBorder,
+                              color: Palette.feedBorder,
                               width: 1,
                               style: BorderStyle.solid,
                             ),
@@ -203,7 +203,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 18,
-                                    color: Pallete.black,
+                                    color: Palette.black,
                                     letterSpacing: -0.4,
                                   ),
                                 ),
@@ -213,7 +213,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                 children: [
                                   Icon(
                                     Icons.pets,
-                                    color: Pallete.darkGray,
+                                    color: Palette.darkGray,
                                     size: 16,
                                   ),
                                   SizedBox(width: 4),
@@ -223,7 +223,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
-                                      color: Pallete.darkGray,
+                                      color: Palette.darkGray,
                                       letterSpacing: -0.4,
                                     ),
                                   ),
@@ -231,7 +231,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                   Container(
                                     width: 1,
                                     height: 10,
-                                    color: Pallete.mediumGray, // 구분선 색상
+                                    color: Palette.mediumGray, // 구분선 색상
                                   ),
                                   SizedBox(width: 8),
                                   Text(
@@ -240,7 +240,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 14,
-                                      color: Pallete.mediumGray,
+                                      color: Palette.mediumGray,
                                       letterSpacing: -0.35,
                                     ),
                                   ),

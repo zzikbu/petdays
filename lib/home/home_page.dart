@@ -5,7 +5,7 @@ import 'package:pet_log/components/home_section_header.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/medical/medical_detail_page.dart';
 import 'package:pet_log/medical/medical_home_page.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/walk/walk_home_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -29,14 +29,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 260,
-              color: Pallete.mainGreen,
+              color: Palette.mainGreen,
               child: Column(
                 children: [
                   SizedBox(height: 68),
@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                               child: Container(
                                 margin: EdgeInsets.symmetric(horizontal: 24),
                                 decoration: BoxDecoration(
-                                  color: Pallete.white,
+                                  color: Palette.white,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Padding(
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                            color: Pallete.lightGray,
+                                            color: Palette.lightGray,
                                             width: 0.4,
                                           ),
                                           image: DecorationImage(
@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w600,
                                               fontSize: 22,
-                                              color: Pallete.black,
+                                              color: Palette.black,
                                               letterSpacing: -0.5,
                                             ),
                                           ),
@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w500,
                                               fontSize: 18,
-                                              color: Pallete.black,
+                                              color: Palette.black,
                                               letterSpacing: -0.5,
                                             ),
                                           ),
@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w600,
                                               fontSize: 14,
-                                              color: Pallete.mediumGray,
+                                              color: Palette.mediumGray,
                                               letterSpacing: -0.4,
                                             ),
                                           ),
@@ -149,8 +149,8 @@ class _HomePageState extends State<HomePage> {
                       dotHeight: 6.0,
                       paintStyle: PaintingStyle.fill,
                       strokeWidth: 0,
-                      dotColor: Pallete.white.withOpacity(0.5),
-                      activeDotColor: Pallete.white,
+                      dotColor: Palette.white.withOpacity(0.5),
+                      activeDotColor: Palette.white,
                     ),
                   ),
                 ],
@@ -176,11 +176,11 @@ class _HomePageState extends State<HomePage> {
                           margin: EdgeInsets.only(bottom: 12),
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Pallete.white,
+                            color: Palette.white,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Pallete.black.withOpacity(0.05),
+                                color: Palette.black.withOpacity(0.05),
                                 offset: Offset(8, 8),
                                 blurRadius: 8,
                               ),
@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -218,11 +218,11 @@ class _HomePageState extends State<HomePage> {
                                   margin: EdgeInsets.only(bottom: 12),
                                   height: 70,
                                   decoration: BoxDecoration(
-                                    color: Pallete.white,
+                                    color: Palette.white,
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Pallete.black.withOpacity(0.05),
+                                        color: Palette.black.withOpacity(0.05),
                                         offset: Offset(8, 8),
                                         blurRadius: 8,
                                       ),
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w500,
                                           fontSize: 15,
-                                          color: Pallete.black,
+                                          color: Palette.black,
                                           letterSpacing: -0.5,
                                         ),
                                       ),
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 border: Border.all(
-                                                  color: Pallete.lightGray,
+                                                  color: Palette.lightGray,
                                                   width: 0.4,
                                                 ),
                                                 image: DecorationImage(
@@ -296,11 +296,11 @@ class _HomePageState extends State<HomePage> {
                           margin: EdgeInsets.only(bottom: 12),
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Pallete.white,
+                            color: Palette.white,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Pallete.black.withOpacity(0.05),
+                                color: Palette.black.withOpacity(0.05),
                                 offset: Offset(8, 8),
                                 blurRadius: 8,
                               ),
@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -340,11 +340,11 @@ class _HomePageState extends State<HomePage> {
                                   height: 70,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: Pallete.white,
+                                    color: Palette.white,
                                     borderRadius: BorderRadius.circular(20),
                                     boxShadow: [
                                       BoxShadow(
-                                        color: Pallete.black.withOpacity(0.05),
+                                        color: Palette.black.withOpacity(0.05),
                                         offset: Offset(8, 8),
                                         blurRadius: 8,
                                       ),
@@ -365,7 +365,7 @@ class _HomePageState extends State<HomePage> {
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
                                             fontSize: 15,
-                                            color: Pallete.black,
+                                            color: Palette.black,
                                             letterSpacing: -0.4,
                                           ),
                                         ),
@@ -376,7 +376,7 @@ class _HomePageState extends State<HomePage> {
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14,
-                                            color: Pallete.mediumGray,
+                                            color: Palette.mediumGray,
                                             letterSpacing: -0.4,
                                           ),
                                         ),
@@ -409,11 +409,11 @@ class _HomePageState extends State<HomePage> {
                           margin: EdgeInsets.only(bottom: 12),
                           height: 70,
                           decoration: BoxDecoration(
-                            color: Pallete.white,
+                            color: Palette.white,
                             borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Pallete.black.withOpacity(0.05),
+                                color: Palette.black.withOpacity(0.05),
                                 offset: Offset(8, 8),
                                 blurRadius: 8,
                               ),
@@ -426,7 +426,7 @@ class _HomePageState extends State<HomePage> {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 12,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -457,12 +457,12 @@ class _HomePageState extends State<HomePage> {
                                     height: 170,
                                     width: 150,
                                     decoration: BoxDecoration(
-                                      color: Pallete.white,
+                                      color: Palette.white,
                                       borderRadius: BorderRadius.circular(20),
                                       boxShadow: [
                                         BoxShadow(
                                           color:
-                                              Pallete.black.withOpacity(0.05),
+                                              Palette.black.withOpacity(0.05),
                                           offset: Offset(8, 8),
                                           blurRadius: 8,
                                         ),
@@ -485,7 +485,7 @@ class _HomePageState extends State<HomePage> {
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.circle,
                                                   border: Border.all(
-                                                    color: Pallete.lightGray,
+                                                    color: Palette.lightGray,
                                                     width: 0.4,
                                                   ),
                                                   image: DecorationImage(
@@ -504,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                                                   fontFamily: 'Pretendard',
                                                   fontWeight: FontWeight.w500,
                                                   fontSize: 18,
-                                                  color: Pallete.black,
+                                                  color: Palette.black,
                                                   letterSpacing: -0.5,
                                                 ),
                                               ),
@@ -519,7 +519,7 @@ class _HomePageState extends State<HomePage> {
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w400,
                                               fontSize: 16,
-                                              color: Pallete.black,
+                                              color: Palette.black,
                                               letterSpacing: -0.5,
                                             ),
                                           ),
@@ -530,7 +530,7 @@ class _HomePageState extends State<HomePage> {
                                               fontFamily: 'Pretendard',
                                               fontWeight: FontWeight.w400,
                                               fontSize: 14,
-                                              color: Pallete.mediumGray,
+                                              color: Palette.mediumGray,
                                               letterSpacing: -0.4,
                                             ),
                                           ),

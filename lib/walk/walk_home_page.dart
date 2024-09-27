@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/walk/walk_detail_page.dart';
 import 'package:pet_log/select_pet_page.dart';
 
@@ -13,7 +13,7 @@ class WalkHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
@@ -22,12 +22,12 @@ class WalkHomePage extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),
       ),
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       body: Scrollbar(
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
@@ -45,11 +45,11 @@ class WalkHomePage extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 20),
                 height: 130,
                 decoration: BoxDecoration(
-                  color: Pallete.white,
+                  color: Palette.white,
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Pallete.black.withOpacity(0.05),
+                      color: Palette.black.withOpacity(0.05),
                       offset: Offset(8, 8),
                       blurRadius: 8,
                     ),
@@ -98,7 +98,7 @@ class WalkHomePage extends StatelessWidget {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -109,7 +109,7 @@ class WalkHomePage extends StatelessWidget {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w600,
                                 fontSize: 16,
-                                color: Pallete.black,
+                                color: Palette.black,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -127,7 +127,7 @@ class WalkHomePage extends StatelessWidget {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -141,7 +141,7 @@ class WalkHomePage extends StatelessWidget {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w600,
                                       fontSize: 16, // 기본 폰트 크기
-                                      color: Pallete.black,
+                                      color: Palette.black,
                                       letterSpacing: -0.4,
                                     ),
                                   ),
@@ -151,7 +151,7 @@ class WalkHomePage extends StatelessWidget {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12, // 작은 폰트 크기
-                                      color: Pallete.black,
+                                      color: Palette.black,
                                       letterSpacing: -0.4,
                                     ),
                                   ),
@@ -172,7 +172,7 @@ class WalkHomePage extends StatelessWidget {
                                 fontFamily: 'Pretendard',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14,
-                                color: Pallete.mediumGray,
+                                color: Palette.mediumGray,
                                 letterSpacing: -0.4,
                               ),
                             ),
@@ -186,7 +186,7 @@ class WalkHomePage extends StatelessWidget {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w600,
                                       fontSize: 16,
-                                      color: Pallete.black,
+                                      color: Palette.black,
                                       letterSpacing: -0.4,
                                     ),
                                   ),
@@ -196,7 +196,7 @@ class WalkHomePage extends StatelessWidget {
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
                                       fontSize: 12,
-                                      color: Pallete.black,
+                                      color: Palette.black,
                                       letterSpacing: -0.4,
                                     ),
                                   ),
@@ -226,14 +226,14 @@ class WalkHomePage extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: Pallete.darkGray,
+        backgroundColor: Palette.darkGray,
         elevation: 0, // 그림자 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
         child: Icon(
           Icons.add,
-          color: Pallete.white,
+          color: Palette.white,
         ),
       ),
     );

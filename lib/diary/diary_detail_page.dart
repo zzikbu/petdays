@@ -5,7 +5,7 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 import '../components/custom_dialog.dart';
 import '../dummy.dart';
-import '../pallete.dart';
+import '../palette.dart';
 import 'diary_write_page.dart';
 
 class DiaryDetailPage extends StatefulWidget {
@@ -35,10 +35,10 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         actions: [
           GestureDetector(
             onTap: () {
@@ -146,7 +146,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 22,
-                  color: Pallete.black,
+                  color: Palette.black,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -154,7 +154,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Pallete.lightGray,
+                    backgroundColor: Palette.lightGray,
                     radius: 13,
                   ),
                   SizedBox(width: 4),
@@ -164,7 +164,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
-                      color: Pallete.black,
+                      color: Palette.black,
                       letterSpacing: -0.4,
                     ),
                   ),
@@ -175,7 +175,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
-                      color: Pallete.mediumGray,
+                      color: Palette.mediumGray,
                       letterSpacing: -0.4,
                     ),
                   ),
@@ -184,7 +184,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
               SizedBox(height: 16),
               Container(
                 height: 1,
-                color: Pallete.lightGray,
+                color: Palette.lightGray,
               ),
               SizedBox(height: 16),
               Text(
@@ -193,7 +193,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   fontSize: 16,
-                  color: Pallete.darkGray,
+                  color: Palette.darkGray,
                   letterSpacing: -0.4,
                   height: 21 / 14,
                 ),
@@ -223,10 +223,10 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                   height: 42,
                   width: 116,
                   decoration: BoxDecoration(
-                    color: _isLike ? Pallete.darkGray : Pallete.white,
+                    color: _isLike ? Palette.darkGray : Palette.white,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: Pallete.lightGray,
+                      color: Palette.lightGray,
                       width: 1,
                     ),
                   ),
@@ -238,7 +238,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                         Icon(
                           Icons.pets,
                           size: 24,
-                          color: _isLike ? Pallete.white : Pallete.lightGray,
+                          color: _isLike ? Palette.white : Palette.lightGray,
                         ),
                         SizedBox(width: 12),
                         Text(
@@ -247,7 +247,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w500,
                             fontSize: 18,
-                            color: _isLike ? Pallete.white : Pallete.lightGray,
+                            color: _isLike ? Palette.white : Palette.lightGray,
                             letterSpacing: -0.5,
                           ),
                         ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
-import 'package:pet_log/sign_up/sign_up_pet_info_page.dart';
-
-import '../components/next_button.dart';
-import '../components/step_progress_indicator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pet_log/components/next_button.dart';
+import 'package:pet_log/components/step_progress_indicator.dart';
+import 'package:pet_log/palette.dart';
+import 'package:pet_log/service/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class SignUpSelectPetTypePage extends StatefulWidget {
   const SignUpSelectPetTypePage({super.key});
@@ -14,7 +15,7 @@ class SignUpSelectPetTypePage extends StatefulWidget {
 }
 
 class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
-  String? selectedPet;
+  String? selectedPetType;
 
   final List<String> petTypes = [
     '강아지',
@@ -32,22 +33,21 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
   void initState() {
     super.initState();
     petTypes.sort(); // 가나다 순 정렬
+    selectedPetType = context.read<AuthService>().selectedPetType;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.white,
+      backgroundColor: Palette.white,
       appBar: AppBar(
-        backgroundColor: Pallete.white,
+        backgroundColor: Palette.white,
       ),
       bottomNavigationBar: NextButton(
-        isActive: selectedPet != null, // 선택된 펫이 있을 때 활성화
+        isActive: selectedPetType?.isNotEmpty ?? false, // 선택된 펫이 있을 때 활성화
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SignUpPetInfoPage()),
-          );
+          context.read<AuthService>().selectedPetType = selectedPetType!;
+          context.go('/sign_up/pet_type/pet_info');
         },
         buttonText: "다음",
       ),
@@ -60,8 +60,8 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
             StepProgressIndicator(
               totalSteps: 3,
               currentStep: 2,
-              selectedColor: Pallete.black,
-              unselectedColor: Pallete.lightGray,
+              selectedColor: Palette.black,
+              unselectedColor: Palette.lightGray,
             ),
             SizedBox(height: 30),
             Text(
@@ -70,7 +70,7 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
-                color: Pallete.black,
+                color: Palette.black,
                 letterSpacing: -0.6,
               ),
             ),
@@ -81,7 +81,7 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: Pallete.mediumGray,
+                color: Palette.mediumGray,
                 letterSpacing: -0.6,
               ),
             ),
@@ -94,28 +94,30 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: selectedPet == pet
-                          ? Pallete.subGreen
-                          : Pallete.lightGray,
+                      color: selectedPetType == pet
+                          ? Palette.subGreen
+                          : Palette.lightGray,
                       width: 1.0,
                     ),
                   ),
                   label: Text(pet),
-                  backgroundColor: Pallete.white,
-                  selected: selectedPet == pet,
-                  selectedColor: Pallete.mainGreen,
+                  backgroundColor: Palette.white,
+                  selected: selectedPetType == pet,
+                  selectedColor: Palette.mainGreen,
                   showCheckmark: false,
                   labelStyle: TextStyle(
                     fontFamily: 'Pretendard',
-                    fontWeight:
-                        selectedPet == pet ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: selectedPetType == pet
+                        ? FontWeight.w600
+                        : FontWeight.w400,
                     fontSize: 16,
-                    color:
-                        selectedPet == pet ? Pallete.white : Pallete.lightGray,
+                    color: selectedPetType == pet
+                        ? Palette.white
+                        : Palette.lightGray,
                   ),
                   onSelected: (bool isSelected) {
                     setState(() {
-                      selectedPet = isSelected ? pet : null;
+                      selectedPetType = isSelected ? pet : null;
                     });
                   },
                 );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/next_button.dart';
+import 'package:pet_log/components/step_progress_indicator.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
-import 'package:pet_log/pallete.dart';
-
-import '../components/step_progress_indicator.dart';
+import 'package:pet_log/palette.dart';
 
 class SignUpPetInfoPage extends StatefulWidget {
   const SignUpPetInfoPage({super.key});
@@ -14,30 +13,59 @@ class SignUpPetInfoPage extends StatefulWidget {
 }
 
 class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _breedController = TextEditingController();
+  final TextEditingController _birthdayController = TextEditingController();
+  final TextEditingController _meetingDateController = TextEditingController();
   String? selectedGender;
   String? selectedNeutering;
 
-  final List<String> genderTypes = [
-    '수컷',
-    '암컷',
-  ];
+  final List<String> genderTypes = ['수컷', '암컷'];
+  final List<String> NeuteringTypes = ['했어요', '안했어요'];
 
-  final List<String> NeuteringTypes = [
-    '했어요',
-    '안했어요',
-  ];
+  bool _isNextButtonActive = false;
+
+  void _updateButtonState() {
+    setState(() {
+      _isNextButtonActive = _nameController.text.isNotEmpty &&
+          _breedController.text.isNotEmpty &&
+          _birthdayController.text.isNotEmpty &&
+          _meetingDateController.text.isNotEmpty &&
+          selectedGender != null &&
+          selectedNeutering != null;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_updateButtonState);
+    _breedController.addListener(_updateButtonState);
+    _birthdayController.addListener(_updateButtonState);
+    _meetingDateController.addListener(_updateButtonState);
+  }
+
+  @override
+  void dispose() {
+    _nameController.removeListener(_updateButtonState);
+    _breedController.removeListener(_updateButtonState);
+    _birthdayController.removeListener(_updateButtonState);
+    _meetingDateController.removeListener(_updateButtonState);
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Pallete.white,
+      backgroundColor: Palette.white,
       appBar: AppBar(
-        backgroundColor: Pallete.white,
+        backgroundColor: Palette.white,
         scrolledUnderElevation: 0,
       ),
       bottomNavigationBar: NextButton(
-        isActive: true,
+        isActive: _isNextButtonActive,
         onTap: () {
           Navigator.push(
             context,
@@ -56,8 +84,8 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
             child: StepProgressIndicator(
               totalSteps: 3,
               currentStep: 3,
-              selectedColor: Pallete.black,
-              unselectedColor: Pallete.lightGray,
+              selectedColor: Palette.black,
+              unselectedColor: Palette.lightGray,
             ),
           ),
           Expanded(
@@ -75,7 +103,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w600,
                           fontSize: 24,
-                          color: Pallete.black,
+                          color: Palette.black,
                           letterSpacing: -0.6,
                         ),
                       ),
@@ -90,7 +118,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Pallete.lightGray,
+                                  color: Palette.lightGray,
                                   width: 2.0,
                                 ),
                                 color: Colors.white,
@@ -107,7 +135,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                               child: IconButton(
                                 icon: Icon(
                                   Icons.camera_alt,
-                                  color: Pallete.black,
+                                  color: Palette.black,
                                   size: 30.0,
                                 ),
                                 onPressed: () {
@@ -127,12 +155,14 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                             labelText: '이름',
                             maxLength: 5,
                             hintText: '이름을 입력해주세요',
+                            controller: _nameController,
                           ),
                           SizedBox(height: 40),
                           TextFieldWithTitle(
                             labelText: '품종',
                             maxLength: 8,
                             hintText: '품종을 입력해주세요',
+                            controller: _breedController,
                           ),
                           SizedBox(height: 40),
                           TextFieldWithTitle(
@@ -145,6 +175,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                             labelText: '만날 날',
                             hintText: '2000-08-07 형식으로 입력해주세요',
                             keyboardType: TextInputType.datetime,
+                            controller: _meetingDateController,
                           ),
                           SizedBox(height: 40),
                           Text(
@@ -153,7 +184,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
-                              color: Pallete.black,
+                              color: Palette.black,
                               letterSpacing: -0.45,
                             ),
                           ),
@@ -167,15 +198,15 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                   borderRadius: BorderRadius.circular(20),
                                   side: BorderSide(
                                     color: this.selectedGender == pet
-                                        ? Pallete.subGreen
-                                        : Pallete.lightGray,
+                                        ? Palette.subGreen
+                                        : Palette.lightGray,
                                     width: 1.0,
                                   ),
                                 ),
                                 label: Text(pet),
-                                backgroundColor: Pallete.white,
+                                backgroundColor: Palette.white,
                                 selected: this.selectedGender == pet,
-                                selectedColor: Pallete.mainGreen,
+                                selectedColor: Palette.mainGreen,
                                 showCheckmark: false,
                                 labelStyle: TextStyle(
                                   fontFamily: 'Pretendard',
@@ -184,13 +215,14 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                       : FontWeight.w400,
                                   fontSize: 16,
                                   color: this.selectedGender == pet
-                                      ? Pallete.white
-                                      : Pallete.lightGray,
+                                      ? Palette.white
+                                      : Palette.lightGray,
                                 ),
                                 onSelected: (bool isSelected) {
                                   setState(() {
                                     this.selectedGender =
                                         isSelected ? pet : null;
+                                    _updateButtonState();
                                   });
                                 },
                               );
@@ -203,7 +235,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w600,
                               fontSize: 18,
-                              color: Pallete.black,
+                              color: Palette.black,
                               letterSpacing: -0.45,
                             ),
                           ),
@@ -217,15 +249,15 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                   borderRadius: BorderRadius.circular(20),
                                   side: BorderSide(
                                     color: this.selectedNeutering == pet
-                                        ? Pallete.subGreen
-                                        : Pallete.lightGray,
+                                        ? Palette.subGreen
+                                        : Palette.lightGray,
                                     width: 1.0,
                                   ),
                                 ),
                                 label: Text(pet),
-                                backgroundColor: Pallete.white,
+                                backgroundColor: Palette.white,
                                 selected: this.selectedNeutering == pet,
-                                selectedColor: Pallete.mainGreen,
+                                selectedColor: Palette.mainGreen,
                                 showCheckmark: false,
                                 labelStyle: TextStyle(
                                   fontFamily: 'Pretendard',
@@ -234,13 +266,14 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                       : FontWeight.w400,
                                   fontSize: 16,
                                   color: this.selectedNeutering == pet
-                                      ? Pallete.white
-                                      : Pallete.lightGray,
+                                      ? Palette.white
+                                      : Palette.lightGray,
                                 ),
                                 onSelected: (bool isSelected) {
                                   setState(() {
                                     this.selectedNeutering =
                                         isSelected ? pet : null;
+                                    _updateButtonState();
                                   });
                                 },
                               );

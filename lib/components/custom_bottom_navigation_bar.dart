@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 
 import '../feed/feed_home_page.dart';
 import '../home/home_page.dart';
@@ -29,7 +29,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       ),
       bottomNavigationBar: NavigationBar(
         height: 60,
-        backgroundColor: Pallete.white,
+        backgroundColor: Palette.white,
         selectedIndex: currentIndex, // 현재 보여주는 탭
         onDestinationSelected: (newIndex) {
           print("selected newIndex : $newIndex");

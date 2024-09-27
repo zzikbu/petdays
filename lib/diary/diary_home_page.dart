@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/search/search_page.dart';
 
 import '../dummy.dart';
@@ -13,9 +13,9 @@ class DiaryHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
@@ -24,7 +24,7 @@ class DiaryHomePage extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),
@@ -64,7 +64,7 @@ class DiaryHomePage extends StatelessWidget {
                       // color: Pallete.mainGreen,
                       borderRadius: BorderRadius.circular(20),
                       border: Border.all(
-                        color: Pallete.feedBorder,
+                        color: Palette.feedBorder,
                         width: 1,
                       ),
                       image: DecorationImage(
@@ -73,7 +73,7 @@ class DiaryHomePage extends StatelessWidget {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Pallete.black.withOpacity(0.05),
+                          color: Palette.black.withOpacity(0.05),
                           offset: Offset(8, 8),
                           blurRadius: 8,
                         ),
@@ -87,20 +87,20 @@ class DiaryHomePage extends StatelessWidget {
                     child: Container(
                       height: 88,
                       decoration: BoxDecoration(
-                        color: Pallete.white.withOpacity(0.9),
+                        color: Palette.white.withOpacity(0.9),
                         border: Border(
                           left: BorderSide(
-                            color: Pallete.feedBorder,
+                            color: Palette.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
                           right: BorderSide(
-                            color: Pallete.feedBorder,
+                            color: Palette.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
                           bottom: BorderSide(
-                            color: Pallete.feedBorder,
+                            color: Palette.feedBorder,
                             width: 1,
                             style: BorderStyle.solid,
                           ),
@@ -127,7 +127,7 @@ class DiaryHomePage extends StatelessWidget {
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18,
-                                  color: Pallete.black,
+                                  color: Palette.black,
                                   letterSpacing: -0.4,
                                 ),
                               ),
@@ -137,7 +137,7 @@ class DiaryHomePage extends StatelessWidget {
                               children: [
                                 Icon(
                                   Icons.pets,
-                                  color: Pallete.darkGray,
+                                  color: Palette.darkGray,
                                   size: 16,
                                 ),
                                 SizedBox(width: 4),
@@ -147,7 +147,7 @@ class DiaryHomePage extends StatelessWidget {
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
-                                    color: Pallete.darkGray,
+                                    color: Palette.darkGray,
                                     letterSpacing: -0.4,
                                   ),
                                 ),
@@ -155,7 +155,7 @@ class DiaryHomePage extends StatelessWidget {
                                 Container(
                                   width: 1,
                                   height: 10,
-                                  color: Pallete.mediumGray,
+                                  color: Palette.mediumGray,
                                 ),
                                 SizedBox(width: 8),
                                 Text(
@@ -164,7 +164,7 @@ class DiaryHomePage extends StatelessWidget {
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
-                                    color: Pallete.mediumGray,
+                                    color: Palette.mediumGray,
                                     letterSpacing: -0.35,
                                   ),
                                 ),
@@ -172,14 +172,14 @@ class DiaryHomePage extends StatelessWidget {
                                 Container(
                                   width: 1,
                                   height: 10,
-                                  color: Pallete.mediumGray,
+                                  color: Palette.mediumGray,
                                 ),
                                 SizedBox(width: 8),
                                 SvgPicture.asset(
                                   'assets/icons/ic_unlock.svg',
                                   width: 14,
                                   height: 14,
-                                  color: Pallete.mediumGray,
+                                  color: Palette.mediumGray,
                                 ),
                               ],
                             ),
@@ -201,14 +201,14 @@ class DiaryHomePage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => DiaryWritePage()),
           );
         },
-        backgroundColor: Pallete.darkGray,
+        backgroundColor: Palette.darkGray,
         elevation: 0, // 그림자 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
         child: Icon(
           Icons.edit,
-          color: Pallete.white,
+          color: Palette.white,
         ),
       ),
     );

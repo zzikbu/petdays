@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 
 class WalkMapPage extends StatelessWidget {
   const WalkMapPage({super.key});
@@ -15,7 +15,7 @@ class WalkMapPage extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Container(
-              color: Pallete.white,
+              color: Palette.white,
               child: Center(
                 child: Text(
                   '지도',
@@ -31,7 +31,7 @@ class WalkMapPage extends StatelessWidget {
             child: Container(
               height: 76,
               decoration: BoxDecoration(
-                color: Pallete.mainGreen,
+                color: Palette.mainGreen,
                 borderRadius: BorderRadius.circular(32),
               ),
               child: Padding(
@@ -44,7 +44,7 @@ class WalkMapPage extends StatelessWidget {
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w600,
                         fontSize: 28,
-                        color: Pallete.white,
+                        color: Palette.white,
                         letterSpacing: -0.7,
                       ),
                     ),
@@ -55,7 +55,7 @@ class WalkMapPage extends StatelessWidget {
                         print('산책 종료 눌림');
                       },
                       icon: Icon(Icons.square),
-                      color: Pallete.white,
+                      color: Palette.white,
                       iconSize: 46,
                       highlightColor: Colors.transparent, // 꾹 눌렀을 때 애니메이션 제거
                     )

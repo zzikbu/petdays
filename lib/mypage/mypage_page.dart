@@ -4,7 +4,7 @@ import 'package:pet_log/service/auth_service.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
 import 'package:provider/provider.dart';
 
-import '../pallete.dart';
+import '../palette.dart';
 
 class MypagePage extends StatelessWidget {
   const MypagePage({super.key});
@@ -12,7 +12,7 @@ class MypagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -28,7 +28,7 @@ class MypagePage extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: Pallete.lightGray,
+                        color: Palette.lightGray,
                         width: 1.0,
                       ),
                     ),
@@ -40,7 +40,7 @@ class MypagePage extends StatelessWidget {
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
-                      color: Pallete.black,
+                      color: Palette.black,
                       letterSpacing: -0.5,
                     ),
                   ),
@@ -59,7 +59,7 @@ class MypagePage extends StatelessWidget {
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
-                          color: Pallete.black,
+                          color: Palette.black,
                           letterSpacing: -0.4,
                         ),
                       ),
@@ -70,7 +70,7 @@ class MypagePage extends StatelessWidget {
               SizedBox(height: 40),
               Container(
                 height: 1,
-                color: Pallete.lightGray,
+                color: Palette.lightGray,
               ),
               SizedBox(height: 40),
               Text(
@@ -79,7 +79,7 @@ class MypagePage extends StatelessWidget {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 24,
-                  color: Pallete.black,
+                  color: Palette.black,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -92,7 +92,7 @@ class MypagePage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -106,7 +106,7 @@ class MypagePage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -120,7 +120,7 @@ class MypagePage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -128,7 +128,7 @@ class MypagePage extends StatelessWidget {
               SizedBox(height: 40),
               Container(
                 height: 1,
-                color: Pallete.lightGray,
+                color: Palette.lightGray,
               ),
               SizedBox(height: 40),
               Text(
@@ -137,7 +137,7 @@ class MypagePage extends StatelessWidget {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 24,
-                  color: Pallete.black,
+                  color: Palette.black,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -171,7 +171,7 @@ class MypagePage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -185,7 +185,7 @@ class MypagePage extends StatelessWidget {
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 20,
-                    color: Pallete.black,
+                    color: Palette.black,
                     letterSpacing: -0.5,
                   ),
                 ),

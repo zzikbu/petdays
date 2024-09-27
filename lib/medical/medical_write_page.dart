@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 
 import '../components/next_button.dart';
 import '../components/textfield_with_title.dart';
@@ -20,17 +20,17 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         title: Text(
           "진료기록",
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),
@@ -48,7 +48,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
-                  color: Pallete.black,
+                  color: Palette.black,
                   letterSpacing: -0.45,
                 ),
               ),
@@ -59,13 +59,13 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Pallete.lightGray,
+                    color: Palette.lightGray,
                     width: 1,
                   ),
                 ),
                 child: Icon(
                   Icons.add,
-                  color: Pallete.lightGray,
+                  color: Palette.lightGray,
                 ),
               ),
               SizedBox(height: 40),
@@ -95,7 +95,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 18,
-                  color: Pallete.black,
+                  color: Palette.black,
                   letterSpacing: -0.45,
                 ),
               ),
@@ -103,7 +103,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                 child: TextField(
                   autocorrect: false,
                   enableSuggestions: false,
-                  cursorColor: Pallete.subGreen,
+                  cursorColor: Palette.subGreen,
                   maxLines: null,
                   decoration: InputDecoration(
                     hintText: '특이사항이나 메모를 입력해주세요',
@@ -112,13 +112,13 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
                       letterSpacing: -0.4,
-                      color: Pallete.lightGray,
+                      color: Palette.lightGray,
                     ),
                     focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Pallete.black, width: 2),
+                      borderSide: BorderSide(color: Palette.black, width: 2),
                     ),
                     enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Pallete.black, width: 2),
+                      borderSide: BorderSide(color: Palette.black, width: 2),
                     ),
                   ),
                   style: TextStyle(

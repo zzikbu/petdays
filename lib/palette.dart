@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Pallete {
-  Pallete._();
+class Palette {
+  Palette._();
 
   static const white = Color(0xFFFFFFFF);
   static const black = Color(0xFF111111);

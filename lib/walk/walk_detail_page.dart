@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 
 import '../components/custom_dialog.dart';
 import '../components/info_column.dart';
@@ -13,7 +13,7 @@ class WalkDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -37,7 +37,7 @@ class WalkDetailPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
@@ -76,7 +76,7 @@ class WalkDetailPage extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: Pallete.lightGray,
+                color: Palette.lightGray,
                 borderRadius: BorderRadius.circular(8),
               ),
               height: 200,

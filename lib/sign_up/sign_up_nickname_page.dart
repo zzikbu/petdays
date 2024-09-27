@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pet_log/components/next_button.dart';
-import 'package:pet_log/pallete.dart';
-import 'package:pet_log/sign_up/sign_up_select_pet_type_page.dart';
-
-import '../components/step_progress_indicator.dart';
+import 'package:pet_log/components/step_progress_indicator.dart';
+import 'package:pet_log/palette.dart';
+import 'package:pet_log/service/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class SignUpNicknamePage extends StatefulWidget {
   const SignUpNicknamePage({super.key});
@@ -20,6 +21,7 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
   void initState() {
     super.initState();
     _nicknameController.addListener(_updateButtonState);
+    _nicknameController.text = context.read<AuthService>().nickname;
   }
 
   @override
@@ -39,17 +41,15 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Pallete.white,
+      backgroundColor: Palette.white,
       appBar: AppBar(
-        backgroundColor: Pallete.white,
+        backgroundColor: Palette.white,
       ),
       bottomNavigationBar: NextButton(
         isActive: _isNextButtonActive,
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SignUpSelectPetTypePage()),
-          );
+          context.read<AuthService>().nickname = _nicknameController.text;
+          context.go('/sign_up/pet_type');
         },
         buttonText: "다음",
       ),
@@ -62,8 +62,8 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
             StepProgressIndicator(
               totalSteps: 3,
               currentStep: 1,
-              selectedColor: Pallete.black,
-              unselectedColor: Pallete.lightGray,
+              selectedColor: Palette.black,
+              unselectedColor: Palette.lightGray,
             ),
             SizedBox(height: 30),
             Text(
@@ -72,7 +72,7 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 fontSize: 24,
-                color: Pallete.black,
+                color: Palette.black,
                 letterSpacing: -0.6,
               ),
             ),
@@ -83,7 +83,7 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: Pallete.mediumGray,
+                color: Palette.mediumGray,
                 letterSpacing: -0.6,
               ),
             ),
@@ -93,7 +93,7 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
               enableSuggestions: false,
               controller: _nicknameController,
               maxLength: 6, // 최대 글자 수를 6으로 제한
-              cursorColor: Pallete.mainGreen,
+              cursorColor: Palette.mainGreen,
               style: TextStyle(
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w500,
@@ -107,14 +107,14 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
                   fontSize: 20,
                   letterSpacing: -0.5,
                   fontWeight: FontWeight.w500,
-                  color: Pallete.lightGray,
+                  color: Palette.lightGray,
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Pallete.black, width: 2), // 활성화
+                  borderSide: BorderSide(color: Palette.black, width: 2), // 활성화
                 ),
                 enabledBorder: UnderlineInputBorder(
                   borderSide:
-                      BorderSide(color: Pallete.black, width: 2), // 비활성화
+                      BorderSide(color: Palette.black, width: 2), // 비활성화
                 ),
               ),
             ),

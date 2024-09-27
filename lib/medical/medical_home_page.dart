@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
-import 'package:pet_log/pallete.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/search/search_page.dart';
 import 'package:pet_log/select_pet_page.dart';
 
@@ -14,9 +14,9 @@ class MedicalHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Pallete.background,
+      backgroundColor: Palette.background,
       appBar: AppBar(
-        backgroundColor: Pallete.background,
+        backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
@@ -25,7 +25,7 @@ class MedicalHomePage extends StatelessWidget {
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 20,
-            color: Pallete.black,
+            color: Palette.black,
             letterSpacing: -0.5,
           ),
         ),
@@ -63,7 +63,7 @@ class MedicalHomePage extends StatelessWidget {
                     height: 110,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: Pallete.white,
+                      color: Palette.white,
                       borderRadius: BorderRadius.circular(20),
                       // border: Border.all(
                       //   color: Pallete.feedBorder,
@@ -71,7 +71,7 @@ class MedicalHomePage extends StatelessWidget {
                       // ),
                       boxShadow: [
                         BoxShadow(
-                          color: Pallete.black.withOpacity(0.05),
+                          color: Palette.black.withOpacity(0.05),
                           offset: Offset(8, 8),
                           blurRadius: 8,
                         ),
@@ -91,7 +91,7 @@ class MedicalHomePage extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: Pallete.lightGray,
+                                    color: Palette.lightGray,
                                     width: 0.4,
                                   ),
                                   image: DecorationImage(
@@ -109,7 +109,7 @@ class MedicalHomePage extends StatelessWidget {
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 18,
-                                  color: Pallete.black,
+                                  color: Palette.black,
                                   letterSpacing: -0.5,
                                 ),
                               ),
@@ -120,7 +120,7 @@ class MedicalHomePage extends StatelessWidget {
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
-                                  color: Pallete.mediumGray,
+                                  color: Palette.mediumGray,
                                   letterSpacing: -0.4,
                                 ),
                               ),
@@ -135,7 +135,7 @@ class MedicalHomePage extends StatelessWidget {
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
-                              color: Pallete.black,
+                              color: Palette.black,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -152,7 +152,7 @@ class MedicalHomePage extends StatelessWidget {
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
-                        color: Pallete.black,
+                        color: Palette.black,
                         letterSpacing: -0.4,
                       ),
                     ),
@@ -172,14 +172,14 @@ class MedicalHomePage extends StatelessWidget {
             ),
           );
         },
-        backgroundColor: Pallete.darkGray,
+        backgroundColor: Palette.darkGray,
         elevation: 0, // 그림자 제거
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
         child: Icon(
           Icons.edit,
-          color: Pallete.white,
+          color: Palette.white,
         ),
       ),
     );

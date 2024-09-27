@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../pallete.dart';
+import '../palette.dart';
 
 class CustomDialog extends StatelessWidget {
   final String title;
@@ -19,7 +19,7 @@ class CustomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Pallete.white,
+      backgroundColor: Palette.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -34,7 +34,7 @@ class CustomDialog extends StatelessWidget {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
-                color: Pallete.black,
+                color: Palette.black,
                 letterSpacing: -0.5,
               ),
             ),
@@ -46,7 +46,7 @@ class CustomDialog extends StatelessWidget {
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w400,
                 fontSize: 14,
-                color: Pallete.mediumGray,
+                color: Palette.mediumGray,
                 letterSpacing: -0.5,
               ),
             ),
@@ -62,7 +62,7 @@ class CustomDialog extends StatelessWidget {
                       child: Container(
                         height: 50,
                         decoration: BoxDecoration(
-                          color: Pallete.lightGray,
+                          color: Palette.lightGray,
                           borderRadius: BorderRadius.circular(18),
                         ),
                         child: Center(
@@ -72,7 +72,7 @@ class CustomDialog extends StatelessWidget {
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
-                              color: Pallete.black,
+                              color: Palette.black,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -91,7 +91,7 @@ class CustomDialog extends StatelessWidget {
                     child: Container(
                       height: 50,
                       decoration: BoxDecoration(
-                        color: Pallete.mainGreen,
+                        color: Palette.mainGreen,
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Center(
@@ -101,7 +101,7 @@ class CustomDialog extends StatelessWidget {
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w500,
                             fontSize: 16,
-                            color: Pallete.white,
+                            color: Palette.white,
                             letterSpacing: -0.5,
                           ),
                         ),
