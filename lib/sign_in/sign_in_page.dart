@@ -30,20 +30,15 @@ class _SignInPageState extends State<SignInPage> {
               /// 구글
               GestureDetector(
                 onTap: () {
-                  // context.read<AuthService>().signInWithGoogle(
-                  //   onSuccess: () {
-                  //     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  //       content: Text("로그인 성공"),
-                  //     ));
-                  //
-                  //     Navigator.pushReplacement(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => SignUpNicknamePage()),
-                  //     );
-                  //   },
-                  // );
-                  context.go('/sign_up');
+                  context.read<AuthService>().signInWithGoogle(
+                    onSuccess: () {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text("로그인 성공"),
+                      ));
+
+                      context.go('/sign_up');
+                    },
+                  );
                 },
                 child: Container(
                   height: 50,
