@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
 class SignupPage extends StatefulWidget {
@@ -154,34 +158,32 @@ class _SignupPageState extends State<SignupPage> {
                               });
 
                               // 회원가입 로직
-                              // try {
-                              //   await context.read<MyAuthProvider>().signUp(
-                              //         email: _emailTEC.text,
-                              //         name: _nameTEC.text,
-                              //         password: _passwordTEC.text,
-                              //         profileImage: _image,
-                              //       );
-                              //
-                              //   Navigator.pushReplacement(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //         builder: (context) => SigninScreen(),
-                              //       ));
-                              //
-                              //   // 스낵바 띄우기
-                              //   ScaffoldMessenger.of(context).showSnackBar(
-                              //     SnackBar(
-                              //       content: Text("인증 메일을 전송했습니다."),
-                              //       duration: Duration(seconds: 120),
-                              //     ),
-                              //   );
-                              // } on CustomException catch (e) {
-                              //   setState(() {
-                              //     _isEnabled = true; // 다시 활성화
-                              //   });
-                              //
-                              //   errorDialogWidget(context, e);
-                              // }
+                              try {
+                                await context.read<MyAuthProvider>().signUp(
+                                      email: _emailTEC.text,
+                                      password: _passwordTEC.text,
+                                    );
+
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SignInPage(),
+                                    ));
+
+                                // 스낵바 띄우기
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("인증 메일을 전송했습니다."),
+                                    duration: Duration(seconds: 120),
+                                  ),
+                                );
+                              } on CustomException catch (e) {
+                                setState(() {
+                                  _isEnabled = true; // 다시 활성화
+                                });
+
+                                errorDialogWidget(context, e);
+                              }
                             }
                           : null,
                       child: Container(
@@ -193,7 +195,7 @@ class _SignupPageState extends State<SignupPage> {
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
-                            '로그인',
+                            '회원가입',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontFamily: 'Pretendard',
