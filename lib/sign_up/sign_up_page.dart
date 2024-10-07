@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
-import 'package:pet_log/sign_up/sign_up_page.dart';
+import 'package:pet_log/sign_in/sign_in_page.dart';
 import 'package:validators/validators.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignupPageState extends State<SignupPage> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>(); // 검증 로직을 위한
 
   final TextEditingController _emailTEC = TextEditingController();
@@ -41,7 +39,7 @@ class _SignInPageState extends State<SignInPage> {
           backgroundColor: Palette.white,
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Form(
                 // 검증 로직을 위해 Form으로 감싸기
                 key: _globalKey,
@@ -112,6 +110,32 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     SizedBox(height: 20),
 
+                    // 패스워드 확인
+                    TextFormField(
+                      enabled: _isEnabled,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        fillColor: Colors.transparent,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Palette.mainGreen),
+                        ),
+                        labelText: "패스워드 확인",
+                        labelStyle: TextStyle(color: Colors.black),
+                        prefixIcon: Icon(Icons.lock),
+                        filled: true,
+                      ),
+                      validator: (value) {
+                        if (_passwordTEC.text != value) {
+                          return "패스워드가 일치하지 않습니다.";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 40),
+
                     // 로그인 버튼
                     GestureDetector(
                       onTap: _isEnabled
@@ -125,19 +149,32 @@ class _SignInPageState extends State<SignInPage> {
                               // 검증 로직 후에
                               setState(() {
                                 _isEnabled = false;
-                                _autovalidateMode = AutovalidateMode.always;
+                                _autovalidateMode =
+                                    AutovalidateMode.always; // 실시간으로 변하게
                               });
 
-                              // 로그인 로직
+                              // 회원가입 로직
                               // try {
-                              //   logger.d(context.read<AuthState>().authStatus);
-                              //
-                              //   await context.read<MyAuthProvider>().signIn(
+                              //   await context.read<MyAuthProvider>().signUp(
                               //         email: _emailTEC.text,
+                              //         name: _nameTEC.text,
                               //         password: _passwordTEC.text,
+                              //         profileImage: _image,
                               //       );
                               //
-                              //   logger.d(context.read<AuthState>().authStatus);
+                              //   Navigator.pushReplacement(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => SigninScreen(),
+                              //       ));
+                              //
+                              //   // 스낵바 띄우기
+                              //   ScaffoldMessenger.of(context).showSnackBar(
+                              //     SnackBar(
+                              //       content: Text("인증 메일을 전송했습니다."),
+                              //       duration: Duration(seconds: 120),
+                              //     ),
+                              //   );
                               // } on CustomException catch (e) {
                               //   setState(() {
                               //     _isEnabled = true; // 다시 활성화
@@ -168,153 +205,27 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
 
-                    // 회원가입 하기 버튼
+                    // 로그인 하기 버튼
                     GestureDetector(
                       onTap: _isEnabled
                           ? () => Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignupPage(),
+                                builder: (context) => SignInPage(),
                               ))
                           : null,
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "회원이 아니신가요? 회원가입 하기",
+                          "이미 회원이신가요? 로그인 하기",
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                             color: Palette.mediumGray,
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-
-                    // 구글
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpNicknamePage()),
-                        );
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: Color(0xFF747775))),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_google.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Google로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 38),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-
-                    // 카카오
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpNicknamePage()),
-                        );
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFE500),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_kakao.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Kakao로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 38),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-
-                    // 애플
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpNicknamePage()),
-                        );
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF050708),
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 21.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_apple.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: const Text(
-                                'APPLE로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 36,
-                            ),
-                          ],
                         ),
                       ),
                     ),
