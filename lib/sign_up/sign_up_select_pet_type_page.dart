@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/step_progress_indicator.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/service/auth_service.dart';
+import 'package:pet_log/sign_up/sign_up_pet_info_page.dart';
 import 'package:provider/provider.dart';
 
 class SignUpSelectPetTypePage extends StatefulWidget {
@@ -33,7 +32,6 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
   void initState() {
     super.initState();
     petTypes.sort(); // 가나다 순 정렬
-    selectedPetType = context.read<AuthService>().selectedPetType;
   }
 
   @override
@@ -46,8 +44,10 @@ class _SignUpSelectPetTypePageState extends State<SignUpSelectPetTypePage> {
       bottomNavigationBar: NextButton(
         isActive: selectedPetType?.isNotEmpty ?? false, // 선택된 펫이 있을 때 활성화
         onTap: () {
-          context.read<AuthService>().selectedPetType = selectedPetType!;
-          context.go('/sign_up/pet_type/pet_info');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignUpPetInfoPage()),
+          );
         },
         buttonText: "다음",
       ),

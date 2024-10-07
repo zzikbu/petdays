@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/step_progress_indicator.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/service/auth_service.dart';
-import 'package:provider/provider.dart';
+import 'package:pet_log/sign_up/sign_up_select_pet_type_page.dart';
 
 class SignUpNicknamePage extends StatefulWidget {
   const SignUpNicknamePage({super.key});
@@ -14,28 +12,6 @@ class SignUpNicknamePage extends StatefulWidget {
 }
 
 class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
-  final TextEditingController _nicknameController = TextEditingController();
-  bool _isNextButtonActive = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nicknameController.addListener(_updateButtonState);
-    _nicknameController.text = context.read<AuthService>().nickname;
-  }
-
-  @override
-  void dispose() {
-    _nicknameController.removeListener(_updateButtonState);
-    _nicknameController.dispose();
-    super.dispose();
-  }
-
-  void _updateButtonState() {
-    setState(() {
-      _isNextButtonActive = _nicknameController.text.isNotEmpty;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +22,13 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
         backgroundColor: Palette.white,
       ),
       bottomNavigationBar: NextButton(
-        isActive: _isNextButtonActive,
+        isActive: false,
         onTap: () {
-          context.read<AuthService>().nickname = _nicknameController.text;
-          context.go('/sign_up/pet_type');
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SignUpSelectPetTypePage()),
+          );
         },
         buttonText: "다음",
       ),
@@ -91,7 +70,6 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
             TextField(
               autocorrect: false,
               enableSuggestions: false,
-              controller: _nicknameController,
               maxLength: 6, // 최대 글자 수를 6으로 제한
               cursorColor: Palette.mainGreen,
               style: TextStyle(

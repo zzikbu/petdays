@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/step_progress_indicator.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
-import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class SignUpPetInfoPage extends StatefulWidget {
@@ -46,12 +45,12 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
     _birthdayController.addListener(_updateButtonState);
     _meetingDateController.addListener(_updateButtonState);
 
-    _nameController.text = context.read<AuthService>().name;
-    _breedController.text = context.read<AuthService>().breed;
-    _birthdayController.text = context.read<AuthService>().birthday;
-    _meetingDateController.text = context.read<AuthService>().meetingDate;
-    selectedGender = context.read<AuthService>().selectedGender;
-    selectedNeutering = context.read<AuthService>().selectedNeutering;
+    // _nameController.text = context.read<AuthService>().name;
+    // _breedController.text = context.read<AuthService>().breed;
+    // _birthdayController.text = context.read<AuthService>().birthday;
+    // _meetingDateController.text = context.read<AuthService>().meetingDate;
+    // selectedGender = context.read<AuthService>().selectedGender;
+    // selectedNeutering = context.read<AuthService>().selectedNeutering;
 
     _updateButtonState();
   }
@@ -72,9 +71,6 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = context.read<AuthService>();
-    final user = authService.currentUser()!;
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Palette.white,
@@ -85,20 +81,11 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
       bottomNavigationBar: NextButton(
         isActive: _isNextButtonActive,
         onTap: () {
-          authService.name = _nameController.text;
-          authService.breed = _breedController.text;
-          authService.birthday = _birthdayController.text;
-          authService.meetingDate = _meetingDateController.text;
-          authService.selectedGender = selectedGender!;
-          authService.selectedNeutering = selectedNeutering!;
-
-          authService.create(uid: user.uid);
-
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //       builder: (context) => CustomBottomNavigationBar()),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomBottomNavigationBar()),
+          );
         },
         buttonText: "시작하기",
       ),
