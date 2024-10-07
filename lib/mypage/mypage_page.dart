@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:provider/provider.dart';
 
 import '../palette.dart';
 
@@ -148,15 +150,9 @@ class MypagePage extends StatelessWidget {
                       return CustomDialog(
                         title: '로그아웃',
                         message: '로그아웃 하시겠습니까??',
-                        onConfirm: () {
-                          // 로그아웃
-
-                          // SignInPage로 이동
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignInPage()),
-                          );
+                        onConfirm: () async {
+                          // 로그아웃 로직
+                          await context.read<MyAuthProvider>().signOut();
                         },
                       );
                     },

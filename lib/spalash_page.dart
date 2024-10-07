@@ -4,8 +4,8 @@ import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
 import 'package:provider/provider.dart';
 
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({super.key});
+class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
 
   @override
   Widget build(BuildContext context) {

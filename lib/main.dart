@@ -6,7 +6,7 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
-import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:pet_log/spalash_page.dart';
 import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true),
-        home: SignInPage(),
+        home: SplashPage(),
       ),
     );
   }

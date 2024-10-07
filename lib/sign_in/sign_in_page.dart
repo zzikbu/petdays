@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
 import 'package:pet_log/sign_up/sign_up_page.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
 class SignInPage extends StatefulWidget {
@@ -129,22 +133,18 @@ class _SignInPageState extends State<SignInPage> {
                               });
 
                               // 로그인 로직
-                              // try {
-                              //   logger.d(context.read<AuthState>().authStatus);
-                              //
-                              //   await context.read<MyAuthProvider>().signIn(
-                              //         email: _emailTEC.text,
-                              //         password: _passwordTEC.text,
-                              //       );
-                              //
-                              //   logger.d(context.read<AuthState>().authStatus);
-                              // } on CustomException catch (e) {
-                              //   setState(() {
-                              //     _isEnabled = true; // 다시 활성화
-                              //   });
-                              //
-                              //   errorDialogWidget(context, e);
-                              // }
+                              try {
+                                await context.read<MyAuthProvider>().signIn(
+                                      email: _emailTEC.text,
+                                      password: _passwordTEC.text,
+                                    );
+                              } on CustomException catch (e) {
+                                setState(() {
+                                  _isEnabled = true; // 다시 활성화
+                                });
+
+                                errorDialogWidget(context, e);
+                              }
                             }
                           : null,
                       child: Container(
