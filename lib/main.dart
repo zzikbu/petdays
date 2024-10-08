@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
+import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:pet_log/spalash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +39,12 @@ class _MyAppState extends State<MyApp> {
               firebaseAuth: FirebaseAuth.instance,
               firebaseFirestore: FirebaseFirestore.instance),
         ),
+        Provider<DiaryRepository>(
+          create: (context) => DiaryRepository(
+            firebaseStorage: FirebaseStorage.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
         StreamProvider<User?>(
           // ‼️앱 자체에서 인증상태를 변경하는게 아닌,
           // 파이어베이스 인증상태의 변화에 따라 앱의 인증상태를 변경하게 하기 위함‼️
@@ -48,6 +58,9 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<MyAuthProvider, AuthState>(
           create: (context) => MyAuthProvider(),
+        ),
+        StateNotifierProvider<DiaryProvider, DiaryState>(
+          create: (context) => DiaryProvider(),
         ),
       ],
       child: MaterialApp(

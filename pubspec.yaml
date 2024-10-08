@@ -29,6 +29,7 @@ dependencies:
   provider: ^6.1.2
   state_notifier: ^1.0.0
   flutter_state_notifier: ^1.0.0
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,7 @@ class TextFieldWithTitle extends StatefulWidget {
   final String hintText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
+  final bool isMultiLine;
 
   const TextFieldWithTitle({
     super.key,
@@ -16,6 +17,7 @@ class TextFieldWithTitle extends StatefulWidget {
     required this.hintText,
     this.keyboardType = TextInputType.text, // 기본값 설정
     this.controller,
+    this.isMultiLine = false, // 기본값 false
   });
 
   @override
@@ -38,12 +40,15 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
             letterSpacing: -0.45,
           ),
         ),
-        TextField(
+        TextFormField(
           controller: widget.controller,
           autocorrect: false,
           enableSuggestions: false,
           maxLength: widget.maxLength,
-          keyboardType: widget.keyboardType,
+          maxLines: widget.isMultiLine ? null : 1, // null이면 여러 줄 허용
+          keyboardType: widget.isMultiLine
+              ? TextInputType.multiline
+              : widget.keyboardType, // multiline일 경우
           cursorColor: Palette.subGreen,
           style: TextStyle(
             fontFamily: 'Pretendard',
