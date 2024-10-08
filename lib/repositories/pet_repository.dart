@@ -29,15 +29,15 @@ class PetRepository {
     String downloadURL = "";
 
     try {
-      String diaryId = Uuid().v1(); // Generate a v1 (time-based) id
+      String petId = Uuid().v1(); // Generate a v1 (time-based) id
 
       // firestore 문서 참조
       DocumentReference<Map<String, dynamic>> petDocRef =
-          firebaseFirestore.collection("pets").doc();
+          firebaseFirestore.collection("pets").doc(petId);
 
       // firestorage
       Reference ref =
-          firebaseStorage.ref().child("pets").child(uid); // 아직 업로드 X
+          firebaseStorage.ref().child("pets").child(petId); // 아직 업로드 X
       TaskSnapshot snapshot = await ref.putData(file!); // 업로드
       downloadURL = await snapshot.ref.getDownloadURL(); // 사진 경로 받기
 
