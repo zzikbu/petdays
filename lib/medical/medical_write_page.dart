@@ -37,11 +37,9 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
 
   void _checkBottomActive() {
     setState(() {
-      _isActive = _visitDateTEC.text.isNotEmpty &&
-          _reasonTEC.text.isNotEmpty &&
-          _hospitalTEC.text.isNotEmpty &&
-          _doctorTEC.text.isNotEmpty &&
-          _noteTEC.text.isNotEmpty;
+      _isActive = _files.isNotEmpty &&
+          _visitDateTEC.text.isNotEmpty &&
+          _reasonTEC.text.isNotEmpty;
     });
   }
 
@@ -81,6 +79,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                     : () {
                         setState(() {
                           _files.remove(data); // 사진 삭제
+                          _checkBottomActive();
                         });
                       },
                 child: Container(
@@ -193,6 +192,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                                 final _images = await selectImages();
                                 setState(() {
                                   _files.addAll(_images);
+                                  _checkBottomActive();
                                 });
                               },
                               child: Container(
@@ -288,6 +288,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text("작성 완료")));
 
+              Navigator.pop(context);
               Navigator.pop(context);
             } on CustomException catch (e) {
               errorDialogWidget(context, e);

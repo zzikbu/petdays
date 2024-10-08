@@ -44,7 +44,9 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
   void _checkBottomActive() {
     setState(() {
-      _isActive = _titleTEC.text.isNotEmpty && _descTEC.text.isNotEmpty;
+      _isActive = _files.isNotEmpty &&
+          _titleTEC.text.isNotEmpty &&
+          _descTEC.text.isNotEmpty;
     });
   }
 
@@ -84,6 +86,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                     : () {
                         setState(() {
                           _files.remove(data); // 사진 삭제
+                          _checkBottomActive();
                         });
                       },
                 child: Container(
@@ -231,6 +234,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                 final _images = await selectImages();
                                 setState(() {
                                   _files.addAll(_images);
+                                  _checkBottomActive();
                                 });
                               },
                               child: Container(

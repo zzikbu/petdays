@@ -50,13 +50,15 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
           await file.readAsBytes(); // 선택한 이미지를 코드로 조작할 수 있게 반환
       setState(() {
         _image = uint8list;
+        _checkBottomActive();
       });
     }
   }
 
   void _checkBottomActive() {
     setState(() {
-      _isActive = _nameTEC.text.isNotEmpty &&
+      _isActive = _image != null &&
+          _nameTEC.text.isNotEmpty &&
           _breedTEC.text.isNotEmpty &&
           _birthdayTEC.text.isNotEmpty &&
           _firstMeetingDateTEC.text.isNotEmpty &&
