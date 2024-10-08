@@ -8,8 +8,11 @@ import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/pet/pet_provider.dart';
+import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
+import 'package:pet_log/repositories/pet_repository.dart';
 import 'package:pet_log/spalash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +42,12 @@ class _MyAppState extends State<MyApp> {
               firebaseAuth: FirebaseAuth.instance,
               firebaseFirestore: FirebaseFirestore.instance),
         ),
+        Provider<PetRepository>(
+          create: (context) => PetRepository(
+            firebaseStorage: FirebaseStorage.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
         Provider<DiaryRepository>(
           create: (context) => DiaryRepository(
             firebaseStorage: FirebaseStorage.instance,
@@ -58,6 +67,9 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<MyAuthProvider, AuthState>(
           create: (context) => MyAuthProvider(),
+        ),
+        StateNotifierProvider<PetProvider, PetState>(
+          create: (context) => PetProvider(),
         ),
         StateNotifierProvider<DiaryProvider, DiaryState>(
           create: (context) => DiaryProvider(),

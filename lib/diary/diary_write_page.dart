@@ -117,6 +117,9 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
   @override
   void dispose() {
+    _titleTEC.removeListener(_checkBottomActive);
+    _titleTEC.removeListener(_checkBottomActive);
+
     _titleTEC.dispose();
     _descTEC.dispose();
 

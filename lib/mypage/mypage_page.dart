@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:pet_log/sign_up/sign_up_pet_info_page.dart';
 import 'package:provider/provider.dart';
 
 import '../palette.dart';
@@ -34,17 +35,18 @@ class MypagePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 8),
-                  Text(
-                    '이승민',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Palette.black,
-                      letterSpacing: -0.5,
+                  Expanded(
+                    child: Text(
+                      '이승민',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                        color: Palette.black,
+                        letterSpacing: -0.5,
+                      ),
                     ),
                   ),
-                  Spacer(),
                   Container(
                     width: 80,
                     height: 40,
@@ -84,6 +86,26 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SignUpPetInfoPage()),
+                  );
+                },
+                child: Text(
+                  '펫 추가',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    color: Palette.black,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ),
+              SizedBox(height: 14),
               GestureDetector(
                 onTap: () {},
                 child: Text(
