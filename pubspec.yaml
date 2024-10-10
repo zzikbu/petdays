@@ -19,6 +19,8 @@ dependencies:
   pull_down_button: ^0.10.1
   image_picker: ^1.1.2
   validators: ^3.0.0
+  uuid: ^4.5.1
+  extended_image: ^8.3.1
 
   firebase_core: ^3.6.0
   firebase_auth: ^5.3.1
@@ -29,7 +31,6 @@ dependencies:
   provider: ^6.1.2
   state_notifier: ^1.0.0
   flutter_state_notifier: ^1.0.0
-  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/diary_model.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:provider/provider.dart';
 
 import '../diary/diary_detail_page.dart';
-import '../dummy.dart';
 import '../palette.dart';
 import '../search/search_page.dart';
 
@@ -13,11 +18,48 @@ class FeedHomePage extends StatefulWidget {
   _FeedHomePageState createState() => _FeedHomePageState();
 }
 
-class _FeedHomePageState extends State<FeedHomePage> {
+class _FeedHomePageState extends State<FeedHomePage>
+    with AutomaticKeepAliveClientMixin<FeedHomePage> {
+  late final DiaryProvider diaryProvider;
+
   bool isAllSelected = true;
+
+  // 다른 화면에서 돌아올 때
+  // 데이터를 매번 가져오지 않도록
+  @override
+  bool get wantKeepAlive => true; // AutomaticKeepAliveClientMixin
+
+  @override
+  void initState() {
+    super.initState();
+    diaryProvider = context.read<DiaryProvider>();
+    _getFeedList();
+  }
+
+  void _getFeedList() {
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await diaryProvider.getDiaryList();
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    DiaryState diaryState = context.watch<DiaryState>();
+    List<DiaryModel> diaryList = diaryState.diaryList;
+
+    if (diaryState.diaryStatus == DiaryStatus.fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Palette.background,
       appBar: AppBar(
@@ -38,7 +80,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      isAllSelected = true; // Set "전체" as selected
+                      isAllSelected = true;
                     });
                   },
                   child: Container(
@@ -68,7 +110,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      isAllSelected = false; // Set "HOT" as selected
+                      isAllSelected = false;
                     });
                   },
                   child: Container(
@@ -116,14 +158,17 @@ class _FeedHomePageState extends State<FeedHomePage> {
         ],
       ),
       body: RefreshIndicator(
+        // 새로고침
+        color: Palette.subGreen,
+        backgroundColor: Palette.white,
         onRefresh: () async {
-          print("새로고침");
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
+          _getFeedList(); // diaryList를 watch하고 있기 때문에 변경사항이 발생하면 화면을 새롭게 그림
         },
         child: Scrollbar(
           child: ListView.builder(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            itemCount: dummyPets.length,
+            itemCount: diaryList.length,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
@@ -134,6 +179,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                 },
                 child: Stack(
                   children: [
+                    // 사진
                     Container(
                       margin: EdgeInsets.only(bottom: 20),
                       height: 220,
@@ -144,8 +190,8 @@ class _FeedHomePageState extends State<FeedHomePage> {
                           width: 1,
                         ),
                         image: DecorationImage(
-                          image: AssetImage(dummyPets[index]['image']!),
-                          fit: BoxFit.cover,
+                          image: NetworkImage(diaryList[index].imageUrls[0]),
+                          fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -160,6 +206,7 @@ class _FeedHomePageState extends State<FeedHomePage> {
                       left: 0,
                       right: 0,
                       bottom: 20,
+                      // 흰색 부분
                       child: Container(
                         height: 88,
                         decoration: BoxDecoration(
@@ -195,8 +242,9 @@ class _FeedHomePageState extends State<FeedHomePage> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 2),
+                                // 제목
                                 child: Text(
-                                  '다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 ',
+                                  diaryList[index].title,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -211,14 +259,17 @@ class _FeedHomePageState extends State<FeedHomePage> {
                               SizedBox(height: 4),
                               Row(
                                 children: [
+                                  // 좋아요 아이콘
                                   Icon(
                                     Icons.pets,
                                     color: Palette.darkGray,
                                     size: 16,
                                   ),
                                   SizedBox(width: 4),
+
+                                  // 좋아요 개수
                                   Text(
-                                    '123',
+                                    diaryList[index].likeCount.toString(),
                                     style: TextStyle(
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
@@ -228,14 +279,22 @@ class _FeedHomePageState extends State<FeedHomePage> {
                                     ),
                                   ),
                                   SizedBox(width: 8), // 여유 공간 추가
+
+                                  // 세로 구분선
                                   Container(
                                     width: 1,
                                     height: 10,
                                     color: Palette.mediumGray, // 구분선 색상
                                   ),
                                   SizedBox(width: 8),
+
+                                  // 날짜
                                   Text(
-                                    '2024.08.14',
+                                    diaryList[index]
+                                        .createAt
+                                        .toDate()
+                                        .toString()
+                                        .split(" ")[0],
                                     style: TextStyle(
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,

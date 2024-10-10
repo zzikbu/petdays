@@ -16,7 +16,42 @@ class DiaryRepository {
     required this.firebaseFirestore,
   });
 
-  Future<void> uploadDiary({
+  // 성장일기 가져오기
+  Future<List<DiaryModel>> getDiaryList() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
+          .collection("diaries")
+          .orderBy('createAt', descending: true) // 최신순으로
+          .get();
+
+      return await Future.wait(snapshot.docs.map(
+        (e) async {
+          Map<String, dynamic> data = e.data();
+          DocumentReference<Map<String, dynamic>> writerDocRef = data["writer"];
+          DocumentSnapshot<Map<String, dynamic>> writerSnapshot =
+              await writerDocRef.get();
+          UserModel userModel = UserModel.fromMap(writerSnapshot.data()!);
+          data["writer"] = userModel;
+          return DiaryModel.fromMap(data);
+        },
+      ).toList());
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
+  // 성장일기 업로드
+  Future<DiaryModel> uploadDiary({
     required String uid, // 작성자
     required List<String> files, // 이미지들
     required String title, // 제목
@@ -79,6 +114,7 @@ class DiaryRepository {
       // 모든 작업이 큐에 추가된 후, commit()을 호출하면 Firestore에 모든 작업이 한 번에 적용
       // 만약 작업 중 하나라도 실패하면 전체 작업이 취소되며, 이로 인해 데이터의 일관성이 유지
       batch.commit();
+      return diaryModel; // 등록한 성장일기를 리스트에 추가하기 위해 반환
     } on FirebaseException catch (e) {
       // 에러 발생시 store에 등록된 이미지 삭제
       _deleteImage(imageUrls);
