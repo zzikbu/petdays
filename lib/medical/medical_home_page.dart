@@ -168,7 +168,7 @@ class MedicalHomePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SelectPetPage(isFromMedicalPage: true),
+              builder: (context) => SelectPetPage(isMedical: true),
             ),
           );
         },

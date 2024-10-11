@@ -221,7 +221,7 @@ class WalkHomePage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SelectPetPage(
-                isFromMedicalPage: false,
+                isMedical: false,
               ),
             ),
           );

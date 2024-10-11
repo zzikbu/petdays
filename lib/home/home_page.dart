@@ -63,15 +63,15 @@ class _HomePageState extends State<HomePage>
     return '${ageInYears}살 ${breed}';
   }
 
-  // 펫 가져오기
-  void _getPetList() {
+  // 데이터 가져오기
+  void _getData() {
     String uid = context.read<User>().uid;
 
     // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await petProvider.getPetList(uid: uid);
-        await diaryProvider.getDiaryList(uid: uid);
+        await petProvider.getPetList(uid: uid); // 펫 가져오기
+        await diaryProvider.getDiaryList(uid: uid); // 성장일기 가져오기
       } on CustomException catch (e) {
         errorDialogWidget(context, e);
       }
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage>
 
     petProvider = context.read<PetProvider>();
     diaryProvider = context.read<DiaryProvider>();
-    _getPetList();
+    _getData();
   }
 
   @override
