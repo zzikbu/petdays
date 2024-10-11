@@ -10,11 +10,20 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   DiaryProvider() : super(DiaryState.init());
 
   // 성장일기 가져오기
-  Future<void> getDiaryList() async {
+  Future<void> getDiaryList({
+    String? uid,
+  }) async {
     try {
       state = state.copyWith(diaryStatus: DiaryStatus.fetching); // 상태 변경
 
-      List<DiaryModel> diaryList = await read<DiaryRepository>().getDiaryList();
+      List<DiaryModel> diaryList;
+
+      if (uid != null) {
+        diaryList = await read<DiaryRepository>()
+            .getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
+      } else {
+        diaryList = await read<DiaryRepository>().getDiaryList(); // 전체 가져오기
+      }
 
       state = state.copyWith(
         diaryList: diaryList,

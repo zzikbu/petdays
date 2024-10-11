@@ -1,17 +1,67 @@
+import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/search/search_page.dart';
-
-import '../dummy.dart';
+import 'package:provider/provider.dart';
 import 'diary_write_page.dart';
 
-class DiaryHomePage extends StatelessWidget {
+class DiaryHomePage extends StatefulWidget {
   const DiaryHomePage({super.key});
 
   @override
+  State<DiaryHomePage> createState() => _DiaryHomePageState();
+}
+
+class _DiaryHomePageState extends State<DiaryHomePage>
+    with AutomaticKeepAliveClientMixin<DiaryHomePage> {
+  late final DiaryProvider diaryProvider;
+
+  // 다른 화면에서 돌아올 때
+  // 데이터를 매번 가져오지 않도록
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    diaryProvider = context.read<DiaryProvider>();
+    _getFeedList();
+  }
+
+  void _getFeedList() {
+    String uid = context.read<User>().uid;
+
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await diaryProvider.getDiaryList(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    DiaryState diaryState = context.watch<DiaryState>();
+    List<DiaryModel> diaryList = diaryState.diaryList;
+
+    if (diaryState.diaryStatus == DiaryStatus.fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Palette.background,
       appBar: AppBar(
@@ -43,155 +93,176 @@ class DiaryHomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Scrollbar(
-        child: ListView.builder(
-          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          itemCount: dummyPets.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DiaryDetailPage()),
-                );
-              },
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(bottom: 20),
-                    height: 220,
-                    decoration: BoxDecoration(
-                      // color: Pallete.mainGreen,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: Palette.feedBorder,
-                        width: 1,
-                      ),
-                      image: DecorationImage(
-                        image: AssetImage(dummyPets[index]['image']!),
-                        fit: BoxFit.cover,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Palette.black.withOpacity(0.05),
-                          offset: Offset(8, 8),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 20,
-                    child: Container(
-                      height: 88,
+      body: RefreshIndicator(
+        // 새로고침
+        color: Palette.subGreen,
+        backgroundColor: Palette.white,
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
+          _getFeedList(); // diaryList를 watch하고 있기 때문에 변경사항이 발생하면 화면을 새롭게 그림
+        },
+        child: Scrollbar(
+          child: ListView.builder(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            itemCount: diaryList.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DiaryDetailPage()),
+                  );
+                },
+                child: Stack(
+                  children: [
+                    // 사진
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20),
+                      height: 220,
                       decoration: BoxDecoration(
-                        color: Palette.white.withOpacity(0.9),
-                        border: Border(
-                          left: BorderSide(
-                            color: Palette.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          right: BorderSide(
-                            color: Palette.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
-                          bottom: BorderSide(
-                            color: Palette.feedBorder,
-                            width: 1,
-                            style: BorderStyle.solid,
-                          ),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Palette.feedBorder,
+                          width: 1,
                         ),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
+                        image: DecorationImage(
+                          image: ExtendedNetworkImageProvider(
+                              diaryList[index].imageUrls[0]),
+                          fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Palette.black.withOpacity(0.05),
+                            offset: Offset(8, 8),
+                            blurRadius: 8,
+                          ),
+                        ],
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 2),
-                              child: Text(
-                                '다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 다같이 애견카페 가서 놀은 날 ',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                  color: Palette.black,
-                                  letterSpacing: -0.4,
-                                ),
-                              ),
+                    ),
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 20,
+                      // 흰색 부분
+                      child: Container(
+                        height: 88,
+                        decoration: BoxDecoration(
+                          color: Palette.white.withOpacity(0.9),
+                          border: Border(
+                            left: BorderSide(
+                              color: Palette.feedBorder,
+                              width: 1,
+                              style: BorderStyle.solid,
                             ),
-                            SizedBox(height: 4),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.pets,
-                                  color: Palette.darkGray,
-                                  size: 16,
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  '123',
+                            right: BorderSide(
+                              color: Palette.feedBorder,
+                              width: 1,
+                              style: BorderStyle.solid,
+                            ),
+                            bottom: BorderSide(
+                              color: Palette.feedBorder,
+                              width: 1,
+                              style: BorderStyle.solid,
+                            ),
+                          ),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 2),
+                                // 제목
+                                child: Text(
+                                  diaryList[index].title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Palette.darkGray,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                    color: Palette.black,
                                     letterSpacing: -0.4,
                                   ),
                                 ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 1,
-                                  height: 10,
-                                  color: Palette.mediumGray,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  '2024.08.14',
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Palette.mediumGray,
-                                    letterSpacing: -0.35,
+                              ),
+                              SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  // 좋아요 아이콘
+                                  Icon(
+                                    Icons.pets,
+                                    color: Palette.darkGray,
+                                    size: 16,
                                   ),
-                                ),
-                                SizedBox(width: 8),
-                                Container(
-                                  width: 1,
-                                  height: 10,
-                                  color: Palette.mediumGray,
-                                ),
-                                SizedBox(width: 8),
-                                SvgPicture.asset(
-                                  'assets/icons/ic_unlock.svg',
-                                  width: 14,
-                                  height: 14,
-                                  color: Palette.mediumGray,
-                                ),
-                              ],
-                            ),
-                          ],
+                                  SizedBox(width: 4),
+
+                                  // 좋아요 개수
+                                  Text(
+                                    diaryList[index].likeCount.toString(),
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Palette.darkGray,
+                                      letterSpacing: -0.4,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // 여유 공간 추가
+
+                                  // 세로 구분선
+                                  Container(
+                                    width: 1,
+                                    height: 10,
+                                    color: Palette.mediumGray, // 구분선 색상
+                                  ),
+                                  SizedBox(width: 8),
+
+                                  // 날짜
+                                  Text(
+                                    diaryList[index]
+                                        .createAt
+                                        .toDate()
+                                        .toString()
+                                        .split(" ")[0],
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                      color: Palette.mediumGray,
+                                      letterSpacing: -0.35,
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+
+                                  // 공개여부 좌물쇠
+                                  SvgPicture.asset(
+                                    diaryList[index].isLock
+                                        ? 'assets/icons/ic_lock.svg'
+                                        : 'assets/icons/ic_unlock.svg',
+                                    width: 14,
+                                    height: 14,
+                                    color: Palette.mediumGray,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
