@@ -12,10 +12,13 @@ import 'package:pet_log/providers/medical/medical_provider.dart';
 import 'package:pet_log/providers/medical/medical_state.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
+import 'package:pet_log/providers/profile/profile_provider.dart';
+import 'package:pet_log/providers/profile/profile_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:pet_log/repositories/medical_repository.dart';
 import 'package:pet_log/repositories/pet_repository.dart';
+import 'package:pet_log/repositories/profile_repository.dart';
 import 'package:pet_log/spalash_page.dart';
 import 'package:provider/provider.dart';
 
@@ -63,6 +66,11 @@ class _MyAppState extends State<MyApp> {
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
+        Provider<ProfileRepository>(
+          create: (context) => ProfileRepository(
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
         StreamProvider<User?>(
           // ‼️앱 자체에서 인증상태를 변경하는게 아닌,
           // 파이어베이스 인증상태의 변화에 따라 앱의 인증상태를 변경하게 하기 위함‼️
@@ -85,6 +93,9 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<MedicalProvider, MedicalState>(
           create: (context) => MedicalProvider(),
+        ),
+        StateNotifierProvider<ProfileProvider, ProfileState>(
+          create: (context) => ProfileProvider(),
         ),
       ],
       child: MaterialApp(

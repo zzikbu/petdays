@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
@@ -190,7 +191,8 @@ class _FeedHomePageState extends State<FeedHomePage>
                           width: 1,
                         ),
                         image: DecorationImage(
-                          image: NetworkImage(diaryList[index].imageUrls[0]),
+                          image: ExtendedNetworkImageProvider(
+                              diaryList[index].imageUrls[0]),
                           fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                         ),
                         boxShadow: [

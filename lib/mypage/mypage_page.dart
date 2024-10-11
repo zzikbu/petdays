@@ -1,17 +1,52 @@
+import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:pet_log/providers/profile/profile_provider.dart';
+import 'package:pet_log/providers/profile/profile_state.dart';
+import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
 import 'package:pet_log/sign_up/sign_up_pet_info_page.dart';
 import 'package:provider/provider.dart';
 
 import '../palette.dart';
 
-class MypagePage extends StatelessWidget {
+class MypagePage extends StatefulWidget {
   const MypagePage({super.key});
 
   @override
+  State<MypagePage> createState() => _MypagePageState();
+}
+
+class _MypagePageState extends State<MypagePage> {
+  late final ProfileProvider profileProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    profileProvider = context.read<ProfileProvider>();
+    _getProfile();
+  }
+
+  void _getProfile() {
+    String uid = context.read<User>().uid;
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await profileProvider.getProfile(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    UserModel userModel = context.watch<ProfileState>().userModel;
+
     return Scaffold(
       backgroundColor: Palette.background,
       body: SafeArea(
@@ -23,58 +58,63 @@ class MypagePage extends StatelessWidget {
               SizedBox(height: 40),
               Row(
                 children: [
+                  // 프로필 사진
                   Container(
-                    width: 50,
-                    height: 50,
+                    width: 60,
+                    height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: Palette.lightGray,
                         width: 1.0,
                       ),
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      '이승민',
-                      style: TextStyle(
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Palette.black,
-                        letterSpacing: -0.5,
+                      image: DecorationImage(
+                        image: userModel.profileImage == null
+                            ? ExtendedAssetImageProvider(
+                                "assets/icons/profile.png")
+                            : ExtendedNetworkImageProvider(
+                                userModel.profileImage!),
+                        fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                       ),
                     ),
                   ),
-                  Container(
-                    width: 80,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF2F3F6),
-                      borderRadius: BorderRadius.circular(8),
+                  SizedBox(width: 12),
+
+                  // 닉네임
+                  Text(
+                    userModel.nickname,
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Palette.black,
+                      letterSpacing: -0.5,
                     ),
-                    child: Center(
-                      child: Text(
-                        '프로필 수정',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                          color: Palette.black,
-                          letterSpacing: -0.4,
-                        ),
-                      ),
-                    ),
+                  ),
+
+                  // 닉네임 수정
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SignUpNicknamePage(),
+                          ));
+                    },
+                    icon: Icon(Icons.edit),
                   ),
                 ],
               ),
               SizedBox(height: 40),
+
+              // 구분선
               Container(
                 height: 1,
                 color: Palette.lightGray,
               ),
               SizedBox(height: 40),
+
+              // MY
               Text(
                 'MY',
                 style: TextStyle(
@@ -86,6 +126,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
+
+              // 펫추가
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -106,6 +148,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 14),
+
+              // 획득한 메달
               GestureDetector(
                 onTap: () {},
                 child: Text(
@@ -120,6 +164,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 14),
+
+              // 공개한 성장일기
               GestureDetector(
                 onTap: () {},
                 child: Text(
@@ -134,6 +180,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 14),
+
+              // 공감한 성장일기
               GestureDetector(
                 onTap: () {},
                 child: Text(
@@ -148,11 +196,15 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 40),
+
+              // 구분선
               Container(
                 height: 1,
                 color: Palette.lightGray,
               ),
               SizedBox(height: 40),
+
+              // 계정
               Text(
                 '계정',
                 style: TextStyle(
@@ -164,6 +216,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
+
+              // 로그아웃
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -192,6 +246,8 @@ class MypagePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 14),
+
+              // 회원탈퇴
               GestureDetector(
                 onTap: () {},
                 child: Text(
