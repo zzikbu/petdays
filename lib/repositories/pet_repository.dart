@@ -15,7 +15,40 @@ class PetRepository {
     required this.firebaseFirestore,
   });
 
-  Future<void> uploadPet({
+  // 펫 가져오기
+  Future<List<PetModel>> getDiaryList({
+    required String uid,
+  }) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
+          .collection('pets')
+          .where('uid', isEqualTo: uid)
+          .orderBy('createAt', descending: false) // 오랜된 순 정렬
+          .get();
+
+      return await Future.wait(snapshot.docs.map(
+        (e) async {
+          Map<String, dynamic> data = e.data();
+          return PetModel.fromMap(data);
+        },
+      ).toList());
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
+  // 펫 추가
+  Future<PetModel> uploadPet({
     required String uid,
     required Uint8List? file,
     required String type,
@@ -56,6 +89,8 @@ class PetRepository {
 
       // Firestore에 문서 저장
       await petDocRef.set(petModel.toMap());
+
+      return petModel; // 등록한 펫을 리스트에 추가하기 위해 반환
     } on FirebaseException catch (e) {
       // 에러 발생시 storage에 등록된 이미지 삭제
       await firebaseStorage.refFromURL(downloadURL).delete();

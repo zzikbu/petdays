@@ -1,12 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/home_section_header.dart';
 import 'package:pet_log/diary/diary_detail_page.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/medical/medical_detail_page.dart';
 import 'package:pet_log/medical/medical_home_page.dart';
+import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/pet/pet_provider.dart';
+import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/walk/walk_home_page.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../diary/diary_home_page.dart';
@@ -20,128 +28,208 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int currentPetPageIndex = 0;
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
+  late final PetProvider petProvider;
 
-  final CarouselSliderController _myPetCarouselSliderController =
+  int _indicatorIndex = 0;
+
+  final CarouselSliderController _carouselController =
       CarouselSliderController();
+
+  // 다른 화면에서 돌아올 때
+  // 데이터를 매번 가져오지 않도록
+  @override
+  bool get wantKeepAlive => true;
+
+  // 펫 가져오기
+  void _getPetList() {
+    String uid = context.read<User>().uid;
+
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await petProvider.getPetList(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
+
+  // 만난 날 계산
+  String _calculateDaysSinceMeeting(String meetingDateString) {
+    DateTime meetingDate = DateTime.parse(meetingDateString);
+    DateTime currentDate = DateTime.now();
+    Duration difference = currentDate.difference(meetingDate);
+    return 'D+${difference.inDays}';
+  }
+
+  // 나이 계산 & 품종
+  String _calculateAge(String birthDateString, String breed) {
+    DateTime birthDate = DateTime.parse(birthDateString);
+    DateTime currentDate = DateTime.now();
+    Duration ageDifference = currentDate.difference(birthDate);
+    int ageInYears = ageDifference.inDays ~/ 365; // 연도로 변환
+    return '${ageInYears}살 ${breed}';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    petProvider = context.read<PetProvider>();
+    _getPetList();
+  }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    PetState petState = context.watch<PetState>();
+    List<PetModel> petList = petState.petList;
+
+    if (petState.petStatus == PetStatus.fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Palette.background,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 최상단 초록색 영역
             Container(
               height: 260,
               color: Palette.mainGreen,
               child: Column(
                 children: [
                   SizedBox(height: 68),
-                  CarouselSlider(
-                    carouselController: _myPetCarouselSliderController,
-                    items: dummyPets.map(
-                      (pet) {
-                        return Builder(
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                print(this.currentPetPageIndex);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(horizontal: 24),
-                                decoration: BoxDecoration(
-                                  color: Palette.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: Palette.lightGray,
-                                            width: 0.4,
-                                          ),
-                                          image: DecorationImage(
-                                            image: AssetImage(dummyPets[
-                                                    this.currentPetPageIndex]
-                                                ['image']!),
-                                            fit: BoxFit.cover,
-                                          ),
+
+                  // TODO 값 비었을 때 펫 추가 버튼 구현 해주기
+                  petList.isEmpty
+                      ? SizedBox()
+                      : CarouselSlider(
+                          // Carousel 영역
+                          carouselController: _carouselController,
+                          items: dummyPets.map(
+                            (pet) {
+                              return Builder(
+                                builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      print(_indicatorIndex);
+                                    },
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 24),
+                                      decoration: BoxDecoration(
+                                        color: Palette.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: Row(
+                                          children: [
+                                            // 사진
+                                            Container(
+                                              width: 100,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: Palette.lightGray,
+                                                  width: 0.4,
+                                                ),
+                                                image: DecorationImage(
+                                                  image:
+                                                      ExtendedNetworkImageProvider(
+                                                          petList[_indicatorIndex]
+                                                              .image),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 30),
+
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // 만난 날 계산
+                                                Text(
+                                                  _calculateDaysSinceMeeting(
+                                                      petList[_indicatorIndex]
+                                                          .firstMeetingDate),
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 22,
+                                                    color: Palette.black,
+                                                    letterSpacing: -0.5,
+                                                  ),
+                                                ),
+
+                                                // 이름
+                                                Text(
+                                                  petList[_indicatorIndex].name,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 18,
+                                                    color: Palette.black,
+                                                    letterSpacing: -0.5,
+                                                  ),
+                                                ),
+
+                                                // 나이 계산 & 품종
+                                                Text(
+                                                  _calculateAge(
+                                                      petList[_indicatorIndex]
+                                                          .birthDay,
+                                                      petList[_indicatorIndex]
+                                                          .breed),
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 14,
+                                                    color: Palette.mediumGray,
+                                                    letterSpacing: -0.4,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      SizedBox(width: 30),
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'D+2100',
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 22,
-                                              color: Palette.black,
-                                              letterSpacing: -0.5,
-                                            ),
-                                          ),
-                                          Text(
-                                            dummyPets[this.currentPetPageIndex]
-                                                ['name']!,
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 18,
-                                              color: Palette.black,
-                                              letterSpacing: -0.5,
-                                            ),
-                                          ),
-                                          Text(
-                                            '5살 치와와',
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 14,
-                                              color: Palette.mediumGray,
-                                              letterSpacing: -0.4,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ).toList(),
-                    options: CarouselOptions(
-                      initialPage: 0,
-                      height: 150,
-                      viewportFraction: 1.0,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          currentPetPageIndex = index;
-                        });
-                      },
-                    ),
-                  ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ).toList(),
+                          options: CarouselOptions(
+                            initialPage: 0,
+                            height: 150,
+                            viewportFraction: 1.0,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                // _indicatorIndex가 petList의 길이를 초과하지 못하도록
+                                _indicatorIndex = index % petList.length;
+                              });
+                            },
+                          ),
+                        ),
                   SizedBox(height: 20),
+
+                  // Indicator
                   AnimatedSmoothIndicator(
-                    activeIndex: this.currentPetPageIndex,
-                    count: dummyPets.length,
+                    activeIndex: _indicatorIndex,
+                    count: petList.length,
                     effect: JumpingDotEffect(
                       spacing: 6.0,
                       radius: 3.0,
@@ -157,10 +245,12 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SizedBox(height: 40),
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
+                  // 산책
                   HomeSectionHeader(
                     title: '산책',
                     onTap: () {
@@ -278,6 +368,8 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                   SizedBox(height: 28),
+
+                  // 성장일기
                   Column(
                     children: [
                       HomeSectionHeader(
@@ -391,6 +483,8 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(height: 28),
+
+                  // 진료기록
                   Column(
                     children: [
                       HomeSectionHeader(
