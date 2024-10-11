@@ -9,8 +9,11 @@ import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/medical/medical_detail_page.dart';
 import 'package:pet_log/medical/medical_home_page.dart';
+import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/walk/walk_home_page.dart';
@@ -31,6 +34,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   late final PetProvider petProvider;
+  late final DiaryProvider diaryProvider;
 
   int _indicatorIndex = 0;
 
@@ -41,20 +45,6 @@ class _HomePageState extends State<HomePage>
   // 데이터를 매번 가져오지 않도록
   @override
   bool get wantKeepAlive => true;
-
-  // 펫 가져오기
-  void _getPetList() {
-    String uid = context.read<User>().uid;
-
-    // 위젯들이 만들어 진 후에
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        await petProvider.getPetList(uid: uid);
-      } on CustomException catch (e) {
-        errorDialogWidget(context, e);
-      }
-    });
-  }
 
   // 만난 날 계산
   String _calculateDaysSinceMeeting(String meetingDateString) {
@@ -73,10 +63,27 @@ class _HomePageState extends State<HomePage>
     return '${ageInYears}살 ${breed}';
   }
 
+  // 펫 가져오기
+  void _getPetList() {
+    String uid = context.read<User>().uid;
+
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await petProvider.getPetList(uid: uid);
+        await diaryProvider.getDiaryList(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
     petProvider = context.read<PetProvider>();
+    diaryProvider = context.read<DiaryProvider>();
     _getPetList();
   }
 
@@ -87,7 +94,11 @@ class _HomePageState extends State<HomePage>
     PetState petState = context.watch<PetState>();
     List<PetModel> petList = petState.petList;
 
-    if (petState.petStatus == PetStatus.fetching) {
+    DiaryState diaryState = context.watch<DiaryState>();
+    List<DiaryModel> diaryList = diaryState.diaryList;
+
+    if (petState.petStatus == PetStatus.fetching ||
+        diaryState.diaryStatus == DiaryStatus.fetching) {
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -383,7 +394,7 @@ class _HomePageState extends State<HomePage>
                         },
                       ),
                       SizedBox(height: 10),
-                      if (dummyPets.isEmpty)
+                      if (diaryList.isEmpty)
                         Container(
                           margin: EdgeInsets.only(bottom: 12),
                           height: 70,
@@ -414,9 +425,9 @@ class _HomePageState extends State<HomePage>
                       else
                         Column(
                           children: List.generate(
-                            dummyPets.length > 3
+                            diaryList.length > 3
                                 ? 3
-                                : dummyPets.length, // 최대 3개
+                                : diaryList.length, // 최대 3개
                             (index) {
                               return GestureDetector(
                                 onTap: () {
@@ -452,7 +463,7 @@ class _HomePageState extends State<HomePage>
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "다같이 애견카페 가서 놀은 날",
+                                          diaryList[index].title,
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
@@ -463,7 +474,11 @@ class _HomePageState extends State<HomePage>
                                         ),
                                         SizedBox(height: 2),
                                         Text(
-                                          "2024.08.14",
+                                          diaryList[index]
+                                              .createAt
+                                              .toDate()
+                                              .toString()
+                                              .split(" ")[0],
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w400,
