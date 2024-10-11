@@ -26,13 +26,13 @@ class MedicalDetailPage extends StatelessWidget {
                 PullDownMenuItem(
                   title: '수정하기',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            MedicalWritePage(isEditMode: true),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) =>
+                    //         MedicalWritePage(isEditMode: true),
+                    //   ),
+                    // );
                   },
                 ),
                 PullDownMenuItem(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/medical/medical_provider.dart';
 import 'package:pet_log/providers/medical/medical_state.dart';
@@ -14,10 +15,12 @@ import '../components/textfield_with_title.dart';
 
 class MedicalWritePage extends StatefulWidget {
   final bool isEditMode;
+  final PetModel selectedPet;
 
   const MedicalWritePage({
     super.key,
     this.isEditMode = false,
+    required this.selectedPet,
   });
 
   @override
@@ -133,6 +136,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.selectedPet);
     final medicalStatus = context.watch<MedicalState>().medicalStatus;
 
     return GestureDetector(
@@ -282,6 +286,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
                     hospital: _hospitalTEC.text,
                     doctor: _doctorTEC.text,
                     note: _noteTEC.text,
+                    petId: widget.selectedPet.petId,
                   );
 
               // 스낵바

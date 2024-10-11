@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/medical_model.dart';
+import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/models/user_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,8 +17,10 @@ class MedicalRepository {
     required this.firebaseFirestore,
   });
 
+  // 진료기록 업로드
   Future<void> uploadMedical({
     required String uid, // 작성자
+    required String petId,
     required List<String> files, // 이미지들
     required String visitDate,
     required String reason,
@@ -35,11 +38,14 @@ class MedicalRepository {
       String medicalId = Uuid().v1(); // Generate a v1 (time-based) id
 
       // firestore 문서 참조
-      DocumentReference<Map<String, dynamic>> diaryDocRef =
+      DocumentReference<Map<String, dynamic>> medicalDocRef =
           firebaseFirestore.collection("medicals").doc(medicalId);
 
       DocumentReference<Map<String, dynamic>> userDocRef =
           firebaseFirestore.collection("users").doc(uid);
+
+      DocumentReference<Map<String, dynamic>> petDocRef =
+          firebaseFirestore.collection("pets").doc(petId);
 
       // firestorage 참조
       Reference ref = firebaseStorage.ref().child("medicals").child(medicalId);
@@ -57,8 +63,14 @@ class MedicalRepository {
           await userDocRef.get();
       UserModel userModel = UserModel.fromMap(userSnapshot.data()!);
 
+      // 펫 모델 생성
+      DocumentSnapshot<Map<String, dynamic>> petSnapshot =
+          await petDocRef.get();
+      PetModel petModel = PetModel.fromMap(petSnapshot.data()!);
+
       MedicalModel medicalModel = MedicalModel.fromMap({
         "uid": uid,
+        "pet": petModel,
         "medicalId": medicalId,
         "imageUrls": imageUrls,
         "visitDate": visitDate,
@@ -69,7 +81,13 @@ class MedicalRepository {
         "writer": userModel,
       });
 
-      batch.set(diaryDocRef, medicalModel.toMap(userDocRef: userDocRef));
+      batch.set(
+        medicalDocRef,
+        medicalModel.toMap(
+          userDocRef: userDocRef,
+          petDocRef: petDocRef,
+        ),
+      );
 
       batch.update(userDocRef, {
         "medicalCount": FieldValue.increment(1), // 기존값에서 1 증가

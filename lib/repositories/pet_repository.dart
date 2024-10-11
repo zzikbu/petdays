@@ -76,6 +76,7 @@ class PetRepository {
 
       PetModel petModel = PetModel.fromMap({
         "uid": uid,
+        "petId": petId,
         "image": downloadURL,
         "type": type,
         "name": name,

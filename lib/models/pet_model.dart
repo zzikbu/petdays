@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PetModel {
   final String uid;
+  final String petId;
   final String image;
   final String type;
   final String name;
@@ -14,6 +15,7 @@ class PetModel {
 
   const PetModel({
     required this.uid,
+    required this.petId,
     required this.image,
     required this.type,
     required this.name,
@@ -28,6 +30,7 @@ class PetModel {
   Map<String, dynamic> toMap() {
     return {
       'uid': this.uid,
+      'petId': this.petId,
       'image': this.image,
       'type': this.type,
       'name': this.name,
@@ -43,6 +46,7 @@ class PetModel {
   factory PetModel.fromMap(Map<String, dynamic> map) {
     return PetModel(
       uid: map['uid'],
+      petId: map['petId'],
       image: map['image'],
       type: map['type'],
       name: map['name'],
@@ -57,6 +61,6 @@ class PetModel {
 
   @override
   String toString() {
-    return 'PetModel{uid: $uid, image: $image, type: $type, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
+    return 'PetModel{uid: $uid, petId: $petId, image: $image, type: $type, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
   }
 }

@@ -208,15 +208,18 @@ class _SelectPetPageState extends State<SelectPetPage>
       bottomNavigationBar: NextButton(
         isActive: _isActive,
         onTap: () {
+          PetModel selectedPet = petList[selectedIndices[0]];
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  widget.isMedical ? MedicalWritePage() : WalkMapPage(),
+              builder: (context) => widget.isMedical
+                  ? MedicalWritePage(selectedPet: selectedPet)
+                  : WalkMapPage(),
             ),
           );
         },
-        buttonText: "시작하기",
+        buttonText: widget.isMedical ? "다음" : "시작하기",
       ),
     );
   }
