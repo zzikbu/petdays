@@ -50,7 +50,8 @@ class PetRepository {
         "birthDay": birthDay,
         "firstMeetingDate": firstMeetingDate,
         "gender": gender,
-        "isNeutering": isNeutering
+        "isNeutering": isNeutering,
+        "createAt": Timestamp.now(), // 현재 시간
       });
 
       // Firestore에 문서 저장

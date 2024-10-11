@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class PetModel {
   final String uid;
   final String image;
@@ -8,6 +10,7 @@ class PetModel {
   final String firstMeetingDate;
   final String gender;
   final bool isNeutering; // 중성화
+  final Timestamp createAt;
 
   const PetModel({
     required this.uid,
@@ -19,12 +22,13 @@ class PetModel {
     required this.firstMeetingDate,
     required this.gender,
     required this.isNeutering,
+    required this.createAt,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'uid': this.uid,
-      'petImage': this.image,
+      'image': this.image,
       'type': this.type,
       'name': this.name,
       'breed': this.breed,
@@ -32,6 +36,7 @@ class PetModel {
       'firstMeetingDate': this.firstMeetingDate,
       'gender': this.gender,
       'isNeutering': this.isNeutering,
+      'createAt': this.createAt,
     };
   }
 
@@ -46,6 +51,12 @@ class PetModel {
       firstMeetingDate: map['firstMeetingDate'],
       gender: map['gender'],
       isNeutering: map['isNeutering'],
+      createAt: map['createAt'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'PetModel{uid: $uid, image: $image, type: $type, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
   }
 }

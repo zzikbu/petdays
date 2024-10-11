@@ -166,157 +166,155 @@ class _FeedHomePageState extends State<FeedHomePage>
           await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
           _getFeedList(); // diaryList를 watch하고 있기 때문에 변경사항이 발생하면 화면을 새롭게 그림
         },
-        child: Scrollbar(
-          child: ListView.builder(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            itemCount: diaryList.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DiaryDetailPage()),
-                  );
-                },
-                child: Stack(
-                  children: [
-                    // 사진
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      height: 220,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Palette.feedBorder,
-                          width: 1,
-                        ),
-                        image: DecorationImage(
-                          image: ExtendedNetworkImageProvider(
-                              diaryList[index].imageUrls[0]),
-                          fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Palette.black.withOpacity(0.05),
-                            offset: Offset(8, 8),
-                            blurRadius: 8,
-                          ),
-                        ],
+        child: ListView.builder(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+          itemCount: diaryList.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DiaryDetailPage()),
+                );
+              },
+              child: Stack(
+                children: [
+                  // 사진
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    height: 220,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: Palette.feedBorder,
+                        width: 1,
                       ),
+                      image: DecorationImage(
+                        image: ExtendedNetworkImageProvider(
+                            diaryList[index].imageUrls[0]),
+                        fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Palette.black.withOpacity(0.05),
+                          offset: Offset(8, 8),
+                          blurRadius: 8,
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 20,
-                      // 흰색 부분
-                      child: Container(
-                        height: 88,
-                        decoration: BoxDecoration(
-                          color: Palette.white.withOpacity(0.9),
-                          border: Border(
-                            left: BorderSide(
-                              color: Palette.feedBorder,
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
-                            right: BorderSide(
-                              color: Palette.feedBorder,
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
-                            bottom: BorderSide(
-                              color: Palette.feedBorder,
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 20,
+                    // 흰색 부분
+                    child: Container(
+                      height: 88,
+                      decoration: BoxDecoration(
+                        color: Palette.white.withOpacity(0.9),
+                        border: Border(
+                          left: BorderSide(
+                            color: Palette.feedBorder,
+                            width: 1,
+                            style: BorderStyle.solid,
                           ),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            bottomRight: Radius.circular(20),
+                          right: BorderSide(
+                            color: Palette.feedBorder,
+                            width: 1,
+                            style: BorderStyle.solid,
+                          ),
+                          bottom: BorderSide(
+                            color: Palette.feedBorder,
+                            width: 1,
+                            style: BorderStyle.solid,
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 2),
-                                // 제목
-                                child: Text(
-                                  diaryList[index].title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 2),
+                              // 제목
+                              child: Text(
+                                diaryList[index].title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18,
+                                  color: Palette.black,
+                                  letterSpacing: -0.4,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
+                                // 좋아요 아이콘
+                                Icon(
+                                  Icons.pets,
+                                  color: Palette.darkGray,
+                                  size: 16,
+                                ),
+                                SizedBox(width: 4),
+
+                                // 좋아요 개수
+                                Text(
+                                  diaryList[index].likeCount.toString(),
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18,
-                                    color: Palette.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Palette.darkGray,
                                     letterSpacing: -0.4,
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  // 좋아요 아이콘
-                                  Icon(
-                                    Icons.pets,
-                                    color: Palette.darkGray,
-                                    size: 16,
-                                  ),
-                                  SizedBox(width: 4),
+                                SizedBox(width: 8), // 여유 공간 추가
 
-                                  // 좋아요 개수
-                                  Text(
-                                    diaryList[index].likeCount.toString(),
-                                    style: TextStyle(
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Palette.darkGray,
-                                      letterSpacing: -0.4,
-                                    ),
-                                  ),
-                                  SizedBox(width: 8), // 여유 공간 추가
+                                // 세로 구분선
+                                Container(
+                                  width: 1,
+                                  height: 10,
+                                  color: Palette.mediumGray, // 구분선 색상
+                                ),
+                                SizedBox(width: 8),
 
-                                  // 세로 구분선
-                                  Container(
-                                    width: 1,
-                                    height: 10,
-                                    color: Palette.mediumGray, // 구분선 색상
+                                // 날짜
+                                Text(
+                                  diaryList[index]
+                                      .createAt
+                                      .toDate()
+                                      .toString()
+                                      .split(" ")[0],
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14,
+                                    color: Palette.mediumGray,
+                                    letterSpacing: -0.35,
                                   ),
-                                  SizedBox(width: 8),
-
-                                  // 날짜
-                                  Text(
-                                    diaryList[index]
-                                        .createAt
-                                        .toDate()
-                                        .toString()
-                                        .split(" ")[0],
-                                    style: TextStyle(
-                                      fontFamily: 'Pretendard',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 14,
-                                      color: Palette.mediumGray,
-                                      letterSpacing: -0.35,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

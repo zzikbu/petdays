@@ -50,12 +50,13 @@ class _MypagePageState extends State<MypagePage> {
     return Scaffold(
       backgroundColor: Palette.background,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 40),
+
               Row(
                 children: [
                   // 프로필 사진
@@ -261,6 +262,7 @@ class _MypagePageState extends State<MypagePage> {
                   ),
                 ),
               ),
+              SizedBox(height: 40),
             ],
           ),
         ),
