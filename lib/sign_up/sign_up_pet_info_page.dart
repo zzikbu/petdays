@@ -157,8 +157,8 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                               ),
                             ),
                             Positioned(
-                              bottom: 4,
-                              right: 4,
+                              bottom: 0,
+                              right: 0,
                               child: GestureDetector(
                                 onTap: () async {
                                   await selectImage();
@@ -167,7 +167,7 @@ class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
                                   height: 30,
                                   width: 30,
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.grey.withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(60),
                                   ),
                                   child: Icon(
