@@ -25,7 +25,7 @@ class MedicalRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('medicals')
           .where('uid', isEqualTo: uid)
-          .orderBy('createAt', descending: true) // 최신순 정렬
+          .orderBy('visitDate', descending: true) // 최신순 정렬
           .get();
 
       return await Future.wait(snapshot.docs.map(
@@ -64,7 +64,7 @@ class MedicalRepository {
   }
 
   // 진료기록 업로드
-  Future<void> uploadMedical({
+  Future<MedicalModel> uploadMedical({
     required String uid, // 작성자
     required String petId,
     required List<String> files, // 이미지들
@@ -143,6 +143,7 @@ class MedicalRepository {
       // 모든 작업이 큐에 추가된 후, commit()을 호출하면 Firestore에 모든 작업이 한 번에 적용
       // 만약 작업 중 하나라도 실패하면 전체 작업이 취소되며, 이로 인해 데이터의 일관성이 유지
       batch.commit();
+      return medicalModel;
     } on FirebaseException catch (e) {
       // 에러 발생시 store에 등록된 이미지 삭제
       _deleteImage(imageUrls);

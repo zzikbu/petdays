@@ -40,9 +40,7 @@ class _MedicalWritePageState extends State<MedicalWritePage> {
 
   void _checkBottomActive() {
     setState(() {
-      _isActive = _files.isNotEmpty &&
-          _visitDateTEC.text.isNotEmpty &&
-          _reasonTEC.text.isNotEmpty;
+      _isActive = _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
     });
   }
 

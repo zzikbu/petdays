@@ -61,12 +61,12 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
       );
 
       state = state.copyWith(
-        diaryStatus: DiaryStatus.success,
+        diaryStatus: DiaryStatus.success, // 등록 완료 상태로 변경
         diaryList: [
           diaryModel,
-          ...state.diaryList, // // 새로 등록한 성장일기를 리스트 맨앞에 추가
+          ...state.diaryList, // 새로 등록한 성장일기를 리스트 맨앞에 추가
         ],
-      ); // 등록 완료 상태로 변경
+      );
     } on CustomException catch (_) {
       state = state.copyWith(
           diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경

@@ -46,7 +46,8 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
 
       String uid = read<User>().uid; // 작성자
 
-      await read<MedicalRepository>().uploadMedical(
+      // 새로 등록한 진료기록을 리스트 맨앞에 추가 해주기 위해 변수에 저장
+      MedicalModel medicalModel = await read<MedicalRepository>().uploadMedical(
         uid: uid,
         files: files,
         visitDate: visitDate,
@@ -57,8 +58,14 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
         petId: petId,
       );
 
-      state =
-          state.copyWith(medicalStatus: MedicalStatus.success); // 등록 완료 상태로 변경
+      state = state.copyWith(
+        medicalStatus: MedicalStatus.success, // 등록 완료 상태로 변경
+        medicalList: [
+          medicalModel,
+          ...state.medicalList, // 새로 등록한 진료기록을 리스트 맨앞에 추가
+        ]..sort((a, b) =>
+            b.visitDate.compareTo(a.visitDate)), // visitDate 기준으로 내림차순 정렬
+      );
     } on CustomException catch (_) {
       state = state.copyWith(
           medicalStatus: MedicalStatus.error); // 문제가 생기면 error로 상태 변경
