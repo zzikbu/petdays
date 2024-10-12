@@ -17,6 +17,52 @@ class MedicalRepository {
     required this.firebaseFirestore,
   });
 
+  // 진료기록 가져오기
+  Future<List<MedicalModel>> getMedicalList({
+    required String uid,
+  }) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
+          .collection('medicals')
+          .where('uid', isEqualTo: uid)
+          .orderBy('createAt', descending: true) // 최신순 정렬
+          .get();
+
+      return await Future.wait(snapshot.docs.map(
+        (e) async {
+          Map<String, dynamic> data = e.data();
+
+          // pet 필드 처리
+          DocumentReference<Map<String, dynamic>> petDocRef = data["pet"];
+          DocumentSnapshot<Map<String, dynamic>> petSnapshot =
+              await petDocRef.get();
+          PetModel petModel = PetModel.fromMap(petSnapshot.data()!);
+          data["pet"] = petModel;
+
+          // writer 필드 처리
+          DocumentReference<Map<String, dynamic>> writerDocRef = data["writer"];
+          DocumentSnapshot<Map<String, dynamic>> writerSnapshot =
+              await writerDocRef.get();
+          UserModel userModel = UserModel.fromMap(writerSnapshot.data()!);
+          data["writer"] = userModel;
+          return MedicalModel.fromMap(data);
+        },
+      ).toList());
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 진료기록 업로드
   Future<void> uploadMedical({
     required String uid, // 작성자
@@ -79,6 +125,7 @@ class MedicalRepository {
         "doctor": doctor,
         "note": note,
         "writer": userModel,
+        "createAt": Timestamp.now(), // 현재 시간
       });
 
       batch.set(

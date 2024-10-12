@@ -14,18 +14,19 @@ class DiaryModel {
   final Timestamp createAt;
   final UserModel writer;
 
-  const DiaryModel(
-      {required this.uid,
-      required this.diaryId,
-      required this.title,
-      required this.desc,
-      required this.imageUrls,
-      required this.likes,
-      required this.likeCount,
-      required this.reportCount,
-      required this.isLock,
-      required this.createAt,
-      required this.writer});
+  const DiaryModel({
+    required this.uid,
+    required this.diaryId,
+    required this.title,
+    required this.desc,
+    required this.imageUrls,
+    required this.likes,
+    required this.likeCount,
+    required this.reportCount,
+    required this.isLock,
+    required this.createAt,
+    required this.writer,
+  });
 
   Map<String, dynamic> toMap({
     required DocumentReference<Map<String, dynamic>> userDocRef,

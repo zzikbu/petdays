@@ -1,18 +1,69 @@
+import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/diary/diary_detail_page.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/medical/medical_provider.dart';
+import 'package:pet_log/providers/medical/medical_state.dart';
 import 'package:pet_log/search/search_page.dart';
 import 'package:pet_log/select_pet_page.dart';
+import 'package:provider/provider.dart';
 
 import '../dummy.dart';
 import 'medical_detail_page.dart';
 
-class MedicalHomePage extends StatelessWidget {
+class MedicalHomePage extends StatefulWidget {
   const MedicalHomePage({super.key});
 
   @override
+  State<MedicalHomePage> createState() => _MedicalHomePageState();
+}
+
+class _MedicalHomePageState extends State<MedicalHomePage>
+    with AutomaticKeepAliveClientMixin<MedicalHomePage> {
+  late final MedicalProvider medicalProvider;
+
+  // 다른 화면에서 돌아올 때
+  // 데이터를 매번 가져오지 않도록
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    medicalProvider = context.read<MedicalProvider>();
+    _getFeedList();
+  }
+
+  void _getFeedList() {
+    String uid = context.read<User>().uid;
+
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await medicalProvider.getMedicalList(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
+
+    MedicalState medicalState = context.watch<MedicalState>();
+    List<MedicalModel> medicalList = medicalState.medicalList;
+
+    if (medicalState.medicalStatus == MedicalStatus.fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Palette.background,
       appBar: AppBar(
@@ -47,7 +98,7 @@ class MedicalHomePage extends StatelessWidget {
       body: Scrollbar(
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          itemCount: dummyPets.length,
+          itemCount: medicalList.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
@@ -61,12 +112,11 @@ class MedicalHomePage extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.only(bottom: 20),
                     height: 110,
-                    width: double.infinity,
                     decoration: BoxDecoration(
                       color: Palette.white,
                       borderRadius: BorderRadius.circular(20),
                       // border: Border.all(
-                      //   color: Pallete.feedBorder,
+                      //   color: Palette.feedBorder,
                       //   width: 1,
                       // ),
                       boxShadow: [
@@ -85,6 +135,7 @@ class MedicalHomePage extends StatelessWidget {
                         children: [
                           Row(
                             children: [
+                              // 사진
                               Container(
                                 width: 36,
                                 height: 36,
@@ -95,16 +146,17 @@ class MedicalHomePage extends StatelessWidget {
                                     width: 0.4,
                                   ),
                                   image: DecorationImage(
-                                    image: AssetImage(
-                                      dummyPets[index]['image']!,
-                                    ),
+                                    image: ExtendedNetworkImageProvider(
+                                        medicalList[index].pet.image),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                               SizedBox(width: 8),
+
+                              // 이름
                               Text(
-                                dummyPets[index]['name']!,
+                                medicalList[index].pet.name,
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
@@ -114,8 +166,10 @@ class MedicalHomePage extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: 8),
+
+                              // 방문날짜
                               Text(
-                                "2024.08.13",
+                                medicalList[index].visitDate,
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w400,
@@ -127,8 +181,10 @@ class MedicalHomePage extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 14),
+
+                          // 이유
                           Text(
-                            "구토 증상",
+                            medicalList[index].reason,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(

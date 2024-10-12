@@ -13,6 +13,7 @@ class MedicalModel {
   final List<String> imageUrls;
   final UserModel writer;
   final PetModel pet;
+  final Timestamp createAt;
 
   const MedicalModel({
     required this.uid,
@@ -25,6 +26,7 @@ class MedicalModel {
     required this.imageUrls,
     required this.writer,
     required this.pet,
+    required this.createAt,
   });
 
   Map<String, dynamic> toMap({
@@ -42,6 +44,7 @@ class MedicalModel {
       'imageUrls': this.imageUrls,
       'writer': userDocRef,
       'pet': petDocRef,
+      'createAt': this.createAt,
     };
   }
 
@@ -59,6 +62,7 @@ class MedicalModel {
       imageUrls: List<String>.from(map['imageUrls']),
       writer: map['writer'],
       pet: map['pet'],
+      createAt: map['createAt'],
     );
   }
 }
