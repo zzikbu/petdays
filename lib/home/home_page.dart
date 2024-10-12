@@ -10,10 +10,13 @@ import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/medical/medical_detail_page.dart';
 import 'package:pet_log/medical/medical_home_page.dart';
 import 'package:pet_log/models/diary_model.dart';
+import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/medical/medical_provider.dart';
+import 'package:pet_log/providers/medical/medical_state.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/walk/walk_home_page.dart';
@@ -35,6 +38,7 @@ class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   late final PetProvider petProvider;
   late final DiaryProvider diaryProvider;
+  late final MedicalProvider medicalProvider;
 
   int _indicatorIndex = 0;
 
@@ -72,6 +76,7 @@ class _HomePageState extends State<HomePage>
       try {
         await petProvider.getPetList(uid: uid); // 펫 가져오기
         await diaryProvider.getDiaryList(uid: uid); // 성장일기 가져오기
+        await medicalProvider.getMedicalList(uid: uid); // 진료기록 가져오기
       } on CustomException catch (e) {
         errorDialogWidget(context, e);
       }
@@ -84,7 +89,9 @@ class _HomePageState extends State<HomePage>
 
     petProvider = context.read<PetProvider>();
     diaryProvider = context.read<DiaryProvider>();
-    _getData();
+    medicalProvider = context.read<MedicalProvider>();
+
+    _getData(); // 데이터 가져오기
   }
 
   @override
@@ -97,8 +104,12 @@ class _HomePageState extends State<HomePage>
     DiaryState diaryState = context.watch<DiaryState>();
     List<DiaryModel> diaryList = diaryState.diaryList;
 
+    MedicalState medicalState = context.watch<MedicalState>();
+    List<MedicalModel> medicalList = medicalState.medicalList;
+
     if (petState.petStatus == PetStatus.fetching ||
-        diaryState.diaryStatus == DiaryStatus.fetching) {
+        diaryState.diaryStatus == DiaryStatus.fetching ||
+        medicalState.medicalStatus == MedicalStatus.fetching) {
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -513,7 +524,7 @@ class _HomePageState extends State<HomePage>
                         },
                       ),
                       SizedBox(height: 10),
-                      if (dummyPets.isEmpty)
+                      if (medicalList.isEmpty)
                         Container(
                           margin: EdgeInsets.only(bottom: 12),
                           height: 70,
@@ -546,24 +557,25 @@ class _HomePageState extends State<HomePage>
                           scrollDirection: Axis.horizontal, // 수평 스크롤 설정
                           child: Row(
                             children: List.generate(
-                              dummyPets.length > 3
+                              medicalList.length > 3
                                   ? 7
-                                  : dummyPets.length, // 최대 7개
+                                  : medicalList.length, // 최대 7개
                               (index) {
                                 return GestureDetector(
                                   onTap: () {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            MedicalDetailPage(),
-                                      ),
+                                          builder: (context) =>
+                                              MedicalDetailPage()),
                                     );
                                   },
+
+                                  // 흰색 카드 영역
                                   child: Container(
                                     margin:
                                         EdgeInsets.only(right: 12, bottom: 10),
-                                    height: 170,
+                                    height: 150,
                                     width: 150,
                                     decoration: BoxDecoration(
                                       color: Palette.white,
@@ -586,6 +598,7 @@ class _HomePageState extends State<HomePage>
                                         children: [
                                           Row(
                                             children: [
+                                              // 사진
                                               Container(
                                                 width: 36,
                                                 height: 36,
@@ -598,30 +611,53 @@ class _HomePageState extends State<HomePage>
                                                     width: 0.4,
                                                   ),
                                                   image: DecorationImage(
-                                                    image: AssetImage(
-                                                      dummyPets[index]
-                                                          ['image']!,
-                                                    ),
+                                                    image:
+                                                        ExtendedNetworkImageProvider(
+                                                            medicalList[index]
+                                                                .pet
+                                                                .image),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(width: 4),
-                                              Text(
-                                                dummyPets[index]['name']!,
-                                                style: TextStyle(
-                                                  fontFamily: 'Pretendard',
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                  color: Palette.black,
-                                                  letterSpacing: -0.5,
+                                              // SizedBox(width: 4),
+
+                                              // 이름
+                                              Expanded(
+                                                child: Text(
+                                                  medicalList[index].pet.name,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 16,
+                                                    color: Palette.black,
+                                                    letterSpacing: -0.5,
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(height: 18),
+                                          SizedBox(height: 12),
+
+                                          // 방문 날짜
                                           Text(
-                                            "이틀 째 숨을 거칠게 쉬어서 이틀 째 숨을 거칠게 쉬어서 이틀 째 숨을 거칠게 쉬어서",
+                                            medicalList[index].visitDate,
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 14,
+                                              color: Palette.mediumGray,
+                                              letterSpacing: -0.4,
+                                            ),
+                                          ),
+                                          SizedBox(height: 6),
+
+                                          // 이유
+                                          Text(
+                                            medicalList[index].reason,
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -630,17 +666,6 @@ class _HomePageState extends State<HomePage>
                                               fontSize: 16,
                                               color: Palette.black,
                                               letterSpacing: -0.5,
-                                            ),
-                                          ),
-                                          SizedBox(height: 18),
-                                          Text(
-                                            "2024.08.13",
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                              color: Palette.mediumGray,
-                                              letterSpacing: -0.4,
                                             ),
                                           ),
                                         ],
