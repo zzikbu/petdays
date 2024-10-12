@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
@@ -23,6 +26,29 @@ class MypagePage extends StatefulWidget {
 
 class _MypagePageState extends State<MypagePage> {
   late final ProfileProvider profileProvider;
+
+  Uint8List? _image; // Uint8List: 이미지나 동영상 같은 바이너리 데이터 취급할 때
+
+  // 사진 선택 함수
+  Future<void> selectImage() async {
+    ImagePicker imagePicker = new ImagePicker();
+    // XFile: 기기의 파일시스템에 접근할 수 있는 클래스
+    // 사진을 선택하지 안했을 때는 null 반환
+    XFile? file = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      // 용량 줄이기
+      maxHeight: 512,
+      maxWidth: 512,
+    );
+
+    if (file != null) {
+      Uint8List uint8list =
+          await file.readAsBytes(); // 선택한 이미지를 코드로 조작할 수 있게 반환
+      setState(() {
+        _image = uint8list;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -60,24 +86,50 @@ class _MypagePageState extends State<MypagePage> {
               Row(
                 children: [
                   // 프로필 사진
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Palette.lightGray,
-                        width: 1.0,
+                  Stack(
+                    children: [
+                      Container(
+                        width: 60,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Palette.lightGray,
+                            width: 1.0,
+                          ),
+                          image: DecorationImage(
+                            image: userModel.profileImage == null
+                                ? ExtendedAssetImageProvider(
+                                    "assets/icons/profile.png")
+                                : ExtendedNetworkImageProvider(
+                                    userModel.profileImage!),
+                            fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
+                          ),
+                        ),
                       ),
-                      image: DecorationImage(
-                        image: userModel.profileImage == null
-                            ? ExtendedAssetImageProvider(
-                                "assets/icons/profile.png")
-                            : ExtendedNetworkImageProvider(
-                                userModel.profileImage!),
-                        fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () async {
+                            await selectImage();
+                          },
+                          child: Container(
+                            height: 20,
+                            width: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.grey.withOpacity(0.4),
+                              borderRadius: BorderRadius.circular(60),
+                            ),
+                            child: Icon(
+                              color: Colors.white,
+                              size: 15,
+                              Icons.camera_alt,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   SizedBox(width: 12),
 
@@ -99,7 +151,8 @@ class _MypagePageState extends State<MypagePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SignUpNicknamePage(),
+                            builder: (context) =>
+                                SignUpNicknamePage(isEditMode: true),
                           ));
                     },
                     icon: Icon(Icons.edit),
