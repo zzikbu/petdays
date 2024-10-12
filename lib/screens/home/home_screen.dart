@@ -571,7 +571,9 @@ class _HomeScreenState extends State<HomeScreen>
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              MedicalDetailScreen()),
+                                              MedicalDetailScreen(
+                                                  medicalModel:
+                                                      medicalList[index])),
                                     );
                                   },
 

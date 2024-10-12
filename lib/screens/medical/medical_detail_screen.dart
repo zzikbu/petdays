@@ -1,15 +1,26 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/info_column.dart';
-import 'package:pet_log/dummy.dart';
+import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-class MedicalDetailScreen extends StatelessWidget {
-  const MedicalDetailScreen({super.key});
+class MedicalDetailScreen extends StatefulWidget {
+  final MedicalModel medicalModel;
 
+  const MedicalDetailScreen({
+    super.key,
+    required this.medicalModel,
+  });
+
+  @override
+  State<MedicalDetailScreen> createState() => _MedicalDetailScreenState();
+}
+
+class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,47 +82,57 @@ class MedicalDetailScreen extends StatelessWidget {
               SizedBox(height: 20),
               InfoColumn(
                 title: '진료받은 반려동물',
-                content: '나비',
+                content: widget.medicalModel.pet.name,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '진료일',
-                content: '2024.08.14 수요일',
+                content: widget.medicalModel.visitDate,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '이유',
-                content: '4차 예방접종',
+                content: widget.medicalModel.reason,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '병원',
-                content: '새싹동물병원',
+                content: widget.medicalModel.hospital.isEmpty
+                    ? "-"
+                    : widget.medicalModel.hospital,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '수의사',
-                content: '이승민',
+                content: widget.medicalModel.doctor.isEmpty
+                    ? "-"
+                    : widget.medicalModel.doctor,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '메모',
-                content:
-                    '수의사가 접종 후 경미한 부종은 정상적인 반응일 수 있다고 했다. 그러나 증상이 계속되거나 심해질 경우에는 추가적인 검사가 필요하다고 말했다.',
+                content: widget.medicalModel.note.isEmpty
+                    ? "-"
+                    : widget.medicalModel.note,
               ),
               SizedBox(height: 10),
+
+              // 사진
               ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: dummyPets.length,
+                itemCount: widget.medicalModel.imageUrls.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    width: 300,
+                    margin: EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
-                        image: AssetImage(dummyPets[index]['image']!),
+                        image: ExtendedNetworkImageProvider(
+                            widget.medicalModel.imageUrls[index]),
                         fit: BoxFit.cover,
                       ),
                     ),
