@@ -3,18 +3,18 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:pet_log/screens/sign_in/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class SignupEmailScreen extends StatefulWidget {
+  const SignupEmailScreen({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<SignupEmailScreen> createState() => _SignupEmailScreenState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignupEmailScreenState extends State<SignupEmailScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>(); // 검증 로직을 위한
 
   final TextEditingController _emailTEC = TextEditingController();
@@ -167,7 +167,7 @@ class _SignupPageState extends State<SignupPage> {
                                 Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => SignInPage(),
+                                      builder: (context) => SignInScreen(),
                                     ));
 
                                 // 스낵바 띄우기
@@ -215,7 +215,7 @@ class _SignupPageState extends State<SignupPage> {
                           ? () => Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignInPage(),
+                                builder: (context) => SignInScreen(),
                               ))
                           : null,
                       child: Align(

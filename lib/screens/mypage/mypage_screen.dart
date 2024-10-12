@@ -8,23 +8,22 @@ import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/user_model.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
-import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
-import 'package:pet_log/sign_up/sign_up_pet_info_page.dart';
+import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
+import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../palette.dart';
-
-class MypagePage extends StatefulWidget {
-  const MypagePage({super.key});
+class MypagePageScreen extends StatefulWidget {
+  const MypagePageScreen({super.key});
 
   @override
-  State<MypagePage> createState() => _MypagePageState();
+  State<MypagePageScreen> createState() => _MypagePageScreenState();
 }
 
-class _MypagePageState extends State<MypagePage> {
+class _MypagePageScreenState extends State<MypagePageScreen> {
   late final ProfileProvider profileProvider;
 
   Uint8List? _image; // Uint8List: 이미지나 동영상 같은 바이너리 데이터 취급할 때
@@ -152,7 +151,7 @@ class _MypagePageState extends State<MypagePage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                SignUpNicknamePage(isEditMode: true),
+                                SignUpNicknameScreen(isEditMode: true),
                           ));
                     },
                     icon: Icon(Icons.edit),
@@ -186,8 +185,7 @@ class _MypagePageState extends State<MypagePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => SignUpPetInfoPage()),
+                    MaterialPageRoute(builder: (context) => PetUploadScreen()),
                   );
                 },
                 child: Text(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/components/next_button.dart';
+import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,22 +13,19 @@ import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:provider/provider.dart';
 
-import '../components/next_button.dart';
-import '../components/textfield_with_title.dart';
-
-class DiaryWritePage extends StatefulWidget {
+class DiaryUploadScreen extends StatefulWidget {
   final bool isEditMode;
 
-  const DiaryWritePage({
+  const DiaryUploadScreen({
     super.key,
     this.isEditMode = false,
   });
 
   @override
-  State<DiaryWritePage> createState() => _DiaryWritePageState();
+  State<DiaryUploadScreen> createState() => _DiaryUploadScreenState();
 }
 
-class _DiaryWritePageState extends State<DiaryWritePage> {
+class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
   final TextEditingController _titleTEC = TextEditingController();
   final TextEditingController _descTEC = TextEditingController();
 

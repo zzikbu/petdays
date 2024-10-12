@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_log/dummy.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/walk/walk_detail_page.dart';
-import 'package:pet_log/select_pet_page.dart';
+import 'package:pet_log/screens/walk/walk_detail_screen.dart';
+import 'package:pet_log/screens/select_pet_screen.dart';
 
-import '../dummy.dart';
-
-class WalkHomePage extends StatelessWidget {
-  const WalkHomePage({super.key});
+class WalkHomeScreen extends StatelessWidget {
+  const WalkHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +36,7 @@ class WalkHomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => WalkDetailPage(),
+                    builder: (context) => WalkDetailScreen(),
                   ),
                 );
               },
@@ -220,7 +219,7 @@ class WalkHomePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SelectPetPage(
+              builder: (context) => SelectPetScreen(
                 isMedical: false,
               ),
             ),

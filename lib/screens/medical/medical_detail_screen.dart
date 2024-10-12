@@ -1,16 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/medical/medical_write_page.dart';
+import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/info_column.dart';
+import 'package:pet_log/dummy.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../components/custom_dialog.dart';
-import '../components/info_column.dart';
-import '../dummy.dart';
-
-class MedicalDetailPage extends StatelessWidget {
-  const MedicalDetailPage({super.key});
+class MedicalDetailScreen extends StatelessWidget {
+  const MedicalDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

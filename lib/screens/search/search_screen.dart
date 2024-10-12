@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/palette.dart';
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

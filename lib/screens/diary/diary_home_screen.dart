@@ -3,25 +3,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/diary/diary_detail_page.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
-import 'package:pet_log/search/search_page.dart';
+import 'package:pet_log/screens/diary/diary_detail_screen.dart';
+import 'package:pet_log/screens/diary/diary_upload_screen.dart';
+import 'package:pet_log/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
-import 'diary_write_page.dart';
 
-class DiaryHomePage extends StatefulWidget {
-  const DiaryHomePage({super.key});
+class DiaryHomeScreen extends StatefulWidget {
+  const DiaryHomeScreen({super.key});
 
   @override
-  State<DiaryHomePage> createState() => _DiaryHomePageState();
+  State<DiaryHomeScreen> createState() => _DiaryHomeScreenState();
 }
 
-class _DiaryHomePageState extends State<DiaryHomePage>
-    with AutomaticKeepAliveClientMixin<DiaryHomePage> {
+class _DiaryHomeScreenState extends State<DiaryHomeScreen>
+    with AutomaticKeepAliveClientMixin<DiaryHomeScreen> {
   late final DiaryProvider diaryProvider;
 
   // 다른 화면에서 돌아올 때
@@ -85,7 +85,7 @@ class _DiaryHomePageState extends State<DiaryHomePage>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
                 );
               },
               child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
@@ -110,7 +110,8 @@ class _DiaryHomePageState extends State<DiaryHomePage>
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DiaryDetailPage()),
+                    MaterialPageRoute(
+                        builder: (context) => DiaryDetailScreen()),
                   );
                 },
                 child: Stack(
@@ -269,7 +270,7 @@ class _DiaryHomePageState extends State<DiaryHomePage>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DiaryWritePage()),
+            MaterialPageRoute(builder: (context) => DiaryUploadScreen()),
           );
         },
         backgroundColor: Palette.darkGray,

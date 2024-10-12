@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/components/next_button.dart';
+import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
@@ -10,24 +12,21 @@ import 'package:pet_log/providers/medical/medical_provider.dart';
 import 'package:pet_log/providers/medical/medical_state.dart';
 import 'package:provider/provider.dart';
 
-import '../components/next_button.dart';
-import '../components/textfield_with_title.dart';
-
-class MedicalWritePage extends StatefulWidget {
+class MedicalUploadScreen extends StatefulWidget {
   final bool isEditMode;
   final PetModel selectedPet;
 
-  const MedicalWritePage({
+  const MedicalUploadScreen({
     super.key,
     this.isEditMode = false,
     required this.selectedPet,
   });
 
   @override
-  State<MedicalWritePage> createState() => _MedicalWritePageState();
+  State<MedicalUploadScreen> createState() => _MedicalUploadScreenState();
 }
 
-class _MedicalWritePageState extends State<MedicalWritePage> {
+class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
   final TextEditingController _visitDateTEC = TextEditingController();
   final TextEditingController _reasonTEC = TextEditingController();
   final TextEditingController _hospitalTEC = TextEditingController();

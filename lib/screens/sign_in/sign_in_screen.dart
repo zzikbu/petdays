@@ -4,19 +4,19 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/sign_up/sign_up_nickname_page.dart';
-import 'package:pet_log/sign_up/sign_up_page.dart';
+import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
+import 'package:pet_log/screens/sign_up/sign_up_email_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignInScreenState extends State<SignInScreen> {
   final GlobalKey<FormState> _globalKey = GlobalKey<FormState>(); // 검증 로직을 위한
 
   final TextEditingController _emailTEC = TextEditingController();
@@ -176,7 +176,7 @@ class _SignInPageState extends State<SignInPage> {
                           ? () => Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SignupPage(),
+                                builder: (context) => SignupEmailScreen(),
                               ))
                           : null,
                       child: Align(
@@ -201,7 +201,7 @@ class _SignInPageState extends State<SignInPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  SignUpNicknamePage(isEditMode: false)),
+                                  SignUpNicknameScreen(isEditMode: false)),
                         );
                       },
                       child: Container(
@@ -243,7 +243,7 @@ class _SignInPageState extends State<SignInPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  SignUpNicknamePage(isEditMode: false)),
+                                  SignUpNicknameScreen(isEditMode: false)),
                         );
                       },
                       child: Container(
@@ -285,7 +285,7 @@ class _SignInPageState extends State<SignInPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  SignUpNicknamePage(isEditMode: false)),
+                                  SignUpNicknameScreen(isEditMode: false)),
                         );
                       },
                       child: Container(

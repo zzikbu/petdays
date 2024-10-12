@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/custom_bottom_navigation_bar.dart';
+import 'package:pet_log/screens/main_screen.dart';
 import 'package:pet_log/providers/auth/auth_state.dart';
-import 'package:pet_log/sign_in/sign_in_page.dart';
+import 'package:pet_log/screens/sign_in/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({super.key});
+class SplashScreen extends StatelessWidget {
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,8 @@ class SplashPage extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) => authStatus == AuthStatus.authenticated
-              ? CustomBottomNavigationBar()
-              : SignInPage(),
+              ? MainScreen()
+              : SignInScreen(),
         ),
         (route) => route.isFirst, // 첫번째 화면은 남겨둔 채로 (splash 화면 남기기)
       );

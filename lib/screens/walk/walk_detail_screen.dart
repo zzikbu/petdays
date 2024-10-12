@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/info_column.dart';
 import 'package:pet_log/palette.dart';
 
-import '../components/custom_dialog.dart';
-import '../components/info_column.dart';
-
-class WalkDetailPage extends StatelessWidget {
-  const WalkDetailPage({super.key});
+class WalkDetailScreen extends StatelessWidget {
+  const WalkDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

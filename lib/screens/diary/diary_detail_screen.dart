@@ -1,21 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/dummy.dart';
+import 'package:pet_log/palette.dart';
+import 'package:pet_log/screens/diary/diary_upload_screen.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../components/custom_dialog.dart';
-import '../dummy.dart';
-import '../palette.dart';
-import 'diary_write_page.dart';
-
-class DiaryDetailPage extends StatefulWidget {
-  const DiaryDetailPage({super.key});
+class DiaryDetailScreen extends StatefulWidget {
+  const DiaryDetailScreen({super.key});
 
   @override
-  State<DiaryDetailPage> createState() => _DiaryDetailPageState();
+  State<DiaryDetailScreen> createState() => _DiaryDetailScreenState();
 }
 
-class _DiaryDetailPageState extends State<DiaryDetailPage> {
+class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _isLike = false;
   bool _isLock = true;
   bool _myDiary = true;
@@ -90,7 +89,7 @@ class _DiaryDetailPageState extends State<DiaryDetailPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    DiaryWritePage(isEditMode: true)),
+                                    DiaryUploadScreen(isEditMode: true)),
                           );
                         },
                       ),

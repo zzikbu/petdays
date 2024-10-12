@@ -2,31 +2,30 @@ import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/pet_model.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
-import 'package:pet_log/walk/walk_map_page.dart';
+import 'package:pet_log/screens/medical/medical_upload_screen.dart';
+import 'package:pet_log/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'components/next_button.dart';
-import 'medical/medical_write_page.dart';
-import 'palette.dart';
-
-class SelectPetPage extends StatefulWidget {
+class SelectPetScreen extends StatefulWidget {
   final bool isMedical;
 
-  const SelectPetPage({
+  const SelectPetScreen({
     super.key,
     required this.isMedical,
   });
 
   @override
-  State<SelectPetPage> createState() => _SelectPetPageState();
+  State<SelectPetScreen> createState() => _SelectPetScreenState();
 }
 
-class _SelectPetPageState extends State<SelectPetPage>
-    with AutomaticKeepAliveClientMixin<SelectPetPage> {
+class _SelectPetScreenState extends State<SelectPetScreen>
+    with AutomaticKeepAliveClientMixin<SelectPetScreen> {
   late final PetProvider petProvider;
 
   List<int> selectedIndices = []; // 선택된 애완동물 인덱스 저장
@@ -214,8 +213,8 @@ class _SelectPetPageState extends State<SelectPetPage>
             context,
             MaterialPageRoute(
               builder: (context) => widget.isMedical
-                  ? MedicalWritePage(selectedPet: selectedPet)
-                  : WalkMapPage(),
+                  ? MedicalUploadScreen(selectedPet: selectedPet)
+                  : WalkMapScreen(),
             ),
           );
         },

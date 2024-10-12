@@ -4,23 +4,22 @@ import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/screens/diary/diary_detail_screen.dart';
+import 'package:pet_log/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../diary/diary_detail_page.dart';
-import '../palette.dart';
-import '../search/search_page.dart';
-
-class FeedHomePage extends StatefulWidget {
-  const FeedHomePage({super.key});
+class FeedHomeScreen extends StatefulWidget {
+  const FeedHomeScreen({super.key});
 
   @override
-  _FeedHomePageState createState() => _FeedHomePageState();
+  _FeedHomeScreenState createState() => _FeedHomeScreenState();
 }
 
-class _FeedHomePageState extends State<FeedHomePage>
-    with AutomaticKeepAliveClientMixin<FeedHomePage> {
+class _FeedHomeScreenState extends State<FeedHomeScreen>
+    with AutomaticKeepAliveClientMixin<FeedHomeScreen> {
   late final DiaryProvider diaryProvider;
 
   bool isAllSelected = true;
@@ -150,7 +149,7 @@ class _FeedHomePageState extends State<FeedHomePage>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
                 );
               },
               child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
@@ -174,7 +173,7 @@ class _FeedHomePageState extends State<FeedHomePage>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiaryDetailPage()),
+                  MaterialPageRoute(builder: (context) => DiaryDetailScreen()),
                 );
               },
               child: Stack(

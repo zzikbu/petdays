@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:pet_log/firebase_options.dart';
 import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
@@ -19,10 +20,8 @@ import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:pet_log/repositories/medical_repository.dart';
 import 'package:pet_log/repositories/pet_repository.dart';
 import 'package:pet_log/repositories/profile_repository.dart';
-import 'package:pet_log/spalash_page.dart';
+import 'package:pet_log/screens/spalash_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
@@ -101,7 +100,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(useMaterial3: true),
-        home: SplashPage(),
+        home: SplashScreen(),
       ),
     );
   }

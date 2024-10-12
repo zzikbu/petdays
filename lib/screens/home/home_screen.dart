@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/home_section_header.dart';
-import 'package:pet_log/diary/diary_detail_page.dart';
+import 'package:pet_log/dummy.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/medical/medical_detail_page.dart';
-import 'package:pet_log/medical/medical_home_page.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/models/pet_model.dart';
@@ -19,23 +17,24 @@ import 'package:pet_log/providers/medical/medical_provider.dart';
 import 'package:pet_log/providers/medical/medical_state.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
-import 'package:pet_log/walk/walk_home_page.dart';
+import 'package:pet_log/screens/diary/diary_detail_screen.dart';
+import 'package:pet_log/screens/diary/diary_home_screen.dart';
+import 'package:pet_log/screens/medical/medical_detail_screen.dart';
+import 'package:pet_log/screens/medical/medical_home_screen.dart';
+import 'package:pet_log/screens/walk/walk_detail_screen.dart';
+import 'package:pet_log/screens/walk/walk_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../diary/diary_home_page.dart';
-import '../dummy.dart';
-import '../walk/walk_detail_page.dart';
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin<HomePage> {
+class _HomeScreenState extends State<HomeScreen>
+    with AutomaticKeepAliveClientMixin<HomeScreen> {
   late final PetProvider petProvider;
   late final DiaryProvider diaryProvider;
   late final MedicalProvider medicalProvider;
@@ -278,7 +277,8 @@ class _HomePageState extends State<HomePage>
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => WalkHomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => WalkHomeScreen()),
                       );
                     },
                   ),
@@ -322,7 +322,7 @@ class _HomePageState extends State<HomePage>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => WalkDetailPage(),
+                                      builder: (context) => WalkDetailScreen(),
                                     ),
                                   );
                                 },
@@ -400,7 +400,7 @@ class _HomePageState extends State<HomePage>
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DiaryHomePage()),
+                                builder: (context) => DiaryHomeScreen()),
                           );
                         },
                       ),
@@ -445,7 +445,7 @@ class _HomePageState extends State<HomePage>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DiaryDetailPage(),
+                                      builder: (context) => DiaryDetailScreen(),
                                     ),
                                   );
                                 },
@@ -519,7 +519,7 @@ class _HomePageState extends State<HomePage>
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MedicalHomePage()),
+                                builder: (context) => MedicalHomeScreen()),
                           );
                         },
                       ),
@@ -567,7 +567,7 @@ class _HomePageState extends State<HomePage>
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              MedicalDetailPage()),
+                                              MedicalDetailScreen()),
                                     );
                                   },
 

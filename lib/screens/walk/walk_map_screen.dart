@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/palette.dart';
 
-class WalkMapPage extends StatelessWidget {
-  const WalkMapPage({super.key});
+class WalkMapScreen extends StatelessWidget {
+  const WalkMapScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -11,14 +11,14 @@ import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPetInfoPage extends StatefulWidget {
-  const SignUpPetInfoPage({super.key});
+class PetUploadScreen extends StatefulWidget {
+  const PetUploadScreen({super.key});
 
   @override
-  _SignUpPetInfoPageState createState() => _SignUpPetInfoPageState();
+  _PetUploadScreenState createState() => _PetUploadScreenState();
 }
 
-class _SignUpPetInfoPageState extends State<SignUpPetInfoPage> {
+class _PetUploadScreenState extends State<PetUploadScreen> {
   final TextEditingController _nameTEC = TextEditingController();
   final TextEditingController _breedTEC = TextEditingController();
   final TextEditingController _birthdayTEC = TextEditingController();

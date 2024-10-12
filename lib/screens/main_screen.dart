@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/screens/feed/feed_home_screen.dart';
+import 'package:pet_log/screens/home/home_screen.dart';
+import 'package:pet_log/screens/mypage/mypage_screen.dart';
 
-import '../feed/feed_home_page.dart';
-import '../home/home_page.dart';
-import '../mypage/mypage_page.dart';
-
-class CustomBottomNavigationBar extends StatefulWidget {
-  const CustomBottomNavigationBar({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<CustomBottomNavigationBar> createState() =>
-      _CustomBottomNavigationBarState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+class _MainScreenState extends State<MainScreen> {
   int currentIndex = 1;
 
   @override
@@ -22,9 +20,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       body: IndexedStack(
         index: currentIndex, // index 순서에 해당하는 child를 맨 위에 보여줌
         children: [
-          FeedHomePage(),
-          HomePage(),
-          MypagePage(),
+          FeedHomeScreen(),
+          HomeScreen(),
+          MypagePageScreen(),
         ],
       ),
       bottomNavigationBar: NavigationBar(

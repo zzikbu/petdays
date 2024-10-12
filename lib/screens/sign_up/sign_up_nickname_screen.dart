@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/sign_up/sign_up_select_pet_type_page.dart';
 
-class SignUpNicknamePage extends StatefulWidget {
+class SignUpNicknameScreen extends StatefulWidget {
   final bool isEditMode;
 
-  const SignUpNicknamePage({
+  const SignUpNicknameScreen({
     super.key,
     required this.isEditMode,
   });
 
   @override
-  _SignUpNicknamePageState createState() => _SignUpNicknamePageState();
+  _SignUpNicknameScreenState createState() => _SignUpNicknameScreenState();
 }
 
-class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
+class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
   final TextEditingController _nicknameTEC = TextEditingController();
 
   bool _isActive = false; // 작성하기 버튼 활성화 여부
@@ -121,11 +120,11 @@ class _SignUpNicknamePageState extends State<SignUpNicknamePage> {
         bottomNavigationBar: NextButton(
           isActive: _isActive,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => SignUpSelectPetTypePage()),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => SignUpSelectPetTypePage()),
+            // );
           },
           buttonText: widget.isEditMode ? "수정하기" : "시작하기",
         ),

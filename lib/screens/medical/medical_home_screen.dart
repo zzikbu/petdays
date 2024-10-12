@@ -8,21 +8,20 @@ import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/medical/medical_provider.dart';
 import 'package:pet_log/providers/medical/medical_state.dart';
-import 'package:pet_log/search/search_page.dart';
-import 'package:pet_log/select_pet_page.dart';
+import 'package:pet_log/screens/medical/medical_detail_screen.dart';
+import 'package:pet_log/screens/search/search_screen.dart';
+import 'package:pet_log/screens/select_pet_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'medical_detail_page.dart';
-
-class MedicalHomePage extends StatefulWidget {
-  const MedicalHomePage({super.key});
+class MedicalHomeScreen extends StatefulWidget {
+  const MedicalHomeScreen({super.key});
 
   @override
-  State<MedicalHomePage> createState() => _MedicalHomePageState();
+  State<MedicalHomeScreen> createState() => _MedicalHomeScreenState();
 }
 
-class _MedicalHomePageState extends State<MedicalHomePage>
-    with AutomaticKeepAliveClientMixin<MedicalHomePage> {
+class _MedicalHomeScreenState extends State<MedicalHomeScreen>
+    with AutomaticKeepAliveClientMixin<MedicalHomeScreen> {
   late final MedicalProvider medicalProvider;
 
   // 다른 화면에서 돌아올 때
@@ -86,7 +85,7 @@ class _MedicalHomePageState extends State<MedicalHomePage>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SearchPage()),
+                  MaterialPageRoute(builder: (context) => SearchScreen()),
                 );
               },
               child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
@@ -114,7 +113,7 @@ class _MedicalHomePageState extends State<MedicalHomePage>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MedicalDetailPage(),
+                      builder: (context) => MedicalDetailScreen(),
                     ),
                   );
                 },
@@ -227,7 +226,7 @@ class _MedicalHomePageState extends State<MedicalHomePage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SelectPetPage(isMedical: true),
+              builder: (context) => SelectPetScreen(isMedical: true),
             ),
           );
         },
