@@ -516,6 +516,7 @@ class _HomeScreenState extends State<HomeScreen>
 
                   // 진료기록
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       HomeSectionHeader(
                         title: '진료기록',
