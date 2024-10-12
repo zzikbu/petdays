@@ -1,14 +1,21 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/dummy.dart';
+import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
-  const DiaryDetailScreen({super.key});
+  final DiaryModel diaryModel;
+
+  const DiaryDetailScreen({
+    super.key,
+    required this.diaryModel,
+  });
 
   @override
   State<DiaryDetailScreen> createState() => _DiaryDetailScreenState();
@@ -132,62 +139,120 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Scrollbar(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-              Text(
-                '다같이 애견카페 가서 놀은 날',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 22,
-                  color: Palette.black,
-                  letterSpacing: -0.5,
+
+              // 제목
+              Center(
+                child: Text(
+                  widget.diaryModel.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 22,
+                    color: Palette.black,
+                    letterSpacing: -0.5,
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
+
               Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Palette.lightGray,
-                    radius: 13,
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    '팜하니',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      color: Palette.black,
-                      letterSpacing: -0.4,
+                  // 프로필 사진
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Palette.lightGray,
+                        width: 1.0,
+                      ),
+                      image: DecorationImage(
+                        image: widget.diaryModel.writer.profileImage == null
+                            ? ExtendedAssetImageProvider(
+                                "assets/icons/profile.png")
+                            : ExtendedNetworkImageProvider(
+                                widget.diaryModel.writer.profileImage!),
+                        fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
+                      ),
                     ),
                   ),
+                  SizedBox(width: 6),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 닉네임
+                      Text(
+                        widget.diaryModel.writer.nickname,
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Palette.black,
+                          letterSpacing: -0.4,
+                        ),
+                      ),
+
+                      // 작성 날짜
+                      Text(
+                        DateFormat('yyyy-MM-dd HH:mm:ss')
+                            .format(widget.diaryModel.createAt.toDate()),
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
+                          color: Palette.mediumGray,
+                          letterSpacing: -0.4,
+                        ),
+                      ),
+                    ],
+                  ),
+
                   Spacer(),
-                  Text(
-                    '2024.08.16 17:24',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      color: Palette.mediumGray,
-                      letterSpacing: -0.4,
-                    ),
+
+                  Row(
+                    children: [
+                      // 좋아요 버튼
+                      Icon(
+                        Icons.favorite_outline,
+                        color: Palette.darkGray,
+                        size: 24,
+                      ),
+                      SizedBox(width: 5),
+
+                      // 좋아요 카운트
+                      Text(
+                        widget.diaryModel.likeCount.toString(), // 문자열로 변환
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 22,
+                          color: Palette.black,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
               SizedBox(height: 16),
-              Container(
-                height: 1,
-                color: Palette.lightGray,
-              ),
+
+              // 구분선
+              Divider(color: Palette.lightGray),
               SizedBox(height: 16),
+
+              // 내용
               Text(
-                '오늘은 망고와 초코를 데리고 애견카페에 다녀왔다.\n\n두 녀석 모두 집에서만 시간을 보내다가 오랜만에 외출이라 그런지, 차에서부터 흥분된 기색이 역력했다. 카페에 도착하자마자 망고와 초코는 꼬리를 흔들며 신나게 뛰어다니기 시작했다. 넓은 마당과 다양한 놀이기구가 마련된 곳이라 두 녀석이 마음껏 뛰어놀 수 있어 나도 덩달아 기분이 좋아졌다.',
+                widget.diaryModel.desc,
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
@@ -197,64 +262,74 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   height: 21 / 14,
                 ),
               ),
+              SizedBox(height: 10),
+
+              // 사진
               ListView.builder(
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: dummyPets.length,
+                itemCount: widget.diaryModel.imageUrls.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
-                    margin: EdgeInsets.symmetric(vertical: 10),
+                    margin: EdgeInsets.only(bottom: 12),
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
-                        image: AssetImage(dummyPets[index]['image']!),
+                        image: ExtendedNetworkImageProvider(
+                            widget.diaryModel.imageUrls[index]),
                         fit: BoxFit.cover,
                       ),
                     ),
                   );
                 },
               ),
-              SizedBox(height: 10),
-              GestureDetector(
-                onTap: _likeTap,
-                child: Container(
-                  height: 42,
-                  width: 116,
-                  decoration: BoxDecoration(
-                    color: _isLike ? Palette.darkGray : Palette.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Palette.lightGray,
-                      width: 1,
-                    ),
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.pets,
-                          size: 24,
-                          color: _isLike ? Palette.white : Palette.lightGray,
-                        ),
-                        SizedBox(width: 12),
-                        Text(
-                          '123',
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                            color: _isLike ? Palette.white : Palette.lightGray,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // SizedBox(height: 10),
+
+              // 좋아요
+              // Center(
+              //   child: GestureDetector(
+              //     onTap: _likeTap,
+              //     child: Container(
+              //       height: 42,
+              //       width: 116,
+              //       decoration: BoxDecoration(
+              //         color: _isLike ? Palette.darkGray : Palette.white,
+              //         borderRadius: BorderRadius.circular(20),
+              //         border: Border.all(
+              //           color: Palette.lightGray,
+              //           width: 1,
+              //         ),
+              //       ),
+              //       child: Center(
+              //         child: Row(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           crossAxisAlignment: CrossAxisAlignment.center,
+              //           children: [
+              //             Icon(
+              //               Icons.pets,
+              //               size: 24,
+              //               color: _isLike ? Palette.white : Palette.lightGray,
+              //             ),
+              //             SizedBox(width: 12),
+              //             Text(
+              //               widget.diaryModel.likeCount.toString(),
+              //               style: TextStyle(
+              //                 fontFamily: 'Pretendard',
+              //                 fontWeight: FontWeight.w500,
+              //                 fontSize: 18,
+              //                 color:
+              //                     _isLike ? Palette.white : Palette.lightGray,
+              //                 letterSpacing: -0.5,
+              //               ),
+              //             ),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               SizedBox(height: 60),
             ],
           ),

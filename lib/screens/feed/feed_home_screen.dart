@@ -173,7 +173,9 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DiaryDetailScreen()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          DiaryDetailScreen(diaryModel: diaryList[index])),
                 );
               },
               child: Stack(

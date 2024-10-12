@@ -3,6 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/home_section_header.dart';
 import 'package:pet_log/dummy.dart';
@@ -445,8 +446,8 @@ class _HomeScreenState extends State<HomeScreen>
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => DiaryDetailScreen(),
-                                    ),
+                                        builder: (context) => DiaryDetailScreen(
+                                            diaryModel: diaryList[index])),
                                   );
                                 },
                                 child: Container(
@@ -473,8 +474,11 @@ class _HomeScreenState extends State<HomeScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
+                                        // 제목
                                         Text(
                                           diaryList[index].title,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w500,
@@ -484,12 +488,12 @@ class _HomeScreenState extends State<HomeScreen>
                                           ),
                                         ),
                                         SizedBox(height: 2),
+
+                                        // 날짜
                                         Text(
-                                          diaryList[index]
-                                              .createAt
-                                              .toDate()
-                                              .toString()
-                                              .split(" ")[0],
+                                          DateFormat('yyyy-MM-dd').format(
+                                            diaryList[index].createAt.toDate(),
+                                          ),
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w400,

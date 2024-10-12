@@ -207,8 +207,8 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
                       ),
                     ),
 
-                    // 노트가 있을 경우 아이콘 표시
-                    if (medical.note != null && medical.note.isNotEmpty)
+                    // 메모가 있을 경우 아이콘 표시
+                    if (medical.note.isNotEmpty)
                       Positioned(
                         top: 10,
                         right: 16,
