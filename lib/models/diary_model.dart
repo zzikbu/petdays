@@ -63,4 +63,9 @@ class DiaryModel {
       writer: map['writer'],
     );
   }
+
+  @override
+  String toString() {
+    return 'DiaryModel{uid: $uid, diaryId: $diaryId, title: $title, desc: $desc, imageUrls: $imageUrls, likes: $likes, likeCount: $likeCount, reportCount: $reportCount, isLock: $isLock, createAt: $createAt, writer: $writer}';
+  }
 }

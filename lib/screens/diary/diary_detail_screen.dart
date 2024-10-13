@@ -7,16 +7,19 @@ import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
-  final DiaryModel diaryModel;
+  final int index;
 
   const DiaryDetailScreen({
     super.key,
-    required this.diaryModel,
+    required this.index,
   });
 
   @override
@@ -24,15 +27,16 @@ class DiaryDetailScreen extends StatefulWidget {
 }
 
 class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
-  bool _isLike = false;
   bool _isLock = true;
   bool _myDiary = true;
 
-  Future<void> _likeDiary() async {
+  Future<void> _likeDiary(diaryModel) async {
     await context.read<DiaryProvider>().likeDiary(
-          diaryId: widget.diaryModel.diaryId,
-          diaryLikes: widget.diaryModel.likes,
+          diaryId: diaryModel.diaryId,
+          diaryLikes: diaryModel.likes,
         );
+
+    await context.read<UserProvider>().getUserInfo(); // 상태관리하고 있는 userModel 갱신
   }
 
   void _lockTap() {
@@ -43,6 +47,12 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String currentUserId = context.read<UserState>().userModel.uid;
+    DiaryModel diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+
+    bool isLike = diaryModel.likes.contains(currentUserId);
+    _isLock = diaryModel.isLock;
+
     return Scaffold(
       backgroundColor: Palette.background,
       appBar: AppBar(
@@ -153,7 +163,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
               // 제목
               Center(
                 child: Text(
-                  widget.diaryModel.title,
+                  diaryModel.title,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Pretendard',
@@ -179,11 +189,11 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                         width: 1.0,
                       ),
                       image: DecorationImage(
-                        image: widget.diaryModel.writer.profileImage == null
+                        image: diaryModel.writer.profileImage == null
                             ? ExtendedAssetImageProvider(
                                 "assets/icons/profile.png")
                             : ExtendedNetworkImageProvider(
-                                widget.diaryModel.writer.profileImage!),
+                                diaryModel.writer.profileImage!),
                         fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                       ),
                     ),
@@ -195,7 +205,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                     children: [
                       // 닉네임
                       Text(
-                        widget.diaryModel.writer.nickname,
+                        diaryModel.writer.nickname,
                         style: TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w500,
@@ -208,7 +218,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                       // 작성 날짜
                       Text(
                         DateFormat('yyyy-MM-dd HH:mm:ss')
-                            .format(widget.diaryModel.createAt.toDate()),
+                            .format(diaryModel.createAt.toDate()),
                         style: TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w400,
@@ -227,19 +237,25 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                       // 좋아요 버튼
                       GestureDetector(
                         onTap: () async {
-                          await _likeDiary();
+                          await _likeDiary(diaryModel);
                         },
-                        child: Icon(
-                          Icons.favorite_outline,
-                          color: Palette.darkGray,
-                          size: 24,
-                        ),
+                        child: isLike
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.red,
+                                size: 24,
+                              )
+                            : Icon(
+                                Icons.favorite_border,
+                                color: Palette.darkGray,
+                                size: 24,
+                              ),
                       ),
                       SizedBox(width: 5),
 
                       // 좋아요 카운트
                       Text(
-                        widget.diaryModel.likeCount.toString(), // 문자열로 변환
+                        diaryModel.likeCount.toString(), // 문자열로 변환
                         style: TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w500,
@@ -260,7 +276,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
               // 내용
               Text(
-                widget.diaryModel.desc,
+                diaryModel.desc,
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
@@ -277,7 +293,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: widget.diaryModel.imageUrls.length,
+                itemCount: diaryModel.imageUrls.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
@@ -286,7 +302,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                       borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
                         image: ExtendedNetworkImageProvider(
-                            widget.diaryModel.imageUrls[index]),
+                            diaryModel.imageUrls[index]),
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -18,16 +18,32 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   }) async {
     state = state.copyWith(diaryStatus: DiaryStatus.submitting);
 
-    UserModel userModel = read<UserState>().userModel;
+    try {
+      UserModel userModel = read<UserState>().userModel;
 
-    await read<DiaryRepository>().likeDiary(
-      diaryId: diaryId,
-      diaryLikes: diaryLikes,
-      uid: userModel.uid,
-      userLikes: userModel.likes,
-    );
+      // 좋아요가 눌려서 내용물이 수정된 성장일기
+      DiaryModel diaryModel = await read<DiaryRepository>().likeDiary(
+        diaryId: diaryId,
+        diaryLikes: diaryLikes,
+        uid: userModel.uid,
+        userLikes: userModel.likes,
+      );
 
-    state = state.copyWith(diaryStatus: DiaryStatus.success);
+      List<DiaryModel> newDiaryList = state.diaryList.map(
+        (diary) {
+          return diary.diaryId == diaryId ? diaryModel : diary;
+        },
+      ).toList();
+
+      state = state.copyWith(
+        diaryStatus: DiaryStatus.success,
+        diaryList: newDiaryList,
+      );
+    } on CustomException catch (_) {
+      state = state.copyWith(
+          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
   }
 
   // 성장일기 가져오기
