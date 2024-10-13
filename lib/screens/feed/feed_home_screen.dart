@@ -20,21 +20,14 @@ class FeedHomeScreen extends StatefulWidget {
 
 class _FeedHomeScreenState extends State<FeedHomeScreen>
     with AutomaticKeepAliveClientMixin<FeedHomeScreen> {
-  late final DiaryProvider diaryProvider;
-
-  bool isAllSelected = true;
-
   // 다른 화면에서 돌아올 때
   // 데이터를 매번 가져오지 않도록
   @override
   bool get wantKeepAlive => true; // AutomaticKeepAliveClientMixin
 
-  @override
-  void initState() {
-    super.initState();
-    diaryProvider = context.read<DiaryProvider>();
-    _getFeedList();
-  }
+  /// Properties
+  late final DiaryProvider diaryProvider;
+  bool isAllSelected = true;
 
   void _getFeedList() {
     // 위젯들이 만들어 진 후에
@@ -45,6 +38,14 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         errorDialogWidget(context, e);
       }
     });
+  }
+
+  /// Lifecycle
+  @override
+  void initState() {
+    super.initState();
+    diaryProvider = context.read<DiaryProvider>();
+    _getFeedList();
   }
 
   @override

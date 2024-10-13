@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
@@ -26,10 +28,11 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _isLock = true;
   bool _myDiary = true;
 
-  void _likeTap() {
-    setState(() {
-      _isLike = !_isLike;
-    });
+  Future<void> _likeDiary() async {
+    await context.read<DiaryProvider>().likeDiary(
+          diaryId: widget.diaryModel.diaryId,
+          diaryLikes: widget.diaryModel.likes,
+        );
   }
 
   void _lockTap() {
@@ -222,10 +225,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   Row(
                     children: [
                       // 좋아요 버튼
-                      Icon(
-                        Icons.favorite_outline,
-                        color: Palette.darkGray,
-                        size: 24,
+                      GestureDetector(
+                        onTap: () async {
+                          await _likeDiary();
+                        },
+                        child: Icon(
+                          Icons.favorite_outline,
+                          color: Palette.darkGray,
+                          size: 24,
+                        ),
                       ),
                       SizedBox(width: 5),
 
@@ -285,51 +293,6 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   );
                 },
               ),
-              // SizedBox(height: 10),
-
-              // 좋아요
-              // Center(
-              //   child: GestureDetector(
-              //     onTap: _likeTap,
-              //     child: Container(
-              //       height: 42,
-              //       width: 116,
-              //       decoration: BoxDecoration(
-              //         color: _isLike ? Palette.darkGray : Palette.white,
-              //         borderRadius: BorderRadius.circular(20),
-              //         border: Border.all(
-              //           color: Palette.lightGray,
-              //           width: 1,
-              //         ),
-              //       ),
-              //       child: Center(
-              //         child: Row(
-              //           mainAxisAlignment: MainAxisAlignment.center,
-              //           crossAxisAlignment: CrossAxisAlignment.center,
-              //           children: [
-              //             Icon(
-              //               Icons.pets,
-              //               size: 24,
-              //               color: _isLike ? Palette.white : Palette.lightGray,
-              //             ),
-              //             SizedBox(width: 12),
-              //             Text(
-              //               widget.diaryModel.likeCount.toString(),
-              //               style: TextStyle(
-              //                 fontFamily: 'Pretendard',
-              //                 fontWeight: FontWeight.w500,
-              //                 fontSize: 18,
-              //                 color:
-              //                     _isLike ? Palette.white : Palette.lightGray,
-              //                 letterSpacing: -0.5,
-              //               ),
-              //             ),
-              //           ],
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
               SizedBox(height: 60),
             ],
           ),

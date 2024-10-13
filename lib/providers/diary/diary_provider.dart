@@ -1,13 +1,34 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
+import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   // DiaryProvider 만들어질 때 DiaryState도 같이 만들기
   DiaryProvider() : super(DiaryState.init());
+
+  // 성장일기 좋아요
+  Future<void> likeDiary({
+    required String diaryId,
+    required List<String> diaryLikes,
+  }) async {
+    state = state.copyWith(diaryStatus: DiaryStatus.submitting);
+
+    UserModel userModel = read<UserState>().userModel;
+
+    await read<DiaryRepository>().likeDiary(
+      diaryId: diaryId,
+      diaryLikes: diaryLikes,
+      uid: userModel.uid,
+      userLikes: userModel.likes,
+    );
+
+    state = state.copyWith(diaryStatus: DiaryStatus.success);
+  }
 
   // 성장일기 가져오기
   Future<void> getDiaryList({
@@ -46,8 +67,6 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
     try {
       state = state.copyWith(
           diaryStatus: DiaryStatus.submitting); // 게시글을 등록하는 중인 상태로 변경
-
-      print(state);
 
       String uid = read<User>().uid; // 작성자
 
