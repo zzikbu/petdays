@@ -12,6 +12,7 @@ import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +58,7 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
   }
 
   void _getProfile() {
-    String uid = context.read<User>().uid;
+    String uid = context.read<UserState>().userModel.uid;
     // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {

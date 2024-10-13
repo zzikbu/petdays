@@ -15,6 +15,8 @@ import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:pet_log/repositories/medical_repository.dart';
@@ -83,6 +85,9 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<MyAuthProvider, AuthState>(
           create: (context) => MyAuthProvider(),
+        ),
+        StateNotifierProvider<UserProvider, UserState>(
+          create: (context) => UserProvider(),
         ),
         StateNotifierProvider<PetProvider, PetState>(
           create: (context) => PetProvider(),
