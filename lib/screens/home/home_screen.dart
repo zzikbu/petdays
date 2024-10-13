@@ -50,16 +50,22 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   bool get wantKeepAlive => true;
 
-  // 만난 날 계산
-  String _calculateDaysSinceMeeting(String meetingDateString) {
+  // 이름 & 만난 날 계산
+  String _getNameAndDaysSinceMeeting({
+    required String name,
+    required String meetingDateString,
+  }) {
     DateTime meetingDate = DateTime.parse(meetingDateString);
     DateTime currentDate = DateTime.now();
     Duration difference = currentDate.difference(meetingDate);
-    return 'D+${difference.inDays}';
+    return '${name}\n만난 지 ${difference.inDays}일째';
   }
 
   // 나이 계산 & 품종
-  String _calculateAge(String birthDateString, String breed) {
+  String _getAgeAndBreed({
+    required String birthDateString,
+    required String breed,
+  }) {
     DateTime birthDate = DateTime.parse(birthDateString);
     DateTime currentDate = DateTime.now();
     Duration ageDifference = currentDate.difference(birthDate);
@@ -182,39 +188,37 @@ class _HomeScreenState extends State<HomeScreen>
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                // 만난 날 계산
+                                                // 이름 & 만난 날 계산
                                                 Text(
-                                                  _calculateDaysSinceMeeting(
-                                                      petList[_indicatorIndex]
-                                                          .firstMeetingDate),
+                                                  _getNameAndDaysSinceMeeting(
+                                                    name:
+                                                        petList[_indicatorIndex]
+                                                            .name,
+                                                    meetingDateString:
+                                                        petList[_indicatorIndex]
+                                                            .firstMeetingDate,
+                                                  ),
                                                   style: TextStyle(
                                                     fontFamily: 'Pretendard',
                                                     fontWeight: FontWeight.w600,
-                                                    fontSize: 22,
+                                                    fontSize: 20,
                                                     color: Palette.black,
                                                     letterSpacing: -0.5,
+                                                    height: 1.2,
                                                   ),
                                                 ),
-
-                                                // 이름
-                                                Text(
-                                                  petList[_indicatorIndex].name,
-                                                  style: TextStyle(
-                                                    fontFamily: 'Pretendard',
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 18,
-                                                    color: Palette.black,
-                                                    letterSpacing: -0.5,
-                                                  ),
-                                                ),
+                                                SizedBox(height: 6),
 
                                                 // 나이 계산 & 품종
                                                 Text(
-                                                  _calculateAge(
-                                                      petList[_indicatorIndex]
-                                                          .birthDay,
-                                                      petList[_indicatorIndex]
-                                                          .breed),
+                                                  _getAgeAndBreed(
+                                                    birthDateString:
+                                                        petList[_indicatorIndex]
+                                                            .birthDay,
+                                                    breed:
+                                                        petList[_indicatorIndex]
+                                                            .breed,
+                                                  ),
                                                   style: TextStyle(
                                                     fontFamily: 'Pretendard',
                                                     fontWeight: FontWeight.w600,
