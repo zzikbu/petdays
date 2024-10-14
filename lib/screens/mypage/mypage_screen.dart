@@ -13,6 +13,7 @@ import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
+import 'package:pet_log/screens/like/like_screen.dart';
 import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
@@ -236,9 +237,14 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
 
               // 공감한 성장일기
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LikeScreen()),
+                  );
+                },
                 child: Text(
-                  '공감한 성장일기',
+                  '좋아요한 성장일기',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
