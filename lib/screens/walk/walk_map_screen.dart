@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:pet_log/palette.dart';
 
 class WalkMapScreen extends StatelessWidget {
@@ -10,19 +11,14 @@ class WalkMapScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: true, // 앱바 위에까지 보이게
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Container(
-              color: Palette.white,
-              child: Center(
-                child: Text(
-                  '지도',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
+          NaverMap(
+            options: const NaverMapViewOptions(),
+            onMapReady: (controller) {
+              print("네이버 맵 로딩됨!");
+            },
           ),
           Positioned(
             left: 24,
@@ -63,7 +59,7 @@ class WalkMapScreen extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
