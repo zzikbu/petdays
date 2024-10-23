@@ -24,6 +24,7 @@ import 'package:pet_log/screens/medical/medical_detail_screen.dart';
 import 'package:pet_log/screens/medical/medical_home_screen.dart';
 import 'package:pet_log/screens/walk/walk_detail_screen.dart';
 import 'package:pet_log/screens/walk/walk_home_screen.dart';
+import 'package:pet_log/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -283,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => WalkHomeScreen()),
+                            builder: (context) => WalkMapScreen()),
                       );
                     },
                   ),

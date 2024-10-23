@@ -15,23 +15,23 @@ class HomeSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Palette.black,
-            letterSpacing: -0.5,
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontFamily: 'Pretendard',
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+                color: Palette.black,
+                letterSpacing: -0.5,
+              ),
+            ),
           ),
-        ),
-        Spacer(),
-        GestureDetector(
-          onTap: onTap,
-          child: Row(
+          Row(
             children: [
               Text(
                 "더 보기",
@@ -48,8 +48,8 @@ class HomeSectionHeader extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

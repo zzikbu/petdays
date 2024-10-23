@@ -33,7 +33,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NaverMapSdk.instance.initialize(clientId: NAVERMAPCLIENTID);
+  await NaverMapSdk.instance.initialize(clientId: NAVER_MAP_CLIENT_ID);
   runApp(const MyApp());
 }
 
