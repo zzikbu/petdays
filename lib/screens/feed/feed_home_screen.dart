@@ -5,8 +5,8 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/diary/diary_provider.dart';
-import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/feed/feed_provider.dart';
+import 'package:pet_log/providers/feed/feed_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:pet_log/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
@@ -26,14 +26,14 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   bool get wantKeepAlive => true; // AutomaticKeepAliveClientMixin
 
   /// Properties
-  late final DiaryProvider diaryProvider;
+  late final FeedProvider feedProvider;
   bool isAllSelected = true;
 
   void _getFeedList() {
     // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await diaryProvider.getDiaryList();
+        await feedProvider.getFeedList();
       } on CustomException catch (e) {
         errorDialogWidget(context, e);
       }
@@ -44,7 +44,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   @override
   void initState() {
     super.initState();
-    diaryProvider = context.read<DiaryProvider>();
+    feedProvider = context.read<FeedProvider>();
     _getFeedList();
   }
 
@@ -52,10 +52,10 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    DiaryState diaryState = context.watch<DiaryState>();
-    List<DiaryModel> diaryList = diaryState.diaryList;
+    FeedState feedState = context.watch<FeedState>();
+    List<DiaryModel> feedList = feedState.feedList;
 
-    if (diaryState.diaryStatus == DiaryStatus.fetching) {
+    if (feedState.feedStatus == FeedStatus.fetching) {
       return Center(
         child: CircularProgressIndicator(),
       );
@@ -164,18 +164,24 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         backgroundColor: Palette.white,
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
-          _getFeedList(); // diaryList를 watch하고 있기 때문에 변경사항이 발생하면 화면을 새롭게 그림
+          _getFeedList();
         },
+
+        // 리스트뷰
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          itemCount: diaryList.length,
+          itemCount: feedList.length,
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => DiaryDetailScreen(index: index)),
+                    builder: (context) => DiaryDetailScreen(
+                      index: index,
+                      isFeed: true,
+                    ),
+                  ),
                 );
               },
               child: Stack(
@@ -192,7 +198,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                       ),
                       image: DecorationImage(
                         image: ExtendedNetworkImageProvider(
-                            diaryList[index].imageUrls[0]),
+                            feedList[index].imageUrls[0]),
                         fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                       ),
                       boxShadow: [
@@ -246,7 +252,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                                   const EdgeInsets.symmetric(horizontal: 2),
                               // 제목
                               child: Text(
-                                diaryList[index].title,
+                                feedList[index].title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -271,7 +277,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
                                 // 좋아요 개수
                                 Text(
-                                  diaryList[index].likeCount.toString(),
+                                  feedList[index].likeCount.toString(),
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w400,
@@ -292,7 +298,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
                                 // 날짜
                                 Text(
-                                  diaryList[index]
+                                  feedList[index]
                                       .createAt
                                       .toDate()
                                       .toString()

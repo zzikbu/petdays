@@ -8,6 +8,7 @@ import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/feed/feed_state.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
@@ -16,10 +17,12 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
+  final bool isFeed;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
+    this.isFeed = false,
   });
 
   @override
@@ -47,9 +50,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String currentUserId = context.read<UserState>().userModel.uid;
-    DiaryModel diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+    DiaryModel diaryModel;
 
+    if (widget.isFeed) {
+      diaryModel = context.watch<FeedState>().feedList[widget.index];
+    } else {
+      diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+    }
+
+    String currentUserId = context.read<UserState>().userModel.uid;
     bool isLike = diaryModel.likes.contains(currentUserId);
     _isLock = diaryModel.isLock;
 

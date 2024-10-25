@@ -48,24 +48,20 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
 
   // 성장일기 가져오기
   Future<void> getDiaryList({
-    String? uid,
+    required String uid,
   }) async {
     try {
       state = state.copyWith(diaryStatus: DiaryStatus.fetching); // 상태 변경
 
       List<DiaryModel> diaryList;
 
-      if (uid != null) {
-        diaryList = await read<DiaryRepository>()
-            .getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
-      } else {
-        diaryList = await read<DiaryRepository>().getDiaryList(); // 전체 가져오기
-      }
+      diaryList = await read<DiaryRepository>()
+          .getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
 
       state = state.copyWith(
         diaryList: diaryList,
-        diaryStatus: DiaryStatus.success,
-      ); // 상태 변경
+        diaryStatus: DiaryStatus.success, // 상태 변경
+      );
     } on CustomException catch (_) {
       state = state.copyWith(
           diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경

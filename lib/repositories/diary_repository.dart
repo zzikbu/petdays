@@ -91,21 +91,15 @@ class DiaryRepository {
 
   // 성장일기 가져오기
   Future<List<DiaryModel>> getDiaryList({
-    String? uid,
+    required String uid,
   }) async {
     try {
       // snapshot 을 생성하기 위한 query 생성
-      Query<Map<String, dynamic>> query = await firebaseFirestore
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('diaries')
-          .orderBy('createAt', descending: true);
-
-      // uid 가 null 이 아닐 경우(특정 유저의 피드를 가져올 경우) query에 조건 추가
-      if (uid != null) {
-        query = query.where('uid', isEqualTo: uid);
-      }
-
-      // query 를 실행하여 snapshot 생성
-      QuerySnapshot<Map<String, dynamic>> snapshot = await query.get();
+          .where('uid', isEqualTo: uid)
+          .orderBy('createAt', descending: true)
+          .get();
 
       return await Future.wait(snapshot.docs.map(
         (e) async {
