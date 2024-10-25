@@ -111,7 +111,11 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => DiaryDetailScreen(index: index)),
+                      builder: (context) => DiaryDetailScreen(
+                        index: index,
+                        isDiary: true,
+                      ),
+                    ),
                   );
                 },
                 child: Stack(

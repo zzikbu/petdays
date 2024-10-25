@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
-import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -11,29 +9,17 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   // DiaryProvider 만들어질 때 DiaryState도 같이 만들기
   DiaryProvider() : super(DiaryState.init());
 
-  // 성장일기 좋아요
-  Future<void> likeDiary({
-    required String diaryId,
-    required List<String> diaryLikes,
-  }) async {
+  // DiaryHomeScreen을 통해 좋아요 했을 때 DiaryState.diaryList 업데이트
+  void likeDiary({
+    required DiaryModel newDiaryModel,
+  }) {
     state = state.copyWith(diaryStatus: DiaryStatus.submitting);
 
     try {
-      UserModel userModel = read<UserState>().userModel;
-
-      // 좋아요가 눌려서 내용물이 수정된 성장일기
-      DiaryModel diaryModel = await read<DiaryRepository>().likeDiary(
-        diaryId: diaryId,
-        diaryLikes: diaryLikes,
-        uid: userModel.uid,
-        userLikes: userModel.likes,
-      );
-
-      List<DiaryModel> newDiaryList = state.diaryList.map(
-        (diary) {
-          return diary.diaryId == diaryId ? diaryModel : diary;
-        },
-      ).toList();
+      // 기존 diaryList 특정 diaryId와 동일한 항목을 찾아 새로운 diaryModel로 교체
+      List<DiaryModel> newDiaryList = state.diaryList.map((diary) {
+        return diary.diaryId == newDiaryModel.diaryId ? newDiaryModel : diary;
+      }).toList();
 
       state = state.copyWith(
         diaryStatus: DiaryStatus.success,
@@ -70,7 +56,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   }
 
   // 성장일기 업로드
-  Future<void> uploadDiary({
+  Future<DiaryModel> uploadDiary({
     required List<String> files, // 이미지들
     required String title, // 제목
     required String desc, // 내용
@@ -98,6 +84,8 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
           ...state.diaryList, // 새로 등록한 성장일기를 리스트 맨앞에 추가
         ],
       );
+
+      return diaryModel;
     } on CustomException catch (_) {
       state = state.copyWith(
           diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경

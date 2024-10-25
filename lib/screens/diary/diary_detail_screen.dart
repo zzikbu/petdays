@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/feed/feed_provider.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
@@ -17,12 +20,12 @@ import 'package:pull_down_button/pull_down_button.dart';
 
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
-  final bool isFeed;
+  final bool isDiary;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
-    this.isFeed = false,
+    this.isDiary = false,
   });
 
   @override
@@ -34,12 +37,27 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _myDiary = true;
 
   Future<void> _likeDiary(diaryModel) async {
-    await context.read<DiaryProvider>().likeDiary(
-          diaryId: diaryModel.diaryId,
-          diaryLikes: diaryModel.likes,
-        );
+    try {
+      DiaryModel newDiaryModel = await context.read<FeedProvider>().likeDiary(
+            diaryId: diaryModel.diaryId,
+            diaryLikes: diaryModel.likes,
+          );
 
-    await context.read<UserProvider>().getUserInfo(); // 상태관리하고 있는 userModel 갱신
+      context.read<DiaryProvider>().likeDiary(newDiaryModel: newDiaryModel);
+
+      // DiaryModel newDiaryModel = await context.read<DiaryProvider>().likeDiary(
+      //       diaryId: diaryModel.diaryId,
+      //       diaryLikes: diaryModel.likes,
+      //     );
+      //
+      // context.read<FeedProvider>().likeDiary(newDiaryModel: newDiaryModel);
+
+      await context
+          .read<UserProvider>()
+          .getUserInfo(); // 좋아요 했기 때문에 상태관리하고 있는 userModel 갱신
+    } on CustomException catch (e) {
+      errorDialogWidget(context, e);
+    }
   }
 
   void _lockTap() {
@@ -52,10 +70,12 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   Widget build(BuildContext context) {
     DiaryModel diaryModel;
 
-    if (widget.isFeed) {
-      diaryModel = context.watch<FeedState>().feedList[widget.index];
-    } else {
+    if (widget.isDiary) {
+      // DiaryHomeScreen OR HomeScreen push 됐을 때
       diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+    } else {
+      // FeedHomeScreen에서 push 됐을 때
+      diaryModel = context.watch<FeedState>().feedList[widget.index];
     }
 
     String currentUserId = context.read<UserState>().userModel.uid;

@@ -177,10 +177,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DiaryDetailScreen(
-                      index: index,
-                      isFeed: true,
-                    ),
+                    builder: (context) => DiaryDetailScreen(index: index),
                   ),
                 );
               },

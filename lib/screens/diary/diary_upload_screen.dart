@@ -7,10 +7,12 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/feed/feed_provider.dart';
 import 'package:provider/provider.dart';
 
 class DiaryUploadScreen extends StatefulWidget {
@@ -292,12 +294,18 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
               });
 
               // 성장일기 업로드 로직
-              await context.read<DiaryProvider>().uploadDiary(
-                    files: _files,
-                    title: _titleTEC.text,
-                    desc: _descTEC.text,
-                    isLock: _isLock,
-                  );
+              DiaryModel diaryModel =
+                  await context.read<DiaryProvider>().uploadDiary(
+                        files: _files,
+                        title: _titleTEC.text,
+                        desc: _descTEC.text,
+                        isLock: _isLock,
+                      );
+
+              // 공개로 업로드일 때
+              if (!_isLock) {
+                context.read<FeedProvider>().uploadFeed(diaryModel: diaryModel);
+              }
 
               // 스낵바
               ScaffoldMessenger.of(context)
