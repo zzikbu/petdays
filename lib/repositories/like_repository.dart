@@ -25,12 +25,16 @@ class LikeRepository {
       List<DiaryModel> diaryList = await Future.wait(likes.map((diaryId) async {
         DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
             await firebaseFirestore.collection('diaries').doc(diaryId).get();
+
         Map<String, dynamic> diaryMapData = documentSnapshot.data()!;
+
         DocumentReference<Map<String, dynamic>> userDocRef =
             diaryMapData['writer'];
+
         Map<String, dynamic> writerMapData =
             await userDocRef.get().then((value) => value.data()!);
         diaryMapData['writer'] = UserModel.fromMap(writerMapData);
+
         return DiaryModel.fromMap(diaryMapData);
       }).toList());
       return diaryList;

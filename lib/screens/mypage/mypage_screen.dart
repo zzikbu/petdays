@@ -13,7 +13,7 @@ import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/screens/like/like_screen.dart';
+import 'package:pet_log/screens/like/like_home_screen.dart';
 import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
@@ -240,7 +240,7 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LikeScreen()),
+                    MaterialPageRoute(builder: (context) => LikeHomeScreen()),
                   );
                 },
                 child: Text(

@@ -12,6 +12,8 @@ import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/providers/feed/feed_provider.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
+import 'package:pet_log/providers/like/like_provider.dart';
+import 'package:pet_log/providers/like/like_state.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
@@ -21,11 +23,13 @@ import 'package:pull_down_button/pull_down_button.dart';
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
   final bool isDiary;
+  final bool isLike;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
     this.isDiary = false,
+    this.isLike = false,
   });
 
   @override
@@ -35,22 +39,22 @@ class DiaryDetailScreen extends StatefulWidget {
 class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _isLock = true;
   bool _myDiary = true;
+  late String _currentUserId;
 
-  Future<void> _likeDiary(diaryModel) async {
+  Future<void> _likeDiary(DiaryModel diaryModel) async {
     try {
       DiaryModel newDiaryModel = await context.read<FeedProvider>().likeDiary(
             diaryId: diaryModel.diaryId,
             diaryLikes: diaryModel.likes,
           );
 
-      context.read<DiaryProvider>().likeDiary(newDiaryModel: newDiaryModel);
+      if (_currentUserId == diaryModel.uid) {
+        context.read<DiaryProvider>().likeDiary(newDiaryModel: newDiaryModel);
+      }
 
-      // DiaryModel newDiaryModel = await context.read<DiaryProvider>().likeDiary(
-      //       diaryId: diaryModel.diaryId,
-      //       diaryLikes: diaryModel.likes,
-      //     );
-      //
-      // context.read<FeedProvider>().likeDiary(newDiaryModel: newDiaryModel);
+      if (widget.isLike) {
+        context.read<LikeProvider>().likeDiary(newDiaryModel: newDiaryModel);
+      }
 
       await context
           .read<UserProvider>()
@@ -71,15 +75,18 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     DiaryModel diaryModel;
 
     if (widget.isDiary) {
-      // DiaryHomeScreen OR HomeScreen push 됐을 때
+      // DiaryHomeScreen OR HomeScreen에서 push
       diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+    } else if (widget.isLike) {
+      // LikeHomeScreen에서 push
+      diaryModel = context.watch<LikeState>().likeList[widget.index];
     } else {
-      // FeedHomeScreen에서 push 됐을 때
+      // FeedHomeScreen에서 push
       diaryModel = context.watch<FeedState>().feedList[widget.index];
     }
 
-    String currentUserId = context.read<UserState>().userModel.uid;
-    bool isLike = diaryModel.likes.contains(currentUserId);
+    _currentUserId = context.read<UserState>().userModel.uid;
+    bool isLike = diaryModel.likes.contains(_currentUserId);
     _isLock = diaryModel.isLock;
 
     return Scaffold(
