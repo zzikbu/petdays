@@ -38,7 +38,7 @@ class DiaryDetailScreen extends StatefulWidget {
 
 class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _isLock = true;
-  bool _myDiary = true;
+  late bool _isMyDiary;
   late String _currentUserId;
 
   Future<void> _likeDiary(DiaryModel diaryModel) async {
@@ -88,6 +88,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     _currentUserId = context.read<UserState>().userModel.uid;
     bool isLike = diaryModel.likes.contains(_currentUserId);
     _isLock = diaryModel.isLock;
+    _isMyDiary = diaryModel.uid == _currentUserId;
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -95,48 +96,49 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
         scrolledUnderElevation: 0,
         backgroundColor: Palette.background,
         actions: [
-          GestureDetector(
-            onTap: () {
-              if (_isLock) {
-                // 비공개 -> 공개
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: '성장일기 공개',
-                      message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
-                      onConfirm: () {
-                        _lockTap();
-                      },
-                    );
-                  },
-                );
-              } else {
-                // 공개 -> 비공개
-                // _isLock이 false일 때 바로 _lockTap() 호출
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: '성장일기 비공개',
-                      message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
-                      onConfirm: () {
-                        _lockTap();
-                      },
-                    );
-                  },
-                );
-              }
-            },
-            child: _isLock
-                ? SvgPicture.asset('assets/icons/ic_lock.svg')
-                : SvgPicture.asset('assets/icons/ic_unlock.svg'),
-          ),
+          if (_isMyDiary)
+            GestureDetector(
+              onTap: () {
+                if (_isLock) {
+                  // 비공개 -> 공개
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialog(
+                        title: '성장일기 공개',
+                        message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
+                        onConfirm: () {
+                          _lockTap();
+                        },
+                      );
+                    },
+                  );
+                } else {
+                  // 공개 -> 비공개
+                  // _isLock이 false일 때 바로 _lockTap() 호출
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialog(
+                        title: '성장일기 비공개',
+                        message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
+                        onConfirm: () {
+                          _lockTap();
+                        },
+                      );
+                    },
+                  );
+                }
+              },
+              child: _isLock
+                  ? SvgPicture.asset('assets/icons/ic_lock.svg')
+                  : SvgPicture.asset('assets/icons/ic_unlock.svg'),
+            ),
           SizedBox(width: 14),
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: PullDownButton(
-              itemBuilder: (context) => _myDiary
+              itemBuilder: (context) => _isMyDiary
                   ? [
                       PullDownMenuItem(
                         title: '수정하기',
@@ -159,8 +161,13 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                               return CustomDialog(
                                 title: '성장일기 삭제',
                                 message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                                onConfirm: () {
-                                  print('삭제됨');
+                                onConfirm: () async {
+                                  // 삭제 로직
+                                  await context
+                                      .read<FeedProvider>()
+                                      .deleteDiary(diaryModel: diaryModel);
+
+                                  Navigator.of(context).pop();
                                 },
                               );
                             },

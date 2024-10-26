@@ -10,6 +10,17 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
   // FeedProvider 만들어질 때 FeedState 같이 만들기
   FeedProvider() : super(FeedState.init());
 
+  // 성장일기 삭제
+  Future<void> deleteDiary({
+    required DiaryModel diaryModel,
+  }) async {
+    state = state.copyWith(feedStatus: FeedStatus.submitting);
+
+    await read<FeedRepository>().deleteDiary(diaryModel: diaryModel);
+
+    state = state.copyWith(feedStatus: FeedStatus.success);
+  }
+
   // 성장일기 좋아요
   Future<DiaryModel> likeDiary({
     required String diaryId,

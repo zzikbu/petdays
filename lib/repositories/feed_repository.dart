@@ -13,6 +13,58 @@ class FeedRepository {
     required this.firebaseFirestore,
   });
 
+  // 성장일기 삭제
+  Future<void> deleteDiary({
+    required DiaryModel diaryModel,
+  }) async {
+    try {
+      WriteBatch batch = firebaseFirestore.batch();
+
+      DocumentReference<Map<String, dynamic>> diaryDocRef =
+          firebaseFirestore.collection('diaries').doc(diaryModel.diaryId);
+      DocumentReference<Map<String, dynamic>> writerDocRef =
+          firebaseFirestore.collection('users').doc(diaryModel.uid);
+
+      List<String> likes = await diaryDocRef
+          .get()
+          .then((value) => List<String>.from(value.data()!['likes']));
+
+      // 해당 성장일기에 좋아요를 누른 users 문서의 likes 필드에서 diaryId 삭제
+      likes.forEach((uid) {
+        batch.update(firebaseFirestore.collection('users').doc(uid), {
+          'likes': FieldValue.arrayRemove([diaryModel.diaryId]),
+        });
+      });
+
+      // diaries 컬렉션에서 문서 삭제
+      batch.delete(diaryDocRef);
+
+      // 성장일기 작성자의 users 문서에서 diaryCount 1 감소
+      batch.update(writerDocRef, {
+        'diaryCount': FieldValue.increment(-1),
+      });
+
+      // storage 이미지 삭제
+      diaryModel.imageUrls.forEach((element) async {
+        await firebaseStorage.refFromURL(element).delete();
+      });
+
+      batch.commit();
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 성장일기 좋아요
   Future<DiaryModel> likeDiary({
     required String diaryId,
