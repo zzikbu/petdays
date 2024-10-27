@@ -4,7 +4,6 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
 import 'package:pet_log/screens/sign_up/sign_up_email_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
@@ -197,12 +196,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     // 구글
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SignUpNicknameScreen(isEditMode: false)),
-                        );
+
                       },
                       child: Container(
                         height: 50,
@@ -239,12 +233,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     // 카카오
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SignUpNicknameScreen(isEditMode: false)),
-                        );
+
                       },
                       child: Container(
                         height: 50,
@@ -281,12 +270,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     // 애플
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  SignUpNicknameScreen(isEditMode: false)),
-                        );
+
                       },
                       child: Container(
                         height: 50,

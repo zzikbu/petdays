@@ -7,7 +7,27 @@ import 'package:state_notifier/state_notifier.dart';
 class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {
   ProfileProvider() : super(ProfileState.init());
 
-  // 프로필 페이지 데이터 가져오기
+  // 닉네임 수정
+  Future<void> updateNickname({
+    required String uid,
+    required String newNickname,
+  }) async {
+    state = state.copyWith(profileStatus: ProfileStatus.fetching); // 상태 변경
+
+    try {
+      await read<ProfileRepository>().updateNickname(
+        uid: uid,
+        newNickname: newNickname,
+      );
+
+      state = state.copyWith(profileStatus: ProfileStatus.success); // 상태 변경
+    } on CustomException catch (_) {
+      state = state.copyWith(profileStatus: ProfileStatus.error); // 에러 상태로 변경
+      rethrow;
+    }
+  }
+
+  // 프로필 데이터 가져오기
   Future<void> getProfile({
     required String uid,
   }) async {
@@ -23,6 +43,7 @@ class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {
       );
     } on CustomException catch (_) {
       state = state.copyWith(profileStatus: ProfileStatus.error); // 에러 상태로 변경
+      rethrow;
     }
   }
 }

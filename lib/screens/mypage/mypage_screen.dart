@@ -1,21 +1,17 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
-import 'package:pet_log/providers/profile/profile_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/like/like_home_screen.dart';
-import 'package:pet_log/screens/sign_up/sign_up_nickname_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
+import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
 
 class MypagePageScreen extends StatefulWidget {
@@ -52,27 +48,8 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    profileProvider = context.read<ProfileProvider>();
-    _getProfile();
-  }
-
-  void _getProfile() {
-    String uid = context.read<UserState>().userModel.uid;
-    // 위젯들이 만들어 진 후에
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        await profileProvider.getProfile(uid: uid);
-      } on CustomException catch (e) {
-        errorDialogWidget(context, e);
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    UserModel userModel = context.watch<ProfileState>().userModel;
+    UserModel userModel = context.watch<UserState>().userModel;
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -152,8 +129,7 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                SignUpNicknameScreen(isEditMode: true),
+                            builder: (context) => UpdateNicknameScreen(),
                           ));
                     },
                     icon: Icon(Icons.edit),

@@ -1,34 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/next_button.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/profile/profile_provider.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
+import 'package:pet_log/providers/user/user_state.dart';
+import 'package:provider/provider.dart';
 
-class SignUpNicknameScreen extends StatefulWidget {
-  final bool isEditMode;
-
-  const SignUpNicknameScreen({
-    super.key,
-    required this.isEditMode,
-  });
+class UpdateNicknameScreen extends StatefulWidget {
+  const UpdateNicknameScreen({super.key});
 
   @override
-  _SignUpNicknameScreenState createState() => _SignUpNicknameScreenState();
+  _UpdateNicknameScreenState createState() => _UpdateNicknameScreenState();
 }
 
-class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
+class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
+  /// Properties
   final TextEditingController _nicknameTEC = TextEditingController();
 
-  bool _isActive = false; // 작성하기 버튼 활성화 여부
+  bool _isActive = false;
 
+  /// Method
   void _checkBottomActive() {
     setState(() {
       _isActive = _nicknameTEC.text.isNotEmpty && _nicknameTEC.text.length > 1;
     });
   }
 
+  /// LifeCycle
   @override
   void initState() {
     super.initState();
-
     _nicknameTEC.addListener(_checkBottomActive);
   }
 
@@ -36,12 +40,13 @@ class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
   void dispose() {
     _nicknameTEC.removeListener(_checkBottomActive);
     _nicknameTEC.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final String uid = context.read<UserState>().userModel.uid;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
@@ -71,7 +76,7 @@ class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
 
               // 설명
               Text(
-                '두글 자 이상, 최대 여섯 글자까지 가능합니다.',
+                '2글자 이상 10글자 이하로 입력해주세요.',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
@@ -87,7 +92,7 @@ class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
                 controller: _nicknameTEC,
                 autocorrect: false,
                 enableSuggestions: false,
-                maxLength: 6, // 최대 글자 수를 6으로 제한
+                maxLength: 10, // 10 글자 제한
                 cursorColor: Palette.mainGreen,
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -119,14 +124,24 @@ class _SignUpNicknameScreenState extends State<SignUpNicknameScreen> {
         ),
         bottomNavigationBar: NextButton(
           isActive: _isActive,
-          onTap: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //       builder: (context) => SignUpSelectPetTypePage()),
-            // );
+          buttonText: "수정하기",
+          onTap: () async {
+            try {
+              // 수정 로직
+              await context.read<ProfileProvider>().updateNickname(
+                    uid: uid,
+                    newNickname: _nicknameTEC.text,
+                  );
+
+              await context
+                  .read<UserProvider>()
+                  .getUserInfo(); // 상태관리하고 있는 userModel 갱신
+
+              Navigator.pop(context);
+            } on CustomException catch (e) {
+              errorDialogWidget(context, e);
+            }
           },
-          buttonText: widget.isEditMode ? "수정하기" : "시작하기",
         ),
       ),
     );
