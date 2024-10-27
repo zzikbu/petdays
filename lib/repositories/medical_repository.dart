@@ -17,6 +17,105 @@ class MedicalRepository {
     required this.firebaseFirestore,
   });
 
+  // 진료기록 수정
+  Future<MedicalModel> updateMedical({
+    required String medicalId,
+    required String uid,
+    required String petId,
+    required List<String> files, // 새로 추가된 이미지들
+    required List<String> remainImageUrls, // 유지할 기존 이미지 URL들
+    required List<String> deleteImageUrls, // 삭제할 기존 이미지 URL들
+    required String visitDate,
+    required String reason,
+    required String hospital,
+    required String doctor,
+    required String note,
+  }) async {
+    List<String> newImageUrls = [];
+
+    try {
+      WriteBatch batch = firebaseFirestore.batch();
+
+      // firestore 문서 참조
+      DocumentReference<Map<String, dynamic>> medicalDocRef =
+          firebaseFirestore.collection("medicals").doc(medicalId);
+      DocumentReference<Map<String, dynamic>> userDocRef =
+          firebaseFirestore.collection("users").doc(uid);
+      DocumentReference<Map<String, dynamic>> petDocRef =
+          firebaseFirestore.collection("pets").doc(petId);
+
+      // 1. 삭제할 이미지들 storage에서 제거
+      for (String imageUrl in deleteImageUrls) {
+        await firebaseStorage.refFromURL(imageUrl).delete();
+      }
+
+      // 2. 새로운 이미지들 storage에 업로드
+      if (files.isNotEmpty) {
+        Reference ref =
+            firebaseStorage.ref().child("medicals").child(medicalId);
+
+        newImageUrls = await Future.wait(files.map((e) async {
+          String imageId = Uuid().v1();
+          TaskSnapshot taskSnapshot = await ref.child(imageId).putFile(File(e));
+          return await taskSnapshot.ref.getDownloadURL();
+        }).toList());
+      }
+
+      // 3. 모든 이미지 URL 합치기 (유지할 이미지들 + 새로운 이미지들)
+      List<String> allImageUrls = [...remainImageUrls, ...newImageUrls];
+
+      // 4. 유저와 펫 모델 가져오기
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await userDocRef.get();
+      UserModel userModel = UserModel.fromMap(userSnapshot.data()!);
+
+      DocumentSnapshot<Map<String, dynamic>> petSnapshot =
+          await petDocRef.get();
+      PetModel petModel = PetModel.fromMap(petSnapshot.data()!);
+
+      // 5. 수정된 MedicalModel 생성
+      MedicalModel medicalModel = MedicalModel.fromMap({
+        "uid": uid,
+        "pet": petModel,
+        "medicalId": medicalId,
+        "imageUrls": allImageUrls,
+        "visitDate": visitDate,
+        "reason": reason,
+        "hospital": hospital,
+        "doctor": doctor,
+        "note": note,
+        "writer": userModel,
+        "createAt": Timestamp.now(),
+      });
+
+      // 6. Firestore 문서 업데이트
+      batch.update(
+        medicalDocRef,
+        medicalModel.toMap(
+          userDocRef: userDocRef,
+          petDocRef: petDocRef,
+        ),
+      );
+
+      await batch.commit();
+      return medicalModel;
+    } on FirebaseException catch (e) {
+      // 에러 발생시 새로 업로드된 이미지들 삭제
+      _deleteImage(newImageUrls);
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 에러 발생시 새로 업로드된 이미지들 삭제
+      _deleteImage(newImageUrls);
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 진료기록 삭제
   Future<void> deleteDiary({
     required MedicalModel medicalModel,

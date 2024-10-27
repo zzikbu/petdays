@@ -9,6 +9,63 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
   // MedicalProvider 만들어질 때 DiaryState도 같이 만들기
   MedicalProvider() : super(MedicalState.init());
 
+  // 진료기록 수정
+  Future<void> updateMedical({
+    required String medicalId,
+    required String uid,
+    required String petId,
+    required List<String> files,
+    required List<String> remainImageUrls,
+    required List<String> deleteImageUrls,
+    required String visitDate,
+    required String reason,
+    required String hospital,
+    required String doctor,
+    required String note,
+  }) async {
+    try {
+      state = state.copyWith(
+        medicalStatus: MedicalStatus.submitting,
+      );
+
+      // 수정된 진료기록 가져오기
+      MedicalModel updatedMedical =
+          await read<MedicalRepository>().updateMedical(
+        medicalId: medicalId,
+        uid: uid,
+        petId: petId,
+        files: files,
+        remainImageUrls: remainImageUrls,
+        deleteImageUrls: deleteImageUrls,
+        visitDate: visitDate,
+        reason: reason,
+        hospital: hospital,
+        doctor: doctor,
+        note: note,
+      );
+
+      // 기존 리스트에서 수정된 진료기록만 교체
+      List<MedicalModel> updatedList = state.medicalList.map((medical) {
+        if (medical.medicalId == medicalId) {
+          return updatedMedical;
+        }
+        return medical;
+      }).toList()
+        ..sort((a, b) =>
+            b.visitDate.compareTo(a.visitDate)); // visitDate 기준으로 내림차순 정렬
+
+      state = state.copyWith(
+        medicalStatus: MedicalStatus.success,
+        medicalList: updatedList,
+      );
+    } on CustomException catch (_) {
+      state = state.copyWith(
+        medicalStatus: MedicalStatus.error,
+      );
+      rethrow;
+    }
+  }
+
   // 진료기록 삭제
   Future<void> deleteMedical({
     required MedicalModel medicalModel,

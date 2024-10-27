@@ -113,8 +113,8 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MedicalDetailScreen(
-                            medicalModel: medicalList[index])),
+                        builder: (context) =>
+                            MedicalDetailScreen(index: index)),
                   );
                 },
                 child: Stack(

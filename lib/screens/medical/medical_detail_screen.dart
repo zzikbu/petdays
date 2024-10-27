@@ -7,15 +7,17 @@ import 'package:pet_log/components/info_column.dart';
 import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/medical/medical_provider.dart';
+import 'package:pet_log/providers/medical/medical_state.dart';
+import 'package:pet_log/screens/medical/medical_upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class MedicalDetailScreen extends StatefulWidget {
-  final MedicalModel medicalModel;
+  final int index;
 
   const MedicalDetailScreen({
     super.key,
-    required this.medicalModel,
+    required this.index,
   });
 
   @override
@@ -25,6 +27,9 @@ class MedicalDetailScreen extends StatefulWidget {
 class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    MedicalModel medicalModel =
+        context.watch<MedicalState>().medicalList[widget.index];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.background,
@@ -37,13 +42,16 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                 PullDownMenuItem(
                   title: '수정하기',
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         MedicalWritePage(isEditMode: true),
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MedicalUploadScreen(
+                          isEditMode: true,
+                          selectedPet: medicalModel.pet,
+                          originalMedicalModel: medicalModel,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 PullDownMenuItem(
@@ -58,8 +66,9 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                           message: '진료기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                           onConfirm: () {
                             Navigator.pop(context);
-                            context.read<MedicalProvider>().deleteMedical(
-                                medicalModel: widget.medicalModel);
+                            context
+                                .read<MedicalProvider>()
+                                .deleteMedical(medicalModel: medicalModel);
                             Navigator.pop(context);
                           },
                         );
@@ -87,38 +96,34 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
               SizedBox(height: 20),
               InfoColumn(
                 title: '진료받은 반려동물',
-                content: widget.medicalModel.pet.name,
+                content: medicalModel.pet.name,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '진료일',
-                content: widget.medicalModel.visitDate,
+                content: medicalModel.visitDate,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '이유',
-                content: widget.medicalModel.reason,
+                content: medicalModel.reason,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '병원',
-                content: widget.medicalModel.hospital.isEmpty
-                    ? "-"
-                    : widget.medicalModel.hospital,
+                content:
+                    medicalModel.hospital.isEmpty ? "-" : medicalModel.hospital,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '수의사',
-                content: widget.medicalModel.doctor.isEmpty
-                    ? "-"
-                    : widget.medicalModel.doctor,
+                content:
+                    medicalModel.doctor.isEmpty ? "-" : medicalModel.doctor,
               ),
               SizedBox(height: 20),
               InfoColumn(
                 title: '메모',
-                content: widget.medicalModel.note.isEmpty
-                    ? "-"
-                    : widget.medicalModel.note,
+                content: medicalModel.note.isEmpty ? "-" : medicalModel.note,
               ),
               SizedBox(height: 10),
 
@@ -127,7 +132,7 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 primary: false,
-                itemCount: widget.medicalModel.imageUrls.length,
+                itemCount: medicalModel.imageUrls.length,
                 itemBuilder: (context, index) {
                   return Container(
                     height: 300,
@@ -137,7 +142,7 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                       borderRadius: BorderRadius.circular(4),
                       image: DecorationImage(
                         image: ExtendedNetworkImageProvider(
-                            widget.medicalModel.imageUrls[index]),
+                            medicalModel.imageUrls[index]),
                         fit: BoxFit.cover,
                       ),
                     ),

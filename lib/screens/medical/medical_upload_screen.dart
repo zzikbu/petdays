@@ -6,6 +6,7 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/medical/medical_provider.dart';
@@ -15,11 +16,13 @@ import 'package:provider/provider.dart';
 class MedicalUploadScreen extends StatefulWidget {
   final bool isEditMode;
   final PetModel selectedPet;
+  final MedicalModel? originalMedicalModel; // 수정
 
   const MedicalUploadScreen({
     super.key,
     this.isEditMode = false,
     required this.selectedPet,
+    this.originalMedicalModel, // 수정
   });
 
   @override
@@ -27,6 +30,7 @@ class MedicalUploadScreen extends StatefulWidget {
 }
 
 class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
+  /// Properties
   final TextEditingController _visitDateTEC = TextEditingController();
   final TextEditingController _reasonTEC = TextEditingController();
   final TextEditingController _hospitalTEC = TextEditingController();
@@ -34,9 +38,12 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
   final TextEditingController _noteTEC = TextEditingController();
 
   final List<String> _files = [];
+  final List<String> _remainImageUrls = []; // 유지할 기존 이미지들
+  final List<String> _deleteImageUrls = []; // 삭제할 기존 이미지들
 
   bool _isActive = false; // 작성하기 버튼 활성화 여부
 
+  /// Method
   void _checkBottomActive() {
     setState(() {
       _isActive = _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
@@ -103,9 +110,74 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
     }).toList();
   }
 
+  // 기존 이미지 표시를 위한 위젯 리스트
+  List<Widget> existingImageList() {
+    final medicalStatus = context.watch<MedicalState>().medicalStatus;
+
+    return _remainImageUrls.map((url) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.network(
+                url,
+                fit: BoxFit.cover,
+                height: 80,
+                width: 80,
+              ),
+            ),
+            Positioned(
+              top: 4,
+              right: 4,
+              child: InkWell(
+                onTap: medicalStatus == MedicalStatus.submitting
+                    ? null
+                    : () {
+                        setState(() {
+                          _remainImageUrls.remove(url); // 유지 목록에서 제거
+                          _deleteImageUrls.add(url); // 삭제 목록에 추가
+                          _checkBottomActive();
+                        });
+                      },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.4),
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  height: 24,
+                  width: 24,
+                  child: Icon(
+                    color: Colors.black.withOpacity(0.6),
+                    size: 24,
+                    Icons.highlight_remove_outlined,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  /// LifeCycle
   @override
   void initState() {
     super.initState();
+
+    // 수정 모드일 때 기존 데이터로 초기화
+    if (widget.isEditMode && widget.originalMedicalModel != null) {
+      // 기존 이미지 URLs를 유지할 이미지 목록에 추가
+      _remainImageUrls.addAll(widget.originalMedicalModel!.imageUrls);
+
+      _visitDateTEC.text = widget.originalMedicalModel!.visitDate;
+      _reasonTEC.text = widget.originalMedicalModel!.reason;
+      _hospitalTEC.text = widget.originalMedicalModel!.hospital;
+      _doctorTEC.text = widget.originalMedicalModel!.doctor;
+      _noteTEC.text = widget.originalMedicalModel!.note;
+    }
 
     _visitDateTEC.addListener(_checkBottomActive);
     _reasonTEC.addListener(_checkBottomActive);
@@ -133,7 +205,6 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.selectedPet);
     final medicalStatus = context.watch<MedicalState>().medicalStatus;
 
     return GestureDetector(
@@ -143,6 +214,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
         appBar: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Palette.background,
+          centerTitle: true,
           title: Text(
             "진료기록",
             style: TextStyle(
@@ -213,7 +285,8 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                 ),
                               ),
                             ),
-                            ...selectedImageList(),
+                            ...existingImageList(), // 기존 이미지들 먼저 표시
+                            ...selectedImageList(), // 새로 선택된 이미지들 표시
                           ],
                         ),
                       ),
@@ -275,23 +348,44 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                 _isActive = false;
               });
 
-              // 진료기록 업로드 로직
-              await context.read<MedicalProvider>().uploadMedical(
-                    files: _files,
-                    visitDate: _visitDateTEC.text,
-                    reason: _reasonTEC.text,
-                    hospital: _hospitalTEC.text,
-                    doctor: _doctorTEC.text,
-                    note: _noteTEC.text,
-                    petId: widget.selectedPet.petId,
-                  );
+              if (widget.isEditMode) {
+                // 진료기록 수정 로직
+                await context.read<MedicalProvider>().updateMedical(
+                      medicalId: widget.originalMedicalModel!.medicalId,
+                      uid: widget.originalMedicalModel!.uid,
+                      petId: widget.selectedPet.petId,
+                      files: _files,
+                      remainImageUrls: _remainImageUrls,
+                      deleteImageUrls: _deleteImageUrls,
+                      visitDate: _visitDateTEC.text,
+                      reason: _reasonTEC.text,
+                      hospital: _hospitalTEC.text,
+                      doctor: _doctorTEC.text,
+                      note: _noteTEC.text,
+                    );
 
-              // 스낵바
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("작성 완료")));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("수정 완료")));
 
-              Navigator.pop(context);
-              Navigator.pop(context);
+                Navigator.pop(context);
+              } else {
+                // 진료기록 업로드 로직
+                await context.read<MedicalProvider>().uploadMedical(
+                      files: _files,
+                      visitDate: _visitDateTEC.text,
+                      reason: _reasonTEC.text,
+                      hospital: _hospitalTEC.text,
+                      doctor: _doctorTEC.text,
+                      note: _noteTEC.text,
+                      petId: widget.selectedPet.petId,
+                    );
+
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("작성 완료")));
+
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             } on CustomException catch (e) {
               errorDialogWidget(context, e);
 
