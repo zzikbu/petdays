@@ -9,6 +9,30 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   // DiaryProvider 만들어질 때 DiaryState도 같이 만들기
   DiaryProvider() : super(DiaryState.init());
 
+  // 성장일기 삭제
+  Future<void> deleteDiary({
+    required DiaryModel diaryModel,
+  }) async {
+    state = state.copyWith(diaryStatus: DiaryStatus.submitting);
+
+    try {
+      await read<DiaryRepository>().deleteDiary(diaryModel: diaryModel);
+
+      List<DiaryModel> newDiaryList = state.diaryList
+          .where((element) => element.diaryId != diaryModel.diaryId)
+          .toList(); // 삭제하지 않은 모델만 뽑아 새로운 리스트 생성
+
+      state = state.copyWith(
+        diaryStatus: DiaryStatus.success,
+        diaryList: newDiaryList,
+      );
+    } on CustomException catch (_) {
+      state = state.copyWith(
+          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
+
   // DiaryHomeScreen을 통해 좋아요 했을 때 DiaryState.diaryList 업데이트
   void likeDiary({
     required DiaryModel newDiaryModel,

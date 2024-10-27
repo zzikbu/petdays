@@ -11,14 +11,25 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
   FeedProvider() : super(FeedState.init());
 
   // 성장일기 삭제
-  Future<void> deleteDiary({
-    required DiaryModel diaryModel,
-  }) async {
-    state = state.copyWith(feedStatus: FeedStatus.submitting);
+  void deleteDiary({
+    required String diaryId,
+  }) {
+    try {
+      state = state.copyWith(feedStatus: FeedStatus.submitting);
 
-    await read<FeedRepository>().deleteDiary(diaryModel: diaryModel);
+      List<DiaryModel> newFeedList = state.feedList
+          .where((element) => element.diaryId != diaryId)
+          .toList();
 
-    state = state.copyWith(feedStatus: FeedStatus.success);
+      state = state.copyWith(
+        feedStatus: FeedStatus.success,
+        feedList: newFeedList,
+      );
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
   }
 
   // 성장일기 좋아요

@@ -48,12 +48,10 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
             diaryLikes: diaryModel.likes,
           );
 
+      context.read<LikeProvider>().likeDiary(newDiaryModel: newDiaryModel);
+
       if (_currentUserId == diaryModel.uid) {
         context.read<DiaryProvider>().likeDiary(newDiaryModel: newDiaryModel);
-      }
-
-      if (widget.isLike) {
-        context.read<LikeProvider>().likeDiary(newDiaryModel: newDiaryModel);
       }
 
       await context
@@ -162,12 +160,24 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                 title: '성장일기 삭제',
                                 message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                                 onConfirm: () async {
-                                  // 삭제 로직
-                                  await context
-                                      .read<FeedProvider>()
-                                      .deleteDiary(diaryModel: diaryModel);
+                                  try {
+                                    // 삭제 로직
+                                    Navigator.pop(context);
 
-                                  Navigator.of(context).pop();
+                                    await context
+                                        .read<DiaryProvider>()
+                                        .deleteDiary(diaryModel: diaryModel);
+
+                                    context.read<FeedProvider>().deleteDiary(
+                                        diaryId: diaryModel.diaryId);
+
+                                    context.read<LikeProvider>().deleteDiary(
+                                        diaryId: diaryModel.diaryId);
+
+                                    Navigator.pop(context);
+                                  } on CustomException catch (e) {
+                                    errorDialogWidget(context, e);
+                                  }
                                 },
                               );
                             },
