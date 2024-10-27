@@ -17,6 +17,47 @@ class MedicalRepository {
     required this.firebaseFirestore,
   });
 
+  // 진료기록 삭제
+  Future<void> deleteDiary({
+    required MedicalModel medicalModel,
+  }) async {
+    try {
+      WriteBatch batch = firebaseFirestore.batch();
+
+      DocumentReference<Map<String, dynamic>> medicalDocRef =
+          firebaseFirestore.collection('medicals').doc(medicalModel.medicalId);
+      DocumentReference<Map<String, dynamic>> writerDocRef =
+          firebaseFirestore.collection('users').doc(medicalModel.uid);
+
+      // diaries 컬렉션에서 문서 삭제
+      batch.delete(medicalDocRef);
+
+      // 작성자의 users 문서에서 medicalCount 1 감소
+      batch.update(writerDocRef, {
+        'medicalCount': FieldValue.increment(-1),
+      });
+
+      // storage 이미지 삭제
+      medicalModel.imageUrls.forEach((element) async {
+        await firebaseStorage.refFromURL(element).delete();
+      });
+
+      batch.commit();
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 진료기록 가져오기
   Future<List<MedicalModel>> getMedicalList({
     required String uid,

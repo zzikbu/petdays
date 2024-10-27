@@ -6,6 +6,8 @@ import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/info_column.dart';
 import 'package:pet_log/models/medical_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/medical/medical_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 class MedicalDetailScreen extends StatefulWidget {
@@ -55,7 +57,10 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                           title: '진료기록 삭제',
                           message: '진료기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                           onConfirm: () {
-                            print('삭제됨');
+                            Navigator.pop(context);
+                            context.read<MedicalProvider>().deleteMedical(
+                                medicalModel: widget.medicalModel);
+                            Navigator.pop(context);
                           },
                         );
                       },
