@@ -1,30 +1,32 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/like/like_home_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
 
-class MypagePageScreen extends StatefulWidget {
-  const MypagePageScreen({super.key});
+class MyPageScreen extends StatefulWidget {
+  const MyPageScreen({super.key});
 
   @override
-  State<MypagePageScreen> createState() => _MypagePageScreenState();
+  State<MyPageScreen> createState() => _MyPageScreenState();
 }
 
-class _MypagePageScreenState extends State<MypagePageScreen> {
+class _MyPageScreenState extends State<MyPageScreen> {
   late final ProfileProvider profileProvider;
-
-  Uint8List? _image; // Uint8List: 이미지나 동영상 같은 바이너리 데이터 취급할 때
 
   // 사진 선택 함수
   Future<void> selectImage() async {
@@ -39,11 +41,22 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
     );
 
     if (file != null) {
-      Uint8List uint8list =
-          await file.readAsBytes(); // 선택한 이미지를 코드로 조작할 수 있게 반환
-      setState(() {
-        _image = uint8list;
-      });
+      Uint8List uint8list = await file.readAsBytes();
+
+      final uid = context.read<UserState>().userModel.uid;
+
+      try {
+        // 프로필 이미지 수정 로직
+        await context.read<ProfileProvider>().updateProfileImage(
+              uid: uid,
+              imageFile: uint8list,
+            );
+
+        // 상태관리하고 있는 userModel 갱신
+        await context.read<UserProvider>().getUserInfo();
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
     }
   }
 
@@ -63,7 +76,7 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
 
               Row(
                 children: [
-                  // 프로필 사진
+                  // 프로필 이미지
                   Stack(
                     children: [
                       Container(
@@ -89,8 +102,88 @@ class _MypagePageScreenState extends State<MypagePageScreen> {
                         bottom: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: () async {
-                            await selectImage();
+                          onTap: () {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return CupertinoActionSheet(
+                                  actions: [
+                                    // 앨범에서 선택
+                                    CupertinoActionSheetAction(
+                                      child: Text(
+                                        '앨범에서 선택',
+                                        style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          color: CupertinoColors.systemBlue,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      onPressed: () async {
+                                        Navigator.pop(context);
+
+                                        // 프로필 이미지 수정 로직
+                                        await selectImage();
+                                      },
+                                    ),
+                                    if (!(userModel.profileImage == null))
+                                      // 프로필 이미지 삭제
+                                      CupertinoActionSheetAction(
+                                        child: Text(
+                                          '프로필 이미지 삭제',
+                                          style: TextStyle(
+                                            fontFamily: 'Pretendard',
+                                            color: CupertinoColors.systemRed,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 17,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+
+                                          try {
+                                            final uid = context
+                                                .read<UserState>()
+                                                .userModel
+                                                .uid;
+
+                                            // 프로필 이미지 삭제 로직
+                                            await context
+                                                .read<ProfileProvider>()
+                                                .updateProfileImage(
+                                                  uid: uid,
+                                                  imageFile: null,
+                                                );
+
+                                            // 상태관리하고 있는 userModel 갱신
+                                            await context
+                                                .read<UserProvider>()
+                                                .getUserInfo();
+                                          } on CustomException catch (e) {
+                                            errorDialogWidget(context, e);
+                                          }
+                                        },
+                                      ),
+                                  ],
+                                  // 취소 버튼
+                                  cancelButton: CupertinoActionSheetAction(
+                                    isDefaultAction: true,
+                                    child: Text(
+                                      '취소',
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        color: CupertinoColors.systemBlue,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                );
+                              },
+                            );
                           },
                           child: Container(
                             height: 20,

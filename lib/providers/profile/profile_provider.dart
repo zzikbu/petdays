@@ -1,11 +1,34 @@
+import 'dart:typed_data';
+
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/repositories/profile_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {
   ProfileProvider() : super(ProfileState.init());
+
+  // 프로필 이미지 수정/삭제
+  Future<void> updateProfileImage({
+    required String uid,
+    required Uint8List? imageFile, // null이면 삭제
+  }) async {
+    state = state.copyWith(profileStatus: ProfileStatus.submitting);
+
+    try {
+      await read<ProfileRepository>().updateProfileImage(
+        uid: uid,
+        imageFile: imageFile,
+      );
+
+      state = state.copyWith(profileStatus: ProfileStatus.success);
+    } on CustomException catch (_) {
+      state = state.copyWith(profileStatus: ProfileStatus.error);
+      rethrow;
+    }
+  }
 
   // 닉네임 수정
   Future<void> updateNickname({

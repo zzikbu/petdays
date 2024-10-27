@@ -1,13 +1,52 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/user_model.dart';
 
 class ProfileRepository {
+  final FirebaseStorage firebaseStorage;
   final FirebaseFirestore firebaseFirestore;
 
   const ProfileRepository({
+    required this.firebaseStorage,
     required this.firebaseFirestore,
   });
+
+  // 프로필 이미지 수정/삭제
+  Future<void> updateProfileImage({
+    required String uid,
+    required Uint8List? imageFile, // null이면 삭제
+  }) async {
+    try {
+      String? downloadURL = null;
+      final ref = firebaseStorage.ref().child('profile').child(uid);
+
+      if (imageFile != null) {
+        // 이미지 수정
+        downloadURL = await (await ref.putData(imageFile)).ref.getDownloadURL();
+      } else {
+        // 이미지 삭제
+        await ref.delete();
+      }
+
+      // firestore 업데이트
+      await firebaseFirestore.collection("users").doc(uid).update({
+        "profileImage": downloadURL,
+      });
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
 
   // 닉네임 수정
   Future<void> updateNickname({

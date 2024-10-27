@@ -84,6 +84,7 @@ class _MyAppState extends State<MyApp> {
         ),
         Provider<ProfileRepository>(
           create: (context) => ProfileRepository(
+            firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),

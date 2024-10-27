@@ -63,7 +63,7 @@ class _MainScreenState extends State<MainScreen>
           children: [
             FeedHomeScreen(),
             HomeScreen(),
-            MypagePageScreen(),
+            MyPageScreen(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
