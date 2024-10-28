@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/screens/feed/feed_home_screen.dart';
 import 'package:pet_log/screens/home/home_screen.dart';
@@ -68,6 +69,9 @@ class _MainScreenState extends State<MainScreen>
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
+          backgroundColor: Palette.white,
+          selectedItemColor: Palette.darkGray,
+          unselectedItemColor: Palette.lightGray,
           currentIndex: tabController.index,
           onTap: (value) {
             bottomNavigationItemOnTab(value);

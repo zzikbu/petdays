@@ -16,6 +16,104 @@ class DiaryRepository {
     required this.firebaseFirestore,
   });
 
+  // 성장일기 수정
+  Future<DiaryModel> updateDiary({
+    required String diaryId,
+    required String uid,
+    required List<String> files,
+    required List<String> remainImageUrls,
+    required List<String> deleteImageUrls,
+    required String title,
+    required String desc,
+  }) async {
+    List<String> newImageUrls = [];
+
+    try {
+      // 1. 삭제할 이미지들 storage에서 제거
+      for (String imageUrl in deleteImageUrls) {
+        await firebaseStorage.refFromURL(imageUrl).delete();
+      }
+
+      // 2. 새로운 이미지들 storage에 업로드
+      if (files.isNotEmpty) {
+        Reference ref = firebaseStorage.ref().child("diaries").child(diaryId);
+
+        newImageUrls = await Future.wait(files.map((e) async {
+          String imageId = Uuid().v1();
+          TaskSnapshot taskSnapshot = await ref.child(imageId).putFile(File(e));
+          return await taskSnapshot.ref.getDownloadURL();
+        }).toList());
+      }
+
+      // 3. 모든 이미지 URL 합치기
+      List<String> allImageUrls = [...remainImageUrls, ...newImageUrls];
+
+      // 4. 트랜잭션으로 데이터 업데이트
+      return await firebaseFirestore
+          .runTransaction<DiaryModel>((transaction) async {
+        // firestore 문서 참조
+        DocumentReference<Map<String, dynamic>> diaryDocRef =
+            firebaseFirestore.collection("diaries").doc(diaryId);
+        DocumentReference<Map<String, dynamic>> userDocRef =
+            firebaseFirestore.collection("users").doc(uid);
+
+        // 현재 문서 상태 가져오기
+        DocumentSnapshot<Map<String, dynamic>> diarySnapshot =
+            await transaction.get(diaryDocRef);
+        DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+            await transaction.get(userDocRef);
+
+        if (!diarySnapshot.exists) {
+          throw CustomException(
+            code: "not-found",
+            message: "Diary does not exist",
+          );
+        }
+
+        // 현재 데이터 가져오기
+        Map<String, dynamic> currentData = diarySnapshot.data()!;
+        UserModel userModel = UserModel.fromMap(userSnapshot.data()!);
+
+        // 새로운 DiaryModel 생성 (likes와 관련된 필드는 현재 값 유지)
+        DiaryModel diaryModel = DiaryModel.fromMap({
+          "uid": uid,
+          "diaryId": diaryId,
+          "title": title,
+          "desc": desc,
+          "imageUrls": allImageUrls,
+          "likes": currentData['likes'], // 현재 likes 유지
+          "likeCount": currentData['likeCount'], // 현재 likeCount 유지
+          "reportCount": currentData['reportCount'], // 현재 reportCount 유지
+          "isLock": currentData['isLock'],
+          "createAt": currentData['createAt'], // 생성 시간 유지
+          "writer": userModel,
+        });
+
+        // 트랜잭션 내에서 문서 업데이트
+        transaction.update(
+          diaryDocRef,
+          diaryModel.toMap(userDocRef: userDocRef),
+        );
+
+        return diaryModel;
+      });
+    } on FirebaseException catch (e) {
+      // 에러 발생시 새로 업로드된 이미지들 삭제
+      _deleteImage(newImageUrls);
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 에러 발생시 새로 업로드된 이미지들 삭제
+      _deleteImage(newImageUrls);
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 성장일기 삭제
   Future<void> deleteDiary({
     required DiaryModel diaryModel,

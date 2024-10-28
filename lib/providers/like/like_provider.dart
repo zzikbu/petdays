@@ -8,6 +8,31 @@ import 'package:pet_log/repositories/like_repository.dart';
 class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
   LikeProvider() : super(LikeState.init());
 
+  // 성장일기 수정
+  void updateDiary({
+    required DiaryModel updatedDiaryModel,
+  }) {
+    state = state.copyWith(likeStatus: LikeStatus.submitting);
+
+    try {
+      // 기존 LikeList 특정 diaryId와 동일한 항목을 찾아 새로운 diaryModel로 교체
+      List<DiaryModel> newLikeList = state.likeList.map((diary) {
+        return diary.diaryId == updatedDiaryModel.diaryId
+            ? updatedDiaryModel
+            : diary;
+      }).toList();
+
+      state = state.copyWith(
+        likeStatus: LikeStatus.success,
+        likeList: newLikeList,
+      );
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
+
   // 성장일기 삭제
   void deleteDiary({
     required String diaryId,

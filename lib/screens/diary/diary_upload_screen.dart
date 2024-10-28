@@ -13,14 +13,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/providers/feed/feed_provider.dart';
+import 'package:pet_log/providers/like/like_provider.dart';
 import 'package:provider/provider.dart';
 
 class DiaryUploadScreen extends StatefulWidget {
   final bool isEditMode;
+  final DiaryModel? originalDiaryModel;
 
   const DiaryUploadScreen({
     super.key,
     this.isEditMode = false,
+    this.originalDiaryModel,
   });
 
   @override
@@ -31,10 +34,12 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
   final TextEditingController _titleTEC = TextEditingController();
   final TextEditingController _descTEC = TextEditingController();
 
-  final List<String> _files = [];
+  final List<String> _files = []; // 새로 추가할 이미지 파일들
+  final List<String> _remainImageUrls = []; // 유지할 기존 이미지 URLs
+  final List<String> _deleteImageUrls = []; // 삭제할 기존 이미지 URLs
 
-  bool _isLock = true; // 성장일기 공개 여부
-  bool _isActive = false; // 작성하기 버튼 활성화 여부
+  bool _isLock = true;
+  bool _isActive = false;
 
   void _lockTap() {
     setState(() {
@@ -45,9 +50,13 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
 
   void _checkBottomActive() {
     setState(() {
-      _isActive = _files.isNotEmpty &&
-          _titleTEC.text.isNotEmpty &&
-          _descTEC.text.isNotEmpty;
+      // 수정 모드일 때는 기존 이미지나 새 이미지가 하나라도 있으면 활성화
+      bool hasImages = widget.isEditMode
+          ? (_remainImageUrls.isNotEmpty || _files.isNotEmpty)
+          : _files.isNotEmpty;
+
+      _isActive =
+          hasImages && _titleTEC.text.isNotEmpty && _descTEC.text.isNotEmpty;
     });
   }
 
@@ -62,58 +71,123 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
 
   List<Widget> selectedImageList() {
     final diaryStatus = context.watch<DiaryState>().diaryStatus;
+    List<Widget> imageWidgets = [];
 
-    return _files.map((data) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: Image.file(
-                File(data),
-                fit: BoxFit.cover,
-                height: 80,
-                width: 80,
-              ),
-            ),
-            Positioned(
-              // 이미지 삭제 버튼
-              top: 4,
-              right: 4,
-              child: InkWell(
-                onTap: diaryStatus == DiaryStatus.submitting
-                    ? null // 작성 중일때 버튼 막기
-                    : () {
-                        setState(() {
-                          _files.remove(data); // 사진 삭제
-                          _checkBottomActive();
-                        });
-                      },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.4),
-                    borderRadius: BorderRadius.circular(60),
-                  ),
-                  height: 24,
-                  width: 24,
-                  child: Icon(
-                    color: Colors.black.withOpacity(0.6),
-                    size: 24,
-                    Icons.highlight_remove_outlined,
-                  ),
+    // 기존 이미지 표시
+    for (String imageUrl in _remainImageUrls) {
+      imageWidgets.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  height: 80,
+                  width: 80,
                 ),
               ),
-            )
-          ],
+              Positioned(
+                top: 4,
+                right: 4,
+                child: InkWell(
+                  onTap: diaryStatus == DiaryStatus.submitting
+                      ? null
+                      : () {
+                          setState(() {
+                            _remainImageUrls.remove(imageUrl);
+                            _deleteImageUrls.add(imageUrl);
+                            _checkBottomActive();
+                          });
+                        },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(60),
+                    ),
+                    height: 24,
+                    width: 24,
+                    child: Icon(
+                      color: Colors.black.withOpacity(0.6),
+                      size: 24,
+                      Icons.highlight_remove_outlined,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
-    }).toList();
+    }
+
+    // 새로 선택한 이미지 표시
+    for (String file in _files) {
+      imageWidgets.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.file(
+                  File(file),
+                  fit: BoxFit.cover,
+                  height: 80,
+                  width: 80,
+                ),
+              ),
+              Positioned(
+                top: 4,
+                right: 4,
+                child: InkWell(
+                  onTap: diaryStatus == DiaryStatus.submitting
+                      ? null
+                      : () {
+                          setState(() {
+                            _files.remove(file);
+                            _checkBottomActive();
+                          });
+                        },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(60),
+                    ),
+                    height: 24,
+                    width: 24,
+                    child: Icon(
+                      color: Colors.black.withOpacity(0.6),
+                      size: 24,
+                      Icons.highlight_remove_outlined,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
+    return imageWidgets;
   }
 
   @override
   void initState() {
     super.initState();
+
+    // 수정 모드일 때 초기값 설정
+    if (widget.isEditMode && widget.originalDiaryModel != null) {
+      _titleTEC.text = widget.originalDiaryModel!.title;
+      _descTEC.text = widget.originalDiaryModel!.desc;
+      _isLock = widget.originalDiaryModel!.isLock;
+
+      // 기존 이미지 URLs를 유지할 이미지 목록에 추가
+      _remainImageUrls.addAll(widget.originalDiaryModel!.imageUrls);
+    }
 
     _titleTEC.addListener(_checkBottomActive);
     _descTEC.addListener(_checkBottomActive);
@@ -135,12 +209,13 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
     final diaryStatus = context.watch<DiaryState>().diaryStatus;
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Palette.background,
         appBar: AppBar(
           scrolledUnderElevation: 0,
           backgroundColor: Palette.background,
+          centerTitle: true,
           title: Text(
             "성장일기",
             style: TextStyle(
@@ -151,50 +226,46 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
               letterSpacing: -0.5,
             ),
           ),
-          actions: !widget.isEditMode
-              ? [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (_isLock) {
-                          // 비공개 -> 공개
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialog(
-                                title: '성장일기 공개',
-                                message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
-                                onConfirm: () {
-                                  _lockTap();
-                                },
-                              );
+          actions: [
+            if (!widget.isEditMode) // 성장일기 업로드 일 때
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: GestureDetector(
+                  onTap: () {
+                    if (_isLock) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            title: '성장일기 공개',
+                            message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
+                            onConfirm: () {
+                              _lockTap();
                             },
                           );
-                        } else {
-                          // 공개 -> 비공개
-                          // _isLock이 false일 때 바로 _lockTap() 호출
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialog(
-                                title: '성장일기 비공개',
-                                message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
-                                onConfirm: () {
-                                  _lockTap();
-                                },
-                              );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            title: '성장일기 비공개',
+                            message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
+                            onConfirm: () {
+                              _lockTap();
                             },
                           );
-                        }
-                      },
-                      child: _isLock
-                          ? SvgPicture.asset('assets/icons/ic_lock.svg')
-                          : SvgPicture.asset('assets/icons/ic_unlock.svg'),
-                    ),
-                  ),
-                ]
-              : [],
+                        },
+                      );
+                    }
+                  },
+                  child: _isLock
+                      ? SvgPicture.asset('assets/icons/ic_lock.svg')
+                      : SvgPicture.asset('assets/icons/ic_unlock.svg'),
+                ),
+              ),
+          ],
         ),
         body: Column(
           children: [
@@ -213,8 +284,6 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 15),
-
-                      // 사진
                       Text(
                         '사진',
                         style: TextStyle(
@@ -229,7 +298,6 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
-                            // 이미지 추가 버튼
                             GestureDetector(
                               onTap: () async {
                                 final _images = await selectImages();
@@ -260,16 +328,12 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                         ),
                       ),
                       SizedBox(height: 40),
-
-                      // 제목
                       TextFieldWithTitle(
                         controller: _titleTEC,
                         labelText: '제목',
                         hintText: '제목을 입력해주세요',
                       ),
                       SizedBox(height: 40),
-
-                      // 내용
                       TextFieldWithTitle(
                         controller: _descTEC,
                         isMultiLine: true,
@@ -288,34 +352,57 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
           isActive: _isActive,
           onTap: () async {
             try {
-              // 버튼 비활성화
               setState(() {
                 _isActive = false;
               });
 
-              // 성장일기 업로드 로직
-              DiaryModel diaryModel =
-                  await context.read<DiaryProvider>().uploadDiary(
-                        files: _files,
-                        title: _titleTEC.text,
-                        desc: _descTEC.text,
-                        isLock: _isLock,
-                      );
+              if (widget.isEditMode && widget.originalDiaryModel != null) {
+                // 수정 로직
+                DiaryModel updatedDiary =
+                    await context.read<DiaryProvider>().updateDiary(
+                          diaryId: widget.originalDiaryModel!.diaryId,
+                          files: _files,
+                          remainImageUrls: _remainImageUrls,
+                          deleteImageUrls: _deleteImageUrls,
+                          title: _titleTEC.text,
+                          desc: _descTEC.text,
+                        );
 
-              // 공개로 업로드일 때
-              if (!_isLock) {
-                context.read<FeedProvider>().uploadFeed(diaryModel: diaryModel);
+                // 내가 좋아요 한 성장일기 리스트 갱신
+                context
+                    .read<LikeProvider>()
+                    .updateDiary(updatedDiaryModel: updatedDiary);
+
+                // 공개 상태에 따른 처리
+                if (!updatedDiary.isLock) {
+                  context
+                      .read<FeedProvider>()
+                      .updateDiary(updatedDiaryModel: updatedDiary);
+                }
+              } else {
+                // 새로운 일기 업로드 로직
+                DiaryModel diaryModel =
+                    await context.read<DiaryProvider>().uploadDiary(
+                          files: _files,
+                          title: _titleTEC.text,
+                          desc: _descTEC.text,
+                          isLock: _isLock,
+                        );
+
+                if (!_isLock) {
+                  context
+                      .read<FeedProvider>()
+                      .uploadFeed(diaryModel: diaryModel);
+                }
               }
 
-              // 스낵바
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("작성 완료")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(widget.isEditMode ? "수정 완료" : "작성 완료")),
+              );
 
               Navigator.pop(context);
             } on CustomException catch (e) {
               errorDialogWidget(context, e);
-
-              // 에러 발생시 버튼 재활성화
               setState(() {
                 _isActive = true;
               });

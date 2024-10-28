@@ -144,8 +144,11 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    DiaryUploadScreen(isEditMode: true)),
+                              builder: (context) => DiaryUploadScreen(
+                                isEditMode: true,
+                                originalDiaryModel: diaryModel,
+                              ),
+                            ),
                           );
                         },
                       ),

@@ -9,6 +9,48 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
   // DiaryProvider 만들어질 때 DiaryState도 같이 만들기
   DiaryProvider() : super(DiaryState.init());
 
+  // 성장일기 수정
+  Future<DiaryModel> updateDiary({
+    required String diaryId,
+    required List<String> files, // 새로 추가된 이미지들
+    required List<String> remainImageUrls, // 유지할 기존 이미지 URL들
+    required List<String> deleteImageUrls, // 삭제할 기존 이미지 URL들
+    required String title,
+    required String desc,
+  }) async {
+    try {
+      state = state.copyWith(diaryStatus: DiaryStatus.submitting);
+
+      String uid = read<User>().uid;
+
+      // 수정된 성장일기 모델 받아오기
+      DiaryModel updatedDiary = await read<DiaryRepository>().updateDiary(
+        diaryId: diaryId,
+        uid: uid,
+        files: files,
+        remainImageUrls: remainImageUrls,
+        deleteImageUrls: deleteImageUrls,
+        title: title,
+        desc: desc,
+      );
+
+      // diaryList에서 수정된 일기로 교체
+      List<DiaryModel> newDiaryList = state.diaryList.map((diary) {
+        return diary.diaryId == diaryId ? updatedDiary : diary;
+      }).toList();
+
+      state = state.copyWith(
+        diaryStatus: DiaryStatus.success,
+        diaryList: newDiaryList,
+      );
+
+      return updatedDiary;
+    } on CustomException catch (_) {
+      state = state.copyWith(diaryStatus: DiaryStatus.error);
+      rethrow;
+    }
+  }
+
   // 성장일기 삭제
   Future<void> deleteDiary({
     required DiaryModel diaryModel,
