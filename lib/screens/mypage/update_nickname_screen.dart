@@ -127,6 +127,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
           buttonText: "수정하기",
           onTap: () async {
             try {
+              setState(() {
+                _isActive = false;
+              });
+
               // 수정 로직
               await context.read<ProfileProvider>().updateNickname(
                     uid: uid,
@@ -140,6 +144,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
               Navigator.pop(context);
             } on CustomException catch (e) {
               errorDialogWidget(context, e);
+
+              setState(() {
+                _isActive = true;
+              });
             }
           },
         ),
