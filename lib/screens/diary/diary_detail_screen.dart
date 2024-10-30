@@ -233,7 +233,36 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     fontSize: 17,
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () async {
+                                  try {
+                                    await context
+                                        .read<FeedProvider>()
+                                        .reportDiary(
+                                          diaryModel: diaryModel,
+                                          countField: ReportType.ad.countField,
+                                        );
+
+                                    Navigator.pop(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialog(
+                                          title: '신고하기',
+                                          message:
+                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                          hasCancelButton: false,
+                                          onConfirm: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  } on CustomException catch (e) {
+                                    Navigator.pop(context);
+                                    errorDialogWidget(context, e);
+                                  }
+                                },
                               ),
 
                               // 욕설/비하
@@ -247,11 +276,36 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     fontSize: 17,
                                   ),
                                 ),
-                                onPressed: () {
-                                  context.read<FeedProvider>().reportDiary(
-                                        diaryId: diaryModel.diaryId,
-                                        countField: ReportType.abuse.countField,
-                                      );
+                                onPressed: () async {
+                                  try {
+                                    await context
+                                        .read<FeedProvider>()
+                                        .reportDiary(
+                                          diaryModel: diaryModel,
+                                          countField:
+                                              ReportType.abuse.countField,
+                                        );
+
+                                    Navigator.pop(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialog(
+                                          title: '신고하기',
+                                          message:
+                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                          hasCancelButton: false,
+                                          onConfirm: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  } on CustomException catch (e) {
+                                    Navigator.pop(context);
+                                    errorDialogWidget(context, e);
+                                  }
                                 },
                               ),
 
@@ -266,11 +320,36 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     fontSize: 17,
                                   ),
                                 ),
-                                onPressed: () {
-                                  context.read<FeedProvider>().reportDiary(
-                                        diaryId: diaryModel.diaryId,
-                                        countField: ReportType.adult.countField,
-                                      );
+                                onPressed: () async {
+                                  try {
+                                    await context
+                                        .read<FeedProvider>()
+                                        .reportDiary(
+                                          diaryModel: diaryModel,
+                                          countField:
+                                              ReportType.adult.countField,
+                                        );
+
+                                    Navigator.pop(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialog(
+                                          title: '신고하기',
+                                          message:
+                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                          hasCancelButton: false,
+                                          onConfirm: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  } on CustomException catch (e) {
+                                    Navigator.pop(context);
+                                    errorDialogWidget(context, e);
+                                  }
                                 },
                               ),
 
@@ -285,11 +364,36 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     fontSize: 17,
                                   ),
                                 ),
-                                onPressed: () {
-                                  context.read<FeedProvider>().reportDiary(
-                                        diaryId: diaryModel.diaryId,
-                                        countField: ReportType.other.countField,
-                                      );
+                                onPressed: () async {
+                                  try {
+                                    await context
+                                        .read<FeedProvider>()
+                                        .reportDiary(
+                                          diaryModel: diaryModel,
+                                          countField:
+                                              ReportType.other.countField,
+                                        );
+
+                                    Navigator.pop(context);
+
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return CustomDialog(
+                                          title: '신고하기',
+                                          message:
+                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                          hasCancelButton: false,
+                                          onConfirm: () {
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      },
+                                    );
+                                  } on CustomException catch (e) {
+                                    Navigator.pop(context);
+                                    errorDialogWidget(context, e);
+                                  }
                                 },
                               ),
                             ],

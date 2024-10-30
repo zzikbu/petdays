@@ -13,7 +13,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
 
   // 성장일기 신고
   Future<void> reportDiary({
-    required String diaryId,
+    required DiaryModel diaryModel,
     required String countField,
   }) async {
     state = state.copyWith(feedStatus: FeedStatus.submitting);
@@ -21,13 +21,23 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     try {
       String uid = read<UserState>().userModel.uid;
 
-      await read<FeedRepository>().reportDiary(
+      // 신고하기가 눌려서 내용물이 수정된 성장일기
+      DiaryModel newDiaryModel = await read<FeedRepository>().reportDiary(
         uid: uid,
-        diaryId: diaryId,
+        diaryModel: diaryModel,
         countField: countField,
       );
 
-      state = state.copyWith(feedStatus: FeedStatus.success);
+      List<DiaryModel> newFeedList = state.feedList.map(
+        (diary) {
+          return diary.diaryId == diaryModel.diaryId ? newDiaryModel : diary;
+        },
+      ).toList();
+
+      state = state.copyWith(
+        feedStatus: FeedStatus.success,
+        feedList: newFeedList,
+      );
     } on CustomException catch (_) {
       state =
           state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경

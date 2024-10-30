@@ -15,22 +15,55 @@ class FeedRepository {
   });
 
   // 성장일기 신고
-  Future<void> reportDiary({
+  Future<DiaryModel> reportDiary({
     required String uid,
-    required String diaryId,
+    required DiaryModel diaryModel,
     required String countField,
   }) async {
-    final batch = firebaseFirestore.batch();
+    try {
+      if (diaryModel.reports.contains(uid)) {
+        throw CustomException(
+          code: "Exception",
+          message: "이미 신고한 성장일기입니다.",
+        );
+      }
 
-    DocumentReference<Map<String, dynamic>> diaryDocRef =
-        firebaseFirestore.collection('diaries').doc(diaryId);
+      final batch = firebaseFirestore.batch();
 
-    batch.update(diaryDocRef, {
-      countField: FieldValue.increment(1),
-      'reports': FieldValue.arrayUnion([uid]),
-    });
+      DocumentReference<Map<String, dynamic>> diaryDocRef =
+          firebaseFirestore.collection('diaries').doc(diaryModel.diaryId);
 
-    await batch.commit();
+      batch.update(diaryDocRef, {
+        countField: FieldValue.increment(1),
+        'reports': FieldValue.arrayUnion([uid]),
+      });
+
+      await batch.commit();
+
+      // 신고된 성장일기 반환
+      Map<String, dynamic> diaryMapData =
+          await diaryDocRef.get().then((value) => value.data()!);
+
+      DocumentReference<Map<String, dynamic>> writerDocRef =
+          diaryMapData['writer'];
+      Map<String, dynamic> userMapData =
+          await writerDocRef.get().then((value) => value.data()!);
+      UserModel userModel = UserModel.fromMap(userMapData);
+      diaryMapData['writer'] = userModel;
+      return DiaryModel.fromMap(diaryMapData);
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
   }
 
   // 성장일기 좋아요
