@@ -20,6 +20,21 @@ import 'package:pet_log/screens/diary/diary_upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+enum ReportType {
+  ad('상업적 광고 및 판매', 'adReportCount'),
+  abuse('욕설/비하', 'abuseReportCount'),
+  adult('음란물', 'adultReportCount'),
+  other('기타', 'otherReportCount');
+
+  final String label;
+  final String countField; // Firestore count 필드명
+
+  const ReportType(
+    this.label,
+    this.countField,
+  );
+}
+
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
   final bool isDiary;
@@ -94,11 +109,11 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
         scrolledUnderElevation: 0,
         backgroundColor: Palette.background,
         actions: [
-          if (_isMyDiary)
+          if (_isMyDiary) ...[
+            // 내 다이어리일 때
             GestureDetector(
               onTap: () {
                 if (_isLock) {
-                  // 비공개 -> 공개
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -112,8 +127,6 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                     },
                   );
                 } else {
-                  // 공개 -> 비공개
-                  // _isLock이 false일 때 바로 _lockTap() 호출
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -132,80 +145,188 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   ? SvgPicture.asset('assets/icons/ic_lock.svg')
                   : SvgPicture.asset('assets/icons/ic_unlock.svg'),
             ),
-          SizedBox(width: 14),
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: PullDownButton(
-              itemBuilder: (context) => _isMyDiary
-                  ? [
-                      PullDownMenuItem(
-                        title: '수정하기',
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DiaryUploadScreen(
-                                isEditMode: true,
-                                originalDiaryModel: diaryModel,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      PullDownMenuItem(
-                        title: '삭제하기',
-                        isDestructive: true,
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialog(
-                                title: '성장일기 삭제',
-                                message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                                onConfirm: () async {
-                                  try {
-                                    // 삭제 로직
-                                    Navigator.pop(context);
-
-                                    await context
-                                        .read<DiaryProvider>()
-                                        .deleteDiary(diaryModel: diaryModel);
-
-                                    context.read<FeedProvider>().deleteDiary(
-                                        diaryId: diaryModel.diaryId);
-
-                                    context.read<LikeProvider>().deleteDiary(
-                                        diaryId: diaryModel.diaryId);
-
-                                    Navigator.pop(context);
-                                  } on CustomException catch (e) {
-                                    errorDialogWidget(context, e);
-                                  }
-                                },
-                              );
+            SizedBox(width: 14),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: PullDownButton(
+                itemBuilder: (context) => [
+                  PullDownMenuItem(
+                    title: '수정하기',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DiaryUploadScreen(
+                            isEditMode: true,
+                            originalDiaryModel: diaryModel,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  PullDownMenuItem(
+                    title: '삭제하기',
+                    isDestructive: true,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            title: '성장일기 삭제',
+                            message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                            onConfirm: () async {
+                              try {
+                                Navigator.pop(context);
+                                await context
+                                    .read<DiaryProvider>()
+                                    .deleteDiary(diaryModel: diaryModel);
+                                context
+                                    .read<FeedProvider>()
+                                    .deleteDiary(diaryId: diaryModel.diaryId);
+                                context
+                                    .read<LikeProvider>()
+                                    .deleteDiary(diaryId: diaryModel.diaryId);
+                                Navigator.pop(context);
+                              } on CustomException catch (e) {
+                                errorDialogWidget(context, e);
+                              }
                             },
                           );
                         },
-                      ),
-                    ]
-                  : [
-                      PullDownMenuItem(
-                        title: '신고하기',
-                        onTap: () {},
-                      ),
-                      PullDownMenuItem(
-                        title: '차단하기',
-                        onTap: () {},
-                        isDestructive: true,
-                      ),
-                    ],
-              buttonBuilder: (context, showMenu) => CupertinoButton(
-                onPressed: showMenu,
-                padding: EdgeInsets.zero,
-                child: SvgPicture.asset('assets/icons/ic_more.svg'),
+                      );
+                    },
+                  ),
+                ],
+                buttonBuilder: (context, showMenu) => CupertinoButton(
+                  onPressed: showMenu,
+                  padding: EdgeInsets.zero,
+                  child: SvgPicture.asset('assets/icons/ic_more.svg'),
+                ),
               ),
             ),
-          ),
+          ] else ...[
+            // 남의 다이어리일 때
+            SizedBox(width: 14),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: PullDownButton(
+                itemBuilder: (context) => [
+                  PullDownMenuItem(
+                    title: '신고하기',
+                    onTap: () {
+                      showCupertinoModalPopup(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CupertinoActionSheet(
+                            title: Text('신고 사유를 선택해주세요.'),
+                            message: Text(
+                                '신고는 반대의견을 나타내는 기능이 아닙니다.\n신고 사유에 맞지 않는 신고를 햇을 경우, 해당 신고는 처리되지 않습니다.'),
+                            actions: [
+                              // 상업적 광고 및 판매
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                  ReportType.ad.label,
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    color: CupertinoColors.systemBlue,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onPressed: () {},
+                              ),
+
+                              // 욕설/비하
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                  ReportType.abuse.label,
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    color: CupertinoColors.systemBlue,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context.read<FeedProvider>().reportDiary(
+                                        diaryId: diaryModel.diaryId,
+                                        countField: ReportType.abuse.countField,
+                                      );
+                                },
+                              ),
+
+                              // 음란물
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                  ReportType.adult.label,
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    color: CupertinoColors.systemBlue,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context.read<FeedProvider>().reportDiary(
+                                        diaryId: diaryModel.diaryId,
+                                        countField: ReportType.adult.countField,
+                                      );
+                                },
+                              ),
+
+                              // 기타
+                              CupertinoActionSheetAction(
+                                child: Text(
+                                  ReportType.other.label,
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    color: CupertinoColors.systemBlue,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  context.read<FeedProvider>().reportDiary(
+                                        diaryId: diaryModel.diaryId,
+                                        countField: ReportType.other.countField,
+                                      );
+                                },
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
+                              isDefaultAction: true,
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  color: CupertinoColors.systemBlue,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  PullDownMenuItem(
+                    title: '차단하기',
+                    onTap: () {},
+                    isDestructive: true,
+                  ),
+                ],
+                buttonBuilder: (context, showMenu) => CupertinoButton(
+                  onPressed: showMenu,
+                  padding: EdgeInsets.zero,
+                  child: SvgPicture.asset('assets/icons/ic_more.svg'),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
       body: Scrollbar(

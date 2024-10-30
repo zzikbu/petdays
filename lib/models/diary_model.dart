@@ -9,7 +9,11 @@ class DiaryModel {
   final List<String> imageUrls;
   final List<String> likes; // 좋아요한 유저
   final int likeCount;
-  final int reportCount; // 신고당한 횟수
+  final List<String> reports; // 성장일기를 신고한 유저
+  final int adReportCount; // 상업적 광고 및 판매
+  final int abuseReportCount; // 욕설/비하
+  final int adultReportCount; // 음란물
+  final int otherReportCount; // 기타
   final bool isLock; // 공개여부
   final Timestamp createAt;
   final UserModel writer;
@@ -22,7 +26,11 @@ class DiaryModel {
     required this.imageUrls,
     required this.likes,
     required this.likeCount,
-    required this.reportCount,
+    required this.reports,
+    required this.adReportCount,
+    required this.abuseReportCount,
+    required this.adultReportCount,
+    required this.otherReportCount,
     required this.isLock,
     required this.createAt,
     required this.writer,
@@ -39,7 +47,11 @@ class DiaryModel {
       'imageUrls': this.imageUrls,
       'likes': this.likes,
       'likeCount': this.likeCount,
-      'reportCount': this.reportCount,
+      'reports': this.reports,
+      'adReportCount': this.adReportCount,
+      'abuseReportCount': this.abuseReportCount,
+      'adultReportCount': this.adultReportCount,
+      'otherReportCount': this.otherReportCount,
       'isLock': this.isLock,
       'createAt': this.createAt,
       'writer': userDocRef,
@@ -57,7 +69,11 @@ class DiaryModel {
       imageUrls: List<String>.from(map['imageUrls']),
       likes: List<String>.from(map['likes']),
       likeCount: map['likeCount'],
-      reportCount: map['reportCount'],
+      reports: List<String>.from(map['reports']),
+      adReportCount: map['adReportCount'],
+      abuseReportCount: map['abuseReportCount'],
+      adultReportCount: map['adultReportCount'],
+      otherReportCount: map['otherReportCount'],
       isLock: map['isLock'],
       createAt: map['createAt'],
       writer: map['writer'],
@@ -66,6 +82,6 @@ class DiaryModel {
 
   @override
   String toString() {
-    return 'DiaryModel{uid: $uid, diaryId: $diaryId, title: $title, desc: $desc, imageUrls: $imageUrls, likes: $likes, likeCount: $likeCount, reportCount: $reportCount, isLock: $isLock, createAt: $createAt, writer: $writer}';
+    return 'DiaryModel{uid: $uid, diaryId: $diaryId, title: $title, desc: $desc, imageUrls: $imageUrls, likes: $likes, likeCount: $likeCount, reports: $reports, adReportCount: $adReportCount, abuseReportCount: $abuseReportCount, adultReportCount: $adultReportCount, otherReportCount: $otherReportCount, isLock: $isLock, createAt: $createAt, writer: $writer}';
   }
 }

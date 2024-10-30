@@ -4,11 +4,36 @@ import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/feed_repository.dart';
+import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
   // FeedProvider 만들어질 때 FeedState 같이 만들기
   FeedProvider() : super(FeedState.init());
+
+  // 성장일기 신고
+  Future<void> reportDiary({
+    required String diaryId,
+    required String countField,
+  }) async {
+    state = state.copyWith(feedStatus: FeedStatus.submitting);
+
+    try {
+      String uid = read<UserState>().userModel.uid;
+
+      await read<FeedRepository>().reportDiary(
+        uid: uid,
+        diaryId: diaryId,
+        countField: countField,
+      );
+
+      state = state.copyWith(feedStatus: FeedStatus.success);
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
 
   // 성장일기 수정
   void updateDiary({

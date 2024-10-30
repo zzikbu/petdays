@@ -253,7 +253,11 @@ class DiaryRepository {
         "imageUrls": imageUrls,
         "likes": [], // 좋아요 누른 유저들의 uid
         "likeCount": 0,
-        "reportCount": 0,
+        "reports": [], // 신고하기 한 유저들의 uid
+        "adReportCount": 0,
+        "abuseReportCount": 0,
+        "adultReportCount": 0,
+        "otherReportCount": 0,
         "isLock": isLock,
         "createAt": Timestamp.now(), // 현재 시간
         "writer": userModel, // 생성한 유저 모델

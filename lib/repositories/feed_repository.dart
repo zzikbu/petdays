@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/models/user_model.dart';
+import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 
 class FeedRepository {
   final FirebaseStorage firebaseStorage;
@@ -12,6 +13,25 @@ class FeedRepository {
     required this.firebaseStorage,
     required this.firebaseFirestore,
   });
+
+  // 성장일기 신고
+  Future<void> reportDiary({
+    required String uid,
+    required String diaryId,
+    required String countField,
+  }) async {
+    final batch = firebaseFirestore.batch();
+
+    DocumentReference<Map<String, dynamic>> diaryDocRef =
+        firebaseFirestore.collection('diaries').doc(diaryId);
+
+    batch.update(diaryDocRef, {
+      countField: FieldValue.increment(1),
+      'reports': FieldValue.arrayUnion([uid]),
+    });
+
+    await batch.commit();
+  }
 
   // 성장일기 좋아요
   Future<DiaryModel> likeDiary({
@@ -41,8 +61,6 @@ class FeedRepository {
       await firebaseFirestore.runTransaction(
         (transaction) async {
           bool isDiaryContains = diaryLikes.contains(uid);
-
-          print(">>>>>isDiaryContains: $isDiaryContains");
 
           transaction.update(diaryDocRef, {
             'likes': isDiaryContains
