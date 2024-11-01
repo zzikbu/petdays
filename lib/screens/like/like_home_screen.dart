@@ -7,6 +7,7 @@ import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/like/like_provider.dart';
 import 'package:pet_log/providers/like/like_state.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -47,6 +48,8 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final currentUserId = context.read<UserState>().userModel.uid;
+
     final likeState = context.watch<LikeState>();
     List<DiaryModel> likeList = likeState.likeList;
 
@@ -86,6 +89,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
             itemCount: likeList.length,
             itemBuilder: (context, index) {
+              bool isLike = likeList[index].likes.contains(currentUserId);
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -182,11 +186,17 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                               Row(
                                 children: [
                                   // 좋아요 아이콘
-                                  Icon(
-                                    Icons.pets,
-                                    color: Palette.darkGray,
-                                    size: 16,
-                                  ),
+                                  isLike
+                                      ? Icon(
+                                          Icons.favorite,
+                                          color: Colors.red,
+                                          size: 16,
+                                        )
+                                      : Icon(
+                                          Icons.favorite_border,
+                                          color: Palette.darkGray,
+                                          size: 16,
+                                        ),
                                   SizedBox(width: 4),
 
                                   // 좋아요 개수

@@ -78,20 +78,20 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
             letterSpacing: -0.5,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchScreen()),
-                );
-              },
-              child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 16),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => SearchScreen()),
+        //         );
+        //       },
+        //       child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
+        //     ),
+        //   ),
+        // ],
       ),
       body: RefreshIndicator(
         // 새로고침

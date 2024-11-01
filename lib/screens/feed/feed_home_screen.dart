@@ -7,6 +7,8 @@ import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/feed/feed_provider.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:pet_log/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
@@ -52,6 +54,8 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final currentUserId = context.read<UserState>().userModel.uid;
+
     FeedState feedState = context.watch<FeedState>();
     List<DiaryModel> feedList = feedState.feedList;
 
@@ -67,6 +71,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
         title: Container(
           height: 48,
           width: 170,
@@ -143,20 +148,20 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchScreen()),
-                );
-              },
-              child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 16),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => SearchScreen()),
+        //         );
+        //       },
+        //       child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
+        //     ),
+        //   ),
+        // ],
       ),
       body: RefreshIndicator(
         // 새로고침
@@ -172,6 +177,8 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
           itemCount: feedList.length,
           itemBuilder: (context, index) {
+            bool isLike = feedList[index].likes.contains(currentUserId);
+
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -265,11 +272,17 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                             Row(
                               children: [
                                 // 좋아요 아이콘
-                                Icon(
-                                  Icons.pets,
-                                  color: Palette.darkGray,
-                                  size: 16,
-                                ),
+                                isLike
+                                    ? Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                        size: 16,
+                                      )
+                                    : Icon(
+                                        Icons.favorite_border,
+                                        color: Palette.darkGray,
+                                        size: 16,
+                                      ),
                                 SizedBox(width: 4),
 
                                 // 좋아요 개수

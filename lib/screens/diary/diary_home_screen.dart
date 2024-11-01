@@ -8,6 +8,7 @@ import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
 import 'package:pet_log/providers/diary/diary_state.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:pet_log/screens/diary/diary_upload_screen.dart';
 import 'package:pet_log/screens/search/search_screen.dart';
@@ -53,6 +54,8 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
+    final currentUserId = context.read<UserState>().userModel.uid;
+
     DiaryState diaryState = context.watch<DiaryState>();
     List<DiaryModel> diaryList = diaryState.diaryList;
 
@@ -78,20 +81,20 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
             letterSpacing: -0.5,
           ),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SearchScreen()),
-                );
-              },
-              child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: const EdgeInsets.only(right: 16),
+        //     child: GestureDetector(
+        //       onTap: () {
+        //         Navigator.push(
+        //           context,
+        //           MaterialPageRoute(builder: (context) => SearchScreen()),
+        //         );
+        //       },
+        //       child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
+        //     ),
+        //   ),
+        // ],
       ),
       body: RefreshIndicator(
         // 새로고침
@@ -106,6 +109,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
             itemCount: diaryList.length,
             itemBuilder: (context, index) {
+              bool isLike = diaryList[index].likes.contains(currentUserId);
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -202,11 +206,17 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                               Row(
                                 children: [
                                   // 좋아요 아이콘
-                                  Icon(
-                                    Icons.pets,
-                                    color: Palette.darkGray,
-                                    size: 16,
-                                  ),
+                                  isLike
+                                      ? Icon(
+                                          Icons.favorite,
+                                          color: Colors.red,
+                                          size: 16,
+                                        )
+                                      : Icon(
+                                          Icons.favorite_border,
+                                          color: Palette.darkGray,
+                                          size: 16,
+                                        ),
                                   SizedBox(width: 4),
 
                                   // 좋아요 개수
