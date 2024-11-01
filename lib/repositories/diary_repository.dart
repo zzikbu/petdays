@@ -81,11 +81,15 @@ class DiaryRepository {
           "title": title,
           "desc": desc,
           "imageUrls": allImageUrls,
-          "likes": currentData['likes'], // 현재 likes 유지
-          "likeCount": currentData['likeCount'], // 현재 likeCount 유지
-          "reportCount": currentData['reportCount'], // 현재 reportCount 유지
+          "likes": currentData['likes'],
+          "likeCount": currentData['likeCount'],
+          "adReportCount": currentData['adReportCount'],
+          "abuseReportCount": currentData['abuseReportCount'],
+          "adultReportCount": currentData['adultReportCount'],
+          "otherReportCount": currentData['otherReportCount'],
+          "reports": currentData['reports'],
           "isLock": currentData['isLock'],
-          "createAt": currentData['createAt'], // 생성 시간 유지
+          "createAt": currentData['createAt'],
           "writer": userModel,
         });
 
