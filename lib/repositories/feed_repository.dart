@@ -14,6 +14,37 @@ class FeedRepository {
     required this.firebaseFirestore,
   });
 
+  // 성장일기 작성자 차단
+  Future<void> blockUser({
+    required String currentUserUid, // 현재 접속한 유저
+    required String targetUserUid, // 차단할 유저
+  }) async {
+    try {
+      DocumentReference<Map<String, dynamic>> userDocRef =
+          firebaseFirestore.collection('users').doc(currentUserUid);
+
+      await firebaseFirestore.runTransaction(
+        (transaction) async {
+          transaction.update(userDocRef, {
+            'blocks': FieldValue.arrayUnion([targetUserUid])
+          });
+        },
+      );
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 성장일기 신고
   Future<DiaryModel> reportDiary({
     required String uid,

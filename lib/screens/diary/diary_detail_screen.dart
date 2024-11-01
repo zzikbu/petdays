@@ -419,7 +419,31 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   ),
                   PullDownMenuItem(
                     title: '차단하기',
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CustomDialog(
+                            title: '차단하기',
+                            message:
+                                '이 작성자의 성장일기가 목록에 노출되지 않으며,\n다시 해제하실 수 없습니다.',
+                            onConfirm: () async {
+                              try {
+                                await context
+                                    .read<FeedProvider>()
+                                    .blockUser(targetUserUid: diaryModel.uid);
+
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              } on CustomException catch (e) {
+                                Navigator.pop(context);
+                                errorDialogWidget(context, e);
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
                     isDestructive: true,
                   ),
                 ],

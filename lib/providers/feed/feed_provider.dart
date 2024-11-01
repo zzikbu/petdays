@@ -11,6 +11,26 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
   // FeedProvider 만들어질 때 FeedState 같이 만들기
   FeedProvider() : super(FeedState.init());
 
+  // 성장일기 작성자 차단
+  Future<void> blockUser({
+    required String targetUserUid, // 차단할 유저
+  }) async {
+    state = state.copyWith(feedStatus: FeedStatus.submitting);
+
+    try {
+      String currentUserUid = read<UserState>().userModel.uid;
+
+      await read<FeedRepository>().blockUser(
+        currentUserUid: currentUserUid,
+        targetUserUid: targetUserUid,
+      );
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
+
   // 성장일기 신고
   Future<void> reportDiary({
     required DiaryModel diaryModel,
