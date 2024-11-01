@@ -1,16 +1,13 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/feed/feed_provider.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
-import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
-import 'package:pet_log/screens/search/search_screen.dart';
 import 'package:provider/provider.dart';
 
 class FeedHomeScreen extends StatefulWidget {
@@ -29,7 +26,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
   /// Properties
   late final FeedProvider feedProvider;
-  bool isAllSelected = true;
+  bool _isHotFeed = true;
 
   void _getFeedList() {
     // 위젯들이 만들어 진 후에
@@ -58,6 +55,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
     FeedState feedState = context.watch<FeedState>();
     List<DiaryModel> feedList = feedState.feedList;
+    List<DiaryModel> hotFeedList = feedState.hotFeedList;
 
     if (feedState.feedStatus == FeedStatus.fetching) {
       return Center(
@@ -86,46 +84,15 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      isAllSelected = true;
+                      _isHotFeed = true;
                     });
                   },
                   child: Container(
                     height: 42,
                     width: 80,
                     decoration: BoxDecoration(
-                      color: isAllSelected
-                          ? Palette.mainGreen
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '전체',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color:
-                              isAllSelected ? Palette.white : Palette.lightGray,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isAllSelected = false;
-                    });
-                  },
-                  child: Container(
-                    height: 42,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color: !isAllSelected
-                          ? Palette.mainGreen
-                          : Colors.transparent,
+                      color:
+                          _isHotFeed ? Palette.mainGreen : Colors.transparent,
                       borderRadius: BorderRadius.circular(24),
                     ),
                     child: Center(
@@ -135,9 +102,35 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
-                          color: !isAllSelected
-                              ? Palette.white
-                              : Palette.lightGray,
+                          color: _isHotFeed ? Palette.white : Palette.lightGray,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isHotFeed = false;
+                    });
+                  },
+                  child: Container(
+                    height: 42,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color:
+                          _isHotFeed ? Colors.transparent : Palette.mainGreen,
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    child: Center(
+                      child: Text(
+                        '전체',
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          color: _isHotFeed ? Palette.lightGray : Palette.white,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -175,16 +168,20 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         // 리스트뷰
         child: ListView.builder(
           padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-          itemCount: feedList.length,
+          itemCount: _isHotFeed ? hotFeedList.length : feedList.length,
           itemBuilder: (context, index) {
-            bool isLike = feedList[index].likes.contains(currentUserId);
+            final feed = _isHotFeed ? hotFeedList[index] : feedList[index];
+            bool isLike = feed.likes.contains(currentUserId);
 
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => DiaryDetailScreen(index: index),
+                    builder: (context) => DiaryDetailScreen(
+                      index: index,
+                      isHotFeed: _isHotFeed ? true : false,
+                    ),
                   ),
                 );
               },
@@ -201,8 +198,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                         width: 1,
                       ),
                       image: DecorationImage(
-                        image: ExtendedNetworkImageProvider(
-                            feedList[index].imageUrls[0]),
+                        image: ExtendedNetworkImageProvider(feed.imageUrls[0]),
                         fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                       ),
                       boxShadow: [
@@ -256,7 +252,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                                   const EdgeInsets.symmetric(horizontal: 2),
                               // 제목
                               child: Text(
-                                feedList[index].title,
+                                feed.title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -287,7 +283,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
                                 // 좋아요 개수
                                 Text(
-                                  feedList[index].likeCount.toString(),
+                                  feed.likeCount.toString(),
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
                                     fontWeight: FontWeight.w400,
@@ -308,8 +304,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
                                 // 날짜
                                 Text(
-                                  feedList[index]
-                                      .createAt
+                                  feed.createAt
                                       .toDate()
                                       .toString()
                                       .split(" ")[0],

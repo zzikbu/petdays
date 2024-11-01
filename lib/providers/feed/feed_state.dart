@@ -11,26 +11,31 @@ enum FeedStatus {
 class FeedState {
   final FeedStatus feedStatus;
   final List<DiaryModel> feedList;
+  final List<DiaryModel> hotFeedList;
 
   const FeedState({
     required this.feedStatus,
     required this.feedList,
+    required this.hotFeedList,
   });
 
   factory FeedState.init() {
     return FeedState(
       feedStatus: FeedStatus.init,
       feedList: [],
+      hotFeedList: [],
     );
   }
 
   FeedState copyWith({
     FeedStatus? feedStatus,
     List<DiaryModel>? feedList,
+    List<DiaryModel>? hotFeedList,
   }) {
     return FeedState(
       feedStatus: feedStatus ?? this.feedStatus,
       feedList: feedList ?? this.feedList,
+      hotFeedList: hotFeedList ?? this.hotFeedList,
     );
   }
 }

@@ -40,12 +40,14 @@ class DiaryDetailScreen extends StatefulWidget {
   final int index;
   final bool isDiary;
   final bool isLike;
+  final bool isHotFeed;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
     this.isDiary = false,
     this.isLike = false,
+    this.isHotFeed = false,
   });
 
   @override
@@ -94,6 +96,9 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     } else if (widget.isLike) {
       // LikeHomeScreen에서 push
       diaryModel = context.watch<LikeState>().likeList[widget.index];
+    } else if (widget.isHotFeed) {
+      // FeedHomeScreen & HotFeed push
+      diaryModel = context.watch<FeedState>().hotFeedList[widget.index];
     } else {
       // FeedHomeScreen에서 push
       diaryModel = context.watch<FeedState>().feedList[widget.index];
@@ -112,41 +117,6 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
         actions: [
           if (_isMyDiary) ...[
             // 내 다이어리일 때
-            GestureDetector(
-              onTap: () {
-                if (_isLock) {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialog(
-                        title: '성장일기 공개',
-                        message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
-                        onConfirm: () {
-                          _lockTap();
-                        },
-                      );
-                    },
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialog(
-                        title: '성장일기 비공개',
-                        message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
-                        onConfirm: () {
-                          _lockTap();
-                        },
-                      );
-                    },
-                  );
-                }
-              },
-              child: _isLock
-                  ? SvgPicture.asset('assets/icons/ic_lock.svg')
-                  : SvgPicture.asset('assets/icons/ic_unlock.svg'),
-            ),
-            SizedBox(width: 14),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: PullDownButton(

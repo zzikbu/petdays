@@ -53,9 +53,16 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         },
       ).toList();
 
+      List<DiaryModel> newHotFeedList = state.hotFeedList.map(
+        (diary) {
+          return diary.diaryId == diaryModel.diaryId ? newDiaryModel : diary;
+        },
+      ).toList();
+
       state = state.copyWith(
         feedStatus: FeedStatus.success,
         feedList: newFeedList,
+        hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
       state =
@@ -78,9 +85,16 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
             : diary;
       }).toList();
 
+      List<DiaryModel> newHotFeedList = state.hotFeedList.map((diary) {
+        return diary.diaryId == updatedDiaryModel.diaryId
+            ? updatedDiaryModel
+            : diary;
+      }).toList();
+
       state = state.copyWith(
         feedStatus: FeedStatus.success,
         feedList: newFeedList,
+        hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
       state =
@@ -100,9 +114,14 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
           .where((element) => element.diaryId != diaryId)
           .toList();
 
+      List<DiaryModel> newHotFeedList = state.hotFeedList
+          .where((element) => element.diaryId != diaryId)
+          .toList();
+
       state = state.copyWith(
         feedStatus: FeedStatus.success,
         feedList: newFeedList,
+        hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
       state =
@@ -135,9 +154,16 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         },
       ).toList();
 
+      List<DiaryModel> newHotFeedList = state.hotFeedList.map(
+        (diary) {
+          return diary.diaryId == diaryId ? diaryModel : diary;
+        },
+      ).toList();
+
       state = state.copyWith(
         feedStatus: FeedStatus.success,
         feedList: newFeedList,
+        hotFeedList: newHotFeedList,
       );
 
       return diaryModel;
@@ -179,8 +205,12 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
       List<DiaryModel> feedList = await read<FeedRepository>()
           .getFeedList(currentUserUid: currentUserUid);
 
+      List<DiaryModel> hotFeedList =
+          feedList.where((feed) => feed.likeCount >= 10).toList();
+
       state = state.copyWith(
         feedList: feedList,
+        hotFeedList: hotFeedList,
         feedStatus: FeedStatus.success, // 상태 변경
       );
     } on CustomException catch (_) {
