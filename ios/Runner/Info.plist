@@ -62,5 +62,7 @@
     <string>This app required NSCameraUsageDescription permission</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>This app required NSMicrophoneUsageDescription permission</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>산책 경로를 기록하고 실시간 위치를 추적하기 위해 위치 권한이 필요합니다.</string>
 </dict>
 </plist>

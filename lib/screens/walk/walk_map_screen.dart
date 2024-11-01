@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/palette.dart';
 
@@ -14,9 +14,12 @@ class WalkMapScreen extends StatefulWidget {
 }
 
 class _WalkMapScreenState extends State<WalkMapScreen> {
-  NaverMapController? _mapController;
+  /// Properties
   Position? _currentPosition;
   late StreamSubscription<Position> _positionStreamSubscription;
+
+  final CameraPosition initialPosition =
+      CameraPosition(target: LatLng(37.4866, 126.8019));
 
   Future<void> _startLocationUpdates() async {
     bool serviceEnabled;
@@ -50,32 +53,19 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
       setState(() {
         _currentPosition = position;
       });
-      _goToCurrentLocation();
+      // _goToCurrentLocation();
     });
-  }
-
-  void _goToCurrentLocation() async {
-    if (_currentPosition != null && _mapController != null) {
-      _mapController!.updateCamera(
-        NCameraUpdate.withParams(
-          target: NLatLng(
-            _currentPosition!.latitude,
-            _currentPosition!.longitude,
-          ),
-        ),
-      );
-    }
   }
 
   @override
   void initState() {
     super.initState();
-    _startLocationUpdates();
+    // _startLocationUpdates();
   }
 
   @override
   void dispose() {
-    _positionStreamSubscription.cancel();
+    // _positionStreamSubscription.cancel();
     super.dispose();
   }
 
@@ -88,34 +78,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          NaverMap(
-            options: NaverMapViewOptions(
-              mapType: NMapType.basic,
-              scaleBarEnable: false,
-              rotationGesturesEnable: false,
-              locationButtonEnable: true,
-              locale: Locale('ko'),
-
-              // 지도 초기 설정
-              initialCameraPosition: NCameraPosition(
-                target: NLatLng(
-                  37.486, // 위도
-                  126.801, // 경도
-                ),
-                zoom: 15,
-                bearing: 0,
-                tilt: 0,
-              ),
-            ),
-
-            // 지도 준비된 후
-            onMapReady: (NaverMapController controller) async {
-              _mapController = controller;
-
-              _goToCurrentLocation();
-            },
-          ),
-
+          GoogleMap(initialCameraPosition: initialPosition),
           // 타이머
           Positioned(
             left: 24,

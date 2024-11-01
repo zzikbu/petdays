@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_naver_map/flutter_naver_map.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:pet_log/firebase_options.dart';
-import 'package:pet_log/key.dart';
 import 'package:pet_log/providers/auth/auth_state.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/diary/diary_provider.dart';
@@ -36,7 +34,6 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NaverMapSdk.instance.initialize(clientId: NAVER_MAP_CLIENT_ID);
   runApp(const MyApp());
 }
 
