@@ -21,6 +21,8 @@ import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/profile/profile_state.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
+import 'package:pet_log/providers/walk/walk_provider.dart';
+import 'package:pet_log/providers/walk/walk_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
 import 'package:pet_log/repositories/diary_repository.dart';
 import 'package:pet_log/repositories/feed_repository.dart';
@@ -28,6 +30,7 @@ import 'package:pet_log/repositories/like_repository.dart';
 import 'package:pet_log/repositories/medical_repository.dart';
 import 'package:pet_log/repositories/pet_repository.dart';
 import 'package:pet_log/repositories/profile_repository.dart';
+import 'package:pet_log/repositories/walk_repository.dart';
 import 'package:pet_log/screens/spalash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -57,6 +60,12 @@ class _MyAppState extends State<MyApp> {
         ),
         Provider<PetRepository>(
           create: (context) => PetRepository(
+            firebaseStorage: FirebaseStorage.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
+        Provider<WalkRepository>(
+          create: (context) => WalkRepository(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
@@ -109,6 +118,9 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<PetProvider, PetState>(
           create: (context) => PetProvider(),
+        ),
+        StateNotifierProvider<WalkProvider, WalkState>(
+          create: (context) => WalkProvider(),
         ),
         StateNotifierProvider<FeedProvider, FeedState>(
           create: (context) => FeedProvider(),

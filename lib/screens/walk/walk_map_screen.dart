@@ -1,10 +1,15 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/walk/walk_provider.dart';
+import 'package:provider/provider.dart';
 
 class WalkMapScreen extends StatefulWidget {
   WalkMapScreen({super.key});
@@ -13,10 +18,14 @@ class WalkMapScreen extends StatefulWidget {
   State<WalkMapScreen> createState() => _WalkMapScreenState();
 }
 
-class _WalkMapScreenState extends State<WalkMapScreen> {
+class _WalkMapScreenState extends State<WalkMapScreen>
+    with WidgetsBindingObserver {
   /// Properties
   late StreamSubscription<Position> _positionStreamSubscription;
   GoogleMapController? _mapController;
+  late Stopwatch _stopwatch;
+  late Timer _timer;
+  String _elapsedTime = '00:00:00';
 
   // 경로 추적을 위한 변수
   final Set<Polyline> _polylines = {};
@@ -27,8 +36,25 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
       37.5214,
       126.9246,
     ),
-    zoom: 16,
+    zoom: 20,
   );
+
+  // 타이머 시작 함수
+  void _startTimer() {
+    _stopwatch = Stopwatch()..start();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      final milliseconds = _stopwatch.elapsedMilliseconds;
+      final hours = (milliseconds / (1000 * 60 * 60)).floor();
+      final minutes = ((milliseconds / (1000 * 60)) % 60).floor();
+      final seconds = ((milliseconds / 1000) % 60).floor();
+
+      setState(() {
+        _elapsedTime = '${hours.toString().padLeft(2, '0')}:'
+            '${minutes.toString().padLeft(2, '0')}:'
+            '${seconds.toString().padLeft(2, '0')}';
+      });
+    });
+  }
 
   Future<void> _startLocationUpdates() async {
     bool serviceEnabled;
@@ -125,17 +151,77 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
     return totalDistance;
   }
 
+  Future<Uint8List?> _captureAndSaveMap() async {
+    // if (_routeCoordinates.isEmpty) return;
+
+    // 모든 경로 포인트를 포함하는 bounds 계산
+    double minLat = _routeCoordinates.first.latitude;
+    double maxLat = _routeCoordinates.first.latitude;
+    double minLng = _routeCoordinates.first.longitude;
+    double maxLng = _routeCoordinates.first.longitude;
+
+    for (LatLng point in _routeCoordinates) {
+      if (point.latitude < minLat) minLat = point.latitude;
+      if (point.latitude > maxLat) maxLat = point.latitude;
+      if (point.longitude < minLng) minLng = point.longitude;
+      if (point.longitude > maxLng) maxLng = point.longitude;
+    }
+
+    // bounds에 padding 추가
+    final bounds = LatLngBounds(
+      southwest: LatLng(minLat - 0.001, minLng - 0.001),
+      northeast: LatLng(maxLat + 0.001, maxLng + 0.001),
+    );
+
+    // 카메라 이동
+    await _mapController?.animateCamera(
+      CameraUpdate.newLatLngBounds(bounds, 50),
+    );
+
+    // 약간의 딜레이를 주어 카메라 이동이 완료되길 기다림
+    await Future.delayed(const Duration(milliseconds: 2500));
+
+    // 지도 캡처
+    final Uint8List? imageBytes = await _mapController?.takeSnapshot();
+
+    if (imageBytes != null) {
+      return imageBytes;
+    }
+
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
-    _startLocationUpdates(); // initState에서 스트림 시작
+    WidgetsBinding.instance.addObserver(this); // 앱 상태 관찰자 등록
+    _startLocationUpdates();
+    _startTimer(); // 타이머 시작
   }
 
   @override
   void dispose() {
-    _positionStreamSubscription.cancel(); // dispose에서 스트림 취소
-    _mapController?.dispose(); // 컨트롤러도 dispose
+    WidgetsBinding.instance.removeObserver(this); // 관찰자 제거
+    _stopwatch.stop();
+    _timer.cancel();
+    _positionStreamSubscription.cancel();
+    _mapController?.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // 앱이 백그라운드로 갈 때도 타이머 유지
+    switch (state) {
+      case AppLifecycleState.paused:
+        // 앱이 백그라운드로 갈 때
+        break;
+      case AppLifecycleState.resumed:
+        // 앱이 포그라운드로 돌아올 때
+        break;
+      default:
+        break;
+    }
   }
 
   @override
@@ -164,7 +250,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
                 tiltGesturesEnabled: false,
                 zoomControlsEnabled: false,
                 padding: const EdgeInsets.only(left: 10, bottom: 20),
-                polylines: _polylines, // 경로 표시
+                polylines: _polylines,
                 onMapCreated: (GoogleMapController controller) async {
                   _mapController = controller;
 
@@ -202,7 +288,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            '00:00:00',
+                            _elapsedTime,
                             style: TextStyle(
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w600,
@@ -215,16 +301,56 @@ class _WalkMapScreenState extends State<WalkMapScreen> {
                         IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            final distance = _calculateTotalDistance();
+                            final double distance = _calculateTotalDistance();
+                            final int minutes = _stopwatch.elapsed.inMinutes;
+
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return CustomDialog(
                                   title: '산책 종료',
-                                  message: '5분 미만 산책은 저장되지 않습니다.\n종료하시겠습니까?',
-                                  onConfirm: () {
-                                    print(
-                                        '총 이동 거리: ${(distance / 1000).toStringAsFixed(2)}km');
+                                  message: minutes < 5
+                                      ? '총 ${(distance / 1000).toStringAsFixed(2)}km\n5분 미만 산책은 저장되지 않습니다.\n종료하시겠습니까?'
+                                      : '총 ${(distance / 1000).toStringAsFixed(2)}km\n산책을 종료하시겠습니까?',
+                                  onConfirm: () async {
+                                    if (minutes >= 0) {
+                                      // 5분 이상일 때만 저장
+                                      try {
+                                        // 위치 업데이트 일시 중지
+                                        _positionStreamSubscription.pause();
+
+                                        // 지도 캡처
+                                        final Uint8List? imageBytes =
+                                            await _captureAndSaveMap();
+
+                                        if (imageBytes != null) {
+                                          // Provider를 통해 데이터 업로드
+                                          await context
+                                              .read<WalkProvider>()
+                                              .uploadWalk(
+                                                mapImage: imageBytes,
+                                                distance: distance
+                                                    .toString(), // 미터 단위로 저장
+                                                duration:
+                                                    _elapsedTime, // HH:MM:SS 형식
+                                                petId:
+                                                    '1a5d8c40-9616-11ef-a41d-6fb9902ca267',
+                                              );
+
+                                          // 성공시 화면 닫기
+                                          Navigator.pop(context); // 다이얼로그 닫기
+                                          Navigator.pop(context); // 지도 화면 닫기
+                                        }
+                                      } on CustomException catch (e) {
+                                        // 에러 처리
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(content: Text(e.message)),
+                                        );
+                                      }
+                                    } else {
+                                      Navigator.pop(context); // 5분 미만일 경우 그냥 닫기
+                                    }
                                   },
                                 );
                               },
