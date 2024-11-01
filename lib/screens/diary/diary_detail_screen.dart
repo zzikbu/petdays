@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -432,6 +433,14 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                 await context
                                     .read<FeedProvider>()
                                     .blockUser(targetUserUid: diaryModel.uid);
+
+                                await context
+                                    .read<FeedProvider>()
+                                    .getFeedList();
+
+                                await context
+                                    .read<LikeProvider>()
+                                    .getLikeList();
 
                                 Navigator.pop(context);
                                 Navigator.pop(context);

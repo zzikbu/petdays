@@ -4,7 +4,6 @@ import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/providers/feed/feed_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/feed_repository.dart';
-import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
@@ -175,7 +174,10 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     try {
       state = state.copyWith(feedStatus: FeedStatus.fetching); // 상태 변경
 
-      List<DiaryModel> feedList = await read<FeedRepository>().getFeedList();
+      String currentUserUid = read<UserState>().userModel.uid;
+
+      List<DiaryModel> feedList = await read<FeedRepository>()
+          .getFeedList(currentUserUid: currentUserUid);
 
       state = state.copyWith(
         feedList: feedList,

@@ -99,37 +99,3 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
     }
   }
 }
-
-/*
-// LikeHomeScreen을 통해 좋아요 했을 때 LikeState.LikeList 업데이트
-  void likeDiary({
-    required DiaryModel newDiaryModel,
-  }) {
-    state = state.copyWith(likeStatus: LikeStatus.submitting);
-
-    try {
-      List<DiaryModel> newLikeList = [];
-
-      int index = state.likeList.indexWhere(
-          (diaryModel) => diaryModel.diaryId == newDiaryModel.diaryId);
-
-      if (index == -1) {
-        // 일치하는게 없을 때 (좋아요)
-        newLikeList = [newDiaryModel, ...newLikeList];
-      } else {
-        // 일치하는게 있을 때 (좋아요 취소)
-        state.likeList.removeAt(index);
-        newLikeList = state.likeList.toList();
-      }
-
-      state = state.copyWith(
-        likeStatus: LikeStatus.success,
-        likeList: newLikeList,
-      );
-    } on CustomException catch (_) {
-      state =
-          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
-      rethrow; // 호출한 곳에다가 다시 rethrow
-    }
-  }
- */

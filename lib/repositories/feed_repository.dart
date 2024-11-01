@@ -169,33 +169,50 @@ class FeedRepository {
   }
 
   // 피드 가져오기
-  Future<List<DiaryModel>> getFeedList() async {
+  Future<List<DiaryModel>> getFeedList({
+    required String currentUserUid,
+  }) async {
     try {
+      // 1. 현재 유저의 차단 목록 가져오기
+      final DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await firebaseFirestore.collection('users').doc(currentUserUid).get();
+
+      final blockedUsers =
+          List<String>.from(userSnapshot.data()?['blocks'] ?? []);
+
+      // 2. 피드 가져오기
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('diaries')
           .where('isLock', isEqualTo: false)
-          .orderBy('createAt', descending: true) // 최신순 정렬
+          .orderBy('createAt', descending: true)
           .get();
 
-      return await Future.wait(snapshot.docs.map(
-        (e) async {
+      // 3. 차단한 사용자의 게시물 필터링하고 변환
+      return await Future.wait(
+        snapshot.docs.map((e) async {
           Map<String, dynamic> data = e.data();
           DocumentReference<Map<String, dynamic>> writerDocRef = data["writer"];
+
+          // 작성자 정보 가져오기
           DocumentSnapshot<Map<String, dynamic>> writerSnapshot =
               await writerDocRef.get();
+
+          // 차단한 사용자의 글이면 null 반환
+          if (blockedUsers.contains(writerSnapshot.id)) {
+            return null;
+          }
+
           UserModel userModel = UserModel.fromMap(writerSnapshot.data()!);
           data["writer"] = userModel;
           return DiaryModel.fromMap(data);
-        },
-      ).toList());
+        }).toList(),
+      ).then((list) => list.whereType<DiaryModel>().toList()); // null 값 제거
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
         code: e.code,
         message: e.message!,
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
         code: "Exception",
         message: e.toString(),
