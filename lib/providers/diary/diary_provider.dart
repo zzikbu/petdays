@@ -39,9 +39,14 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         return diary.diaryId == diaryId ? updatedDiary : diary;
       }).toList();
 
+      List<DiaryModel> newOpenDiaryList = state.diaryList.map((diary) {
+        return diary.diaryId == diaryId ? updatedDiary : diary;
+      }).toList();
+
       state = state.copyWith(
         diaryStatus: DiaryStatus.success,
         diaryList: newDiaryList,
+        openDiaryList: newOpenDiaryList,
       );
 
       return updatedDiary;
@@ -64,9 +69,14 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
           .where((element) => element.diaryId != diaryModel.diaryId)
           .toList(); // 삭제하지 않은 모델만 뽑아 새로운 리스트 생성
 
+      List<DiaryModel> newOpenDiaryList = state.diaryList
+          .where((element) => element.diaryId != diaryModel.diaryId)
+          .toList();
+
       state = state.copyWith(
         diaryStatus: DiaryStatus.success,
         diaryList: newDiaryList,
+        openDiaryList: newOpenDiaryList,
       );
     } on CustomException catch (_) {
       state = state.copyWith(
@@ -75,7 +85,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
     }
   }
 
-  // DiaryHomeScreen을 통해 좋아요 했을 때 DiaryState.diaryList 업데이트
+  // 성장일기 좋아요
   void likeDiary({
     required DiaryModel newDiaryModel,
   }) {
@@ -87,9 +97,14 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         return diary.diaryId == newDiaryModel.diaryId ? newDiaryModel : diary;
       }).toList();
 
+      List<DiaryModel> newOpenDiaryList = state.diaryList.map((diary) {
+        return diary.diaryId == newDiaryModel.diaryId ? newDiaryModel : diary;
+      }).toList();
+
       state = state.copyWith(
         diaryStatus: DiaryStatus.success,
         diaryList: newDiaryList,
+        openDiaryList: newOpenDiaryList,
       );
     } on CustomException catch (_) {
       state = state.copyWith(
@@ -110,8 +125,12 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
       diaryList = await read<DiaryRepository>()
           .getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
 
+      List<DiaryModel> openDiaryList =
+          diaryList.where((diary) => diary.isLock == false).toList();
+
       state = state.copyWith(
         diaryList: diaryList,
+        openDiaryList: openDiaryList,
         diaryStatus: DiaryStatus.success, // 상태 변경
       );
     } on CustomException catch (_) {

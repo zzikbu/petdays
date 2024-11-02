@@ -13,7 +13,8 @@ import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/screens/like/like_home_screen.dart';
+import 'package:pet_log/screens/mypage/like_home_screen.dart';
+import 'package:pet_log/screens/mypage/open_diary_home_screen.dart';
 import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
@@ -273,24 +274,30 @@ class _MyPageScreenState extends State<MyPageScreen> {
               SizedBox(height: 14),
 
               // 획득한 메달
-              GestureDetector(
-                onTap: () {},
-                child: Text(
-                  '획득한 메달',
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20,
-                    color: Palette.black,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ),
-              SizedBox(height: 14),
+              // GestureDetector(
+              //   onTap: () {},
+              //   child: Text(
+              //     '획득한 메달',
+              //     style: TextStyle(
+              //       fontFamily: 'Pretendard',
+              //       fontWeight: FontWeight.w400,
+              //       fontSize: 20,
+              //       color: Palette.black,
+              //       letterSpacing: -0.5,
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(height: 14),
 
               // 공개한 성장일기
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OpenDiaryHomeScreen()),
+                  );
+                },
                 child: Text(
                   '공개한 성장일기',
                   style: TextStyle(

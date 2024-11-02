@@ -11,26 +11,31 @@ enum DiaryStatus {
 class DiaryState {
   final DiaryStatus diaryStatus;
   final List<DiaryModel> diaryList;
+  final List<DiaryModel> openDiaryList;
 
   const DiaryState({
     required this.diaryStatus,
     required this.diaryList,
+    required this.openDiaryList,
   });
 
   factory DiaryState.init() {
     return DiaryState(
       diaryStatus: DiaryStatus.init,
       diaryList: [],
+      openDiaryList: [],
     );
   }
 
   DiaryState copyWith({
     DiaryStatus? diaryStatus,
     List<DiaryModel>? diaryList,
+    List<DiaryModel>? openDiaryList,
   }) {
     return DiaryState(
       diaryStatus: diaryStatus ?? this.diaryStatus,
       diaryList: diaryList ?? this.diaryList,
+      openDiaryList: openDiaryList ?? this.openDiaryList,
     );
   }
 }

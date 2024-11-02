@@ -5,43 +5,46 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/diary_model.dart';
 import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/like/like_provider.dart';
-import 'package:pet_log/providers/like/like_state.dart';
+import 'package:pet_log/providers/diary/diary_provider.dart';
+import 'package:pet_log/providers/diary/diary_state.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
-class LikeHomeScreen extends StatefulWidget {
-  const LikeHomeScreen({super.key});
+class OpenDiaryHomeScreen extends StatefulWidget {
+  const OpenDiaryHomeScreen({super.key});
 
   @override
-  State<LikeHomeScreen> createState() => _LikeHomeScreenState();
+  State<OpenDiaryHomeScreen> createState() => _OpenDiaryHomeScreenState();
 }
 
-class _LikeHomeScreenState extends State<LikeHomeScreen>
-    with AutomaticKeepAliveClientMixin<LikeHomeScreen> {
+class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
+    with AutomaticKeepAliveClientMixin<OpenDiaryHomeScreen> {
+  late final DiaryProvider diaryProvider;
+
   // 다른 화면에서 돌아올 때
   // 데이터를 매번 가져오지 않도록
   @override
-  bool get wantKeepAlive => true; // AutomaticKeepAliveClientMixin
-
-  late final LikeProvider likeProvider;
-
-  void _getLikeList() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      try {
-        await likeProvider.getLikeList();
-      } on CustomException catch (e) {
-        errorDialogWidget(context, e);
-      }
-    });
-  }
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
-    likeProvider = context.read<LikeProvider>();
-    _getLikeList();
+    diaryProvider = context.read<DiaryProvider>();
+    _getFeedList();
+  }
+
+  void _getFeedList() {
+    String uid = context.read<UserState>().userModel.uid;
+
+    // 위젯들이 만들어 진 후에
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        await diaryProvider.getDiaryList(uid: uid);
+      } on CustomException catch (e) {
+        errorDialogWidget(context, e);
+      }
+    });
   }
 
   @override
@@ -50,14 +53,14 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
 
     final currentUserId = context.read<UserState>().userModel.uid;
 
-    final likeState = context.watch<LikeState>();
-    List<DiaryModel> likeList = likeState.likeList;
+    DiaryState diaryState = context.watch<DiaryState>();
+    List<DiaryModel> openDiaryList = diaryState.openDiaryList;
 
-    // if (likeState.likeStatus == LikeStatus.success && likeList.isEmpty) {
-    //   return Center(
-    //     child: Text('좋아요한 성장일기가 없습니다.'),
-    //   );
-    // }
+    if (diaryState.diaryStatus == DiaryStatus.fetching) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -66,7 +69,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
         scrolledUnderElevation: 0,
         centerTitle: true,
         title: Text(
-          "좋아요",
+          "공개한 성장일기",
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
@@ -82,14 +85,14 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
         backgroundColor: Palette.white,
         onRefresh: () async {
           await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
-          _getLikeList();
+          _getFeedList(); // diaryList를 watch하고 있기 때문에 변경사항이 발생하면 화면을 새롭게 그림
         },
         child: Scrollbar(
           child: ListView.builder(
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            itemCount: likeList.length,
+            itemCount: openDiaryList.length,
             itemBuilder: (context, index) {
-              bool isLike = likeList[index].likes.contains(currentUserId);
+              bool isLike = openDiaryList[index].likes.contains(currentUserId);
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -97,7 +100,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                     MaterialPageRoute(
                       builder: (context) => DiaryDetailScreen(
                         index: index,
-                        isLike: true,
+                        isOpenDiary: true,
                       ),
                     ),
                   );
@@ -116,7 +119,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                         ),
                         image: DecorationImage(
                           image: ExtendedNetworkImageProvider(
-                              likeList[index].imageUrls[0]),
+                              openDiaryList[index].imageUrls[0]),
                           fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                         ),
                         boxShadow: [
@@ -170,7 +173,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                                     const EdgeInsets.symmetric(horizontal: 2),
                                 // 제목
                                 child: Text(
-                                  likeList[index].title,
+                                  openDiaryList[index].title,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -201,7 +204,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
 
                                   // 좋아요 개수
                                   Text(
-                                    likeList[index].likeCount.toString(),
+                                    openDiaryList[index].likeCount.toString(),
                                     style: TextStyle(
                                       fontFamily: 'Pretendard',
                                       fontWeight: FontWeight.w400,
@@ -222,7 +225,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
 
                                   // 날짜
                                   Text(
-                                    likeList[index]
+                                    openDiaryList[index]
                                         .createAt
                                         .toDate()
                                         .toString()
@@ -239,7 +242,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
 
                                   // 공개여부 좌물쇠
                                   SvgPicture.asset(
-                                    likeList[index].isLock
+                                    openDiaryList[index].isLock
                                         ? 'assets/icons/ic_lock.svg'
                                         : 'assets/icons/ic_unlock.svg',
                                     width: 14,

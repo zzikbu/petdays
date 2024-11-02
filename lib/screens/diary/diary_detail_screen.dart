@@ -39,6 +39,7 @@ enum ReportType {
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
   final bool isDiary;
+  final bool isOpenDiary;
   final bool isLike;
   final bool isHotFeed;
 
@@ -46,6 +47,7 @@ class DiaryDetailScreen extends StatefulWidget {
     super.key,
     required this.index,
     this.isDiary = false,
+    this.isOpenDiary = false,
     this.isLike = false,
     this.isHotFeed = false,
   });
@@ -93,6 +95,8 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     if (widget.isDiary) {
       // DiaryHomeScreen OR HomeScreen에서 push
       diaryModel = context.watch<DiaryState>().diaryList[widget.index];
+    } else if (widget.isOpenDiary) {
+      diaryModel = context.watch<DiaryState>().openDiaryList[widget.index];
     } else if (widget.isLike) {
       // LikeHomeScreen에서 push
       diaryModel = context.watch<LikeState>().likeList[widget.index];
