@@ -193,117 +193,47 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     SizedBox(height: 20),
 
-                    // 구글
-                    GestureDetector(
-                      onTap: () {
+                    Divider(height: 1, color: Palette.lightGray),
+                    SizedBox(height: 20),
 
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: Color(0xFF747775))),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_google.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Google로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 38),
-                          ],
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // 구글
+                        GestureDetector(
+                          onTap: () {},
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: SvgPicture.asset(
+                                'assets/icons/ic_login_google.svg'),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
+                        SizedBox(width: 14),
 
-                    // 카카오
-                    GestureDetector(
-                      onTap: () {
+                        // 카카오
+                        GestureDetector(
+                          onTap: () {},
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: SvgPicture.asset(
+                                'assets/icons/ic_login_kakao.svg'),
+                          ),
+                        ),
+                        SizedBox(width: 14),
 
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFE500),
-                          borderRadius: BorderRadius.circular(6),
+                        // 애플
+                        GestureDetector(
+                          onTap: () {},
+                          child: SizedBox(
+                            width: 56,
+                            height: 56,
+                            child: SvgPicture.asset(
+                                'assets/icons/ic_login_apple.svg'),
+                          ),
                         ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_kakao.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Kakao로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 38),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 16),
-
-                    // 애플
-                    GestureDetector(
-                      onTap: () {
-
-                      },
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF050708),
-                          borderRadius: BorderRadius.circular(6.0),
-                        ),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 21.0),
-                              child: SvgPicture.asset(
-                                'assets/icons/ic_login_apple.svg',
-                              ),
-                            ),
-                            Expanded(
-                              child: const Text(
-                                'APPLE로 시작하기',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 36,
-                            ),
-                          ],
-                        ),
-                      ),
+                      ],
                     ),
                   ].reversed.toList(),
                 ),
