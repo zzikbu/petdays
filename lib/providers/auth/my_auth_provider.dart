@@ -36,10 +36,14 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
 
   /// 로그아웃
   Future<void> signOut() async {
-    await read<AuthRepository>().signOut();
+    try {
+      await read<AuthRepository>().signOut();
+    } on CustomException catch (_) {
+      rethrow;
+    }
   }
 
-  /// 회원가입
+  /// 이메일 회원가입
   Future<void> signUp({
     required String email,
     required String password,
@@ -55,7 +59,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     }
   }
 
-  /// 로그인
+  /// 이메일 로그인
   Future<void> signIn({
     required String email,
     required String password,
@@ -67,6 +71,15 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
       );
     } on CustomException catch (_) {
       // MyAuthProvider.signIn을 호출한 곳에다가 다시 rethrow
+      rethrow;
+    }
+  }
+
+  /// 구글 로그인
+  Future<void> signInWithGoogle() async {
+    try {
+      await read<AuthRepository>().signInWithGoogle();
+    } on CustomException catch (_) {
       rethrow;
     }
   }

@@ -362,8 +362,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         title: '로그아웃',
                         message: '로그아웃 하시겠습니까??',
                         onConfirm: () async {
-                          // 로그아웃 로직
-                          await context.read<MyAuthProvider>().signOut();
+                          try {
+                            await context.read<MyAuthProvider>().signOut();
+                          } on CustomException catch (e) {
+                            errorDialogWidget(context, e);
+                          }
                         },
                       );
                     },

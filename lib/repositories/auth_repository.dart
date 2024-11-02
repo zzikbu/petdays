@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 
 class AuthRepository {
@@ -93,7 +94,24 @@ class AuthRepository {
 
   /// 로그아웃
   Future<void> signOut() async {
-    await firebaseAuth.signOut();
+    try {
+      final googleSignIn = GoogleSignIn();
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut(); // 구글 로그아웃
+      }
+
+      await firebaseAuth.signOut();
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
   }
 
   /// 이메일 로그인
@@ -172,6 +190,67 @@ class AuthRepository {
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
+  /// 구글 로그인
+  Future<void> signInWithGoogle() async {
+    try {
+      // 구글 로그인 진행
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        throw CustomException(
+          code: "ERROR_ABORTED_BY_USER",
+          message: "구글 로그인이 취소되었습니다.",
+        );
+      }
+
+      // 구글 인증 정보 가져오기
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // 구글 인증 정보로 Firebase 인증 정보 생성
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Firebase 인증
+      final UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(credential);
+      final User user = userCredential.user!;
+
+      // Firestore에서 사용자 정보 확인
+      final userDoc =
+          await firebaseFirestore.collection("users").doc(user.uid).get();
+
+      // 신규 사용자인 경우 Firestore에 사용자 정보 저장
+      if (!userDoc.exists) {
+        String nickname = await randomNickname();
+
+        await firebaseFirestore.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "email": user.email,
+          "profileImage": null,
+          "nickname": nickname,
+          "walkCount": 0,
+          "diaryCount": 0,
+          "medicalCount": 0,
+          "likes": [],
+          "blocks": []
+        });
+      }
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
       throw CustomException(
         code: "Exception",
         message: e.toString(),

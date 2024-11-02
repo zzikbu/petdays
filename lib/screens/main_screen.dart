@@ -28,7 +28,10 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
       initialIndex: 1,
     );
-    _getProfile(); // 접속 중인 사용자의 정보 상태관리 저장
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      _getProfile(); // 접속 중인 사용자의 정보 상태관리 저장
+    });
   }
 
   void bottomNavigationItemOnTab(int index) {

@@ -4,6 +4,7 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
+import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/screens/sign_up/sign_up_email_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
@@ -201,7 +202,15 @@ class _SignInScreenState extends State<SignInScreen> {
                       children: [
                         // 구글
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            try {
+                              await context
+                                  .read<MyAuthProvider>()
+                                  .signInWithGoogle();
+                            } on CustomException catch (e) {
+                              errorDialogWidget(context, e);
+                            }
+                          },
                           child: SizedBox(
                             width: 56,
                             height: 56,
