@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pet Log</string>
+	<string>펫데이즈</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -15,7 +15,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>pet_log</string>
+	<string>펫데이즈</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.410996408533-mh2srmrtmrbalqe9cafgso4gjbv9lfh2</string>
+				<string>com.googleusercontent.apps.410996408533-3378t601hlj6r3p3r9fvk1af56j1uvpb</string>
 			</array>
 		</dict>
 	</array>
@@ -37,6 +37,14 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app required NSCameraUsageDescription permission</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>산책 경로를 기록하고 실시간 위치를 추적하기 위해 위치 권한이 필요합니다.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app required NSMicrophoneUsageDescription permission</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app required NSPhotoLibraryUsageDescription permission</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -56,13 +64,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>This app required NSPhotoLibraryUsageDescription permission</string>
-    <key>NSCameraUsageDescription</key>
-    <string>This app required NSCameraUsageDescription permission</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>This app required NSMicrophoneUsageDescription permission</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>산책 경로를 기록하고 실시간 위치를 추적하기 위해 위치 권한이 필요합니다.</string>
 </dict>
 </plist>
