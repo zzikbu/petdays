@@ -22,7 +22,8 @@ import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:pet_log/screens/diary/diary_home_screen.dart';
 import 'package:pet_log/screens/medical/medical_detail_screen.dart';
 import 'package:pet_log/screens/medical/medical_home_screen.dart';
-import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
+import 'package:pet_log/screens/pet/pet_detail_screen.dart';
+import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:pet_log/screens/walk/walk_detail_screen.dart';
 import 'package:pet_log/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
@@ -186,7 +187,13 @@ class _HomeScreenState extends State<HomeScreen>
                                 builder: (context) {
                                   return GestureDetector(
                                     onTap: () {
-                                      print(_indicatorIndex);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                PetDetailScreen(
+                                                    index: _indicatorIndex)),
+                                      );
                                     },
                                     child: Container(
                                       margin:

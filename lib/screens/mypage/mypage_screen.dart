@@ -15,7 +15,7 @@ import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/mypage/like_home_screen.dart';
 import 'package:pet_log/screens/mypage/open_diary_home_screen.dart';
-import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
+import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
 
