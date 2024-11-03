@@ -22,8 +22,8 @@ import 'package:pet_log/screens/diary/diary_detail_screen.dart';
 import 'package:pet_log/screens/diary/diary_home_screen.dart';
 import 'package:pet_log/screens/medical/medical_detail_screen.dart';
 import 'package:pet_log/screens/medical/medical_home_screen.dart';
+import 'package:pet_log/screens/mypage/pet_upload_screen.dart';
 import 'package:pet_log/screens/walk/walk_detail_screen.dart';
-import 'package:pet_log/screens/walk/walk_home_screen.dart';
 import 'package:pet_log/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -132,17 +132,55 @@ class _HomeScreenState extends State<HomeScreen>
             Container(
               height: 260,
               color: Palette.mainGreen,
-              child: Column(
-                children: [
-                  SizedBox(height: 68),
-
-                  // TODO 값 비었을 때 펫 추가 버튼 구현 해주기
-                  petList.isEmpty
-                      ? SizedBox()
-                      : CarouselSlider(
-                          // Carousel 영역
+              child: petList.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 68, bottom: 42),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PetUploadScreen()),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.symmetric(horizontal: 24),
+                          decoration: BoxDecoration(
+                            color: Palette.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                size: 32,
+                                color: Palette.black,
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                '펫 추가하기',
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  color: Palette.black,
+                                  letterSpacing: -0.5,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        SizedBox(height: 68),
+                        CarouselSlider(
                           carouselController: _carouselController,
-                          items: dummyPets.map(
+                          items: petList.map(
                             (pet) {
                               return Builder(
                                 builder: (context) {
@@ -175,8 +213,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                 image: DecorationImage(
                                                   image:
                                                       ExtendedNetworkImageProvider(
-                                                          petList[_indicatorIndex]
-                                                              .image),
+                                                          pet.image),
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
@@ -192,12 +229,9 @@ class _HomeScreenState extends State<HomeScreen>
                                                 // 이름 & 만난 날 계산
                                                 Text(
                                                   _getNameAndDaysSinceMeeting(
-                                                    name:
-                                                        petList[_indicatorIndex]
-                                                            .name,
+                                                    name: pet.name,
                                                     meetingDateString:
-                                                        petList[_indicatorIndex]
-                                                            .firstMeetingDate,
+                                                        pet.firstMeetingDate,
                                                   ),
                                                   style: TextStyle(
                                                     fontFamily: 'Pretendard',
@@ -214,11 +248,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                 Text(
                                                   _getAgeAndBreed(
                                                     birthDateString:
-                                                        petList[_indicatorIndex]
-                                                            .birthDay,
-                                                    breed:
-                                                        petList[_indicatorIndex]
-                                                            .breed,
+                                                        pet.birthDay,
+                                                    breed: pet.breed,
                                                   ),
                                                   style: TextStyle(
                                                     fontFamily: 'Pretendard',
@@ -243,33 +274,33 @@ class _HomeScreenState extends State<HomeScreen>
                             initialPage: 0,
                             height: 150,
                             viewportFraction: 1.0,
+                            enableInfiniteScroll: false, // 무한 스크롤 비활성화
                             onPageChanged: (index, reason) {
                               setState(() {
-                                // _indicatorIndex가 petList의 길이를 초과하지 못하도록
-                                _indicatorIndex = index % petList.length;
+                                _indicatorIndex = index; // % petList.length 제거
                               });
                             },
                           ),
                         ),
-                  SizedBox(height: 20),
+                        SizedBox(height: 20),
 
-                  // Indicator
-                  AnimatedSmoothIndicator(
-                    activeIndex: _indicatorIndex,
-                    count: petList.length,
-                    effect: JumpingDotEffect(
-                      spacing: 6.0,
-                      radius: 3.0,
-                      dotWidth: 6.0,
-                      dotHeight: 6.0,
-                      paintStyle: PaintingStyle.fill,
-                      strokeWidth: 0,
-                      dotColor: Palette.white.withOpacity(0.5),
-                      activeDotColor: Palette.white,
+                        // Indicator
+                        AnimatedSmoothIndicator(
+                          activeIndex: _indicatorIndex,
+                          count: petList.length,
+                          effect: JumpingDotEffect(
+                            spacing: 6.0,
+                            radius: 3.0,
+                            dotWidth: 6.0,
+                            dotHeight: 6.0,
+                            paintStyle: PaintingStyle.fill,
+                            strokeWidth: 0,
+                            dotColor: Palette.white.withOpacity(0.5),
+                            activeDotColor: Palette.white,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ),
             SizedBox(height: 40),
 

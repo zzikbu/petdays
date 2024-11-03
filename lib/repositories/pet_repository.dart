@@ -51,7 +51,6 @@ class PetRepository {
   Future<PetModel> uploadPet({
     required String uid,
     required Uint8List? file,
-    required String type,
     required String name,
     required String breed,
     required String birthDay,
@@ -78,7 +77,6 @@ class PetRepository {
         "uid": uid,
         "petId": petId,
         "image": downloadURL,
-        "type": type,
         "name": name,
         "breed": breed,
         "birthDay": birthDay,

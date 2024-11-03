@@ -35,7 +35,6 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
   // 펫 추가
   Future<void> uploadPet({
     required Uint8List? file, // 이미지
-    required String type,
     required String name,
     required String breed,
     required String birthDay,
@@ -52,7 +51,6 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
       PetModel petModel = await read<PetRepository>().uploadPet(
         uid: uid,
         file: file,
-        type: type,
         name: name,
         breed: breed,
         birthDay: birthDay,

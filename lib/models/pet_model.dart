@@ -4,7 +4,6 @@ class PetModel {
   final String uid;
   final String petId;
   final String image;
-  final String type;
   final String name;
   final String breed;
   final String birthDay;
@@ -17,7 +16,6 @@ class PetModel {
     required this.uid,
     required this.petId,
     required this.image,
-    required this.type,
     required this.name,
     required this.breed,
     required this.birthDay,
@@ -32,7 +30,6 @@ class PetModel {
       'uid': this.uid,
       'petId': this.petId,
       'image': this.image,
-      'type': this.type,
       'name': this.name,
       'breed': this.breed,
       'birthDay': this.birthDay,
@@ -48,7 +45,6 @@ class PetModel {
       uid: map['uid'],
       petId: map['petId'],
       image: map['image'],
-      type: map['type'],
       name: map['name'],
       breed: map['breed'],
       birthDay: map['birthDay'],
@@ -61,6 +57,6 @@ class PetModel {
 
   @override
   String toString() {
-    return 'PetModel{uid: $uid, petId: $petId, image: $image, type: $type, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
+    return 'PetModel{uid: $uid, petId: $petId, image: $image, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
   }
 }

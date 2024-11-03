@@ -341,7 +341,6 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
               // 펫 업로드 로직
               await context.read<PetProvider>().uploadPet(
                     file: _image,
-                    type: "임시 더미",
                     name: _nameTEC.text,
                     breed: _breedTEC.text,
                     birthDay: _birthdayTEC.text,
