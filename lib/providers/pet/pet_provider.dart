@@ -13,6 +13,29 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
   // PetProvider 만들어질 때 PetState 같이 만들기
   PetProvider() : super(PetState.init());
 
+  // 펫 삭제
+  Future<void> deletePet({
+    required String petId,
+  }) async {
+    state = state.copyWith(petStatus: PetStatus.submitting);
+
+    try {
+      await read<PetRepository>().deletePet(petId: petId);
+
+      // 삭제된 펫을 제외한 새로운 리스트 생성
+      List<PetModel> newPetList =
+          state.petList.where((pet) => pet.petId != petId).toList();
+
+      state = state.copyWith(
+        petStatus: PetStatus.success,
+        petList: newPetList,
+      );
+    } on CustomException catch (_) {
+      state = state.copyWith(petStatus: PetStatus.error);
+      rethrow;
+    }
+  }
+
   // 펫 수정
   Future<void> updatePet({
     required String petId,

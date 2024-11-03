@@ -1,7 +1,12 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pet_log/components/custom_dialog.dart';
+import 'package:pet_log/components/error_dialog_widget.dart';
+import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
+import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +51,37 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     PetModel petModel = context.watch<PetState>().petList[widget.index];
 
     return Scaffold(
-      appBar: AppBar(backgroundColor: Palette.background),
+      appBar: AppBar(
+        backgroundColor: Palette.background,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomDialog(
+                    title: '반려동물 삭제',
+                    message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                    onConfirm: () async {
+                      try {
+                        context
+                            .read<PetProvider>()
+                            .deletePet(petId: petModel.petId);
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } on CustomException catch (e) {
+                        errorDialogWidget(context, e);
+                      }
+                    },
+                  );
+                },
+              );
+            },
+            icon: Icon(CupertinoIcons.delete),
+          ),
+        ],
+      ),
       backgroundColor: Palette.background,
       body: Padding(
         padding: const EdgeInsets.only(top: 20, left: 24, right: 24),

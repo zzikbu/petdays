@@ -10,6 +10,7 @@ class PetModel {
   final String firstMeetingDate;
   final String gender;
   final bool isNeutering; // 중성화
+  final bool isDeleted; // 삭제 여부
   final Timestamp createAt;
 
   const PetModel({
@@ -22,6 +23,7 @@ class PetModel {
     required this.firstMeetingDate,
     required this.gender,
     required this.isNeutering,
+    required this.isDeleted,
     required this.createAt,
   });
 
@@ -36,6 +38,7 @@ class PetModel {
       'firstMeetingDate': this.firstMeetingDate,
       'gender': this.gender,
       'isNeutering': this.isNeutering,
+      'isDeleted': this.isDeleted,
       'createAt': this.createAt,
     };
   }
@@ -51,12 +54,13 @@ class PetModel {
       firstMeetingDate: map['firstMeetingDate'],
       gender: map['gender'],
       isNeutering: map['isNeutering'],
+      isDeleted: map['isDeleted'],
       createAt: map['createAt'],
     );
   }
 
   @override
   String toString() {
-    return 'PetModel{uid: $uid, petId: $petId, image: $image, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, createAt: $createAt}';
+    return 'PetModel{uid: $uid, petId: $petId, image: $image, name: $name, breed: $breed, birthDay: $birthDay, firstMeetingDate: $firstMeetingDate, gender: $gender, isNeutering: $isNeutering, isDeleted: $isDeleted, createAt: $createAt}';
   }
 }

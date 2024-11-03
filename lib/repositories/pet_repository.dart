@@ -15,6 +15,27 @@ class PetRepository {
     required this.firebaseFirestore,
   });
 
+  // 펫 삭제
+  Future<void> deletePet({
+    required String petId,
+  }) async {
+    try {
+      await firebaseFirestore.collection('pets').doc(petId).update({
+        'isDeleted': true,
+      });
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 펫 수정
   Future<PetModel> updatePet({
     required String petId,
@@ -62,6 +83,7 @@ class PetRepository {
         "firstMeetingDate": firstMeetingDate,
         "gender": gender,
         "isNeutering": isNeutering,
+        "isDeleted": false,
         "createAt": createAt,
       });
 
@@ -99,6 +121,7 @@ class PetRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('pets')
           .where('uid', isEqualTo: uid)
+          .where('isDeleted', isEqualTo: false)
           .orderBy('createAt', descending: false) // 오랜된 순 정렬
           .get();
 
@@ -159,6 +182,7 @@ class PetRepository {
         "firstMeetingDate": firstMeetingDate,
         "gender": gender,
         "isNeutering": isNeutering,
+        "isDeleted": false,
         "createAt": Timestamp.now(), // 현재 시간
       });
 

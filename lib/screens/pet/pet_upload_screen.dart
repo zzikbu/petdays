@@ -1,10 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
@@ -139,23 +137,6 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
         appBar: AppBar(
           backgroundColor: Palette.background,
           scrolledUnderElevation: 0,
-          actions: [
-            IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: '반려동물 삭제',
-                      message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                      onConfirm: () async {},
-                    );
-                  },
-                );
-              },
-              icon: Icon(CupertinoIcons.delete),
-            )
-          ],
         ),
         body: Column(
           children: [
