@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
+import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
 
 class PetDetailScreen extends StatefulWidget {
@@ -115,11 +116,13 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                         ),
                         IconButton(
                           onPressed: () {
-                            // Navigator.push(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //       builder: (context) => UpdateNicknameScreen(),
-                            //     ));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PetUploadScreen(
+                                    originalPetModel: petModel,
+                                  ),
+                                ));
                           },
                           icon: Icon(Icons.edit),
                         ),

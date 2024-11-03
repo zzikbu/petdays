@@ -1,15 +1,67 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/pet_repository.dart';
 
 class PetProvider extends StateNotifier<PetState> with LocatorMixin {
   // PetProvider 만들어질 때 PetState 같이 만들기
   PetProvider() : super(PetState.init());
+
+  // 펫 수정
+  Future<void> updatePet({
+    required String petId,
+    required Uint8List? file,
+    required String name,
+    required String breed,
+    required String birthDay,
+    required String firstMeetingDate,
+    required String gender,
+    required bool isNeutering,
+    required String currentImageUrl, // 현재 이미지 URL
+    required Timestamp createAt,
+  }) async {
+    try {
+      state = state.copyWith(petStatus: PetStatus.submitting);
+
+      String uid = read<UserState>().userModel.uid;
+
+      // 수정된 펫 데이터 가져오기
+      PetModel updatedPet = await read<PetRepository>().updatePet(
+        petId: petId,
+        uid: uid,
+        file: file,
+        name: name,
+        breed: breed,
+        birthDay: birthDay,
+        firstMeetingDate: firstMeetingDate,
+        gender: gender,
+        isNeutering: isNeutering,
+        currentImageUrl: currentImageUrl,
+        createAt: createAt,
+      );
+
+      List<PetModel> newPetList = state.petList.map((pet) {
+        if (pet.petId == petId) {
+          return updatedPet;
+        }
+        return pet;
+      }).toList();
+
+      state = state.copyWith(
+        petStatus: PetStatus.success,
+        petList: newPetList,
+      );
+    } on CustomException catch (_) {
+      state = state.copyWith(petStatus: PetStatus.error);
+      rethrow;
+    }
+  }
 
   // 펫 가져오기
   Future<void> getPetList({

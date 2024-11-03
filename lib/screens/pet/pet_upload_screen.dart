@@ -1,24 +1,34 @@
 import 'dart:typed_data';
 
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/components/next_button.dart';
 import 'package:pet_log/components/textfield_with_title.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/models/pet_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/pet/pet_provider.dart';
 import 'package:pet_log/providers/pet/pet_state.dart';
 import 'package:provider/provider.dart';
 
 class PetUploadScreen extends StatefulWidget {
-  const PetUploadScreen({super.key});
+  final PetModel? originalPetModel;
+
+  const PetUploadScreen({
+    super.key,
+    this.originalPetModel,
+  });
 
   @override
   _PetUploadScreenState createState() => _PetUploadScreenState();
 }
 
 class _PetUploadScreenState extends State<PetUploadScreen> {
+  /// Properties
   final TextEditingController _nameTEC = TextEditingController();
   final TextEditingController _breedTEC = TextEditingController();
   final TextEditingController _birthdayTEC = TextEditingController();
@@ -33,6 +43,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
   Uint8List? _image; // Uint8List: 이미지나 동영상 같은 바이너리 데이터 취급할 때
   bool _isActive = false; // 작성하기 버튼 활성화 여부
 
+  /// Method
   // 사진 선택 함수
   Future<void> selectImage() async {
     ImagePicker imagePicker = new ImagePicker();
@@ -67,9 +78,34 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
     });
   }
 
+  // 네트워크 이미지를 Uint8List로 변환
+  Future<void> loadNetworkImage(String imageUrl) async {
+    final Uint8List? bytes =
+        await ExtendedNetworkImageProvider(imageUrl).getNetworkImageData();
+    if (bytes != null) {
+      setState(() {
+        _image = bytes;
+        _checkBottomActive();
+      });
+    }
+  }
+
+  /// LifeCycle
   @override
   void initState() {
     super.initState();
+
+    // 수정일 때 기존 데이터
+    if (widget.originalPetModel != null) {
+      loadNetworkImage(widget.originalPetModel!.image);
+      _nameTEC.text = widget.originalPetModel!.name;
+      _breedTEC.text = widget.originalPetModel!.breed;
+      _birthdayTEC.text = widget.originalPetModel!.birthDay;
+      _firstMeetingDateTEC.text = widget.originalPetModel!.firstMeetingDate;
+      _selectedGender = widget.originalPetModel!.gender == "male" ? "수컷" : "암컷";
+      _selectedNeutering =
+          widget.originalPetModel!.isNeutering ? "했어요" : "안했어요";
+    }
 
     _nameTEC.addListener(_checkBottomActive);
     _breedTEC.addListener(_checkBottomActive);
@@ -103,6 +139,23 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
         appBar: AppBar(
           backgroundColor: Palette.background,
           scrolledUnderElevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialog(
+                      title: '반려동물 삭제',
+                      message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                      onConfirm: () async {},
+                    );
+                  },
+                );
+              },
+              icon: Icon(CupertinoIcons.delete),
+            )
+          ],
         ),
         body: Column(
           children: [
@@ -186,7 +239,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       // 이름
                       TextFieldWithTitle(
                         labelText: '이름',
-                        maxLength: 5,
+                        maxLength: 6,
                         hintText: '이름을 입력해주세요',
                         controller: _nameTEC,
                       ),
@@ -195,7 +248,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       // 품종
                       TextFieldWithTitle(
                         labelText: '품종',
-                        maxLength: 8,
+                        maxLength: 10,
                         hintText: '품종을 입력해주세요',
                         controller: _breedTEC,
                       ),
@@ -234,35 +287,35 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       Wrap(
                         runSpacing: 8.0, // 상하
                         spacing: 8.0, // 좌우
-                        children: genderTypes.map((pet) {
+                        children: genderTypes.map((e) {
                           return ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
-                                color: _selectedGender == pet
+                                color: _selectedGender == e
                                     ? Palette.subGreen
                                     : Palette.lightGray,
                                 width: 1.0,
                               ),
                             ),
-                            label: Text(pet),
+                            label: Text(e),
                             backgroundColor: Palette.white,
-                            selected: _selectedGender == pet,
+                            selected: _selectedGender == e,
                             selectedColor: Palette.mainGreen,
                             showCheckmark: false,
                             labelStyle: TextStyle(
                               fontFamily: 'Pretendard',
-                              fontWeight: _selectedGender == pet
+                              fontWeight: _selectedGender == e
                                   ? FontWeight.w600
                                   : FontWeight.w400,
                               fontSize: 16,
-                              color: _selectedGender == pet
+                              color: _selectedGender == e
                                   ? Palette.white
                                   : Palette.lightGray,
                             ),
                             onSelected: (bool isSelected) {
                               setState(() {
-                                _selectedGender = isSelected ? pet : null;
+                                _selectedGender = isSelected ? e : null;
                                 _checkBottomActive();
                               });
                             },
@@ -286,35 +339,35 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       Wrap(
                         runSpacing: 8.0, // 상하
                         spacing: 8.0, // 좌우
-                        children: NeuteringTypes.map((pet) {
+                        children: NeuteringTypes.map((e) {
                           return ChoiceChip(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
-                                color: _selectedNeutering == pet
+                                color: _selectedNeutering == e
                                     ? Palette.subGreen
                                     : Palette.lightGray,
                                 width: 1.0,
                               ),
                             ),
-                            label: Text(pet),
+                            label: Text(e),
                             backgroundColor: Palette.white,
-                            selected: _selectedNeutering == pet,
+                            selected: _selectedNeutering == e,
                             selectedColor: Palette.mainGreen,
                             showCheckmark: false,
                             labelStyle: TextStyle(
                               fontFamily: 'Pretendard',
-                              fontWeight: _selectedNeutering == pet
+                              fontWeight: _selectedNeutering == e
                                   ? FontWeight.w600
                                   : FontWeight.w400,
                               fontSize: 16,
-                              color: _selectedNeutering == pet
+                              color: _selectedNeutering == e
                                   ? Palette.white
                                   : Palette.lightGray,
                             ),
                             onSelected: (bool isSelected) {
                               setState(() {
-                                _selectedNeutering = isSelected ? pet : null;
+                                _selectedNeutering = isSelected ? e : null;
                                 _checkBottomActive();
                               });
                             },
@@ -338,21 +391,39 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                 _isActive = false;
               });
 
-              // 펫 업로드 로직
-              await context.read<PetProvider>().uploadPet(
-                    file: _image,
-                    name: _nameTEC.text,
-                    breed: _breedTEC.text,
-                    birthDay: _birthdayTEC.text,
-                    firstMeetingDate: _firstMeetingDateTEC.text,
-                    gender: _selectedGender! == "수컷" ? "male" : "female",
-                    isNeutering: _selectedNeutering! == "했어요" ? true : false,
-                  );
+              if (widget.originalPetModel != null) {
+                // 펫 수정 로직
+                await context.read<PetProvider>().updatePet(
+                      petId: widget.originalPetModel!.petId,
+                      file: _image,
+                      name: _nameTEC.text,
+                      breed: _breedTEC.text,
+                      birthDay: _birthdayTEC.text,
+                      firstMeetingDate: _firstMeetingDateTEC.text,
+                      gender: _selectedGender! == "수컷" ? "male" : "female",
+                      isNeutering: _selectedNeutering! == "했어요" ? true : false,
+                      currentImageUrl: widget.originalPetModel!.image,
+                      createAt: widget.originalPetModel!.createAt,
+                    );
 
-              // 스낵바
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("추가 완료")));
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("수정 완료")));
+              } else {
+                // 펫 업로드 로직
+                await context.read<PetProvider>().uploadPet(
+                      file: _image,
+                      name: _nameTEC.text,
+                      breed: _breedTEC.text,
+                      birthDay: _birthdayTEC.text,
+                      firstMeetingDate: _firstMeetingDateTEC.text,
+                      gender: _selectedGender! == "수컷" ? "male" : "female",
+                      isNeutering: _selectedNeutering! == "했어요" ? true : false,
+                    );
 
+                // 스낵바
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text("추가 완료")));
+              }
               Navigator.pop(context);
             } on CustomException catch (e) {
               errorDialogWidget(context, e);
@@ -363,7 +434,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
               });
             }
           },
-          buttonText: "시작하기",
+          buttonText: widget.originalPetModel == null ? "시작하기" : "수정하기",
         ),
       ),
     );
