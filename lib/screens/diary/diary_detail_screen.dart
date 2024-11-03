@@ -1,5 +1,4 @@
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -58,6 +57,7 @@ class DiaryDetailScreen extends StatefulWidget {
 
 class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   bool _isLock = true;
+  bool _isLiking = false;
   late bool _isMyDiary;
   late String _currentUserId;
 
@@ -524,20 +524,56 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                     children: [
                       // 좋아요 버튼
                       GestureDetector(
-                        onTap: () async {
-                          await _likeDiary(diaryModel);
-                        },
-                        child: isLike
-                            ? Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                                size: 24,
-                              )
-                            : Icon(
-                                Icons.favorite_border,
-                                color: Palette.darkGray,
-                                size: 24,
-                              ),
+                        onTap: _isLiking
+                            ? null
+                            : () async {
+                                setState(() {
+                                  _isLiking = true;
+                                });
+
+                                try {
+                                  await _likeDiary(diaryModel);
+                                } finally {
+                                  if (mounted) {
+                                    setState(() {
+                                      _isLiking = false;
+                                    });
+                                  }
+                                }
+                              },
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 200),
+                          transitionBuilder: (child, animation) {
+                            return ScaleTransition(
+                              scale: animation,
+                              child: child,
+                            );
+                          },
+                          child: _isLiking
+                              ? SizedBox(
+                                  key: ValueKey('processing'),
+                                  height: 24,
+                                  width: 24,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.red),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : isLike
+                                  ? Icon(
+                                      key: ValueKey('liked'),
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 24,
+                                    )
+                                  : Icon(
+                                      key: ValueKey('unliked'),
+                                      Icons.favorite_border,
+                                      color: Palette.darkGray,
+                                      size: 24,
+                                    ),
+                        ),
                       ),
                       SizedBox(width: 5),
 
