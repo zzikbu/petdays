@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/repositories/auth_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -31,6 +32,16 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     } else {
       // 로그아웃 상태로 변경
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
+    }
+  }
+
+  /// 회원 탈퇴
+  Future<void> deleteAccount() async {
+    try {
+      String uid = read<User>().uid;
+      await read<AuthRepository>().deleteAccount(uid: uid);
+    } on CustomException catch (_) {
+      rethrow;
     }
   }
 

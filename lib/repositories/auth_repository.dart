@@ -9,10 +9,12 @@ import 'package:pet_log/exceptions/custom_exception.dart';
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
   AuthRepository({
     required this.firebaseAuth,
     required this.firebaseFirestore,
+    required this.firebaseStorage,
   });
 
   /// 랜덤 닉네임 생성
@@ -90,6 +92,116 @@ class AuthRepository {
     }
 
     return generatedNickname;
+  }
+
+  /// 회원 탈퇴
+  Future<void> deleteAccount({
+    required String uid,
+    String? password,
+  }) async {
+    try {
+      // 탈퇴
+      final user = firebaseAuth.currentUser!;
+      await user.delete();
+
+      QuerySnapshot<Map<String, dynamic>> petQuerySnapshot =
+          await firebaseFirestore
+              .collection('pets')
+              .where('uid', isEqualTo: uid)
+              .get();
+
+      QuerySnapshot<Map<String, dynamic>> diaryQuerySnapshot =
+          await firebaseFirestore
+              .collection('diaries')
+              .where('uid', isEqualTo: uid)
+              .get();
+
+      QuerySnapshot<Map<String, dynamic>> medicalQuerySnapshot =
+          await firebaseFirestore
+              .collection('medicals')
+              .where('uid', isEqualTo: uid)
+              .get();
+
+      QuerySnapshot<Map<String, dynamic>> walkQuerySnapshot =
+          await firebaseFirestore
+              .collection('walks')
+              .where('uid', isEqualTo: uid)
+              .get();
+
+      WriteBatch batch = firebaseFirestore.batch();
+
+      // users 컬렉션에서 해당 uid 문서 삭제
+      batch.delete(firebaseFirestore.collection('users').doc(uid));
+
+      // 프로필 이미지 삭제
+      if (await firebaseStorage
+          .ref()
+          .child('profile/$uid')
+          .getDownloadURL()
+          .then((_) => true)
+          .catchError((_) => false)) {
+        await firebaseStorage.ref().child('profile/$uid').delete();
+      }
+
+      // 펫 삭제
+      petQuerySnapshot.docs.forEach((petDoc) async {
+        batch.delete(petDoc.reference);
+
+        String petImageUrl = petDoc.data()['image'];
+        await firebaseStorage.refFromURL(petImageUrl).delete();
+      });
+
+      // 성장일기 삭제
+      // 해당 성장일기에 좋아요 누른 users 문서의 likes 필드에서 diaryId 삭제
+      diaryQuerySnapshot.docs.forEach((diaryDoc) async {
+        List<String> likes = List<String>.from(diaryDoc.data()['likes']);
+
+        likes.forEach((likeUid) {
+          batch.update(firebaseFirestore.collection('users').doc(likeUid), {
+            'likes': FieldValue.arrayRemove([diaryDoc.id]),
+          });
+        });
+
+        batch.delete(diaryDoc.reference);
+
+        List<String> diaryImageUrls =
+            List<String>.from(diaryDoc.data()['imageUrls']);
+        diaryImageUrls.forEach((element) async {
+          await firebaseStorage.refFromURL(element).delete();
+        });
+      });
+
+      // 진료기록 삭제
+      medicalQuerySnapshot.docs.forEach((medicalDoc) async {
+        batch.delete(medicalDoc.reference);
+
+        List<String> medicalImageUrls =
+            List<String>.from(medicalDoc.data()['imageUrls']);
+        medicalImageUrls.forEach((element) async {
+          await firebaseStorage.refFromURL(element).delete();
+        });
+      });
+
+      // 산책 삭제
+      walkQuerySnapshot.docs.forEach((walkDoc) async {
+        batch.delete(walkDoc.reference);
+
+        String walkImageUrl = walkDoc.data()['imageUrl'];
+        await firebaseStorage.refFromURL(walkImageUrl).delete();
+      });
+
+      await batch.commit();
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
   }
 
   /// 로그아웃

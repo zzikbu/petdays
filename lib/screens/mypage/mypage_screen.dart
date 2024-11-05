@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -360,7 +361,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     builder: (BuildContext context) {
                       return CustomDialog(
                         title: '로그아웃',
-                        message: '로그아웃 하시겠습니까??',
+                        message: '로그아웃 하시겠습니까?',
                         onConfirm: () async {
                           try {
                             await context.read<MyAuthProvider>().signOut();
@@ -387,7 +388,26 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
               // 회원탈퇴
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return CustomDialog(
+                        title: '회원탈퇴',
+                        message: '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴 하시겠습니까?',
+                        onConfirm: () async {
+                          try {
+                            await context
+                                .read<MyAuthProvider>()
+                                .deleteAccount();
+                          } on CustomException catch (e) {
+                            errorDialogWidget(context, e);
+                          }
+                        },
+                      );
+                    },
+                  );
+                },
                 child: Text(
                   '회원탈퇴',
                   style: TextStyle(

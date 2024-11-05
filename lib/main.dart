@@ -55,8 +55,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         Provider<AuthRepository>(
           create: (context) => AuthRepository(
-              firebaseAuth: FirebaseAuth.instance,
-              firebaseFirestore: FirebaseFirestore.instance),
+            firebaseAuth: FirebaseAuth.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+            firebaseStorage: FirebaseStorage.instance,
+          ),
         ),
         Provider<PetRepository>(
           create: (context) => PetRepository(
