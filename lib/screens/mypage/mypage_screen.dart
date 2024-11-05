@@ -14,6 +14,7 @@ import 'package:pet_log/providers/auth/my_auth_provider.dart';
 import 'package:pet_log/providers/profile/profile_provider.dart';
 import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/providers/user/user_state.dart';
+import 'package:pet_log/screens/mypage/delete_account_screen.dart';
 import 'package:pet_log/screens/mypage/like_home_screen.dart';
 import 'package:pet_log/screens/mypage/open_diary_home_screen.dart';
 import 'package:pet_log/screens/pet/pet_upload_screen.dart';
@@ -389,24 +390,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
               // 회원탈퇴
               GestureDetector(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CustomDialog(
-                        title: '회원탈퇴',
-                        message: '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴 하시겠습니까?',
-                        onConfirm: () async {
-                          try {
-                            await context
-                                .read<MyAuthProvider>()
-                                .deleteAccount();
-                          } on CustomException catch (e) {
-                            errorDialogWidget(context, e);
-                          }
-                        },
-                      );
-                    },
-                  );
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DeleteAccountScreen(),
+                      ));
                 },
                 child: Text(
                   '회원탈퇴',

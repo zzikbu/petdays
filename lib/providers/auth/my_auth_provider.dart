@@ -36,10 +36,16 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
   }
 
   /// 회원 탈퇴
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount({
+    String? password,
+  }) async {
     try {
       String uid = read<User>().uid;
-      await read<AuthRepository>().deleteAccount(uid: uid);
+
+      await read<AuthRepository>().deleteAccount(
+        uid: uid,
+        password: password,
+      );
     } on CustomException catch (_) {
       rethrow;
     }
@@ -60,7 +66,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     required String password,
   }) async {
     try {
-      await read<AuthRepository>().signUp(
+      await read<AuthRepository>().signUpWithEmail(
         email: email,
         password: password,
       );
@@ -76,7 +82,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     required String password,
   }) async {
     try {
-      await read<AuthRepository>().signIn(
+      await read<AuthRepository>().signInWithEmail(
         email: email,
         password: password,
       );

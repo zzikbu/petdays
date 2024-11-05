@@ -100,8 +100,33 @@ class AuthRepository {
     String? password,
   }) async {
     try {
-      // 탈퇴
       final user = firebaseAuth.currentUser!;
+
+      // 재인증
+      try {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password!,
+        );
+        await user.reauthenticateWithCredential(credential);
+      } on FirebaseAuthException catch (e) {
+        switch (e.code) {
+          case 'invalid-credential':
+          case 'invalid-password':
+          case 'wrong-password':
+            throw CustomException(
+              code: '회원탈퇴',
+              message: '비밀번호가 올바르지 않습니다.',
+            );
+          default:
+            throw CustomException(
+              code: '회원탈퇴',
+              message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
+            );
+        }
+      }
+
+      // 탈퇴
       await user.delete();
 
       QuerySnapshot<Map<String, dynamic>> petQuerySnapshot =
@@ -191,6 +216,8 @@ class AuthRepository {
       });
 
       await batch.commit();
+    } on CustomException {
+      rethrow;
     } on FirebaseException catch (e) {
       throw CustomException(
         code: e.code,
@@ -227,7 +254,7 @@ class AuthRepository {
   }
 
   /// 이메일 로그인
-  Future<void> signIn({
+  Future<void> signInWithEmail({
     required String email,
     required String password,
   }) async {
@@ -262,7 +289,7 @@ class AuthRepository {
   }
 
   /// 이메일 회원가입
-  Future<void> signUp({
+  Future<void> signUpWithEmail({
     required String email,
     required String password,
   }) async {
@@ -285,6 +312,7 @@ class AuthRepository {
         "uid": uid,
         "email": email,
         "profileImage": null,
+        "provider": "email",
         "nickname": nickname,
         "walkCount": 0,
         "diaryCount": 0,
@@ -349,6 +377,7 @@ class AuthRepository {
           "uid": user.uid,
           "email": user.email,
           "profileImage": null,
+          "provider": "google",
           "nickname": nickname,
           "walkCount": 0,
           "diaryCount": 0,

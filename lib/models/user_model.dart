@@ -3,6 +3,7 @@ class UserModel {
   final String nickname;
   final String email;
   final String? profileImage;
+  final String provider;
   final int walkCount;
   final int diaryCount;
   final int medicalCount;
@@ -14,6 +15,7 @@ class UserModel {
     required this.nickname,
     required this.email,
     required this.profileImage,
+    required this.provider,
     required this.walkCount,
     required this.diaryCount,
     required this.medicalCount,
@@ -27,6 +29,7 @@ class UserModel {
       nickname: "",
       email: "",
       profileImage: null,
+      provider: "",
       walkCount: 0,
       diaryCount: 0,
       medicalCount: 0,
@@ -41,6 +44,7 @@ class UserModel {
       'nickname': this.nickname,
       'email': this.email,
       'profileImage': this.profileImage,
+      'provider': this.provider,
       'walkCount': this.walkCount,
       'diaryCount': this.diaryCount,
       'medicalCount': this.medicalCount,
@@ -55,6 +59,7 @@ class UserModel {
       nickname: map['nickname'],
       email: map['email'],
       profileImage: map['profileImage'],
+      provider: map['provider'],
       walkCount: map['walkCount'],
       diaryCount: map['diaryCount'],
       medicalCount: map['medicalCount'],
@@ -67,6 +72,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel{uid: $uid, nickname: $nickname, email: $email, profileImage: $profileImage, walkCount: $walkCount, diaryCount: $diaryCount, medicalCount: $medicalCount, blocks: $blocks, likes: $likes}';
+    return 'UserModel{uid: $uid, nickname: $nickname, email: $email, profileImage: $profileImage, provider: $provider, walkCount: $walkCount, diaryCount: $diaryCount, medicalCount: $medicalCount, blocks: $blocks, likes: $likes}';
   }
 }
