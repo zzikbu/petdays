@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,9 +16,11 @@ import 'package:pet_log/providers/user/user_state.dart';
 import 'package:pet_log/screens/mypage/delete_account_screen.dart';
 import 'package:pet_log/screens/mypage/like_home_screen.dart';
 import 'package:pet_log/screens/mypage/open_diary_home_screen.dart';
+import 'package:pet_log/screens/mypage/terms_policy_screen.dart';
 import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -275,22 +276,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               SizedBox(height: 14),
 
-              // 획득한 메달
-              // GestureDetector(
-              //   onTap: () {},
-              //   child: Text(
-              //     '획득한 메달',
-              //     style: TextStyle(
-              //       fontFamily: 'Pretendard',
-              //       fontWeight: FontWeight.w400,
-              //       fontSize: 20,
-              //       color: Palette.black,
-              //       letterSpacing: -0.5,
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(height: 14),
-
               // 공개한 성장일기
               GestureDetector(
                 onTap: () {
@@ -323,6 +308,70 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 },
                 child: Text(
                   '좋아요한 성장일기',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    color: Palette.black,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
+
+              // 구분선
+              Container(
+                height: 1,
+                color: Palette.lightGray,
+              ),
+              SizedBox(height: 40),
+
+              // 앱
+              Text(
+                '앱',
+                style: TextStyle(
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
+                  color: Palette.black,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              SizedBox(height: 20),
+
+              // 이용약관
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TermsPolicyScreen(isTerms: true),
+                      ));
+                },
+                child: Text(
+                  '이용약관',
+                  style: TextStyle(
+                    fontFamily: 'Pretendard',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 20,
+                    color: Palette.black,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ),
+              SizedBox(height: 14),
+
+              // 개인정보 처리방침
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TermsPolicyScreen(isTerms: false),
+                      ));
+                },
+                child: Text(
+                  '개인정보 처리방침',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
