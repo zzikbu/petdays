@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
 
 void errorDialogWidget(BuildContext context, CustomException e) {
   showDialog(

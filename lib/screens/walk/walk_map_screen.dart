@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/walk/walk_provider.dart';
+import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/walk/walk_provider.dart';
 import 'package:provider/provider.dart';
 
 class WalkMapScreen extends StatefulWidget {

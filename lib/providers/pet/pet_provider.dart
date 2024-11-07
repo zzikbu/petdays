@@ -3,11 +3,11 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/pet_model.dart';
-import 'package:pet_log/providers/pet/pet_state.dart';
-import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/repositories/pet_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/providers/pet/pet_state.dart';
+import 'package:petdays/providers/user/user_state.dart';
+import 'package:petdays/repositories/pet_repository.dart';
 
 class PetProvider extends StateNotifier<PetState> with LocatorMixin {
   // PetProvider 만들어질 때 PetState 같이 만들기

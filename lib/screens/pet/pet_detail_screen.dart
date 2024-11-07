@@ -1,14 +1,14 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/pet_model.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/pet/pet_provider.dart';
-import 'package:pet_log/providers/pet/pet_state.dart';
-import 'package:pet_log/screens/pet/pet_upload_screen.dart';
+import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/pet/pet_provider.dart';
+import 'package:petdays/providers/pet/pet_state.dart';
+import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
 
 class PetDetailScreen extends StatefulWidget {

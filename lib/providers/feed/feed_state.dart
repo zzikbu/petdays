@@ -1,4 +1,4 @@
-import 'package:pet_log/models/diary_model.dart';
+import 'package:petdays/models/diary_model.dart';
 
 enum FeedStatus {
   init, // FeedState를 최초로 객체 생성한 상태

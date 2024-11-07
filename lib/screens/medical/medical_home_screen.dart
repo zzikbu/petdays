@@ -2,15 +2,15 @@ import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/medical_model.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/medical/medical_provider.dart';
-import 'package:pet_log/providers/medical/medical_state.dart';
-import 'package:pet_log/screens/medical/medical_detail_screen.dart';
-import 'package:pet_log/screens/search/search_screen.dart';
-import 'package:pet_log/screens/select_pet_screen.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/medical_model.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/medical/medical_provider.dart';
+import 'package:petdays/providers/medical/medical_state.dart';
+import 'package:petdays/screens/medical/medical_detail_screen.dart';
+import 'package:petdays/screens/search/search_screen.dart';
+import 'package:petdays/screens/select_pet_screen.dart';
 import 'package:provider/provider.dart';
 
 class MedicalHomeScreen extends StatefulWidget {

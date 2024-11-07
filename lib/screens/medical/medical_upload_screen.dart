@@ -2,15 +2,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/components/next_button.dart';
-import 'package:pet_log/components/textfield_with_title.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/medical_model.dart';
-import 'package:pet_log/models/pet_model.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/medical/medical_provider.dart';
-import 'package:pet_log/providers/medical/medical_state.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/next_button.dart';
+import 'package:petdays/components/textfield_with_title.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/medical_model.dart';
+import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/medical/medical_provider.dart';
+import 'package:petdays/providers/medical/medical_state.dart';
 import 'package:provider/provider.dart';
 
 class MedicalUploadScreen extends StatefulWidget {

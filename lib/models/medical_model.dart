@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pet_log/models/pet_model.dart';
-import 'package:pet_log/models/user_model.dart';
+import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/models/user_model.dart';
 
 class MedicalModel {
   final String uid;

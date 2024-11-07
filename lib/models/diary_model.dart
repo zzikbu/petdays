@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pet_log/models/user_model.dart';
+import 'package:petdays/models/user_model.dart';
 
 class DiaryModel {
   final String uid;

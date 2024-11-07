@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/palette.dart';
+import 'package:petdays/palette.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});

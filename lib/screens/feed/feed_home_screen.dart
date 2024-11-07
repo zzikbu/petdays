@@ -1,13 +1,13 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/feed/feed_provider.dart';
-import 'package:pet_log/providers/feed/feed_state.dart';
-import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/screens/diary/diary_detail_screen.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/feed/feed_provider.dart';
+import 'package:petdays/providers/feed/feed_state.dart';
+import 'package:petdays/providers/user/user_state.dart';
+import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
 class FeedHomeScreen extends StatefulWidget {

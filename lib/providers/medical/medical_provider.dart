@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/medical_model.dart';
-import 'package:pet_log/providers/medical/medical_state.dart';
-import 'package:pet_log/repositories/medical_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/medical_model.dart';
+import 'package:petdays/providers/medical/medical_state.dart';
+import 'package:petdays/repositories/medical_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {

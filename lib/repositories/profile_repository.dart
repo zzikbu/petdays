@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/user_model.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/user_model.dart';
 
 class ProfileRepository {
   final FirebaseStorage firebaseStorage;

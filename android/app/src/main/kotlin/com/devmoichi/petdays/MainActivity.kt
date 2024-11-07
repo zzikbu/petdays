@@ -1,4 +1,4 @@
-package com.moichi.pet_log
+package com.devmoichi.petdays
 
 import io.flutter.embedding.android.FlutterActivity
 

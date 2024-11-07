@@ -1,9 +1,9 @@
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/providers/like/like_state.dart';
-import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/repositories/like_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/providers/like/like_state.dart';
+import 'package:petdays/providers/user/user_state.dart';
+import 'package:petdays/repositories/like_repository.dart';
 
 class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
   LikeProvider() : super(LikeState.init());

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/components/next_button.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/profile/profile_provider.dart';
-import 'package:pet_log/providers/user/user_provider.dart';
-import 'package:pet_log/providers/user/user_state.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/next_button.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/profile/profile_provider.dart';
+import 'package:petdays/providers/user/user_provider.dart';
+import 'package:petdays/providers/user/user_state.dart';
 import 'package:provider/provider.dart';
 
 class UpdateNicknameScreen extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:pet_log/models/medical_model.dart';
+import 'package:petdays/models/medical_model.dart';
 
 enum MedicalStatus {
   init, // DiaryState를 최초로 객체 생성한 상태

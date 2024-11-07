@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/walk_model.dart';
-import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/providers/walk/walk_state.dart';
-import 'package:pet_log/repositories/walk_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/walk_model.dart';
+import 'package:petdays/providers/user/user_state.dart';
+import 'package:petdays/providers/walk/walk_state.dart';
+import 'package:petdays/repositories/walk_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {

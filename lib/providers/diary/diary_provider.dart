@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/providers/diary/diary_state.dart';
-import 'package:pet_log/repositories/diary_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/providers/diary/diary_state.dart';
+import 'package:petdays/repositories/diary_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {

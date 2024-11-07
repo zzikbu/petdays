@@ -1,4 +1,4 @@
-import 'package:pet_log/models/pet_model.dart';
+import 'package:petdays/models/pet_model.dart';
 
 enum PetStatus {
   init, // PetState를 최초로 객체 생성한 상태

@@ -1,9 +1,9 @@
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/models/user_model.dart';
-import 'package:pet_log/providers/feed/feed_state.dart';
-import 'package:pet_log/providers/user/user_state.dart';
-import 'package:pet_log/repositories/feed_repository.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/models/user_model.dart';
+import 'package:petdays/providers/feed/feed_state.dart';
+import 'package:petdays/providers/user/user_state.dart';
+import 'package:petdays/repositories/feed_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {

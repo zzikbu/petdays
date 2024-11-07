@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/components/info_column.dart';
-import 'package:pet_log/palette.dart';
+import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/components/info_column.dart';
+import 'package:petdays/palette.dart';
 
 class WalkDetailScreen extends StatelessWidget {
   const WalkDetailScreen({super.key});

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/user/user_provider.dart';
-import 'package:pet_log/screens/feed/feed_home_screen.dart';
-import 'package:pet_log/screens/home/home_screen.dart';
-import 'package:pet_log/screens/mypage/mypage_screen.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/user/user_provider.dart';
+import 'package:petdays/screens/feed/feed_home_screen.dart';
+import 'package:petdays/screens/home/home_screen.dart';
+import 'package:petdays/screens/mypage/mypage_screen.dart';
 import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {

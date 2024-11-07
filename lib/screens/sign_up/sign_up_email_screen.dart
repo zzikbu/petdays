@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/screens/sign_in/sign_in_screen.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/providers/auth/my_auth_provider.dart';
+import 'package:petdays/screens/sign_in/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 

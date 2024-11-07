@@ -1,6 +1,6 @@
 {
-    "name": "pet_log",
-    "short_name": "pet_log",
+    "name": "petdays",
+    "short_name": "petdays",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

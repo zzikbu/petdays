@@ -1,4 +1,4 @@
-import 'package:pet_log/models/walk_model.dart';
+import 'package:petdays/models/walk_model.dart';
 
 enum WalkStatus {
   init, // DiaryState를 최초로 객체 생성한 상태

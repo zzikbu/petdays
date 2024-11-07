@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pet_log/components/custom_dialog.dart';
-import 'package:pet_log/components/error_dialog_widget.dart';
-import 'package:pet_log/components/next_button.dart';
-import 'package:pet_log/components/textfield_with_title.dart';
-import 'package:pet_log/exceptions/custom_exception.dart';
-import 'package:pet_log/models/diary_model.dart';
-import 'package:pet_log/palette.dart';
+import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/next_button.dart';
+import 'package:petdays/components/textfield_with_title.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/palette.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pet_log/providers/diary/diary_provider.dart';
-import 'package:pet_log/providers/diary/diary_state.dart';
-import 'package:pet_log/providers/feed/feed_provider.dart';
-import 'package:pet_log/providers/like/like_provider.dart';
+import 'package:petdays/providers/diary/diary_provider.dart';
+import 'package:petdays/providers/diary/diary_state.dart';
+import 'package:petdays/providers/feed/feed_provider.dart';
+import 'package:petdays/providers/like/like_provider.dart';
 import 'package:provider/provider.dart';
 
 class DiaryUploadScreen extends StatefulWidget {

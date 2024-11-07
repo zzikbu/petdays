@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pet_log/dummy.dart';
-import 'package:pet_log/palette.dart';
-import 'package:pet_log/screens/walk/walk_detail_screen.dart';
-import 'package:pet_log/screens/select_pet_screen.dart';
+import 'package:petdays/dummy.dart';
+import 'package:petdays/palette.dart';
+import 'package:petdays/screens/walk/walk_detail_screen.dart';
+import 'package:petdays/screens/select_pet_screen.dart';
 
 class WalkHomeScreen extends StatelessWidget {
   const WalkHomeScreen({super.key});

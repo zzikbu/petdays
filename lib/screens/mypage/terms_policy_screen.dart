@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pet_log/palette.dart';
+import 'package:petdays/palette.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class TermsPolicyScreen extends StatefulWidget {
