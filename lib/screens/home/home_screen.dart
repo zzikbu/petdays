@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen>
                               ),
                               SizedBox(height: 4),
                               Text(
-                                '펫 추가하기',
+                                '반려동물 추가하기',
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,

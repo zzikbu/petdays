@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
+import 'package:pet_log/main.dart';
 import 'package:pet_log/models/user_model.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
@@ -264,7 +265,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   );
                 },
                 child: Text(
-                  '펫 추가',
+                  '반려동물 추가',
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
@@ -380,6 +381,25 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     letterSpacing: -0.5,
                   ),
                 ),
+              ),
+              SizedBox(height: 14),
+
+              // 앱 버전
+              Row(
+                children: [
+                  Text(
+                    '앱 버전',
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 20,
+                      color: Palette.black,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  Spacer(),
+                  Text('v${packageInfo.version}'),
+                ],
               ),
               SizedBox(height: 40),
 
