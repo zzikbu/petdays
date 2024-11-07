@@ -398,4 +398,47 @@ class AuthRepository {
       );
     }
   }
+
+  /// 애플 로그인
+  Future<void> signInWithApple() async {
+    try {
+      final appleProvider = AppleAuthProvider();
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithProvider(appleProvider);
+
+      final User user = userCredential.user!;
+
+      final userDoc =
+          await firebaseFirestore.collection("users").doc(user.uid).get();
+
+      // 신규 사용자인 경우 Firestore에 사용자 정보 저장
+      if (!userDoc.exists) {
+        String nickname = await randomNickname();
+
+        await firebaseFirestore.collection("users").doc(user.uid).set({
+          "uid": user.uid,
+          "email": null,
+          "profileImage": null,
+          "provider": "apple",
+          "nickname": nickname,
+          "walkCount": 0,
+          "diaryCount": 0,
+          "medicalCount": 0,
+          "likes": [],
+          "blocks": []
+        });
+      }
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
 }

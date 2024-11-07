@@ -12,25 +12,28 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
   // LocatorMixin에 정의되어 있는 함수
   @override
   void update(Locator watch) {
-    // provider에 등록된 상태관리를 하고있는 User값이 변경이 되면
-    // update함수가 자동으로 호출이 됨
+    // Firebase Auth의 현재 유저 상태를 감시
     final user = watch<User?>();
 
-    // 회원가입 상황일 때(User는 반환하지만, emailVerified = false)는 return
+    // 현재 유저가 존재하고 이메일이 인증되지 않은 경우
     if (user != null && !user.emailVerified) {
-      return;
+      // 이메일 로그인 유저인 경우에만 리턴
+      if (user.providerData
+          .any((element) => element.providerId == 'password')) {
+        return;
+      }
     }
 
-    // 미인증 이메일로 로그인 할 때 return
+    // 현재 유저가 없고 이미 로그아웃 상태인 경우 리턴
     if (user == null && state.authStatus == AuthStatus.unauthenticated) {
       return;
     }
 
+    // 유저 존재 여부에 따라 인증 상태 업데이트
+    // 유저가 있으면 로그인 상태로, 없으면 로그아웃 상태로 변경
     if (user != null) {
-      // 로그인 상태로 변경
       state = state.copyWith(authStatus: AuthStatus.authenticated);
     } else {
-      // 로그아웃 상태로 변경
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
     }
   }
@@ -96,6 +99,15 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
   Future<void> signInWithGoogle() async {
     try {
       await read<AuthRepository>().signInWithGoogle();
+    } on CustomException catch (_) {
+      rethrow;
+    }
+  }
+
+  /// 애플 로그인
+  Future<void> signInWithApple() async {
+    try {
+      await read<AuthRepository>().signInWithApple();
     } on CustomException catch (_) {
       rethrow;
     }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
@@ -233,27 +235,36 @@ class _SignInScreenState extends State<SignInScreen> {
                         SizedBox(width: 14),
 
                         // 카카오
-                        GestureDetector(
-                          onTap: () {},
-                          child: SizedBox(
-                            width: 56,
-                            height: 56,
-                            child: SvgPicture.asset(
-                                'assets/icons/ic_login_kakao.svg'),
-                          ),
-                        ),
-                        SizedBox(width: 14),
+                        // GestureDetector(
+                        //   onTap: () {},
+                        //   child: SizedBox(
+                        //     width: 56,
+                        //     height: 56,
+                        //     child: SvgPicture.asset(
+                        //         'assets/icons/ic_login_kakao.svg'),
+                        //   ),
+                        // ),
+                        // SizedBox(width: 14),
 
                         // 애플
-                        GestureDetector(
-                          onTap: () {},
-                          child: SizedBox(
-                            width: 56,
-                            height: 56,
-                            child: SvgPicture.asset(
-                                'assets/icons/ic_login_apple.svg'),
+                        if (Platform.isIOS)
+                          GestureDetector(
+                            onTap: () async {
+                              try {
+                                await context
+                                    .read<MyAuthProvider>()
+                                    .signInWithApple();
+                              } on CustomException catch (e) {
+                                errorDialogWidget(context, e);
+                              }
+                            },
+                            child: SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: SvgPicture.asset(
+                                  'assets/icons/ic_login_apple.svg'),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ].reversed.toList(),

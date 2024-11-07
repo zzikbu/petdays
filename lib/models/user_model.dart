@@ -1,7 +1,7 @@
 class UserModel {
   final String uid;
   final String nickname;
-  final String email;
+  final String? email;
   final String? profileImage;
   final String provider;
   final int walkCount;
@@ -27,7 +27,7 @@ class UserModel {
     return UserModel(
       uid: "",
       nickname: "",
-      email: "",
+      email: null,
       profileImage: null,
       provider: "",
       walkCount: 0,

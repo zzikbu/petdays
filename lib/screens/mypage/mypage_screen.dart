@@ -73,7 +73,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
     if (userModel.provider == "google") {
       providerImageUrl = 'assets/icons/ic_login_google.svg';
-    } else if (userModel.provider == "google") {
+    } else if (userModel.provider == "apple") {
       providerImageUrl = 'assets/icons/ic_login_apple.svg';
     }
 
