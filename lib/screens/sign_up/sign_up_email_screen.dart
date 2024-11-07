@@ -207,7 +207,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 30),
 
                     // 로그인 하기 버튼
                     GestureDetector(
@@ -220,13 +220,26 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                           : null,
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(
-                          "이미 회원이신가요? 로그인 하기",
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Palette.mediumGray,
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              color: Palette.mediumGray,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            children: [
+                              TextSpan(text: "이미 회원이신가요? "),
+                              TextSpan(
+                                text: "로그인 하기",
+                                style: TextStyle(
+                                  color: Palette.subGreen,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

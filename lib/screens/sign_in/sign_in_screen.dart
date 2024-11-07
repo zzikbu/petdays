@@ -4,7 +4,6 @@ import 'package:pet_log/components/error_dialog_widget.dart';
 import 'package:pet_log/exceptions/custom_exception.dart';
 import 'package:pet_log/palette.dart';
 import 'package:pet_log/providers/auth/my_auth_provider.dart';
-import 'package:pet_log/providers/user/user_provider.dart';
 import 'package:pet_log/screens/sign_up/sign_up_email_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
@@ -168,7 +167,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
 
                     // 회원가입 하기 버튼
                     GestureDetector(
@@ -181,13 +180,26 @@ class _SignInScreenState extends State<SignInScreen> {
                           : null,
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(
-                          "회원이 아니신가요? 회원가입 하기",
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Palette.mediumGray,
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              color: Palette.mediumGray,
+                              fontFamily: 'Pretendard',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            children: [
+                              TextSpan(text: "회원이 아니신가요? "),
+                              TextSpan(
+                                text: "회원가입 하기",
+                                style: TextStyle(
+                                  color: Palette.subGreen,
+                                  fontFamily: 'Pretendard',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

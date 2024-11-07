@@ -21,10 +21,10 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
   bool isLoading = true;
 
   static const String _termsUri =
-      'https://firebasestorage.googleapis.com/v0/b/petlog-6e23a.appspot.com/o/app_privacy_rule%2Fterms.html?alt=media&token=25e1494e-9ace-4caf-a1aa-979ca3887545';
+      'https://firebasestorage.googleapis.com/v0/b/petdays-38ca6.firebasestorage.app/o/app_documents%2Fterms.html?alt=media&token=b7090ead-2ee7-4e70-94c4-55f988101008';
 
   static const String _policyUri =
-      'https://firebasestorage.googleapis.com/v0/b/petlog-6e23a.appspot.com/o/app_privacy_rule%2Fpolicy.html?alt=media&token=6b401804-d623-45a2-ab96-5f2c6de58687';
+      'https://firebasestorage.googleapis.com/v0/b/petdays-38ca6.firebasestorage.app/o/app_documents%2Fpolicy.html?alt=media&token=788440b6-cbdf-4e1b-8131-437b9c12187c';
 
   /// Method
   void _initializeController() {

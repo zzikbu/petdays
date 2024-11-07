@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pet_log/components/custom_dialog.dart';
 import 'package:pet_log/components/error_dialog_widget.dart';
@@ -21,7 +22,6 @@ import 'package:pet_log/screens/mypage/terms_policy_screen.dart';
 import 'package:pet_log/screens/pet/pet_upload_screen.dart';
 import 'package:pet_log/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -68,6 +68,14 @@ class _MyPageScreenState extends State<MyPageScreen> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = context.watch<UserState>().userModel;
+
+    String? providerImageUrl;
+
+    if (userModel.provider == "google") {
+      providerImageUrl = 'assets/icons/ic_login_google.svg';
+    } else if (userModel.provider == "google") {
+      providerImageUrl = 'assets/icons/ic_login_apple.svg';
+    }
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -411,15 +419,27 @@ class _MyPageScreenState extends State<MyPageScreen> {
               SizedBox(height: 40),
 
               // 계정
-              Text(
-                '계정',
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 24,
-                  color: Palette.black,
-                  letterSpacing: -0.5,
-                ),
+              Row(
+                children: [
+                  Text(
+                    '계정',
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24,
+                      color: Palette.black,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  SizedBox(width: 4),
+                  SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: providerImageUrl == null
+                        ? Icon(Icons.email)
+                        : SvgPicture.asset(providerImageUrl),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
 
