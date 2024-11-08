@@ -96,33 +96,72 @@ class AuthRepository {
 
   /// 회원 탈퇴
   Future<void> deleteAccount({
-    required String uid,
     String? password,
   }) async {
     try {
-      final user = firebaseAuth.currentUser!;
+      final User user = firebaseAuth.currentUser!;
+      final String uid = user.uid;
 
       // 재인증
-      try {
-        AuthCredential credential = EmailAuthProvider.credential(
-          email: user.email!,
-          password: password!,
-        );
-        await user.reauthenticateWithCredential(credential);
-      } on FirebaseAuthException catch (e) {
-        switch (e.code) {
-          case 'invalid-credential':
-          case 'invalid-password':
-          case 'wrong-password':
-            throw CustomException(
-              code: '회원탈퇴',
-              message: '비밀번호가 올바르지 않습니다.',
-            );
-          default:
-            throw CustomException(
-              code: '회원탈퇴',
-              message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
-            );
+      if (user.providerData.isNotEmpty) {
+        final provider = user.providerData[0].providerId;
+
+        try {
+          switch (provider) {
+            case 'password':
+              // 이메일 재인증
+              AuthCredential credential = EmailAuthProvider.credential(
+                email: user.email!,
+                password: password!,
+              );
+              await user.reauthenticateWithCredential(credential);
+              break;
+
+            case 'google.com':
+              // 구글 재인증
+              final googleUser = await GoogleSignIn().signIn();
+              if (googleUser == null) {
+                throw CustomException(
+                  code: '회원탈퇴',
+                  message: 'Google 계정 선택이 취소되었습니다.',
+                );
+              }
+              final googleAuth = await googleUser.authentication;
+              final credential = GoogleAuthProvider.credential(
+                accessToken: googleAuth.accessToken,
+                idToken: googleAuth.idToken,
+              );
+              await user.reauthenticateWithCredential(credential);
+              break;
+
+            case 'apple.com':
+              // 애플 재인증
+              final appleProvider = AppleAuthProvider();
+              await user.reauthenticateWithProvider(appleProvider);
+              break;
+          }
+        } on FirebaseAuthException catch (e) {
+          switch (e.code) {
+            case 'invalid-credential':
+            case 'invalid-password':
+            case 'wrong-password':
+              throw CustomException(
+                code: '회원탈퇴',
+                message: '인증에 실패했습니다.',
+              );
+            default:
+              throw CustomException(
+                code: '회원탈퇴',
+                message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
+              );
+          }
+        } on CustomException {
+          rethrow;
+        } catch (e) {
+          throw CustomException(
+            code: '회원탈퇴',
+            message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
+          );
         }
       }
 
@@ -302,6 +341,7 @@ class AuthRepository {
       );
 
       String uid = userCredential.user!.uid;
+      String providerId = userCredential.user!.providerData[0].providerId;
 
       await userCredential.user!.sendEmailVerification(); // 인증 메일 보내기
 
@@ -312,7 +352,7 @@ class AuthRepository {
         "uid": uid,
         "email": email,
         "profileImage": null,
-        "provider": "email",
+        "providerId": providerId,
         "nickname": nickname,
         "walkCount": 0,
         "diaryCount": 0,
@@ -377,7 +417,7 @@ class AuthRepository {
           "uid": user.uid,
           "email": user.email,
           "profileImage": null,
-          "provider": "google",
+          "providerId": user.providerData[0].providerId,
           "nickname": nickname,
           "walkCount": 0,
           "diaryCount": 0,
@@ -420,7 +460,7 @@ class AuthRepository {
           "uid": user.uid,
           "email": null,
           "profileImage": null,
-          "provider": "apple",
+          "providerId": user.providerData[0].providerId,
           "nickname": nickname,
           "walkCount": 0,
           "diaryCount": 0,

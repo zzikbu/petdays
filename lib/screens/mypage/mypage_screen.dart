@@ -71,9 +71,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
     String? providerImageUrl;
 
-    if (userModel.provider == "google") {
+    if (userModel.providerId == "google.com") {
       providerImageUrl = 'assets/icons/ic_login_google.svg';
-    } else if (userModel.provider == "apple") {
+    } else if (userModel.providerId == "apple.com") {
       providerImageUrl = 'assets/icons/ic_login_apple.svg';
     }
 
@@ -478,12 +478,30 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
               // 회원탈퇴
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DeleteAccountScreen(),
-                      ));
+                onTap: () async {
+                  if (userModel.providerId == 'password') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DeleteAccountScreen(),
+                        ));
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CustomDialog(
+                          title: '회원탈퇴',
+                          message: '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴하시겠습니까?',
+                          onConfirm: () async {
+                            Navigator.pop(context);
+                            await context
+                                .read<MyAuthProvider>()
+                                .deleteAccount();
+                          },
+                        );
+                      },
+                    );
+                  }
                 },
                 child: Text(
                   '회원탈퇴',

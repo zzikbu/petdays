@@ -43,10 +43,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     String? password,
   }) async {
     try {
-      String uid = read<User>().uid;
-
       await read<AuthRepository>().deleteAccount(
-        uid: uid,
         password: password,
       );
     } on CustomException catch (_) {
