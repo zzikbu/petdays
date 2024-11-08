@@ -83,7 +83,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                     ),
                     SizedBox(height: 20),
 
-                    // 패스워드
+                    // 비밀번호
                     TextFormField(
                       enabled: _isEnabled,
                       controller: _passwordTEC,
@@ -103,18 +103,18 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return "패스워드를 입력해주세요.";
+                          return "비밀번호를 입력해주세요.";
                         }
                         // 파이어베이스에서 비밀번호 6글자 이상 강제하기 때문에 미리 처리
                         if (value.length < 6) {
-                          return "패스워드는 6글자 이상 입력해주세요.";
+                          return "비밀번호는 6글자 이상 입력해주세요.";
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 20),
 
-                    // 패스워드 확인
+                    // 비밀번호 확인
                     TextFormField(
                       enabled: _isEnabled,
                       obscureText: true,
@@ -126,21 +126,21 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Palette.mainGreen),
                         ),
-                        labelText: "패스워드 확인",
+                        labelText: "비밀번호 확인",
                         labelStyle: TextStyle(color: Colors.black),
                         prefixIcon: Icon(Icons.lock),
                         filled: true,
                       ),
                       validator: (value) {
                         if (_passwordTEC.text != value) {
-                          return "패스워드가 일치하지 않습니다.";
+                          return "비밀번호가 일치하지 않습니다.";
                         }
                         return null;
                       },
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 20),
 
-                    // 로그인 버튼
+                    // 회원가입 버튼
                     GestureDetector(
                       onTap: _isEnabled
                           ? () async {
@@ -207,7 +207,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: 40),
 
                     // 로그인 하기 버튼
                     GestureDetector(

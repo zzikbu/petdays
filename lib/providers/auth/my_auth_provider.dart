@@ -38,6 +38,17 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     }
   }
 
+  /// 비밀번호 재설정 이메일 전송
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await read<AuthRepository>().sendPasswordResetEmail(email: email);
+    } on CustomException catch (_) {
+      rethrow;
+    }
+  }
+
   /// 회원 탈퇴
   Future<void> deleteAccount({
     String? password,

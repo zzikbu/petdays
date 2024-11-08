@@ -4,19 +4,19 @@ import 'package:petdays/components/next_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:provider/provider.dart';
+import 'package:validators/validators.dart';
 
-class DeleteAccountScreen extends StatefulWidget {
-  const DeleteAccountScreen({super.key});
+class ResetPasswordScreen extends StatefulWidget {
+  const ResetPasswordScreen({super.key});
 
   @override
-  State<DeleteAccountScreen> createState() => _DeleteAccountScreenState();
+  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
 }
 
-class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   /// Properties
-  final TextEditingController _passwordTEC = TextEditingController();
+  final TextEditingController _emailTEC = TextEditingController();
 
   bool _isActive = false;
   bool _isEnabled = true;
@@ -24,7 +24,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
   /// LifeCycle
   @override
   void dispose() {
-    _passwordTEC.dispose();
+    _emailTEC.dispose();
 
     super.dispose();
   }
@@ -45,7 +45,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
               // 제목
               Text(
-                '비밀번호를 입력해주세요',
+                '이메일을 입력해주세요',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
@@ -58,7 +58,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
               // 설명
               Text(
-                '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.',
+                '해당 이메일로 비밀번호 재설정 링크가 발송됩니다.',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
@@ -71,26 +71,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
               // 이메일
               TextFormField(
-                enabled: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  labelText: context.read<UserState>().userModel.email,
-                  labelStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Icon(Icons.email),
-                  filled: true,
-                ),
-              ),
-              SizedBox(height: 20),
-
-              // 비밀번호
-              TextFormField(
-                controller: _passwordTEC,
-                obscureText: true,
+                controller: _emailTEC,
                 enabled: _isEnabled,
                 onChanged: (value) => setState(() {
-                  _isActive = value.length >= 6;
+                  _isActive = isEmail(value.trim());
                 }),
                 decoration: InputDecoration(
                   fillColor: Colors.transparent,
@@ -100,7 +84,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Palette.mainGreen),
                   ),
-                  labelText: "비밀번호",
+                  labelText: "이메일",
                   labelStyle: TextStyle(color: Colors.black),
                   prefixIcon: Icon(Icons.lock),
                   filled: true,
@@ -111,7 +95,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         ),
         bottomNavigationBar: NextButton(
           isActive: _isActive,
-          buttonText: "탈퇴하기",
+          buttonText: "전송하기",
           onTap: () async {
             try {
               setState(() {
@@ -121,7 +105,12 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
               await context
                   .read<MyAuthProvider>()
-                  .deleteAccount(password: _passwordTEC.text);
+                  .sendPasswordResetEmail(email: _emailTEC.text.trim());
+
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text("전송 완료")));
+
+              Navigator.pop(context);
             } on CustomException catch (e) {
               errorDialogWidget(context, e);
               setState(() {

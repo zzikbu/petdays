@@ -443,6 +443,53 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               SizedBox(height: 20),
 
+              // 비밀번호 재설정
+              if (userModel.providerId == 'password')
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CustomDialog(
+                              title: '비밀번호 재설정',
+                              message:
+                                  '${userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
+                              onConfirm: () async {
+                                try {
+                                  await context
+                                      .read<MyAuthProvider>()
+                                      .sendPasswordResetEmail(
+                                          email: userModel.email!);
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text("전송 완료")));
+
+                                  Navigator.pop(context);
+                                } on CustomException catch (e) {
+                                  errorDialogWidget(context, e);
+                                }
+                              },
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        '비밀번호 재설정',
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20,
+                          color: Palette.black,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 14),
+                  ],
+                ),
+
               // 로그아웃
               GestureDetector(
                 onTap: () {

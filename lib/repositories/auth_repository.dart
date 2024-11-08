@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/providers/user/user_state.dart';
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
@@ -92,6 +93,25 @@ class AuthRepository {
     }
 
     return generatedNickname;
+  }
+
+  /// 비밀번호 재설정 이메일 전송
+  Future<void> sendPasswordResetEmail({
+    required String email,
+  }) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
   }
 
   /// 회원 탈퇴
@@ -415,7 +435,7 @@ class AuthRepository {
 
         await firebaseFirestore.collection("users").doc(user.uid).set({
           "uid": user.uid,
-          "email": user.email,
+          "email": user.providerData[0].email,
           "profileImage": null,
           "providerId": user.providerData[0].providerId,
           "nickname": nickname,
