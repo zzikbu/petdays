@@ -14,6 +14,7 @@ import 'package:petdays/palette.dart';
 import 'package:petdays/providers/pet/pet_provider.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/screens/sign_in/reset_password_screen.dart';
+import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
 class PetUploadScreen extends StatefulWidget {
@@ -47,6 +48,9 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
   /// Method
   // 사진 선택 함수
   Future<void> selectImage() async {
+    final hasPermission = await PermissionUtils.checkPhotoPermission(context);
+    if (!hasPermission) return;
+
     ImagePicker imagePicker = new ImagePicker();
     // XFile: 기기의 파일시스템에 접근할 수 있는 클래스
     // 사진을 선택하지 안했을 때는 null 반환

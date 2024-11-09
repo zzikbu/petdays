@@ -12,6 +12,7 @@ import 'package:petdays/providers/pet/pet_provider.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/screens/medical/medical_upload_screen.dart';
 import 'package:petdays/screens/walk/walk_map_screen.dart';
+import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
 class SelectPetScreen extends StatefulWidget {
@@ -54,71 +55,6 @@ class _SelectPetScreenState extends State<SelectPetScreen>
       }
       _checkBottomActive();
     });
-  }
-
-  Future<bool> _checkLocationPermission() async {
-    // 위치 서비스 활성화 확인
-    bool serviceEnabled =
-        await Permission.locationWhenInUse.serviceStatus.isEnabled;
-    if (!serviceEnabled) {
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return CustomDialog(
-              hasCancelButton: false,
-              title: '위치 서비스 필요',
-              message: '산책 기록을 위해 위치 서비스를 활성화해주세요.',
-              onConfirm: () {
-                openAppSettings();
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-      }
-      return false;
-    }
-
-    // 위치 권한 상태 체크
-    PermissionStatus status = await Permission.locationWhenInUse.status;
-
-    // 권한이 없는 모든 경우(거부, 영구 거부 등) 처리
-    if (!status.isGranted) {
-      // 처음 거부 상태면 권한 요청
-      if (status.isDenied) {
-        status = await Permission.locationWhenInUse.request();
-      }
-
-      // 요청 후에도 권한이 없으면
-      if (!status.isGranted) {
-        if (context.mounted) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return CustomDialog(
-                hasCancelButton: false,
-                title: '위치 권한 필요',
-                message: status.isPermanentlyDenied
-                    ? '산책 기록을 위해 설정에서 위치 권한을 허용해주세요.'
-                    : '산책 기록을 위해 위치 권한이 필요합니다.',
-                onConfirm: () {
-                  if (status.isPermanentlyDenied) {
-                    openAppSettings();
-                  }
-                  Navigator.pop(context);
-                },
-              );
-            },
-          );
-        }
-        return false;
-      }
-    }
-
-    return true;
   }
 
   void _getData() {
@@ -272,7 +208,8 @@ class _SelectPetScreenState extends State<SelectPetScreen>
             List<PetModel> selectedPets =
                 selectedIndices.map((index) => petList[index]).toList();
 
-            final hasPermission = await _checkLocationPermission();
+            final hasPermission =
+                await PermissionUtils.checkLocationPermission(context);
             if (!hasPermission) return;
 
             if (context.mounted) {

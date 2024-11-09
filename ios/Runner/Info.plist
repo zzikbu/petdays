@@ -44,7 +44,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app required NSMicrophoneUsageDescription permission</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app required NSPhotoLibraryUsageDescription permission</string>
+	<string>성장일기, 진료기록 및 프로필 사진 추가 시 사용자가 선택한 사진을 표시하고 공유할 수 있도록 사진 접근 권한이 필요합니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

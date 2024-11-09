@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -21,6 +22,7 @@ import 'package:petdays/screens/mypage/open_diary_home_screen.dart';
 import 'package:petdays/screens/mypage/terms_policy_screen.dart';
 import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:petdays/screens/mypage/update_nickname_screen.dart';
+import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
 class MyPageScreen extends StatefulWidget {
@@ -36,6 +38,9 @@ class _MyPageScreenState extends State<MyPageScreen>
 
   // 사진 선택 함수
   Future<void> selectImage() async {
+    final hasPermission = await PermissionUtils.checkPhotoPermission(context);
+    if (!hasPermission) return;
+
     ImagePicker imagePicker = new ImagePicker();
     // XFile: 기기의 파일시스템에 접근할 수 있는 클래스
     // 사진을 선택하지 안했을 때는 null 반환

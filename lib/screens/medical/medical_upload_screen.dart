@@ -13,6 +13,7 @@ import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/medical/medical_provider.dart';
 import 'package:petdays/providers/medical/medical_state.dart';
+import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
 class MedicalUploadScreen extends StatefulWidget {
@@ -53,6 +54,9 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
   }
 
   Future<List<String>> selectImages() async {
+    final hasPermission = await PermissionUtils.checkPhotoPermission(context);
+    if (!hasPermission) return [];
+
     List<XFile> images = await ImagePicker().pickMultiImage(
       maxHeight: 1024,
       maxWidth: 1024,

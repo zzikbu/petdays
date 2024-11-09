@@ -14,6 +14,7 @@ import 'package:petdays/providers/diary/diary_provider.dart';
 import 'package:petdays/providers/diary/diary_state.dart';
 import 'package:petdays/providers/feed/feed_provider.dart';
 import 'package:petdays/providers/like/like_provider.dart';
+import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
 class DiaryUploadScreen extends StatefulWidget {
@@ -61,6 +62,9 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
   }
 
   Future<List<String>> selectImages() async {
+    final hasPermission = await PermissionUtils.checkPhotoPermission(context);
+    if (!hasPermission) return [];
+
     List<XFile> images = await ImagePicker().pickMultiImage(
       maxHeight: 1024,
       maxWidth: 1024,
@@ -287,7 +291,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                     children: [
                       SizedBox(height: 15),
                       Text(
-                        '사진',
+                        '사진 *',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w600,
@@ -332,14 +336,14 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                       SizedBox(height: 40),
                       TextFieldWithTitle(
                         controller: _titleTEC,
-                        labelText: '제목',
+                        labelText: '제목 *',
                         hintText: '제목을 입력해주세요',
                       ),
                       SizedBox(height: 40),
                       TextFieldWithTitle(
                         controller: _descTEC,
                         isMultiLine: true,
-                        labelText: '내용',
+                        labelText: '내용 *',
                         hintText: '내용을 입력해주세요',
                       ),
                       SizedBox(height: 15),
