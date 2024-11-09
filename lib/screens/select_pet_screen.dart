@@ -207,16 +207,28 @@ class _SelectPetScreenState extends State<SelectPetScreen>
       bottomNavigationBar: NextButton(
         isActive: _isActive,
         onTap: () {
-          PetModel selectedPet = petList[selectedIndices[0]];
+          if (widget.isMedical) {
+            // 진료기록일 경우 단일 펫 전달
+            PetModel selectedPet = petList[selectedIndices[0]];
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    MedicalUploadScreen(selectedPet: selectedPet),
+              ),
+            );
+          } else {
+            // 산책일 경우 선택된 모든 펫 전달
+            List<PetModel> selectedPets =
+                selectedIndices.map((index) => petList[index]).toList();
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => widget.isMedical
-                  ? MedicalUploadScreen(selectedPet: selectedPet)
-                  : WalkMapScreen(),
-            ),
-          );
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WalkMapScreen(selectedPets: selectedPets),
+              ),
+            );
+          }
         },
         buttonText: widget.isMedical ? "다음" : "시작하기",
       ),

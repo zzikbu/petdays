@@ -11,12 +11,33 @@ class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {
   // WalkProvider 만들어질 때 WalkState 같이 만들기
   WalkProvider() : super(WalkState.init());
 
+  // 산책 가져오기
+  Future<void> getWalkList({
+    required String uid,
+  }) async {
+    try {
+      state = state.copyWith(walkStatus: WalkStatus.fetching); // 상태 변경
+
+      List<WalkModel> medicalList =
+          await read<WalkRepository>().getWalkList(uid: uid);
+
+      state = state.copyWith(
+        walkList: medicalList,
+        walkStatus: WalkStatus.success, // 상태 변경
+      );
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(walkStatus: WalkStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
+
   // 산책 업로드
   Future<void> uploadWalk({
     required Uint8List mapImage,
     required String distance,
     required String duration,
-    required String petId,
+    required List<String> petIds,
   }) async {
     try {
       state = state.copyWith(
@@ -29,7 +50,7 @@ class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {
         mapImage: mapImage,
         distance: distance,
         duration: duration,
-        petId: petId,
+        petIds: petIds,
       );
 
       state = state.copyWith(

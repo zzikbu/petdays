@@ -2,17 +2,23 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
+import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/walk/walk_provider.dart';
+import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:provider/provider.dart';
 
 class WalkMapScreen extends StatefulWidget {
-  WalkMapScreen({super.key});
+  final List<PetModel> selectedPets;
+
+  const WalkMapScreen({
+    super.key,
+    required this.selectedPets,
+  });
 
   @override
   State<WalkMapScreen> createState() => _WalkMapScreenState();
@@ -36,7 +42,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
       37.5214,
       126.9246,
     ),
-    zoom: 20,
+    zoom: 16,
   );
 
   // 타이머 시작 함수
@@ -152,7 +158,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
   }
 
   Future<Uint8List?> _captureAndSaveMap() async {
-    // if (_routeCoordinates.isEmpty) return;
+    if (_routeCoordinates.isEmpty) return null;
 
     // 모든 경로 포인트를 포함하는 bounds 계산
     double minLat = _routeCoordinates.first.latitude;
@@ -183,25 +189,76 @@ class _WalkMapScreenState extends State<WalkMapScreen>
 
     // 지도 캡처
     final Uint8List? imageBytes = await _mapController?.takeSnapshot();
+    return imageBytes;
+  }
 
-    if (imageBytes != null) {
-      return imageBytes;
-    }
+  Future<bool> _showExitDialog() async {
+    final double distance = _calculateTotalDistance();
+    final int minutes = _stopwatch.elapsed.inMinutes;
 
-    return null;
+    final bool? result = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialog(
+          title: '산책 종료',
+          message: minutes < 5
+              ? '총 ${(distance / 1000).toStringAsFixed(2)}km\n5분 미만 산책은 저장되지 않습니다.\n종료하시겠습니까?'
+              : '총 ${(distance / 1000).toStringAsFixed(2)}km\n산책을 종료하시겠습니까?',
+          onConfirm: () async {
+            if (minutes >= 0) {
+              try {
+                _positionStreamSubscription.pause();
+                final Uint8List? imageBytes = await _captureAndSaveMap();
+
+                if (imageBytes != null) {
+                  List<String> petIds =
+                      widget.selectedPets.map((pet) => pet.petId).toList();
+
+                  await context.read<WalkProvider>().uploadWalk(
+                        mapImage: imageBytes,
+                        distance: distance.toString(),
+                        duration: _elapsedTime,
+                        petIds: petIds,
+                      );
+
+                  if (context.mounted) {
+                    Navigator.pop(context, true); // 다이얼로그 닫기
+                    Navigator.pop(context); // 지도 화면 닫기
+                    Navigator.pop(context); // SelectPetScreen 닫기
+                  }
+                }
+              } on CustomException catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.message)),
+                  );
+                  Navigator.pop(context, false);
+                }
+              }
+            } else {
+              Navigator.pop(context, true);
+              Navigator.pop(context);
+              Navigator.pop(context);
+            }
+          },
+        );
+      },
+    );
+
+    return result ?? false;
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this); // 앱 상태 관찰자 등록
+    WidgetsBinding.instance.addObserver(this);
     _startLocationUpdates();
-    _startTimer(); // 타이머 시작
+    _startTimer();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // 관찰자 제거
+    WidgetsBinding.instance.removeObserver(this);
     _stopwatch.stop();
     _timer.cancel();
     _positionStreamSubscription.cancel();
@@ -211,13 +268,10 @@ class _WalkMapScreenState extends State<WalkMapScreen>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // 앱이 백그라운드로 갈 때도 타이머 유지
     switch (state) {
       case AppLifecycleState.paused:
-        // 앱이 백그라운드로 갈 때
         break;
       case AppLifecycleState.resumed:
-        // 앱이 포그라운드로 돌아올 때
         break;
       default:
         break;
@@ -226,149 +280,100 @@ class _WalkMapScreenState extends State<WalkMapScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      extendBodyBehindAppBar: true,
-      body: FutureBuilder(
-        future: _checkPermission(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          }
-          return Stack(
-            children: [
-              GoogleMap(
-                initialCameraPosition: initialPosition,
-                mapType: MapType.normal,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: false,
-                rotateGesturesEnabled: false,
-                tiltGesturesEnabled: false,
-                zoomControlsEnabled: false,
-                padding: const EdgeInsets.only(left: 10, bottom: 20),
-                polylines: _polylines,
-                onMapCreated: (GoogleMapController controller) async {
-                  _mapController = controller;
+    final walkStatus = context.watch<WalkState>().walkStatus;
 
-                  final location = await Geolocator.getCurrentPosition();
-                  final initialLatLng = LatLng(
-                    location.latitude,
-                    location.longitude,
-                  );
+    return WillPopScope(
+      onWillPop: _showExitDialog,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: _showExitDialog,
+          ),
+        ),
+        extendBodyBehindAppBar: true,
+        body: FutureBuilder(
+          future: _checkPermission(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            }
+            return Stack(
+              children: [
+                GoogleMap(
+                  initialCameraPosition: initialPosition,
+                  mapType: MapType.normal,
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: false,
+                  rotateGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                  zoomControlsEnabled: false,
+                  padding: const EdgeInsets.only(left: 10, bottom: 20),
+                  polylines: _polylines,
+                  onMapCreated: (GoogleMapController controller) async {
+                    _mapController = controller;
 
-                  // 초기 위치를 경로에 추가
-                  setState(() {
-                    _routeCoordinates.add(initialLatLng);
-                  });
+                    final location = await Geolocator.getCurrentPosition();
+                    final initialLatLng = LatLng(
+                      location.latitude,
+                      location.longitude,
+                    );
 
-                  controller.animateCamera(
-                    CameraUpdate.newLatLng(initialLatLng),
-                  );
-                },
-              ),
+                    setState(() {
+                      _routeCoordinates.add(initialLatLng);
+                    });
 
-              // 타이머
-              Positioned(
-                left: 24,
-                right: 24,
-                bottom: 100,
-                child: Container(
-                  height: 76,
-                  decoration: BoxDecoration(
-                    color: Palette.mainGreen,
-                    borderRadius: BorderRadius.circular(32),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            _elapsedTime,
-                            style: TextStyle(
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 28,
-                              color: Palette.white,
-                              letterSpacing: -0.7,
+                    controller.animateCamera(
+                      CameraUpdate.newLatLng(initialLatLng),
+                    );
+                  },
+                ),
+                Positioned(
+                  left: 24,
+                  right: 24,
+                  bottom: 100,
+                  child: Container(
+                    height: 76,
+                    decoration: BoxDecoration(
+                      color: Palette.mainGreen,
+                      borderRadius: BorderRadius.circular(32),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              _elapsedTime,
+                              style: TextStyle(
+                                fontFamily: 'Pretendard',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 28,
+                                color: Palette.white,
+                                letterSpacing: -0.7,
+                              ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            final double distance = _calculateTotalDistance();
-                            final int minutes = _stopwatch.elapsed.inMinutes;
-
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return CustomDialog(
-                                  title: '산책 종료',
-                                  message: minutes < 5
-                                      ? '총 ${(distance / 1000).toStringAsFixed(2)}km\n5분 미만 산책은 저장되지 않습니다.\n종료하시겠습니까?'
-                                      : '총 ${(distance / 1000).toStringAsFixed(2)}km\n산책을 종료하시겠습니까?',
-                                  onConfirm: () async {
-                                    if (minutes >= 0) {
-                                      // 5분 이상일 때만 저장
-                                      try {
-                                        // 위치 업데이트 일시 중지
-                                        _positionStreamSubscription.pause();
-
-                                        // 지도 캡처
-                                        final Uint8List? imageBytes =
-                                            await _captureAndSaveMap();
-
-                                        if (imageBytes != null) {
-                                          // Provider를 통해 데이터 업로드
-                                          await context
-                                              .read<WalkProvider>()
-                                              .uploadWalk(
-                                                mapImage: imageBytes,
-                                                distance: distance
-                                                    .toString(), // 미터 단위로 저장
-                                                duration:
-                                                    _elapsedTime, // HH:MM:SS 형식
-                                                petId:
-                                                    '1a5d8c40-9616-11ef-a41d-6fb9902ca267',
-                                              );
-
-                                          // 성공시 화면 닫기
-                                          Navigator.pop(context); // 다이얼로그 닫기
-                                          Navigator.pop(context); // 지도 화면 닫기
-                                        }
-                                      } on CustomException catch (e) {
-                                        // 에러 처리
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(content: Text(e.message)),
-                                        );
-                                      }
-                                    } else {
-                                      Navigator.pop(context); // 5분 미만일 경우 그냥 닫기
-                                    }
-                                  },
-                                );
-                              },
-                            );
-                          },
-                          icon: Icon(Icons.square),
-                          color: Palette.white,
-                          iconSize: 46,
-                          highlightColor: Colors.transparent,
-                        ),
-                      ],
+                          IconButton(
+                            padding: EdgeInsets.zero,
+                            onPressed: _showExitDialog,
+                            icon: Icon(Icons.square),
+                            color: Palette.white,
+                            iconSize: 46,
+                            highlightColor: Colors.transparent,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        },
+              ],
+            );
+          },
+        ),
       ),
     );
   }

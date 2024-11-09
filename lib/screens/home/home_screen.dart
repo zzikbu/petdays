@@ -25,7 +25,7 @@ import 'package:petdays/screens/medical/medical_home_screen.dart';
 import 'package:petdays/screens/pet/pet_detail_screen.dart';
 import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:petdays/screens/walk/walk_detail_screen.dart';
-import 'package:petdays/screens/walk/walk_map_screen.dart';
+import 'package:petdays/screens/walk/walk_home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -335,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => WalkMapScreen()),
+                            builder: (context) => WalkHomeScreen()),
                       );
                     },
                   ),
@@ -376,12 +376,12 @@ class _HomeScreenState extends State<HomeScreen>
                             (index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WalkDetailScreen(),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => WalkDetailScreen(),
+                                  //   ),
+                                  // );
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: 12),

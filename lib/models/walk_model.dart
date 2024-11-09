@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/models/user_model.dart';
 
 class WalkModel {
   final String uid;
@@ -7,8 +8,9 @@ class WalkModel {
   final String distance;
   final String duration;
   final String mapImageUrl;
-  final PetModel pet;
+  final List<PetModel> pets;
   final Timestamp createAt;
+  final UserModel writer;
 
   const WalkModel({
     required this.uid,
@@ -16,21 +18,24 @@ class WalkModel {
     required this.distance,
     required this.duration,
     required this.mapImageUrl,
-    required this.pet,
+    required this.pets,
     required this.createAt,
+    required this.writer,
   });
 
   Map<String, dynamic> toMap({
-    required DocumentReference<Map<String, dynamic>> petDocRef,
+    required List<DocumentReference<Map<String, dynamic>>> petDocRefs,
+    required DocumentReference<Map<String, dynamic>> userDocRef,
   }) {
     return {
-      'uid': this.uid,
-      'walkId': this.walkId,
-      'distance': this.distance,
-      'duration': this.duration,
-      'mapImageUrl': this.mapImageUrl,
-      'pets': petDocRef,
-      'createAt': this.createAt,
+      'uid': uid,
+      'walkId': walkId,
+      'distance': distance,
+      'duration': duration,
+      'mapImageUrl': mapImageUrl,
+      'pets': petDocRefs,
+      'createAt': createAt,
+      'writer': userDocRef,
     };
   }
 
@@ -41,13 +46,14 @@ class WalkModel {
       distance: map['distance'],
       duration: map['duration'],
       mapImageUrl: map['mapImageUrl'],
-      pet: map['pet'],
+      pets: map['pets'], // PetModel이 이미 변환된 상태로 전달됨
       createAt: map['createAt'],
+      writer: map['writer'], // UserModel이 이미 변환된 상태로 전달됨
     );
   }
 
   @override
   String toString() {
-    return 'WorkModel{uid: $uid, walkId: $walkId, distance: $distance, duration: $duration, mapImageUrl: $mapImageUrl, pets: $pet, createAt: $createAt}';
+    return 'WalkModel{uid: $uid, walkId: $walkId, distance: $distance, duration: $duration, mapImageUrl: $mapImageUrl, pets: $pets, createAt: $createAt, writer: $writer}';
   }
 }

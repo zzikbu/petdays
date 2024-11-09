@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
+import 'package:petdays/models/user_model.dart';
 import 'package:petdays/models/walk_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,13 +17,61 @@ class WalkRepository {
     required this.firebaseFirestore,
   });
 
+  // 산책 기록 가져오기
+  Future<List<WalkModel>> getWalkList({
+    required String uid,
+  }) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
+          .collection('walks')
+          .where('uid', isEqualTo: uid)
+          .orderBy('createAt', descending: true)
+          .get();
+
+      return await Future.wait(snapshot.docs.map(
+        (doc) async {
+          Map<String, dynamic> data = doc.data();
+
+          // pets 필드 처리
+          List<PetModel> pets = await Future.wait(
+            (data['pets'] as List<dynamic>).map((petRef) async {
+              DocumentSnapshot petSnapshot =
+                  await (petRef as DocumentReference).get();
+              return PetModel.fromMap(
+                  petSnapshot.data() as Map<String, dynamic>);
+            }),
+          );
+          data['pets'] = pets;
+
+          // writer 필드 처리
+          DocumentReference writerDocRef = data['writer'];
+          DocumentSnapshot writerSnapshot = await writerDocRef.get();
+          data['writer'] =
+              UserModel.fromMap(writerSnapshot.data() as Map<String, dynamic>);
+
+          return WalkModel.fromMap(data);
+        },
+      ).toList());
+    } on FirebaseException catch (e) {
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 산책 업로드
   Future<WalkModel> uploadWalk({
     required String uid,
     required Uint8List mapImage,
     required String distance,
     required String duration,
-    required String petId,
+    required List<String> petIds,
   }) async {
     late String mapImageUrl;
 
@@ -37,57 +86,65 @@ class WalkRepository {
       DocumentReference<Map<String, dynamic>> walkDocRef =
           firebaseFirestore.collection("walks").doc(walkId);
 
-      DocumentReference<Map<String, dynamic>> petDocRef =
-          firebaseFirestore.collection("pets").doc(petId);
-
-      // firestorage에 이미지 업로드
+      // Firestore Storage에 지도 이미지 업로드
       Reference ref = firebaseStorage.ref().child("walks").child(walkId);
       TaskSnapshot taskSnapshot = await ref.putData(mapImage);
       mapImageUrl = await taskSnapshot.ref.getDownloadURL();
 
+      // 유저 모델 생성
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await userDocRef.get();
+      UserModel userModel = UserModel.fromMap(userSnapshot.data()!);
+
       // 펫 모델 생성
-      DocumentSnapshot<Map<String, dynamic>> petSnapshot =
-          await petDocRef.get();
-      PetModel petModel = PetModel.fromMap(petSnapshot.data()!);
+      List<DocumentReference<Map<String, dynamic>>> petDocRefs = [];
+      List<PetModel> petModels = [];
 
-      WalkModel walkModel = WalkModel.fromMap({
-        'uid': uid,
-        'walkId': walkId,
-        'distance': distance,
-        'duration': duration,
-        'mapImageUrl': mapImageUrl,
-        'pet': petModel,
-        'createAt': Timestamp.now()
-      });
+      for (String petId in petIds) {
+        DocumentReference<Map<String, dynamic>> petDocRef =
+            firebaseFirestore.collection("pets").doc(petId);
+        petDocRefs.add(petDocRef);
 
-      // walks 컬렉션에 데이터 추가
+        DocumentSnapshot<Map<String, dynamic>> petSnapshot =
+            await petDocRef.get();
+        petModels.add(PetModel.fromMap(petSnapshot.data()!));
+      }
+
+      WalkModel walkModel = WalkModel(
+        uid: uid,
+        walkId: walkId,
+        distance: distance,
+        duration: duration,
+        mapImageUrl: mapImageUrl,
+        pets: petModels,
+        writer: userModel,
+        createAt: Timestamp.now(),
+      );
+
+      // Firestore에 산책 데이터 추가
       batch.set(
         walkDocRef,
         walkModel.toMap(
-          petDocRef: petDocRef,
+          petDocRefs: petDocRefs,
+          userDocRef: userDocRef,
         ),
       );
 
-      // 유저의 산책 카운트 증가
+      // 사용자의 산책 횟수 증가
       batch.update(userDocRef, {
         "walkCount": FieldValue.increment(1),
       });
 
-      // 배치 작업 실행
       await batch.commit();
       return walkModel;
     } on FirebaseException catch (e) {
-      // 에러 발생시 store에 등록된 이미지 삭제
       await _deleteImage(mapImageUrl);
-
       throw CustomException(
         code: e.code,
         message: e.message!,
       );
     } catch (e) {
-      // 에러 발생시 store에 등록된 이미지 삭제
       await _deleteImage(mapImageUrl);
-
       throw CustomException(
         code: "Exception",
         message: e.toString(),

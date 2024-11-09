@@ -1,15 +1,68 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/info_column.dart';
+import 'package:petdays/models/walk_model.dart';
 import 'package:petdays/palette.dart';
+import 'package:petdays/providers/walk/walk_state.dart';
+import 'package:provider/provider.dart';
 
-class WalkDetailScreen extends StatelessWidget {
-  const WalkDetailScreen({super.key});
+class WalkDetailScreen extends StatefulWidget {
+  final int index;
+
+  const WalkDetailScreen({
+    super.key,
+    required this.index,
+  });
+
+  @override
+  State<WalkDetailScreen> createState() => _WalkDetailScreenState();
+}
+
+class _WalkDetailScreenState extends State<WalkDetailScreen> {
+  String _formatDate(DateTime date) {
+    return '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')} ${_getDayOfWeek(date.weekday)} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}:${date.second.toString().padLeft(2, '0')}';
+  }
+
+  String _getDayOfWeek(int weekday) {
+    switch (weekday) {
+      case 1:
+        return '월요일';
+      case 2:
+        return '화요일';
+      case 3:
+        return '수요일';
+      case 4:
+        return '목요일';
+      case 5:
+        return '금요일';
+      case 6:
+        return '토요일';
+      case 7:
+        return '일요일';
+      default:
+        return '';
+    }
+  }
+
+  void _deleteWalk() async {
+    try {
+      // await _walkProvider.deleteWalk(context.read<WalkState>().walkList[widget.index].walkId);
+      if (context.mounted) {
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('산책 기록 삭제 실패: $e'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    WalkModel walkModel = context.read<WalkState>().walkList[widget.index];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.background,
@@ -23,21 +76,19 @@ class WalkDetailScreen extends StatelessWidget {
                   builder: (BuildContext context) {
                     return CustomDialog(
                       title: '산책 기록 삭제',
-                      message: '산책 기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                      onConfirm: () {
-                        print('삭제됨');
-                      },
+                      message: '산책 기록을 삭제하면 복구할 수 없습니다.\n삭제하시겠습니까?',
+                      onConfirm: _deleteWalk,
                     );
                   },
                 );
               },
-              child: SvgPicture.asset('assets/icons/ic_delete.svg'),
+              child: Icon(Icons.delete, color: Palette.black),
             ),
           ),
         ],
       ),
       backgroundColor: Palette.background,
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,28 +98,29 @@ class WalkDetailScreen extends StatelessWidget {
             ),
             InfoColumn(
               title: '함께한 반려동물',
-              content: '망고, 보리',
+              content: walkModel.pets.map((pet) => pet.name).join(', '),
             ),
             SizedBox(
               height: 20,
             ),
             InfoColumn(
               title: '날짜',
-              content: '2024.08.14 수요일',
+              content: _formatDate(walkModel.createAt.toDate()),
             ),
             SizedBox(
               height: 20,
             ),
             InfoColumn(
               title: '시간',
-              content: '14:08 ~ 16:02 (114분)',
+              content: _formatDuration(walkModel.duration),
             ),
             SizedBox(
               height: 20,
             ),
             InfoColumn(
               title: '거리',
-              content: '10.2KM',
+              content:
+                  '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',
             ),
             SizedBox(
               height: 20,
@@ -79,10 +131,22 @@ class WalkDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
               height: 200,
+              child: Image.network(
+                walkModel.mapImageUrl,
+                fit: BoxFit.cover,
+              ),
             )
           ],
         ),
       ),
     );
+  }
+
+  String _formatDuration(String duration) {
+    final parts = duration.split(':');
+    final hours = int.parse(parts[0]);
+    final minutes = int.parse(parts[1]);
+    final seconds = int.parse(parts[2]);
+    return '${hours}시간 ${minutes}분 ${seconds}초';
   }
 }
