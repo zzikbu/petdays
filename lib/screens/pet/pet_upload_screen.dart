@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/components/textfield_with_title.dart';
@@ -11,6 +13,7 @@ import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/pet/pet_provider.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
+import 'package:petdays/screens/sign_in/reset_password_screen.dart';
 import 'package:provider/provider.dart';
 
 class PetUploadScreen extends StatefulWidget {
@@ -236,20 +239,130 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       SizedBox(height: 40),
 
                       // 생년월일
-                      TextFieldWithTitle(
-                        labelText: '생년월일',
-                        hintText: '2000-08-07 형식으로 입력해주세요',
-                        keyboardType: TextInputType.datetime,
-                        controller: _birthdayTEC,
+                      GestureDetector(
+                        onTap: () {
+                          DateTime selectedDate = DateTime.now();
+
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 260,
+                                color: Color(0xFFCED1D8),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Color(0xFFF7F7F7),
+                                      height: 40,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.only(right: 16),
+                                          child: Text(
+                                            '완료',
+                                            style: TextStyle(
+                                              color: CupertinoColors.systemBlue,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _birthdayTEC.text =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(selectedDate);
+                                              _checkBottomActive();
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.date,
+                                        initialDateTime: DateTime.now(),
+                                        maximumDate: DateTime.now(),
+                                        minimumYear: 1900,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          selectedDate = newDate;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: TextFieldWithTitle(
+                          labelText: '생년월일',
+                          hintText: '생년월일을 선택해주세요',
+                          controller: _birthdayTEC,
+                          enabled: false,
+                        ),
                       ),
                       SizedBox(height: 40),
 
                       // 만난 날
-                      TextFieldWithTitle(
-                        labelText: '만난 날',
-                        hintText: '2000-08-07 형식으로 입력해주세요',
-                        keyboardType: TextInputType.datetime,
-                        controller: _firstMeetingDateTEC,
+                      GestureDetector(
+                        onTap: () {
+                          DateTime selectedDate = DateTime.now();
+
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 260,
+                                color: Color(0xFFCED1D8),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Color(0xFFF7F7F7),
+                                      height: 40,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.only(right: 16),
+                                          child: Text(
+                                            '완료',
+                                            style: TextStyle(
+                                              color: CupertinoColors.systemBlue,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _firstMeetingDateTEC.text =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(selectedDate);
+                                              _checkBottomActive();
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.date,
+                                        initialDateTime: DateTime.now(),
+                                        maximumDate: DateTime.now(),
+                                        minimumYear: 1900,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          selectedDate = newDate;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: TextFieldWithTitle(
+                          labelText: '만난 날',
+                          hintText: '만난 날을 선택해주세요',
+                          controller: _firstMeetingDateTEC,
+                          enabled: false,
+                        ),
                       ),
                       SizedBox(height: 40),
 

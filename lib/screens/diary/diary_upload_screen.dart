@@ -238,7 +238,8 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                         builder: (BuildContext context) {
                           return CustomDialog(
                             title: '성장일기 공개',
-                            message: '성장일기를 공개하면 피드에 게시됩니다.\n변경하시겠습니까?',
+                            message:
+                                '성장일기를 공개하면 피드에 게시되고,\n업로드 후 이를 변경할 수 없습니다.',
                             onConfirm: () {
                               _lockTap();
                             },
@@ -251,7 +252,8 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                         builder: (BuildContext context) {
                           return CustomDialog(
                             title: '성장일기 비공개',
-                            message: '성장일기를 비공개하면 피드에서 삭제됩니다.\n변경하시겠습니까?',
+                            message:
+                                '성장일기를 비공개하면 작성자만 볼 수 있고,\n업로드 후 이를 변경할 수 없습니다.',
                             onConfirm: () {
                               _lockTap();
                             },

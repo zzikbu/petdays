@@ -9,6 +9,7 @@ class TextFieldWithTitle extends StatefulWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final bool isMultiLine;
+  final bool? enabled;
 
   const TextFieldWithTitle({
     super.key,
@@ -18,6 +19,7 @@ class TextFieldWithTitle extends StatefulWidget {
     this.keyboardType = TextInputType.text, // 기본값 설정
     this.controller,
     this.isMultiLine = false, // 기본값 false
+    this.enabled = true,
   });
 
   @override
@@ -46,6 +48,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
           enableSuggestions: false,
           maxLength: widget.maxLength,
           maxLines: widget.isMultiLine ? null : 1, // null이면 여러 줄 허용
+          enabled: widget.enabled,
           keyboardType: widget.isMultiLine
               ? TextInputType.multiline
               : widget.keyboardType, // multiline일 경우
@@ -55,6 +58,7 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
             fontWeight: FontWeight.w400,
             fontSize: 16,
             letterSpacing: -0.4,
+            color: Palette.black,
           ),
           decoration: InputDecoration(
             hintText: widget.hintText,
@@ -65,10 +69,15 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               letterSpacing: -0.4,
               color: Palette.lightGray,
             ),
+            // filled: true,
+            // fillColor: Colors.transparent,
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),
             enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Palette.black, width: 2),
+            ),
+            disabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),
           ),

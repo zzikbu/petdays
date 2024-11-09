@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/components/textfield_with_title.dart';
@@ -293,10 +295,66 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                       SizedBox(height: 40),
 
                       // 진료일 (필수)
-                      TextFieldWithTitle(
-                        controller: _visitDateTEC,
-                        labelText: '진료일 *',
-                        hintText: '2000-08-07 형식으로 입력해주세요',
+                      GestureDetector(
+                        onTap: () {
+                          DateTime selectedDate = DateTime.now();
+
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 260,
+                                color: Color(0xFFCED1D8),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      color: Color(0xFFF7F7F7),
+                                      height: 40,
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: CupertinoButton(
+                                          padding: EdgeInsets.only(right: 16),
+                                          child: Text(
+                                            '완료',
+                                            style: TextStyle(
+                                              color: CupertinoColors.systemBlue,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              _visitDateTEC.text =
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(selectedDate);
+                                              _checkBottomActive();
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: CupertinoDatePicker(
+                                        mode: CupertinoDatePickerMode.date,
+                                        initialDateTime: DateTime.now(),
+                                        maximumDate: DateTime.now(),
+                                        minimumYear: 1900,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          selectedDate = newDate;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: TextFieldWithTitle(
+                          labelText: '진료일 *',
+                          hintText: '진료일을 선택해주세요',
+                          controller: _visitDateTEC,
+                          enabled: false,
+                        ),
                       ),
                       SizedBox(height: 40),
 
