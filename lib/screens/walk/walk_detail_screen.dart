@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/components/info_column.dart';
+import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
 import 'package:petdays/palette.dart';
+import 'package:petdays/providers/walk/walk_provider.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:provider/provider.dart';
 
@@ -68,23 +72,31 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
         backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return CustomDialog(
-                      title: '산책 기록 삭제',
-                      message: '산책 기록을 삭제하면 복구할 수 없습니다.\n삭제하시겠습니까?',
-                      onConfirm: _deleteWalk,
-                    );
-                  },
-                );
-              },
-              child: Icon(Icons.delete, color: Palette.black),
-            ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomDialog(
+                    title: '산책기록 삭제',
+                    message: '산책기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                    onConfirm: () async {
+                      try {
+                        await context
+                            .read<WalkProvider>()
+                            .deleteWalk(walkModel: walkModel);
+
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } on CustomException catch (e) {
+                        errorDialogWidget(context, e);
+                      }
+                    },
+                  );
+                },
+              );
+            },
+            icon: Icon(CupertinoIcons.delete),
           ),
         ],
       ),

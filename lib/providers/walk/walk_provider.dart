@@ -11,6 +11,30 @@ class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {
   // WalkProvider 만들어질 때 WalkState 같이 만들기
   WalkProvider() : super(WalkState.init());
 
+  // 산책 삭제
+  Future<void> deleteWalk({
+    required WalkModel walkModel,
+  }) async {
+    state = state.copyWith(walkStatus: WalkStatus.submitting);
+
+    try {
+      await read<WalkRepository>().deleteWalk(walkModel: walkModel);
+
+      List<WalkModel> newWalkList = state.walkList
+          .where((element) => element.walkId != walkModel.walkId)
+          .toList(); // 삭제하지 않은 모델만 뽑아 새로운 리스트 생성
+
+      state = state.copyWith(
+        walkStatus: WalkStatus.success,
+        walkList: newWalkList,
+      );
+    } on CustomException catch (_) {
+      state =
+          state.copyWith(walkStatus: WalkStatus.error); // 문제가 생기면 error로 상태 변경
+      rethrow; // 호출한 곳에다가 다시 rethrow
+    }
+  }
+
   // 산책 가져오기
   Future<void> getWalkList({
     required String uid,

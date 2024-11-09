@@ -17,6 +17,45 @@ class WalkRepository {
     required this.firebaseFirestore,
   });
 
+  // 산책 삭제
+  Future<void> deleteWalk({
+    required WalkModel walkModel,
+  }) async {
+    try {
+      WriteBatch batch = firebaseFirestore.batch();
+
+      DocumentReference<Map<String, dynamic>> walksDocRef =
+          firebaseFirestore.collection('walks').doc(walkModel.walkId);
+      DocumentReference<Map<String, dynamic>> writerDocRef =
+          firebaseFirestore.collection('users').doc(walkModel.uid);
+
+      // diaries 컬렉션에서 문서 삭제
+      batch.delete(walksDocRef);
+
+      // 작성자의 users 문서에서 walkCount 1 감소
+      batch.update(writerDocRef, {
+        'walkCount': FieldValue.increment(-1),
+      });
+
+      batch.commit();
+
+      // storage 이미지 삭제
+      await firebaseStorage.ref('walks/${walkModel.walkId}').delete();
+    } on FirebaseException catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: e.code,
+        message: e.message!,
+      );
+    } catch (e) {
+      // 호출한 곳에서 처리하게 throw
+      throw CustomException(
+        code: "Exception",
+        message: e.toString(),
+      );
+    }
+  }
+
   // 산책 기록 가져오기
   Future<List<WalkModel>> getWalkList({
     required String uid,
