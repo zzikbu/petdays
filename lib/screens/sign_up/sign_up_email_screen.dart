@@ -5,7 +5,7 @@ import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
 import 'package:petdays/screens/sign_in/sign_in_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
+import 'package:string_validator/string_validator.dart';
 
 class SignupEmailScreen extends StatefulWidget {
   const SignupEmailScreen({super.key});

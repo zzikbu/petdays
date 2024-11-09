@@ -5,7 +5,7 @@ import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
+import 'package:string_validator/string_validator.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});

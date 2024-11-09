@@ -64,7 +64,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                     message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                     onConfirm: () async {
                       try {
-                        context
+                        await context
                             .read<PetProvider>()
                             .deletePet(petId: petModel.petId);
 

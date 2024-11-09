@@ -9,7 +9,7 @@ import 'package:petdays/providers/auth/my_auth_provider.dart';
 import 'package:petdays/screens/sign_in/reset_password_screen.dart';
 import 'package:petdays/screens/sign_up/sign_up_email_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:validators/validators.dart';
+import 'package:string_validator/string_validator.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

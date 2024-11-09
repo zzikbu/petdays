@@ -23,8 +23,9 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
 
   # 유효성
-  validators: ^3.0.0
   uuid: ^4.5.1
+  string_validator: ^1.1.0
+
 
   # 이미지
   flutter_svg: ^2.0.10+1

@@ -103,6 +103,19 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // 펫 리스트의 길이가 인디케이터 인덱스보다 작으면 인디케이터 리셋
+    final petList = context.watch<PetState>().petList;
+    if (petList.length <= _indicatorIndex) {
+      setState(() {
+        _indicatorIndex = petList.isEmpty ? 0 : petList.length - 1;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
 
@@ -115,13 +128,13 @@ class _HomeScreenState extends State<HomeScreen>
     MedicalState medicalState = context.watch<MedicalState>();
     List<MedicalModel> medicalList = medicalState.medicalList;
 
-    if (petState.petStatus == PetStatus.fetching ||
-        diaryState.diaryStatus == DiaryStatus.fetching ||
-        medicalState.medicalStatus == MedicalStatus.fetching) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    // if (petState.petStatus == PetStatus.fetching ||
+    //     diaryState.diaryStatus == DiaryStatus.fetching ||
+    //     medicalState.medicalStatus == MedicalStatus.fetching) {
+    //   return Center(
+    //     child: CircularProgressIndicator(),
+    //   );
+    // }
 
     return Scaffold(
       backgroundColor: Palette.background,
