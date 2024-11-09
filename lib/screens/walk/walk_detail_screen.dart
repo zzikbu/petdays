@@ -66,6 +66,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.background,
+        scrolledUnderElevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -93,49 +94,40 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             InfoColumn(
               title: '함께한 반려동물',
               content: walkModel.pets.map((pet) => pet.name).join(', '),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             InfoColumn(
               title: '날짜',
               content: _formatDate(walkModel.createAt.toDate()),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             InfoColumn(
               title: '시간',
               content: _formatDuration(walkModel.duration),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             InfoColumn(
               title: '거리',
               content:
                   '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
-                color: Palette.lightGray,
                 borderRadius: BorderRadius.circular(8),
               ),
-              height: 200,
+              height: 400,
+              width: double.infinity,
               child: Image.network(
                 walkModel.mapImageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.fitHeight,
               ),
-            )
+            ),
+            SizedBox(height: 60),
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -27,13 +29,9 @@ class SelectPetScreen extends StatefulWidget {
 class _SelectPetScreenState extends State<SelectPetScreen>
     with AutomaticKeepAliveClientMixin<SelectPetScreen> {
   late final PetProvider petProvider;
+  List<int> selectedIndices = [];
+  bool _isActive = false;
 
-  List<int> selectedIndices = []; // 선택된 애완동물 인덱스 저장
-
-  bool _isActive = false; // 작성하기 버튼 활성화 여부
-
-  // 다른 화면에서 돌아올 때
-  // 데이터를 매번 가져오지 않도록
   @override
   bool get wantKeepAlive => true;
 
@@ -46,25 +44,86 @@ class _SelectPetScreenState extends State<SelectPetScreen>
   void _toggleSelection(int index) {
     setState(() {
       if (widget.isMedical) {
-        // 중복 선택이 불가능할 경우
-        selectedIndices = [index]; // 선택한 인덱스만 저장
+        selectedIndices = [index];
       } else {
-        // 중복 선택이 가능할 경우
         if (selectedIndices.contains(index)) {
-          selectedIndices.remove(index); // 이미 선택된 경우 선택 해제
+          selectedIndices.remove(index);
         } else {
-          selectedIndices.add(index); // 선택 추가
+          selectedIndices.add(index);
         }
       }
       _checkBottomActive();
     });
   }
 
-  // 펫 가져오기
+  Future<bool> _checkLocationPermission() async {
+    // 위치 서비스 활성화 확인
+    bool serviceEnabled =
+        await Permission.locationWhenInUse.serviceStatus.isEnabled;
+    if (!serviceEnabled) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return CustomDialog(
+              hasCancelButton: false,
+              title: '위치 서비스 필요',
+              message: '산책 기록을 위해 위치 서비스를 활성화해주세요.',
+              onConfirm: () {
+                openAppSettings();
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
+      }
+      return false;
+    }
+
+    // 위치 권한 상태 체크
+    PermissionStatus status = await Permission.locationWhenInUse.status;
+
+    // 권한이 없는 모든 경우(거부, 영구 거부 등) 처리
+    if (!status.isGranted) {
+      // 처음 거부 상태면 권한 요청
+      if (status.isDenied) {
+        status = await Permission.locationWhenInUse.request();
+      }
+
+      // 요청 후에도 권한이 없으면
+      if (!status.isGranted) {
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return CustomDialog(
+                hasCancelButton: false,
+                title: '위치 권한 필요',
+                message: status.isPermanentlyDenied
+                    ? '산책 기록을 위해 설정에서 위치 권한을 허용해주세요.'
+                    : '산책 기록을 위해 위치 권한이 필요합니다.',
+                onConfirm: () {
+                  if (status.isPermanentlyDenied) {
+                    openAppSettings();
+                  }
+                  Navigator.pop(context);
+                },
+              );
+            },
+          );
+        }
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   void _getData() {
     String uid = context.read<User>().uid;
 
-    // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         await petProvider.getPetList(uid: uid);
@@ -77,7 +136,6 @@ class _SelectPetScreenState extends State<SelectPetScreen>
   @override
   void initState() {
     super.initState();
-
     petProvider = context.read<PetProvider>();
     _getData();
   }
@@ -104,8 +162,6 @@ class _SelectPetScreenState extends State<SelectPetScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
-
-                // 타이틀
                 Text(
                   widget.isMedical ? '누구와 병원에 갔나요?' : '누구와 산책하나요?',
                   style: TextStyle(
@@ -117,8 +173,6 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                   ),
                 ),
                 SizedBox(height: 5),
-
-                // 설명
                 Text(
                   widget.isMedical ? '중복 선택이 불가능합니다.' : '중복 선택이 가능합니다.',
                   style: TextStyle(
@@ -133,8 +187,6 @@ class _SelectPetScreenState extends State<SelectPetScreen>
               ],
             ),
           ),
-
-          // GridView
           Expanded(
             child: Scrollbar(
               child: GridView.builder(
@@ -143,13 +195,13 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                   crossAxisCount: 2,
                   crossAxisSpacing: 14,
                   mainAxisSpacing: 14,
-                  mainAxisExtent: 150, // 높이
+                  mainAxisExtent: 150,
                 ),
                 itemCount: petList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  bool isSelected = selectedIndices.contains(index); // 선택 여부 확인
+                  bool isSelected = selectedIndices.contains(index);
                   return GestureDetector(
-                    onTap: () => _toggleSelection(index), // 선택 토글
+                    onTap: () => _toggleSelection(index),
                     child: Container(
                       height: 30,
                       decoration: BoxDecoration(
@@ -206,9 +258,8 @@ class _SelectPetScreenState extends State<SelectPetScreen>
       ),
       bottomNavigationBar: NextButton(
         isActive: _isActive,
-        onTap: () {
+        onTap: () async {
           if (widget.isMedical) {
-            // 진료기록일 경우 단일 펫 전달
             PetModel selectedPet = petList[selectedIndices[0]];
             Navigator.push(
               context,
@@ -218,16 +269,21 @@ class _SelectPetScreenState extends State<SelectPetScreen>
               ),
             );
           } else {
-            // 산책일 경우 선택된 모든 펫 전달
             List<PetModel> selectedPets =
                 selectedIndices.map((index) => petList[index]).toList();
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WalkMapScreen(selectedPets: selectedPets),
-              ),
-            );
+            final hasPermission = await _checkLocationPermission();
+            if (!hasPermission) return;
+
+            if (context.mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      WalkMapScreen(selectedPets: selectedPets),
+                ),
+              );
+            }
           }
         },
         buttonText: widget.isMedical ? "다음" : "시작하기",

@@ -30,7 +30,8 @@ class MyPageScreen extends StatefulWidget {
   State<MyPageScreen> createState() => _MyPageScreenState();
 }
 
-class _MyPageScreenState extends State<MyPageScreen> {
+class _MyPageScreenState extends State<MyPageScreen>
+    with AutomaticKeepAliveClientMixin<MyPageScreen> {
   late final ProfileProvider profileProvider;
 
   // 사진 선택 함수
@@ -65,8 +66,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
     }
   }
 
+  // 다른 화면에서 돌아올 때
+  // 데이터를 매번 가져오지 않도록
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     UserModel userModel = context.watch<UserState>().userModel;
 
     String? providerImageUrl;

@@ -1,9 +1,11 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/error_dialog_widget.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
 import 'package:petdays/palette.dart';
+import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/providers/walk/walk_provider.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
@@ -267,14 +269,26 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SelectPetScreen(
-                isMedical: false,
+          if (context.read<PetState>().petList.isEmpty) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return CustomDialog(
+                  title: '산책',
+                  message: '반려동물을 추가해주세요.',
+                  hasCancelButton: false,
+                  onConfirm: () => Navigator.pop(context),
+                );
+              },
+            );
+          } else {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SelectPetScreen(isMedical: false),
               ),
-            ),
-          );
+            );
+          }
         },
         backgroundColor: Palette.darkGray,
         elevation: 0, // 그림자 제거
