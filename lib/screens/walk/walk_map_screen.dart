@@ -10,6 +10,7 @@ import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/walk/walk_provider.dart';
+import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:provider/provider.dart';
 
 class WalkMapScreen extends StatefulWidget {
@@ -27,6 +28,7 @@ class WalkMapScreen extends StatefulWidget {
 class _WalkMapScreenState extends State<WalkMapScreen>
     with WidgetsBindingObserver {
   /// Properties
+  bool isSubmitting = false;
   late StreamSubscription<Position> _positionStreamSubscription;
   GoogleMapController? _mapController;
   late Stopwatch _stopwatch;
@@ -142,7 +144,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
     final bounds = _calculateMapBounds();
     await _mapController
         ?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
-    await Future.delayed(const Duration(milliseconds: 2500));
+    await Future.delayed(const Duration(milliseconds: 1500));
     return await _mapController?.takeSnapshot();
   }
 
@@ -189,7 +191,9 @@ class _WalkMapScreenState extends State<WalkMapScreen>
   }
 
   Future<void> _handleExitConfirmation(double distance, int minutes) async {
-    if (minutes >= 5) {
+    if (minutes >= 0) {
+      Navigator.pop(context);
+
       await _saveWalkData(distance);
     }
     if (mounted) {
@@ -250,6 +254,10 @@ class _WalkMapScreenState extends State<WalkMapScreen>
 
   @override
   Widget build(BuildContext context) {
+    WalkState walkState = context.watch<WalkState>();
+
+    bool isSubmitting = walkState.walkStatus == WalkStatus.submitting;
+
     return WillPopScope(
       onWillPop: _showExitDialog,
       child: Scaffold(
@@ -261,7 +269,9 @@ class _WalkMapScreenState extends State<WalkMapScreen>
           ),
         ),
         extendBodyBehindAppBar: true,
-        body: _buildMainContent(),
+        body: isSubmitting
+            ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+            : _buildMainContent(),
       ),
     );
   }
