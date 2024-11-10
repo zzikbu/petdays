@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:petdays/firebase_options.dart';
 import 'package:petdays/providers/auth/auth_state.dart';
@@ -40,9 +40,16 @@ import 'package:provider/provider.dart';
 late final PackageInfo packageInfo;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
+  WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
+
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   packageInfo = await PackageInfo.fromPlatform();
+
+  FlutterNativeSplash.remove();
+
   runApp(const MyApp());
 }
 
