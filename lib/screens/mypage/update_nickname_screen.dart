@@ -137,9 +137,9 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                     newNickname: _nicknameTEC.text,
                   );
 
-              await context
-                  .read<UserProvider>()
-                  .getUserInfo(); // 상태관리하고 있는 userModel 갱신
+              // 상태관리하고 있는 userModel 갱신
+              await context.read<ProfileProvider>().getProfile(uid: uid);
+              await context.read<UserProvider>().getUserInfo();
 
               Navigator.pop(context);
             } on CustomException catch (e) {
