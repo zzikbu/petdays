@@ -599,6 +599,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                         .read<MyAuthProvider>()
                                         .deleteAccount();
                                   } on CustomException catch (e) {
+                                    Navigator.pop(context);
                                     showErrorDialog(context, e);
                                   }
                                 },

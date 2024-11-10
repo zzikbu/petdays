@@ -154,6 +154,7 @@ class _HomeScreenState extends State<HomeScreen>
                 _getData();
               },
               child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
                 primary: true,
                 child: Column(
                   children: [

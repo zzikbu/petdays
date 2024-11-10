@@ -31,16 +31,14 @@ class FeedRepository {
         },
       );
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '차단하기',
+        message: '작성자 차단에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "차단하기",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -54,7 +52,7 @@ class FeedRepository {
     try {
       if (diaryModel.reports.contains(uid)) {
         throw CustomException(
-          title: "Exception",
+          title: "신고하기",
           message: "이미 신고한 성장일기입니다.",
         );
       }
@@ -82,17 +80,17 @@ class FeedRepository {
       UserModel userModel = UserModel.fromMap(userMapData);
       diaryMapData['writer'] = userModel;
       return DiaryModel.fromMap(diaryMapData);
+    } on CustomException {
+      rethrow;
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '신고하기',
+        message: '해당 게시물 신고하기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "신고하기",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -154,16 +152,14 @@ class FeedRepository {
       diaryMapData['writer'] = userModel;
       return DiaryModel.fromMap(diaryMapData);
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '피드',
+        message: '해당 게시물 좋아요에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "피드",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -209,13 +205,13 @@ class FeedRepository {
       ).then((list) => list.whereType<DiaryModel>().toList()); // null 값 제거
     } on FirebaseException catch (e) {
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '피드',
+        message: '피드 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "피드",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }

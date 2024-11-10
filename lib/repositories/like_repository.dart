@@ -10,6 +10,7 @@ class LikeRepository {
     required this.firebaseFirestore,
   });
 
+  /// 좋아요한 성장일기 가져오기
   Future<List<DiaryModel>> getLikeList({
     required String uid,
   }) async {
@@ -53,13 +54,13 @@ class LikeRepository {
       return diaryList;
     } on FirebaseException catch (e) {
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '좋아요한 성장일기',
+        message: '좋아요한 성장일기 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "좋아요한 성장일기",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }

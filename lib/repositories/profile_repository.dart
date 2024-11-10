@@ -37,13 +37,13 @@ class ProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '프로필 이미지',
+        message: '프로필 이미지 변경에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "프로필 이미지",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -74,13 +74,13 @@ class ProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '닉네임',
+        message: '닉네임 변경에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "닉네임",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -95,16 +95,14 @@ class ProfileRepository {
 
       return UserModel.fromMap(snapshot.data()!);
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '사용자 정보',
+        message: '사용자 정보 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "사용자 정보",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }

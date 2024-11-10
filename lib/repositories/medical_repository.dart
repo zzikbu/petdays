@@ -100,18 +100,18 @@ class MedicalRepository {
       await batch.commit();
       return medicalModel;
     } on FirebaseException catch (e) {
-      // 에러 발생시 새로 업로드된 이미지들 삭제
-      _deleteImage(newImageUrls);
+      _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
+
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '진료기록',
+        message: '진료기록 수정에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 에러 발생시 새로 업로드된 이미지들 삭제
-      _deleteImage(newImageUrls);
+      _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
+
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "진료기록",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -143,16 +143,14 @@ class MedicalRepository {
 
       batch.commit();
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '진료기록',
+        message: '진료기록 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "진료기록",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -189,16 +187,14 @@ class MedicalRepository {
         },
       ).toList());
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '진료기록',
+        message: '진료기록 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "진료기록",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -285,22 +281,18 @@ class MedicalRepository {
       batch.commit();
       return medicalModel;
     } on FirebaseException catch (e) {
-      // 에러 발생시 store에 등록된 이미지 삭제
-      _deleteImage(imageUrls);
+      _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '진료기록',
+        message: '진료기록 업로드에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 에러 발생시 store에 등록된 이미지 삭제
-      _deleteImage(imageUrls);
+      _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "진료기록",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }

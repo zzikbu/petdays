@@ -11,7 +11,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
 
   // LocatorMixin에 정의되어 있는 함수
   @override
-  void update(Locator watch) {
+  void update(Locator watch) async {
     // Firebase Auth의 현재 유저 상태를 감시
     final user = watch<User?>();
 
@@ -32,6 +32,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     // 유저 존재 여부에 따라 인증 상태 업데이트
     // 유저가 있으면 로그인 상태로, 없으면 로그아웃 상태로 변경
     if (user != null) {
+      await Future.delayed(const Duration(milliseconds: 300));
       state = state.copyWith(authStatus: AuthStatus.authenticated);
     } else {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);

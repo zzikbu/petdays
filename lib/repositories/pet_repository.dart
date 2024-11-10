@@ -15,7 +15,7 @@ class PetRepository {
     required this.firebaseFirestore,
   });
 
-  // 펫 삭제
+  // 반려동물 삭제
   Future<void> deletePet({
     required String petId,
   }) async {
@@ -25,18 +25,18 @@ class PetRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '반려동물',
+        message: '반려동물 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "반려동물",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
 
-  // 펫 수정
+  // 반려동물 수정
   Future<PetModel> updatePet({
     required String petId,
     required String uid,
@@ -93,27 +93,29 @@ class PetRepository {
       await batch.commit();
       return petModel;
     } on FirebaseException catch (e) {
-      // 에러 발생시 새로 업로드된 이미지 삭제 (새 이미지가 있고, 현재 URL과 다른 경우)
+      // 에러 발생시 새로 업로드된 이미지 삭제
       if (downloadURL != currentImageUrl) {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
+
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '반려동물',
+        message: '반려동물 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 에러 발생시 새로 업로드된 이미지 삭제 (새 이미지가 있고, 현재 URL과 다른 경우)
+      // 에러 발생시 새로 업로드된 이미지 삭제
       if (downloadURL != currentImageUrl) {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
+
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "반려동물",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
 
-  // 펫 가져오기
+  // 반려동물 가져오기
   Future<List<PetModel>> getDiaryList({
     required String uid,
   }) async {
@@ -132,21 +134,19 @@ class PetRepository {
         },
       ).toList());
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '반려동물',
+        message: '반려동물 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "반려동물",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
 
-  // 펫 추가
+  // 반려동물 추가
   Future<PetModel> uploadPet({
     required String uid,
     required Uint8List? file,
@@ -191,22 +191,22 @@ class PetRepository {
 
       return petModel; // 등록한 펫을 리스트에 추가하기 위해 반환
     } on FirebaseException catch (e) {
-      // 에러 발생시 storage에 등록된 이미지 삭제
-      await firebaseStorage.refFromURL(downloadURL).delete();
+      await firebaseStorage
+          .refFromURL(downloadURL)
+          .delete(); // 에러 발생시 storage에 등록된 이미지 삭제
 
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: e.code,
-        message: e.message!,
+        title: '반려동물',
+        message: '반려동물 추가하기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
-      // 에러 발생시 storage에 등록된 이미지 삭제
-      await firebaseStorage.refFromURL(downloadURL).delete();
+      await firebaseStorage
+          .refFromURL(downloadURL)
+          .delete(); // 에러 발생시 storage에 등록된 이미지 삭제
 
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        title: "Exception",
-        message: e.toString(),
+        title: "반려동물",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
