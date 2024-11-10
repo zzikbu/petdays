@@ -37,12 +37,12 @@ class ProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -64,7 +64,7 @@ class ProfileRepository {
       // 중복되면 throw
       if (duplicateCheck.docs.isNotEmpty) {
         throw CustomException(
-          code: "닉네임 중복",
+          title: "닉네임 중복",
           message: "이미 사용 중인 닉네임입니다.",
         );
       }
@@ -74,12 +74,12 @@ class ProfileRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -97,13 +97,13 @@ class ProfileRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

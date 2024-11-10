@@ -1,6 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
@@ -34,7 +34,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
       try {
         await feedProvider.getFeedList();
       } on CustomException catch (e) {
-        errorDialogWidget(context, e);
+        showErrorDialog(context, e);
       }
     });
   }

@@ -33,13 +33,13 @@ class FeedRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -54,7 +54,7 @@ class FeedRepository {
     try {
       if (diaryModel.reports.contains(uid)) {
         throw CustomException(
-          code: "Exception",
+          title: "Exception",
           message: "이미 신고한 성장일기입니다.",
         );
       }
@@ -85,13 +85,13 @@ class FeedRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -156,13 +156,13 @@ class FeedRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -209,12 +209,12 @@ class FeedRepository {
       ).then((list) => list.whereType<DiaryModel>().toList()); // null 값 제거
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

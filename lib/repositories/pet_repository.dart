@@ -25,12 +25,12 @@ class PetRepository {
       });
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -98,7 +98,7 @@ class PetRepository {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
@@ -107,7 +107,7 @@ class PetRepository {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -134,13 +134,13 @@ class PetRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -196,7 +196,7 @@ class PetRepository {
 
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
@@ -205,7 +205,7 @@ class PetRepository {
 
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

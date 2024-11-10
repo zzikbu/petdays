@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/components/textfield_with_title.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -408,7 +408,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
 
               Navigator.pop(context);
             } on CustomException catch (e) {
-              errorDialogWidget(context, e);
+              showErrorDialog(context, e);
               setState(() {
                 _isActive = true;
               });

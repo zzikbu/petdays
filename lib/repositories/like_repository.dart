@@ -53,12 +53,12 @@ class LikeRepository {
       return diaryList;
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

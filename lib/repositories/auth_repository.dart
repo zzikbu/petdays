@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/providers/user/user_state.dart';
 
 class AuthRepository {
   final FirebaseAuth firebaseAuth;
@@ -103,13 +102,13 @@ class AuthRepository {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
-        message: e.message!,
+        title: '메일 전송 실패',
+        message: '비밀번호 재설정 메일 전송에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "메일 전송 실패",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -121,68 +120,94 @@ class AuthRepository {
     try {
       final User user = firebaseAuth.currentUser!;
       final String uid = user.uid;
+      final provider = user.providerData[0].providerId;
 
-      // 재인증
-      if (user.providerData.isNotEmpty) {
-        final provider = user.providerData[0].providerId;
-
-        try {
-          switch (provider) {
-            case 'password':
-              // 이메일 재인증
-              AuthCredential credential = EmailAuthProvider.credential(
-                email: user.email!,
-                password: password!,
-              );
-              await user.reauthenticateWithCredential(credential);
-              break;
-
-            case 'google.com':
-              // 구글 재인증
-              final googleUser = await GoogleSignIn().signIn();
-              if (googleUser == null) {
+      switch (provider) {
+        // 이메일 재인증
+        case 'password':
+          try {
+            AuthCredential credential = EmailAuthProvider.credential(
+              email: user.email!,
+              password: password!,
+            );
+            await user.reauthenticateWithCredential(credential);
+          } on FirebaseException catch (e) {
+            switch (e.code) {
+              case 'invalid-credential':
                 throw CustomException(
-                  code: '회원탈퇴',
-                  message: 'Google 계정 선택이 취소되었습니다.',
+                  title: '회원탈퇴',
+                  message: '잘못된 비밀번호입니다. 다시 입력해주세요.',
                 );
-              }
-              final googleAuth = await googleUser.authentication;
-              final credential = GoogleAuthProvider.credential(
-                accessToken: googleAuth.accessToken,
-                idToken: googleAuth.idToken,
-              );
-              await user.reauthenticateWithCredential(credential);
-              break;
+              default:
+                throw CustomException(
+                  title: '회원탈퇴',
+                  message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
+                );
+            }
+          } on CustomException {
+            rethrow;
+          } catch (e) {
+            throw CustomException(
+              title: "회원탈퇴",
+              message:
+                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+            );
+          }
+          break;
 
-            case 'apple.com':
-              // 애플 재인증
-              final appleProvider = AppleAuthProvider();
-              await user.reauthenticateWithProvider(appleProvider);
-              break;
-          }
-        } on FirebaseAuthException catch (e) {
-          switch (e.code) {
-            case 'invalid-credential':
-            case 'invalid-password':
-            case 'wrong-password':
+        // 구글 재인증
+        case 'google.com':
+          try {
+            final googleUser = await GoogleSignIn().signIn();
+
+            if (googleUser == null) {
               throw CustomException(
-                code: '회원탈퇴',
-                message: '인증에 실패했습니다.',
+                title: '회원탈퇴',
+                message: '구글 로그인에 실패했습니다.\n다시 시도해주세요.',
               );
-            default:
-              throw CustomException(
-                code: '회원탈퇴',
-                message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
-              );
+            }
+
+            final googleAuth = await googleUser.authentication;
+            final credential = GoogleAuthProvider.credential(
+              accessToken: googleAuth.accessToken,
+              idToken: googleAuth.idToken,
+            );
+
+            await user.reauthenticateWithCredential(credential);
+          } on CustomException {
+            rethrow;
+          } on FirebaseException catch (e) {
+            throw CustomException(
+              title: '회원탈퇴',
+              message: '구글 로그인에 실패했습니다.\n다시 시도해주세요.',
+            );
+          } catch (e) {
+            throw CustomException(
+              title: "회원탈퇴",
+              message:
+                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+            );
           }
-        } on CustomException {
-          rethrow;
-        } catch (e) {
-          throw CustomException(
-            code: '회원탈퇴',
-            message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
-          );
-        }
+          break;
+
+        // 애플 재인증
+        case 'apple.com':
+          try {
+            final appleProvider = AppleAuthProvider();
+            await user.reauthenticateWithProvider(appleProvider);
+          } on FirebaseException catch (e) {
+            throw CustomException(
+              title: '회원탈퇴',
+              message: '애플 로그인에 실패했습니다.\n다시 시도해주세요.',
+            );
+          } catch (e) {
+            throw CustomException(
+              title: "회원탈퇴",
+              message:
+                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+            );
+          }
+          break;
       }
 
       // 탈퇴
@@ -270,7 +295,7 @@ class AuthRepository {
       walkQuerySnapshot.docs.forEach((walkDoc) async {
         batch.delete(walkDoc.reference);
 
-        String walkImageUrl = walkDoc.data()['imageUrl'];
+        String walkImageUrl = walkDoc.data()['mapImageUrl'];
         await firebaseStorage.refFromURL(walkImageUrl).delete();
       });
 
@@ -279,13 +304,13 @@ class AuthRepository {
       rethrow;
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
-        message: e.message!,
+        title: '회원탈퇴',
+        message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "회원탈퇴",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -294,6 +319,7 @@ class AuthRepository {
   Future<void> signOut() async {
     try {
       final googleSignIn = GoogleSignIn();
+
       if (await googleSignIn.isSignedIn()) {
         await googleSignIn.signOut(); // 구글 로그아웃
       }
@@ -301,13 +327,13 @@ class AuthRepository {
       await firebaseAuth.signOut();
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
-        message: e.message!,
+        title: '로그아웃',
+        message: '로그아웃이 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "로그아웃",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -324,25 +350,41 @@ class AuthRepository {
         password: password,
       );
 
-      // 인증 메일 클릭 여부
       bool isVerified = userCredential.user!.emailVerified;
+
       if (!isVerified) {
         await userCredential.user!.sendEmailVerification();
         await firebaseAuth.signOut();
+
         throw CustomException(
-          code: "Exception",
-          message: "인증되지 않은 이메일",
+          title: "로그인",
+          message: "인증되지 않은 이메일입니다. 메일함을 확인해주세요.",
         );
       }
+    } on CustomException {
+      rethrow;
     } on FirebaseException catch (e) {
-      throw CustomException(
-        code: e.code,
-        message: e.message!,
-      );
+      switch (e.code) {
+        case 'invalid-credential':
+          throw CustomException(
+            title: '로그인',
+            message: '이메일과 비밀번호를 다시 확인해주세요.',
+          );
+        case 'user-disabled':
+          throw CustomException(
+            title: '로그인',
+            message: '비활성화된 계정입니다.\n문의: devmoichi@gmail.com',
+          );
+        default:
+          throw CustomException(
+            title: '로그인',
+            message: '로그인에 실패했습니다.\n다시 시도해주세요.',
+          );
+      }
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "로그인",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -383,16 +425,22 @@ class AuthRepository {
 
       firebaseAuth.signOut(); // 회원가입과 동시에 로그인이 되기 때문에 로그아웃 (메일 인증 전)
     } on FirebaseException catch (e) {
-      // 호출한 곳에서 처리하게 throw
-      throw CustomException(
-        code: e.code,
-        message: e.message!,
-      );
+      switch (e.code) {
+        case 'email-already-in-use':
+          throw CustomException(
+            title: '회원가입',
+            message: '이미 사용 중인 이메일입니다.\n다른 이메일을 입력해주세요.',
+          );
+        case 'network-request-failed':
+          throw CustomException(
+            title: '네트워크 오류',
+            message: '네트워크 연결상태를 확인해주세요.',
+          );
+      }
     } catch (e) {
-      // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "회원가입",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -405,8 +453,8 @@ class AuthRepository {
 
       if (googleUser == null) {
         throw CustomException(
-          code: "ERROR_ABORTED_BY_USER",
-          message: "구글 로그인이 취소되었습니다.",
+          title: "구글 로그인",
+          message: "구글 로그인에 실패했습니다.\n다시 시도해주세요.",
         );
       }
 
@@ -446,15 +494,17 @@ class AuthRepository {
           "blocks": []
         });
       }
+    } on CustomException {
+      rethrow;
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
-        message: e.message!,
+        title: '구글 로그인',
+        message: '구글 로그인에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "구글 로그인",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }
@@ -491,13 +541,13 @@ class AuthRepository {
       }
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
-        message: e.message!,
+        title: '애플 로그인',
+        message: '애플 로그인에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
-        message: e.toString(),
+        title: "애플 로그인",
+        message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
     }
   }

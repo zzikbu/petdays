@@ -44,13 +44,13 @@ class WalkRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -93,12 +93,12 @@ class WalkRepository {
       ).toList());
     } on FirebaseException catch (e) {
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -179,13 +179,13 @@ class WalkRepository {
     } on FirebaseException catch (e) {
       await _deleteImage(mapImageUrl);
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       await _deleteImage(mapImageUrl);
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

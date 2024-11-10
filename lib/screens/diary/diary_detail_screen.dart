@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
@@ -78,7 +78,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           .read<UserProvider>()
           .getUserInfo(); // 좋아요 했기 때문에 상태관리하고 있는 userModel 갱신
     } on CustomException catch (e) {
-      errorDialogWidget(context, e);
+      showErrorDialog(context, e);
     }
   }
 
@@ -163,7 +163,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     .deleteDiary(diaryId: diaryModel.diaryId);
                                 Navigator.pop(context);
                               } on CustomException catch (e) {
-                                errorDialogWidget(context, e);
+                                showErrorDialog(context, e);
                               }
                             },
                           );
@@ -235,7 +235,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     );
                                   } on CustomException catch (e) {
                                     Navigator.pop(context);
-                                    errorDialogWidget(context, e);
+                                    showErrorDialog(context, e);
                                   }
                                 },
                               ),
@@ -279,7 +279,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     );
                                   } on CustomException catch (e) {
                                     Navigator.pop(context);
-                                    errorDialogWidget(context, e);
+                                    showErrorDialog(context, e);
                                   }
                                 },
                               ),
@@ -323,7 +323,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     );
                                   } on CustomException catch (e) {
                                     Navigator.pop(context);
-                                    errorDialogWidget(context, e);
+                                    showErrorDialog(context, e);
                                   }
                                 },
                               ),
@@ -367,7 +367,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                     );
                                   } on CustomException catch (e) {
                                     Navigator.pop(context);
-                                    errorDialogWidget(context, e);
+                                    showErrorDialog(context, e);
                                   }
                                 },
                               ),
@@ -420,7 +420,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                 Navigator.pop(context);
                               } on CustomException catch (e) {
                                 Navigator.pop(context);
-                                errorDialogWidget(context, e);
+                                showErrorDialog(context, e);
                               }
                             },
                           );

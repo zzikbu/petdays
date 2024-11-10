@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/home_section_header.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen>
         await diaryProvider.getDiaryList(uid: uid); // 성장일기 가져오기
         await medicalProvider.getMedicalList(uid: uid); // 진료기록 가져오기
       } on CustomException catch (e) {
-        errorDialogWidget(context, e);
+        showErrorDialog(context, e);
       }
     });
   }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
@@ -112,7 +112,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
               Navigator.pop(context);
             } on CustomException catch (e) {
-              errorDialogWidget(context, e);
+              showErrorDialog(context, e);
               setState(() {
                 _isActive = true;
                 _isEnabled = true;

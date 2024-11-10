@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
 import 'package:petdays/palette.dart';
@@ -39,7 +39,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
       try {
         await _walkProvider.getWalkList(uid: uid);
       } on CustomException catch (e) {
-        errorDialogWidget(context, e);
+        showErrorDialog(context, e);
       }
     });
   }

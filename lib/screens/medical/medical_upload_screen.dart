@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/components/textfield_with_title.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -449,7 +449,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                 Navigator.pop(context);
               }
             } on CustomException catch (e) {
-              errorDialogWidget(context, e);
+              showErrorDialog(context, e);
 
               // 에러 발생시 버튼 재활성화
               setState(() {

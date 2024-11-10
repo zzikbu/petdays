@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/info_column.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
@@ -89,7 +89,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       } on CustomException catch (e) {
-                        errorDialogWidget(context, e);
+                        showErrorDialog(context, e);
                       }
                     },
                   );

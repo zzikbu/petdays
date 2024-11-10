@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
@@ -153,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       _isEnabled = true; // 다시 활성화
                                     });
 
-                                    errorDialogWidget(context, e);
+                                    showErrorDialog(context, e);
                                   }
                                 }
                               : null,
@@ -246,7 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                       .read<MyAuthProvider>()
                                       .signInWithGoogle();
                                 } on CustomException catch (e) {
-                                  errorDialogWidget(context, e);
+                                  showErrorDialog(context, e);
                                 }
                               },
                               child: SizedBox(
@@ -270,7 +270,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                             .read<MyAuthProvider>()
                                             .signInWithApple();
                                       } on CustomException catch (e) {
-                                        errorDialogWidget(context, e);
+                                        showErrorDialog(context, e);
                                       }
                                     },
                                     child: SizedBox(

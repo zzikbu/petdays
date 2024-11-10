@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
+import 'package:petdays/providers/profile/profile_provider.dart';
 import 'package:petdays/providers/user/user_provider.dart';
 import 'package:petdays/screens/feed/feed_home_screen.dart';
 import 'package:petdays/screens/home/home_screen.dart';
@@ -29,9 +30,7 @@ class _MainScreenState extends State<MainScreen>
       initialIndex: 1,
     );
 
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _getProfile(); // 접속 중인 사용자의 정보 상태관리 저장
-    });
+    _getProfile(); // 접속 중인 사용자의 정보 상태관리 저장
   }
 
   void bottomNavigationItemOnTab(int index) {
@@ -52,7 +51,7 @@ class _MainScreenState extends State<MainScreen>
     try {
       await context.read<UserProvider>().getUserInfo();
     } on CustomException catch (e) {
-      errorDialogWidget(context, e);
+      showErrorDialog(context, e);
     }
   }
 

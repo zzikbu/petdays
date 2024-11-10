@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
@@ -182,7 +182,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                                   _isEnabled = true; // 다시 활성화
                                 });
 
-                                errorDialogWidget(context, e);
+                                showErrorDialog(context, e);
                               }
                             }
                           : null,

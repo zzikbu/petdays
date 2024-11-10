@@ -103,14 +103,14 @@ class MedicalRepository {
       // 에러 발생시 새로 업로드된 이미지들 삭제
       _deleteImage(newImageUrls);
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 에러 발생시 새로 업로드된 이미지들 삭제
       _deleteImage(newImageUrls);
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -145,13 +145,13 @@ class MedicalRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -191,13 +191,13 @@ class MedicalRepository {
     } on FirebaseException catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }
@@ -290,7 +290,7 @@ class MedicalRepository {
 
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: e.code,
+        title: e.code,
         message: e.message!,
       );
     } catch (e) {
@@ -299,7 +299,7 @@ class MedicalRepository {
 
       // 호출한 곳에서 처리하게 throw
       throw CustomException(
-        code: "Exception",
+        title: "Exception",
         message: e.toString(),
       );
     }

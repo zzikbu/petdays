@@ -7,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/error_dialog_widget.dart';
+import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/main.dart';
 import 'package:petdays/models/user_model.dart';
@@ -68,7 +68,7 @@ class _MyPageScreenState extends State<MyPageScreen>
         await profileProvider.getProfile(uid: uid);
         await context.read<UserProvider>().getUserInfo();
       } on CustomException catch (e) {
-        errorDialogWidget(context, e);
+        showErrorDialog(context, e);
       }
     }
   }
@@ -80,7 +80,7 @@ class _MyPageScreenState extends State<MyPageScreen>
 
         await profileProvider.getProfile(uid: uid);
       } on CustomException catch (e) {
-        errorDialogWidget(context, e);
+        showErrorDialog(context, e);
       }
     });
   }
@@ -218,7 +218,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                                       .read<UserProvider>()
                                                       .getUserInfo();
                                                 } on CustomException catch (e) {
-                                                  errorDialogWidget(context, e);
+                                                  showErrorDialog(context, e);
                                                 }
                                               },
                                             ),
@@ -519,7 +519,7 @@ class _MyPageScreenState extends State<MyPageScreen>
 
                                         Navigator.pop(context);
                                       } on CustomException catch (e) {
-                                        errorDialogWidget(context, e);
+                                        showErrorDialog(context, e);
                                       }
                                     },
                                   );
@@ -556,7 +556,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                       .read<MyAuthProvider>()
                                       .signOut();
                                 } on CustomException catch (e) {
-                                  errorDialogWidget(context, e);
+                                  showErrorDialog(context, e);
                                 }
                               },
                             );
@@ -594,10 +594,13 @@ class _MyPageScreenState extends State<MyPageScreen>
                                 message:
                                     '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴하시겠습니까?',
                                 onConfirm: () async {
-                                  Navigator.pop(context);
-                                  await context
-                                      .read<MyAuthProvider>()
-                                      .deleteAccount();
+                                  try {
+                                    await context
+                                        .read<MyAuthProvider>()
+                                        .deleteAccount();
+                                  } on CustomException catch (e) {
+                                    showErrorDialog(context, e);
+                                  }
                                 },
                               );
                             },
