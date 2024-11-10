@@ -49,6 +49,8 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
     WalkState walkState = context.watch<WalkState>();
     List<WalkModel> walkList = walkState.walkList;
 
+    bool isLoading = walkState.walkStatus == WalkStatus.fetching;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Palette.background,
@@ -66,173 +68,107 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
         ),
       ),
       backgroundColor: Palette.background,
-      body: RefreshIndicator(
-        // 새로고침
-        color: Palette.subGreen,
-        backgroundColor: Palette.white,
-        onRefresh: () async {
-          await Future.delayed(Duration(seconds: 1));
-          _getWalkList();
-        },
-        child: Scrollbar(
-          child: ListView.builder(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            itemCount: walkList.length,
-            itemBuilder: (context, index) {
-              final walkModel = walkList[index];
+      body: isLoading
+          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          : RefreshIndicator(
+              // 새로고침
+              color: Palette.subGreen,
+              backgroundColor: Palette.white,
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1));
+                _getWalkList();
+              },
+              child: Scrollbar(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  itemCount: walkList.length,
+                  itemBuilder: (context, index) {
+                    final walkModel = walkList[index];
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WalkDetailScreen(index: index),
-                    ),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: 130,
-                  decoration: BoxDecoration(
-                    color: Palette.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Palette.black.withOpacity(0.05),
-                        offset: Offset(8, 8),
-                        blurRadius: 8,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 14),
-                      SizedBox(
-                        height: 36,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          scrollDirection: Axis.horizontal, // 수평
-                          itemCount: walkModel.pets.length,
-                          itemBuilder: (context, index) {
-                            final petModel = walkModel.pets[index];
-
-                            return Container(
-                              width: 36,
-                              height: 36,
-                              margin: EdgeInsets.only(right: 4),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: ExtendedNetworkImageProvider(
-                                      petModel.image),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          },
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                WalkDetailScreen(index: index),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        height: 130,
+                        decoration: BoxDecoration(
+                          color: Palette.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Palette.black.withOpacity(0.05),
+                              offset: Offset(8, 8),
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "날짜",
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: Palette.mediumGray,
-                                    letterSpacing: -0.4,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text(
-                                  walkModel.createAt
-                                      .toDate()
-                                      .toString()
-                                      .substring(0, 10),
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16,
-                                    color: Palette.black,
-                                    letterSpacing: -0.4,
-                                  ),
-                                ),
-                              ],
+                            SizedBox(height: 14),
+                            SizedBox(
+                              height: 36,
+                              child: ListView.builder(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 24),
+                                scrollDirection: Axis.horizontal, // 수평
+                                itemCount: walkModel.pets.length,
+                                itemBuilder: (context, index) {
+                                  final petModel = walkModel.pets[index];
+
+                                  return Container(
+                                    width: 36,
+                                    height: 36,
+                                    margin: EdgeInsets.only(right: 4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: ExtendedNetworkImageProvider(
+                                            petModel.image),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "거리",
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: Palette.mediumGray,
-                                    letterSpacing: -0.4,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text.rich(
-                                  TextSpan(
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 24),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      TextSpan(
-                                        text:
-                                            '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}',
+                                      Text(
+                                        "날짜",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16, // 기본 폰트 크기
-                                          color: Palette.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Palette.mediumGray,
                                           letterSpacing: -0.4,
                                         ),
                                       ),
-                                      TextSpan(
-                                        text: 'KM',
-                                        style: TextStyle(
-                                          fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12, // 작은 폰트 크기
-                                          color: Palette.black,
-                                          letterSpacing: -0.4,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "시간",
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14,
-                                    color: Palette.mediumGray,
-                                    letterSpacing: -0.4,
-                                  ),
-                                ),
-                                SizedBox(height: 4),
-                                Text.rich(
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            '${(int.parse(walkModel.duration.split(':')[1]) + int.parse(walkModel.duration.split(':')[0]) * 60)}',
+                                      SizedBox(height: 4),
+                                      Text(
+                                        walkModel.createAt
+                                            .toDate()
+                                            .toString()
+                                            .substring(0, 10),
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
@@ -241,32 +177,107 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                           letterSpacing: -0.4,
                                         ),
                                       ),
-                                      TextSpan(
-                                        text: '분',
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "거리",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 12,
-                                          color: Palette.black,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Palette.mediumGray,
                                           letterSpacing: -0.4,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16, // 기본 폰트 크기
+                                                color: Palette.black,
+                                                letterSpacing: -0.4,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: 'KM',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12, // 작은 폰트 크기
+                                                color: Palette.black,
+                                                letterSpacing: -0.4,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ],
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "시간",
+                                        style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                          color: Palette.mediumGray,
+                                          letterSpacing: -0.4,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text.rich(
+                                        TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${(int.parse(walkModel.duration.split(':')[1]) + int.parse(walkModel.duration.split(':')[0]) * 60)}',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 16,
+                                                color: Palette.black,
+                                                letterSpacing: -0.4,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: '분',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                                color: Palette.black,
+                                                letterSpacing: -0.4,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (context.read<PetState>().petList.isEmpty) {

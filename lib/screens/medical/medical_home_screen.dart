@@ -56,11 +56,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
     MedicalState medicalState = context.watch<MedicalState>();
     List<MedicalModel> medicalList = medicalState.medicalList;
 
-    if (medicalState.medicalStatus == MedicalStatus.fetching) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    bool isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -78,149 +74,138 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
             letterSpacing: -0.5,
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: const EdgeInsets.only(right: 16),
-        //     child: GestureDetector(
-        //       onTap: () {
-        //         Navigator.push(
-        //           context,
-        //           MaterialPageRoute(builder: (context) => SearchScreen()),
-        //         );
-        //       },
-        //       child: SvgPicture.asset('assets/icons/ic_magnifier.svg'),
-        //     ),
-        //   ),
-        // ],
       ),
-      body: RefreshIndicator(
-        // 새로고침
-        color: Palette.subGreen,
-        backgroundColor: Palette.white,
-        onRefresh: () async {
-          await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
-          _getMedicalList();
-        },
-        child: Scrollbar(
-          child: ListView.builder(
-            padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-            itemCount: medicalList.length,
-            itemBuilder: (context, index) {
-              final medical = medicalList[index]; // medical 변수로 빼기
+      body: isLoading
+          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          : RefreshIndicator(
+              // 새로고침
+              color: Palette.subGreen,
+              backgroundColor: Palette.white,
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
+                _getMedicalList();
+              },
+              child: Scrollbar(
+                child: ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+                  itemCount: medicalList.length,
+                  itemBuilder: (context, index) {
+                    final medical = medicalList[index]; // medical 변수로 빼기
 
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MedicalDetailScreen(index: index)),
-                  );
-                },
-                child: Stack(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20),
-                      height: 110,
-                      decoration: BoxDecoration(
-                        color: Palette.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Palette.black.withOpacity(0.05),
-                            offset: Offset(8, 8),
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              children: [
-                                // 사진
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Palette.lightGray,
-                                      width: 0.4,
-                                    ),
-                                    image: DecorationImage(
-                                      image: ExtendedNetworkImageProvider(
-                                        medical.pet.image,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-
-                                // 이름
-                                Text(
-                                  medical.pet.name,
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18,
-                                    color: Palette.black,
-                                    letterSpacing: -0.5,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-
-                                // 방문날짜
-                                Text(
-                                  medical.visitDate,
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14,
-                                    color: Palette.mediumGray,
-                                    letterSpacing: -0.4,
-                                  ),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MedicalDetailScreen(index: index)),
+                        );
+                      },
+                      child: Stack(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 20),
+                            height: 110,
+                            decoration: BoxDecoration(
+                              color: Palette.white,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Palette.black.withOpacity(0.05),
+                                  offset: Offset(8, 8),
+                                  blurRadius: 8,
                                 ),
                               ],
                             ),
-                            SizedBox(height: 14),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      // 사진
+                                      Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Palette.lightGray,
+                                            width: 0.4,
+                                          ),
+                                          image: DecorationImage(
+                                            image: ExtendedNetworkImageProvider(
+                                              medical.pet.image,
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
 
-                            // 이유
-                            Text(
-                              medical.reason,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color: Palette.black,
-                                letterSpacing: -0.5,
+                                      // 이름
+                                      Text(
+                                        medical.pet.name,
+                                        style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18,
+                                          color: Palette.black,
+                                          letterSpacing: -0.5,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+
+                                      // 방문날짜
+                                      Text(
+                                        medical.visitDate,
+                                        style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 14,
+                                          color: Palette.mediumGray,
+                                          letterSpacing: -0.4,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 14),
+
+                                  // 이유
+                                  Text(
+                                    medical.reason,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontFamily: 'Pretendard',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                      color: Palette.black,
+                                      letterSpacing: -0.5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
 
-                    // 메모가 있을 경우 아이콘 표시
-                    if (medical.note.isNotEmpty)
-                      Positioned(
-                        top: 10,
-                        right: 16,
-                        child: Icon(Icons.sticky_note_2_outlined),
+                          // 메모가 있을 경우 아이콘 표시
+                          if (medical.note.isNotEmpty)
+                            Positioned(
+                              top: 10,
+                              right: 16,
+                              child: Icon(Icons.sticky_note_2_outlined),
+                            ),
+                        ],
                       ),
-                  ],
+                    );
+                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ),
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (context.read<PetState>().petList.isEmpty) {

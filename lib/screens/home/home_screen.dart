@@ -136,672 +136,720 @@ class _HomeScreenState extends State<HomeScreen>
     MedicalState medicalState = context.watch<MedicalState>();
     List<MedicalModel> medicalList = medicalState.medicalList;
 
-    // if (petState.petStatus == PetStatus.fetching ||
-    //     diaryState.diaryStatus == DiaryStatus.fetching ||
-    //     medicalState.medicalStatus == MedicalStatus.fetching) {
-    //   return Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
+    bool isLoading = petState.petStatus == PetStatus.fetching ||
+        walkState.walkStatus == WalkStatus.fetching ||
+        diaryState.diaryStatus == DiaryStatus.fetching ||
+        medicalState.medicalStatus == MedicalStatus.fetching;
 
     return Scaffold(
       backgroundColor: Palette.background,
-      body: Scrollbar(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              // 최상단 초록색 영역
-              Container(
-                height: 260,
-                color: Palette.mainGreen,
-                child: petList.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 68, bottom: 42),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PetUploadScreen()),
-                            );
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            margin: EdgeInsets.symmetric(horizontal: 24),
-                            decoration: BoxDecoration(
-                              color: Palette.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  size: 32,
-                                  color: Palette.black,
+      body: isLoading
+          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          : RefreshIndicator(
+              // 새로고침
+              color: Palette.subGreen,
+              backgroundColor: Palette.white,
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 1));
+                _getData();
+              },
+              child: SingleChildScrollView(
+                primary: true,
+                child: Column(
+                  children: [
+                    // 최상단 초록색 영역
+                    Container(
+                      height: 260,
+                      color: Palette.mainGreen,
+                      child: petList.isEmpty
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 68, bottom: 42),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PetUploadScreen()),
+                                  );
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  margin: EdgeInsets.symmetric(horizontal: 24),
+                                  decoration: BoxDecoration(
+                                    color: Palette.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 32,
+                                        color: Palette.black,
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        '반려동물 추가하기',
+                                        style: TextStyle(
+                                          fontFamily: 'Pretendard',
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                          color: Palette.black,
+                                          letterSpacing: -0.5,
+                                          height: 1.2,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(height: 4),
-                                Text(
-                                  '반려동물 추가하기',
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    color: Palette.black,
-                                    letterSpacing: -0.5,
-                                    height: 1.2,
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                SizedBox(height: 68),
+                                CarouselSlider(
+                                  carouselController: _carouselController,
+                                  items: petList.map(
+                                    (pet) {
+                                      return Builder(
+                                        builder: (context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PetDetailScreen(
+                                                            index:
+                                                                _indicatorIndex)),
+                                              );
+                                            },
+                                            child: Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 24),
+                                              decoration: BoxDecoration(
+                                                color: Palette.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: Row(
+                                                  children: [
+                                                    // 사진
+                                                    Container(
+                                                      width: 100,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        border: Border.all(
+                                                          color:
+                                                              Palette.lightGray,
+                                                          width: 0.4,
+                                                        ),
+                                                        image: DecorationImage(
+                                                          image:
+                                                              ExtendedNetworkImageProvider(
+                                                                  pet.image),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 30),
+
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // 이름 & 만난 날 계산
+                                                        Text(
+                                                          _getNameAndDaysSinceMeeting(
+                                                            name: pet.name,
+                                                            meetingDateString: pet
+                                                                .firstMeetingDate,
+                                                          ),
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Pretendard',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 20,
+                                                            color:
+                                                                Palette.black,
+                                                            letterSpacing: -0.5,
+                                                            height: 1.2,
+                                                          ),
+                                                        ),
+                                                        SizedBox(height: 6),
+
+                                                        // 나이 계산 & 품종
+                                                        Text(
+                                                          _getAgeAndBreed(
+                                                            birthDateString:
+                                                                pet.birthDay,
+                                                            breed: pet.breed,
+                                                          ),
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Pretendard',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontSize: 14,
+                                                            color: Palette
+                                                                .mediumGray,
+                                                            letterSpacing: -0.4,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ).toList(),
+                                  options: CarouselOptions(
+                                    initialPage: 0,
+                                    height: 150,
+                                    viewportFraction: 1.0,
+                                    enableInfiniteScroll: false, // 무한 스크롤 비활성화
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        _indicatorIndex = index;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+
+                                // Indicator
+                                AnimatedSmoothIndicator(
+                                  activeIndex: _indicatorIndex,
+                                  count: petList.length,
+                                  effect: JumpingDotEffect(
+                                    spacing: 6.0,
+                                    radius: 3.0,
+                                    dotWidth: 6.0,
+                                    dotHeight: 6.0,
+                                    paintStyle: PaintingStyle.fill,
+                                    strokeWidth: 0,
+                                    dotColor: Palette.white.withOpacity(0.5),
+                                    activeDotColor: Palette.white,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                        ),
-                      )
-                    : Column(
+                    ),
+                    SizedBox(height: 40),
+
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Column(
                         children: [
-                          SizedBox(height: 68),
-                          CarouselSlider(
-                            carouselController: _carouselController,
-                            items: petList.map(
-                              (pet) {
-                                return Builder(
-                                  builder: (context) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
+                          // 산책
+                          HomeSectionHeader(
+                            title: '산책',
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WalkHomeScreen()),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          walkList.isEmpty
+                              ? Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Palette.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Palette.black.withOpacity(0.05),
+                                        offset: Offset(8, 8),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "산책 기록이 없습니다",
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                        color: Palette.mediumGray,
+                                        letterSpacing: -0.4,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Column(
+                                  children: List.generate(
+                                    walkList.length > 3
+                                        ? 3
+                                        : walkList.length, // 최대 3개
+                                    (index) {
+                                      final walkModel = walkList[index];
+                                      final walkDate =
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              walkModel.createAt
+                                                  .millisecondsSinceEpoch);
+                                      final formattedDate =
+                                          DateFormat('yyyy.MM.dd EEE', 'ko_KR')
+                                              .format(walkDate);
+
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
                                               builder: (context) =>
-                                                  PetDetailScreen(
-                                                      index: _indicatorIndex)),
-                                        );
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 24),
-                                        decoration: BoxDecoration(
-                                          color: Palette.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: Row(
-                                            children: [
-                                              // 사진
-                                              Container(
-                                                width: 100,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: Palette.lightGray,
-                                                    width: 0.4,
-                                                  ),
-                                                  image: DecorationImage(
-                                                    image:
-                                                        ExtendedNetworkImageProvider(
-                                                            pet.image),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 30),
-
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  // 이름 & 만난 날 계산
-                                                  Text(
-                                                    _getNameAndDaysSinceMeeting(
-                                                      name: pet.name,
-                                                      meetingDateString:
-                                                          pet.firstMeetingDate,
-                                                    ),
-                                                    style: TextStyle(
-                                                      fontFamily: 'Pretendard',
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 20,
-                                                      color: Palette.black,
-                                                      letterSpacing: -0.5,
-                                                      height: 1.2,
-                                                    ),
-                                                  ),
-                                                  SizedBox(height: 6),
-
-                                                  // 나이 계산 & 품종
-                                                  Text(
-                                                    _getAgeAndBreed(
-                                                      birthDateString:
-                                                          pet.birthDay,
-                                                      breed: pet.breed,
-                                                    ),
-                                                    style: TextStyle(
-                                                      fontFamily: 'Pretendard',
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      fontSize: 14,
-                                                      color: Palette.mediumGray,
-                                                      letterSpacing: -0.4,
-                                                    ),
-                                                  ),
-                                                ],
+                                                  WalkDetailScreen(
+                                                      index: index),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(bottom: 12),
+                                          height: 70,
+                                          decoration: BoxDecoration(
+                                            color: Palette.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Palette.black
+                                                    .withOpacity(0.05),
+                                                offset: Offset(8, 8),
+                                                blurRadius: 8,
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ).toList(),
-                            options: CarouselOptions(
-                              initialPage: 0,
-                              height: 150,
-                              viewportFraction: 1.0,
-                              enableInfiniteScroll: false, // 무한 스크롤 비활성화
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  _indicatorIndex = index;
-                                });
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 20),
-
-                          // Indicator
-                          AnimatedSmoothIndicator(
-                            activeIndex: _indicatorIndex,
-                            count: petList.length,
-                            effect: JumpingDotEffect(
-                              spacing: 6.0,
-                              radius: 3.0,
-                              dotWidth: 6.0,
-                              dotHeight: 6.0,
-                              paintStyle: PaintingStyle.fill,
-                              strokeWidth: 0,
-                              dotColor: Palette.white.withOpacity(0.5),
-                              activeDotColor: Palette.white,
-                            ),
-                          ),
-                        ],
-                      ),
-              ),
-              SizedBox(height: 40),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
-                    // 산책
-                    HomeSectionHeader(
-                      title: '산책',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WalkHomeScreen()),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 10),
-                    walkList.isEmpty
-                        ? Container(
-                            margin: EdgeInsets.only(bottom: 12),
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Palette.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Palette.black.withOpacity(0.05),
-                                  offset: Offset(8, 8),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                "산책 기록이 없습니다",
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                  color: Palette.mediumGray,
-                                  letterSpacing: -0.4,
-                                ),
-                              ),
-                            ),
-                          )
-                        : Column(
-                            children: List.generate(
-                              walkList.length > 3
-                                  ? 3
-                                  : walkList.length, // 최대 3개
-                              (index) {
-                                final walkModel = walkList[index];
-                                final walkDate =
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        walkModel
-                                            .createAt.millisecondsSinceEpoch);
-                                final formattedDate =
-                                    DateFormat('yyyy.MM.dd EEE', 'ko_KR')
-                                        .format(walkDate);
-
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            WalkDetailScreen(index: index),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(bottom: 12),
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      color: Palette.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color:
-                                              Palette.black.withOpacity(0.05),
-                                          offset: Offset(8, 8),
-                                          blurRadius: 8,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          // 날짜
-                                          Text(
-                                            formattedDate,
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15,
-                                              color: Palette.black,
-                                              letterSpacing: -0.5,
-                                            ),
-                                          ),
-                                          SizedBox(width: 10),
-
-                                          // 사진
-                                          Expanded(
-                                            child: SizedBox(
-                                              height: 36,
-                                              child: SingleChildScrollView(
-                                                scrollDirection:
-                                                    Axis.horizontal,
-                                                child: Row(
-                                                  children: List.generate(
-                                                    walkModel.pets.length,
-                                                    (index) {
-                                                      final petModel =
-                                                          walkModel.pets[index];
-                                                      return Container(
-                                                        width: 36,
-                                                        height: 36,
-                                                        margin: EdgeInsets.only(
-                                                            right: 4),
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            border: Border.all(
-                                                              color:
-                                                                  Colors.grey,
-                                                              width: 0.4,
-                                                            ),
-                                                            image:
-                                                                DecorationImage(
-                                                              image:
-                                                                  ExtendedNetworkImageProvider(
-                                                                      petModel
-                                                                          .image),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                    SizedBox(height: 28),
-
-                    // 성장일기
-                    Column(
-                      children: [
-                        HomeSectionHeader(
-                          title: '성장일기',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DiaryHomeScreen()),
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        if (diaryList.isEmpty)
-                          Container(
-                            margin: EdgeInsets.only(bottom: 12),
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Palette.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Palette.black.withOpacity(0.05),
-                                  offset: Offset(8, 8),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                "성장일기가 없습니다",
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                  color: Palette.mediumGray,
-                                  letterSpacing: -0.4,
-                                ),
-                              ),
-                            ),
-                          )
-                        else
-                          Column(
-                            children: List.generate(
-                              diaryList.length > 3
-                                  ? 3
-                                  : diaryList.length, // 최대 3개
-                              (index) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => DiaryDetailScreen(
-                                          index: index,
-                                          isDiary: true,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.only(bottom: 12),
-                                    height: 70,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: Palette.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color:
-                                              Palette.black.withOpacity(0.05),
-                                          offset: Offset(8, 8),
-                                          blurRadius: 8,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // 제목
-                                          Text(
-                                            diaryList[index].title,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 15,
-                                              color: Palette.black,
-                                              letterSpacing: -0.4,
-                                            ),
-                                          ),
-                                          SizedBox(height: 2),
-
-                                          // 날짜
-                                          Text(
-                                            DateFormat('yyyy-MM-dd').format(
-                                              diaryList[index]
-                                                  .createAt
-                                                  .toDate(),
-                                            ),
-                                            style: TextStyle(
-                                              fontFamily: 'Pretendard',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14,
-                                              color: Palette.mediumGray,
-                                              letterSpacing: -0.4,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                      ],
-                    ),
-                    SizedBox(height: 28),
-
-                    // 진료기록
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        HomeSectionHeader(
-                          title: '진료기록',
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MedicalHomeScreen()),
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        if (medicalList.isEmpty)
-                          Container(
-                            margin: EdgeInsets.only(bottom: 12),
-                            height: 70,
-                            decoration: BoxDecoration(
-                              color: Palette.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Palette.black.withOpacity(0.05),
-                                  offset: Offset(8, 8),
-                                  blurRadius: 8,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                "진료기록이 없습니다",
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 12,
-                                  color: Palette.mediumGray,
-                                  letterSpacing: -0.4,
-                                ),
-                              ),
-                            ),
-                          )
-                        else
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal, // 수평 스크롤 설정
-                            child: Row(
-                              children: List.generate(
-                                medicalList.length > 3
-                                    ? 7
-                                    : medicalList.length, // 최대 7개
-                                (index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                MedicalDetailScreen(
-                                                  index: index,
-                                                )),
-                                      );
-                                    },
-
-                                    // 흰색 카드 영역
-                                    child: Container(
-                                      margin: EdgeInsets.only(
-                                          right: 12, bottom: 10),
-                                      height: 150,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        color: Palette.white,
-                                        borderRadius: BorderRadius.circular(20),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Palette.black.withOpacity(0.05),
-                                            offset: Offset(8, 8),
-                                            blurRadius: 8,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 12, horizontal: 20),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 14),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
                                               children: [
-                                                // 사진
-                                                Container(
-                                                  width: 36,
-                                                  height: 36,
-                                                  margin:
-                                                      EdgeInsets.only(right: 4),
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                      color: Palette.lightGray,
-                                                      width: 0.4,
-                                                    ),
-                                                    image: DecorationImage(
-                                                      image:
-                                                          ExtendedNetworkImageProvider(
-                                                              medicalList[index]
-                                                                  .pet
-                                                                  .image),
-                                                      fit: BoxFit.cover,
-                                                    ),
+                                                // 날짜
+                                                Text(
+                                                  formattedDate,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 15,
+                                                    color: Palette.black,
+                                                    letterSpacing: -0.5,
                                                   ),
                                                 ),
+                                                SizedBox(width: 10),
 
-                                                // 이름
+                                                // 사진
                                                 Expanded(
-                                                  child: Text(
-                                                    medicalList[index].pet.name,
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontFamily: 'Pretendard',
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 16,
-                                                      color: Palette.black,
-                                                      letterSpacing: -0.5,
+                                                  child: SizedBox(
+                                                    height: 36,
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      primary: false,
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: Row(
+                                                        children: List.generate(
+                                                          walkModel.pets.length,
+                                                          (index) {
+                                                            final petModel =
+                                                                walkModel.pets[
+                                                                    index];
+                                                            return Container(
+                                                              width: 36,
+                                                              height: 36,
+                                                              margin: EdgeInsets
+                                                                  .only(
+                                                                      right: 4),
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  shape: BoxShape
+                                                                      .circle,
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    width: 0.4,
+                                                                  ),
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image: ExtendedNetworkImageProvider(
+                                                                        petModel
+                                                                            .image),
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                            SizedBox(height: 12),
-
-                                            // 방문 날짜
-                                            Text(
-                                              medicalList[index].visitDate,
-                                              style: TextStyle(
-                                                fontFamily: 'Pretendard',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                                color: Palette.mediumGray,
-                                                letterSpacing: -0.4,
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-
-                                            // 이유
-                                            Text(
-                                              medicalList[index].reason,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
-                                                fontFamily: 'Pretendard',
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 16,
-                                                color: Palette.black,
-                                                letterSpacing: -0.5,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                          SizedBox(height: 28),
+
+                          // 성장일기
+                          Column(
+                            children: [
+                              HomeSectionHeader(
+                                title: '성장일기',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DiaryHomeScreen()),
                                   );
                                 },
                               ),
-                            ),
+                              SizedBox(height: 10),
+                              if (diaryList.isEmpty)
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Palette.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Palette.black.withOpacity(0.05),
+                                        offset: Offset(8, 8),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "성장일기가 없습니다",
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                        color: Palette.mediumGray,
+                                        letterSpacing: -0.4,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                Column(
+                                  children: List.generate(
+                                    diaryList.length > 3
+                                        ? 3
+                                        : diaryList.length, // 최대 3개
+                                    (index) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DiaryDetailScreen(
+                                                index: index,
+                                                isDiary: true,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(bottom: 12),
+                                          height: 70,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Palette.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Palette.black
+                                                    .withOpacity(0.05),
+                                                offset: Offset(8, 8),
+                                                blurRadius: 8,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 14),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                // 제목
+                                                Text(
+                                                  diaryList[index].title,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 15,
+                                                    color: Palette.black,
+                                                    letterSpacing: -0.4,
+                                                  ),
+                                                ),
+                                                SizedBox(height: 2),
+
+                                                // 날짜
+                                                Text(
+                                                  DateFormat('yyyy-MM-dd')
+                                                      .format(
+                                                    diaryList[index]
+                                                        .createAt
+                                                        .toDate(),
+                                                  ),
+                                                  style: TextStyle(
+                                                    fontFamily: 'Pretendard',
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 14,
+                                                    color: Palette.mediumGray,
+                                                    letterSpacing: -0.4,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                            ],
                           ),
-                      ],
+                          SizedBox(height: 28),
+
+                          // 진료기록
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              HomeSectionHeader(
+                                title: '진료기록',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MedicalHomeScreen()),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              if (medicalList.isEmpty)
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 12),
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Palette.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Palette.black.withOpacity(0.05),
+                                        offset: Offset(8, 8),
+                                        blurRadius: 8,
+                                      ),
+                                    ],
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      "진료기록이 없습니다",
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 12,
+                                        color: Palette.mediumGray,
+                                        letterSpacing: -0.4,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                SingleChildScrollView(
+                                  primary: false,
+                                  scrollDirection: Axis.horizontal, // 수평 스크롤 설정
+                                  child: Row(
+                                    children: List.generate(
+                                      medicalList.length > 3
+                                          ? 7
+                                          : medicalList.length, // 최대 7개
+                                      (index) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MedicalDetailScreen(
+                                                        index: index,
+                                                      )),
+                                            );
+                                          },
+
+                                          // 흰색 카드 영역
+                                          child: Container(
+                                            margin: EdgeInsets.only(
+                                                right: 12, bottom: 10),
+                                            height: 150,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                              color: Palette.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Palette.black
+                                                      .withOpacity(0.05),
+                                                  offset: Offset(8, 8),
+                                                  blurRadius: 8,
+                                                ),
+                                              ],
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 20),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      // 사진
+                                                      Container(
+                                                        width: 36,
+                                                        height: 36,
+                                                        margin: EdgeInsets.only(
+                                                            right: 4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          border: Border.all(
+                                                            color: Palette
+                                                                .lightGray,
+                                                            width: 0.4,
+                                                          ),
+                                                          image:
+                                                              DecorationImage(
+                                                            image:
+                                                                ExtendedNetworkImageProvider(
+                                                                    medicalList[
+                                                                            index]
+                                                                        .pet
+                                                                        .image),
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+
+                                                      // 이름
+                                                      Expanded(
+                                                        child: Text(
+                                                          medicalList[index]
+                                                              .pet
+                                                              .name,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                            fontFamily:
+                                                                'Pretendard',
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                            fontSize: 16,
+                                                            color:
+                                                                Palette.black,
+                                                            letterSpacing: -0.5,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(height: 12),
+
+                                                  // 방문 날짜
+                                                  Text(
+                                                    medicalList[index]
+                                                        .visitDate,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Pretendard',
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 14,
+                                                      color: Palette.mediumGray,
+                                                      letterSpacing: -0.4,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 6),
+
+                                                  // 이유
+                                                  Text(
+                                                    medicalList[index].reason,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                      fontFamily: 'Pretendard',
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      fontSize: 16,
+                                                      color: Palette.black,
+                                                      letterSpacing: -0.5,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                          SizedBox(height: 50),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: 50),
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
