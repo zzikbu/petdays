@@ -70,28 +70,34 @@ class _MainScreenState extends State<MainScreen>
             MyPageScreen(),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Palette.white,
-          selectedItemColor: Palette.darkGray,
-          unselectedItemColor: Palette.lightGray,
-          currentIndex: tabController.index,
-          onTap: (value) {
-            bottomNavigationItemOnTab(value);
-          },
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.feed_outlined),
-              label: "피드",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "홈",
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: "MY"),
-          ],
+        bottomNavigationBar: Theme(
+          data: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: Palette.white,
+            selectedItemColor: Palette.darkGray,
+            unselectedItemColor: Palette.lightGray,
+            currentIndex: tabController.index,
+            onTap: (value) {
+              bottomNavigationItemOnTab(value);
+            },
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.feed_outlined),
+                label: "피드",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: "홈",
+              ),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: "MY"),
+            ],
+          ),
         ),
       ),
     );
