@@ -420,7 +420,8 @@ class AuthRepository {
         "diaryCount": 0,
         "medicalCount": 0,
         "likes": [], // 좋아요한 글
-        "blocks": [] // 차단한 멤버 uid
+        "blocks": [], // 차단한 멤버 uid
+        "createdAt": Timestamp.now(),
       });
 
       firebaseAuth.signOut(); // 회원가입과 동시에 로그인이 되기 때문에 로그아웃 (메일 인증 전)
@@ -491,7 +492,8 @@ class AuthRepository {
           "diaryCount": 0,
           "medicalCount": 0,
           "likes": [],
-          "blocks": []
+          "blocks": [],
+          "createdAt": Timestamp.now(),
         });
       }
     } on CustomException {
@@ -536,7 +538,8 @@ class AuthRepository {
           "diaryCount": 0,
           "medicalCount": 0,
           "likes": [],
-          "blocks": []
+          "blocks": [],
+          "createdAt": Timestamp.now(),
         });
       }
     } on FirebaseException catch (e) {

@@ -222,7 +222,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                                         // 날짜
                                         Text(
                                           likeList[index]
-                                              .createAt
+                                              .createdAt
                                               .toDate()
                                               .toString()
                                               .split(" ")[0],

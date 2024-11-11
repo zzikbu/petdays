@@ -9,7 +9,7 @@ class WalkModel {
   final String duration;
   final String mapImageUrl;
   final List<PetModel> pets;
-  final Timestamp createAt;
+  final Timestamp createdAt;
   final UserModel writer;
 
   const WalkModel({
@@ -19,7 +19,7 @@ class WalkModel {
     required this.duration,
     required this.mapImageUrl,
     required this.pets,
-    required this.createAt,
+    required this.createdAt,
     required this.writer,
   });
 
@@ -34,7 +34,7 @@ class WalkModel {
       'duration': duration,
       'mapImageUrl': mapImageUrl,
       'pets': petDocRefs,
-      'createAt': createAt,
+      'createdAt': createdAt,
       'writer': userDocRef,
     };
   }
@@ -47,13 +47,13 @@ class WalkModel {
       duration: map['duration'],
       mapImageUrl: map['mapImageUrl'],
       pets: map['pets'], // PetModel이 이미 변환된 상태로 전달됨
-      createAt: map['createAt'],
+      createdAt: map['createdAt'],
       writer: map['writer'], // UserModel이 이미 변환된 상태로 전달됨
     );
   }
 
   @override
   String toString() {
-    return 'WalkModel{uid: $uid, walkId: $walkId, distance: $distance, duration: $duration, mapImageUrl: $mapImageUrl, pets: $pets, createAt: $createAt, writer: $writer}';
+    return 'WalkModel{uid: $uid, walkId: $walkId, distance: $distance, duration: $duration, mapImageUrl: $mapImageUrl, pets: $pets, createdAt: $createdAt, writer: $writer}';
   }
 }

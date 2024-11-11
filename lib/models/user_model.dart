@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String uid;
   final String nickname;
@@ -9,6 +11,7 @@ class UserModel {
   final int medicalCount;
   final List<String> blocks; // 차단한 유저
   final List<String> likes; // 좋아요한 글
+  final Timestamp createdAt;
 
   const UserModel({
     required this.uid,
@@ -21,6 +24,7 @@ class UserModel {
     required this.medicalCount,
     required this.blocks,
     required this.likes,
+    required this.createdAt,
   });
 
   factory UserModel.init() {
@@ -35,6 +39,7 @@ class UserModel {
       medicalCount: 0,
       blocks: [],
       likes: [],
+      createdAt: Timestamp.now(),
     );
   }
 
@@ -50,6 +55,7 @@ class UserModel {
       'medicalCount': this.medicalCount,
       'blocks': this.blocks,
       'likes': this.likes,
+      'createdAt': this.createdAt,
     };
   }
 
@@ -67,11 +73,12 @@ class UserModel {
       // List<String>.from()을 통해 List<String>으로 변환
       blocks: List<String>.from(map['blocks']),
       likes: List<String>.from(map['likes']),
+      createdAt: map['createdAt'],
     );
   }
 
   @override
   String toString() {
-    return 'UserModel{uid: $uid, nickname: $nickname, email: $email, profileImage: $profileImage, providerId: $providerId, walkCount: $walkCount, diaryCount: $diaryCount, medicalCount: $medicalCount, blocks: $blocks, likes: $likes}';
+    return 'UserModel{uid: $uid, nickname: $nickname, email: $email, profileImage: $profileImage, providerId: $providerId, walkCount: $walkCount, diaryCount: $diaryCount, medicalCount: $medicalCount, blocks: $blocks, likes: $likes, createdAt: $createdAt}';
   }
 }

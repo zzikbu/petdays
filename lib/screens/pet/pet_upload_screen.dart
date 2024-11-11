@@ -501,7 +501,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       gender: _selectedGender! == "수컷" ? "male" : "female",
                       isNeutering: _selectedNeutering! == "했어요" ? true : false,
                       currentImageUrl: widget.originalPetModel!.image,
-                      createAt: widget.originalPetModel!.createAt,
+                      createdAt: widget.originalPetModel!.createdAt,
                     );
 
                 ScaffoldMessenger.of(context)
@@ -532,7 +532,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
               });
             }
           },
-          buttonText: widget.originalPetModel == null ? "시작하기" : "수정하기",
+          buttonText: widget.originalPetModel == null ? "추가하기" : "수정하기",
         ),
       ),
     );

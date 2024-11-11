@@ -48,7 +48,7 @@ class PetRepository {
     required String gender,
     required bool isNeutering,
     required String currentImageUrl,
-    required Timestamp createAt,
+    required Timestamp createdAt,
   }) async {
     String downloadURL = currentImageUrl; // 기본값으로 현재 이미지 URL 사용
 
@@ -84,7 +84,7 @@ class PetRepository {
         "gender": gender,
         "isNeutering": isNeutering,
         "isDeleted": false,
-        "createAt": createAt,
+        "createdAt": createdAt,
       });
 
       // Firestore 문서 업데이트
@@ -124,7 +124,7 @@ class PetRepository {
           .collection('pets')
           .where('uid', isEqualTo: uid)
           .where('isDeleted', isEqualTo: false)
-          .orderBy('createAt', descending: false) // 오랜된 순 정렬
+          .orderBy('createdAt', descending: false) // 오랜된 순 정렬
           .get();
 
       return await Future.wait(snapshot.docs.map(
@@ -183,7 +183,7 @@ class PetRepository {
         "gender": gender,
         "isNeutering": isNeutering,
         "isDeleted": false,
-        "createAt": Timestamp.now(), // 현재 시간
+        "createdAt": Timestamp.now(), // 현재 시간
       });
 
       // Firestore에 문서 저장

@@ -228,7 +228,7 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
                                         // 날짜
                                         Text(
                                           openDiaryList[index]
-                                              .createAt
+                                              .createdAt
                                               .toDate()
                                               .toString()
                                               .split(" ")[0],

@@ -5,7 +5,7 @@ import 'package:petdays/models/user_model.dart';
 class MedicalModel {
   final String uid;
   final String medicalId;
-  final String visitDate;
+  final String visitedDate;
   final String reason;
   final String hospital;
   final String doctor;
@@ -13,12 +13,12 @@ class MedicalModel {
   final List<String> imageUrls;
   final UserModel writer;
   final PetModel pet;
-  final Timestamp createAt;
+  final Timestamp createdAt;
 
   const MedicalModel({
     required this.uid,
     required this.medicalId,
-    required this.visitDate,
+    required this.visitedDate,
     required this.reason,
     required this.hospital,
     required this.doctor,
@@ -26,7 +26,7 @@ class MedicalModel {
     required this.imageUrls,
     required this.writer,
     required this.pet,
-    required this.createAt,
+    required this.createdAt,
   });
 
   Map<String, dynamic> toMap({
@@ -36,7 +36,7 @@ class MedicalModel {
     return {
       'uid': this.uid,
       'medicalId': this.medicalId,
-      'visitDate': this.visitDate,
+      'visitedDate': this.visitedDate,
       'reason': this.reason,
       'hospital': this.hospital,
       'doctor': this.doctor,
@@ -44,7 +44,7 @@ class MedicalModel {
       'imageUrls': this.imageUrls,
       'writer': userDocRef,
       'pet': petDocRef,
-      'createAt': this.createAt,
+      'createdAt': this.createdAt,
     };
   }
 
@@ -52,7 +52,7 @@ class MedicalModel {
     return MedicalModel(
       uid: map['uid'],
       medicalId: map['medicalId'],
-      visitDate: map['visitDate'],
+      visitedDate: map['visitedDate'],
       reason: map['reason'],
       hospital: map['hospital'],
       doctor: map['doctor'],
@@ -62,7 +62,7 @@ class MedicalModel {
       imageUrls: List<String>.from(map['imageUrls']),
       writer: map['writer'],
       pet: map['pet'],
-      createAt: map['createAt'],
+      createdAt: map['createdAt'],
     );
   }
 }

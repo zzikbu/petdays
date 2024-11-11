@@ -62,7 +62,7 @@ class WalkRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('walks')
           .where('uid', isEqualTo: uid)
-          .orderBy('createAt', descending: true)
+          .orderBy('createdAt', descending: true)
           .get();
 
       return await Future.wait(snapshot.docs.map(
@@ -155,7 +155,7 @@ class WalkRepository {
         mapImageUrl: mapImageUrl,
         pets: petModels,
         writer: userModel,
-        createAt: Timestamp.now(),
+        createdAt: Timestamp.now(),
       );
 
       // Firestore에 산책 데이터 추가

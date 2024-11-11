@@ -291,7 +291,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
                                       // 날짜
                                       Text(
-                                        feed.createAt
+                                        feed.createdAt
                                             .toDate()
                                             .toString()
                                             .split(" ")[0],

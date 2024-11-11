@@ -82,12 +82,6 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     }
   }
 
-  void _lockTap() {
-    setState(() {
-      _isLock = !_isLock;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     DiaryModel diaryModel;
@@ -506,7 +500,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                       // 작성 날짜
                       Text(
                         DateFormat('yyyy-MM-dd HH:mm:ss')
-                            .format(diaryModel.createAt.toDate()),
+                            .format(diaryModel.createdAt.toDate()),
                         style: TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w400,
@@ -520,76 +514,77 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
                   Spacer(),
 
-                  Row(
-                    children: [
-                      // 좋아요 버튼
-                      GestureDetector(
-                        onTap: _isLiking
-                            ? null
-                            : () async {
-                                setState(() {
-                                  _isLiking = true;
-                                });
+                  if (!_isLock)
+                    Row(
+                      children: [
+                        // 좋아요 버튼
+                        GestureDetector(
+                          onTap: _isLiking
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    _isLiking = true;
+                                  });
 
-                                try {
-                                  await _likeDiary(diaryModel);
-                                } finally {
-                                  if (mounted) {
-                                    setState(() {
-                                      _isLiking = false;
-                                    });
+                                  try {
+                                    await _likeDiary(diaryModel);
+                                  } finally {
+                                    if (mounted) {
+                                      setState(() {
+                                        _isLiking = false;
+                                      });
+                                    }
                                   }
-                                }
-                              },
-                        child: AnimatedSwitcher(
-                          duration: Duration(milliseconds: 200),
-                          transitionBuilder: (child, animation) {
-                            return ScaleTransition(
-                              scale: animation,
-                              child: child,
-                            );
-                          },
-                          child: _isLiking
-                              ? SizedBox(
-                                  key: ValueKey('processing'),
-                                  height: 24,
-                                  width: 24,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.red),
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : isLike
-                                  ? Icon(
-                                      key: ValueKey('liked'),
-                                      Icons.favorite,
-                                      color: Colors.red,
-                                      size: 24,
-                                    )
-                                  : Icon(
-                                      key: ValueKey('unliked'),
-                                      Icons.favorite_border,
-                                      color: Palette.darkGray,
-                                      size: 24,
+                                },
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 200),
+                            transitionBuilder: (child, animation) {
+                              return ScaleTransition(
+                                scale: animation,
+                                child: child,
+                              );
+                            },
+                            child: _isLiking
+                                ? SizedBox(
+                                    key: ValueKey('processing'),
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.red),
+                                      strokeWidth: 2,
                                     ),
+                                  )
+                                : isLike
+                                    ? Icon(
+                                        key: ValueKey('liked'),
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                        size: 24,
+                                      )
+                                    : Icon(
+                                        key: ValueKey('unliked'),
+                                        Icons.favorite_border,
+                                        color: Palette.darkGray,
+                                        size: 24,
+                                      ),
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 5),
+                        SizedBox(width: 5),
 
-                      // 좋아요 카운트
-                      Text(
-                        diaryModel.likeCount.toString(), // 문자열로 변환
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 22,
-                          color: Palette.black,
-                          letterSpacing: -0.5,
+                        // 좋아요 카운트
+                        Text(
+                          diaryModel.likeCount.toString(), // 문자열로 변환
+                          style: TextStyle(
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.w500,
+                            fontSize: 22,
+                            color: Palette.black,
+                            letterSpacing: -0.5,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    ),
                 ],
               ),
               SizedBox(height: 16),

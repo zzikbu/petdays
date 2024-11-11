@@ -15,7 +15,7 @@ class DiaryModel {
   final int adultReportCount; // 음란물
   final int otherReportCount; // 기타
   final bool isLock; // 공개여부
-  final Timestamp createAt;
+  final Timestamp createdAt;
   final UserModel writer;
 
   const DiaryModel({
@@ -32,7 +32,7 @@ class DiaryModel {
     required this.adultReportCount,
     required this.otherReportCount,
     required this.isLock,
-    required this.createAt,
+    required this.createdAt,
     required this.writer,
   });
 
@@ -53,7 +53,7 @@ class DiaryModel {
       'adultReportCount': this.adultReportCount,
       'otherReportCount': this.otherReportCount,
       'isLock': this.isLock,
-      'createAt': this.createAt,
+      'createdAt': this.createdAt,
       'writer': userDocRef,
     };
   }
@@ -75,13 +75,13 @@ class DiaryModel {
       adultReportCount: map['adultReportCount'],
       otherReportCount: map['otherReportCount'],
       isLock: map['isLock'],
-      createAt: map['createAt'],
+      createdAt: map['createdAt'],
       writer: map['writer'],
     );
   }
 
   @override
   String toString() {
-    return 'DiaryModel{uid: $uid, diaryId: $diaryId, title: $title, desc: $desc, imageUrls: $imageUrls, likes: $likes, likeCount: $likeCount, reports: $reports, adReportCount: $adReportCount, abuseReportCount: $abuseReportCount, adultReportCount: $adultReportCount, otherReportCount: $otherReportCount, isLock: $isLock, createAt: $createAt, writer: $writer}';
+    return 'DiaryModel{uid: $uid, diaryId: $diaryId, title: $title, desc: $desc, imageUrls: $imageUrls, likes: $likes, likeCount: $likeCount, reports: $reports, adReportCount: $adReportCount, abuseReportCount: $abuseReportCount, adultReportCount: $adultReportCount, otherReportCount: $otherReportCount, isLock: $isLock, createdAt: $createdAt, writer: $writer}';
   }
 }

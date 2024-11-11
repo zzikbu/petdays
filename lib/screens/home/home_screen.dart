@@ -407,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       final walkModel = walkList[index];
                                       final walkDate =
                                           DateTime.fromMillisecondsSinceEpoch(
-                                              walkModel.createAt
+                                              walkModel.createdAt
                                                   .millisecondsSinceEpoch);
                                       final formattedDate =
                                           DateFormat('yyyy.MM.dd EEE', 'ko_KR')
@@ -630,7 +630,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                   DateFormat('yyyy-MM-dd')
                                                       .format(
                                                     diaryList[index]
-                                                        .createAt
+                                                        .createdAt
                                                         .toDate(),
                                                   ),
                                                   style: TextStyle(
@@ -805,7 +805,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                   // 방문 날짜
                                                   Text(
                                                     medicalList[index]
-                                                        .visitDate,
+                                                        .visitedDate,
                                                     style: TextStyle(
                                                       fontFamily: 'Pretendard',
                                                       fontWeight:

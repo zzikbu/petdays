@@ -17,7 +17,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
     required List<String> files,
     required List<String> remainImageUrls,
     required List<String> deleteImageUrls,
-    required String visitDate,
+    required String visitedDate,
     required String reason,
     required String hospital,
     required String doctor,
@@ -37,7 +37,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
         files: files,
         remainImageUrls: remainImageUrls,
         deleteImageUrls: deleteImageUrls,
-        visitDate: visitDate,
+        visitedDate: visitedDate,
         reason: reason,
         hospital: hospital,
         doctor: doctor,
@@ -52,7 +52,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
         return medical;
       }).toList()
         ..sort((a, b) =>
-            b.visitDate.compareTo(a.visitDate)); // visitDate 기준으로 내림차순 정렬
+            b.visitedDate.compareTo(a.visitedDate)); // visitDate 기준으로 내림차순 정렬
 
       state = state.copyWith(
         medicalStatus: MedicalStatus.success,
@@ -114,7 +114,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
   // 진료기록 업로드
   Future<void> uploadMedical({
     required List<String> files, // 이미지들
-    required String visitDate,
+    required String visitedDate,
     required String reason,
     required String hospital,
     required String doctor,
@@ -131,7 +131,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
       MedicalModel medicalModel = await read<MedicalRepository>().uploadMedical(
         uid: uid,
         files: files,
-        visitDate: visitDate,
+        visitedDate: visitedDate,
         reason: reason,
         hospital: hospital,
         doctor: doctor,
@@ -145,7 +145,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
           medicalModel,
           ...state.medicalList, // 새로 등록한 진료기록을 리스트 맨앞에 추가
         ]..sort((a, b) =>
-            b.visitDate.compareTo(a.visitDate)), // visitDate 기준으로 내림차순 정렬
+            b.visitedDate.compareTo(a.visitedDate)), // visitDate 기준으로 내림차순 정렬
       );
     } on CustomException catch (_) {
       state = state.copyWith(

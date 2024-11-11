@@ -114,7 +114,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
             SizedBox(height: 20),
             InfoColumn(
               title: '날짜',
-              content: _formatDate(walkModel.createAt.toDate()),
+              content: _formatDate(walkModel.createdAt.toDate()),
             ),
             SizedBox(height: 20),
             InfoColumn(

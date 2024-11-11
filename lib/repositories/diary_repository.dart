@@ -89,7 +89,7 @@ class DiaryRepository {
           "otherReportCount": currentData['otherReportCount'],
           "reports": currentData['reports'],
           "isLock": currentData['isLock'],
-          "createAt": currentData['createAt'],
+          "createdAt": currentData['createdAt'],
           "writer": userModel,
         });
 
@@ -176,7 +176,7 @@ class DiaryRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('diaries')
           .where('uid', isEqualTo: uid)
-          .orderBy('createAt', descending: true)
+          .orderBy('createdAt', descending: true)
           .get();
 
       return await Future.wait(snapshot.docs.map(
@@ -258,7 +258,7 @@ class DiaryRepository {
         "adultReportCount": 0,
         "otherReportCount": 0,
         "isLock": isLock,
-        "createAt": Timestamp.now(), // 현재 시간
+        "createdAt": Timestamp.now(), // 현재 시간
         "writer": userModel, // 생성한 유저 모델
       });
 

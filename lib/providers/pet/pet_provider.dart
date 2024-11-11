@@ -47,7 +47,7 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
     required String gender,
     required bool isNeutering,
     required String currentImageUrl, // 현재 이미지 URL
-    required Timestamp createAt,
+    required Timestamp createdAt,
   }) async {
     try {
       state = state.copyWith(petStatus: PetStatus.submitting);
@@ -66,7 +66,7 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
         gender: gender,
         isNeutering: isNeutering,
         currentImageUrl: currentImageUrl,
-        createAt: createAt,
+        createdAt: createdAt,
       );
 
       List<PetModel> newPetList = state.petList.map((pet) {

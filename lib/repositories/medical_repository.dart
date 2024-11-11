@@ -25,7 +25,7 @@ class MedicalRepository {
     required List<String> files, // 새로 추가된 이미지들
     required List<String> remainImageUrls, // 유지할 기존 이미지 URL들
     required List<String> deleteImageUrls, // 삭제할 기존 이미지 URL들
-    required String visitDate,
+    required String visitedDate,
     required String reason,
     required String hospital,
     required String doctor,
@@ -79,13 +79,13 @@ class MedicalRepository {
         "pet": petModel,
         "medicalId": medicalId,
         "imageUrls": allImageUrls,
-        "visitDate": visitDate,
+        "visitedDate": visitedDate,
         "reason": reason,
         "hospital": hospital,
         "doctor": doctor,
         "note": note,
         "writer": userModel,
-        "createAt": Timestamp.now(),
+        "createdAt": Timestamp.now(),
       });
 
       // 6. Firestore 문서 업데이트
@@ -163,7 +163,7 @@ class MedicalRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('medicals')
           .where('uid', isEqualTo: uid)
-          .orderBy('visitDate', descending: true) // 최신순 정렬
+          .orderBy('visitedDate', descending: true) // 최신순 정렬
           .get();
 
       return await Future.wait(snapshot.docs.map(
@@ -204,7 +204,7 @@ class MedicalRepository {
     required String uid, // 작성자
     required String petId,
     required List<String> files, // 이미지들
-    required String visitDate,
+    required String visitedDate,
     required String reason,
     required String hospital,
     required String doctor,
@@ -255,13 +255,13 @@ class MedicalRepository {
         "pet": petModel,
         "medicalId": medicalId,
         "imageUrls": imageUrls,
-        "visitDate": visitDate,
+        "visitedDate": visitedDate,
         "reason": reason,
         "hospital": hospital,
         "doctor": doctor,
         "note": note,
         "writer": userModel,
-        "createAt": Timestamp.now(), // 현재 시간
+        "createdAt": Timestamp.now(), // 현재 시간
       });
 
       batch.set(

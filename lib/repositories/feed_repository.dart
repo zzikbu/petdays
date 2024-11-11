@@ -180,7 +180,7 @@ class FeedRepository {
       QuerySnapshot<Map<String, dynamic>> snapshot = await firebaseFirestore
           .collection('diaries')
           .where('isLock', isEqualTo: false)
-          .orderBy('createAt', descending: true)
+          .orderBy('createdAt', descending: true)
           .get();
 
       // 3. 차단한 사용자의 게시물 필터링하고 변환

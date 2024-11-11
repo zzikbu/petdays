@@ -101,7 +101,7 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
               SizedBox(height: 20),
               InfoColumn(
                 title: '진료일',
-                content: medicalModel.visitDate,
+                content: medicalModel.visitedDate,
               ),
               SizedBox(height: 20),
               InfoColumn(

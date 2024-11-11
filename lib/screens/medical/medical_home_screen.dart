@@ -161,7 +161,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
 
                                       // 방문날짜
                                       Text(
-                                        medical.visitDate,
+                                        medical.visitedDate,
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w400,

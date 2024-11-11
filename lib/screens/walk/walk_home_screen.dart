@@ -165,7 +165,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                       ),
                                       SizedBox(height: 4),
                                       Text(
-                                        walkModel.createAt
+                                        walkModel.createdAt
                                             .toDate()
                                             .toString()
                                             .substring(0, 10),

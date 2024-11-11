@@ -190,45 +190,54 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                                     SizedBox(height: 4),
                                     Row(
                                       children: [
-                                        // 좋아요 아이콘
-                                        isLike
-                                            ? Icon(
-                                                Icons.favorite,
-                                                color: Colors.red,
-                                                size: 16,
-                                              )
-                                            : Icon(
-                                                Icons.favorite_border,
-                                                color: Palette.darkGray,
-                                                size: 16,
+                                        if (diaryList[index].isLock == false)
+                                          Row(
+                                            children: [
+                                              // 좋아요 아이콘
+                                              isLike
+                                                  ? Icon(
+                                                      Icons.favorite,
+                                                      color: Colors.red,
+                                                      size: 16,
+                                                    )
+                                                  : Icon(
+                                                      Icons.favorite_border,
+                                                      color: Palette.darkGray,
+                                                      size: 16,
+                                                    ),
+
+                                              SizedBox(width: 4),
+
+                                              // 좋아요 개수
+                                              Text(
+                                                diaryList[index]
+                                                    .likeCount
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontFamily: 'Pretendard',
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 14,
+                                                  color: Palette.darkGray,
+                                                  letterSpacing: -0.4,
+                                                ),
                                               ),
-                                        SizedBox(width: 4),
+                                              SizedBox(width: 8), // 여유 공간 추가
 
-                                        // 좋아요 개수
-                                        Text(
-                                          diaryList[index].likeCount.toString(),
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 14,
-                                            color: Palette.darkGray,
-                                            letterSpacing: -0.4,
+                                              // 세로 구분선
+                                              Container(
+                                                width: 1,
+                                                height: 10,
+                                                color: Palette
+                                                    .mediumGray, // 구분선 색상
+                                              ),
+                                              SizedBox(width: 8),
+                                            ],
                                           ),
-                                        ),
-                                        SizedBox(width: 8), // 여유 공간 추가
-
-                                        // 세로 구분선
-                                        Container(
-                                          width: 1,
-                                          height: 10,
-                                          color: Palette.mediumGray, // 구분선 색상
-                                        ),
-                                        SizedBox(width: 8),
 
                                         // 날짜
                                         Text(
                                           diaryList[index]
-                                              .createAt
+                                              .createdAt
                                               .toDate()
                                               .toString()
                                               .split(" ")[0],

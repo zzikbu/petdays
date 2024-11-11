@@ -178,7 +178,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
       // 기존 이미지 URLs를 유지할 이미지 목록에 추가
       _remainImageUrls.addAll(widget.originalMedicalModel!.imageUrls);
 
-      _visitDateTEC.text = widget.originalMedicalModel!.visitDate;
+      _visitDateTEC.text = widget.originalMedicalModel!.visitedDate;
       _reasonTEC.text = widget.originalMedicalModel!.reason;
       _hospitalTEC.text = widget.originalMedicalModel!.hospital;
       _doctorTEC.text = widget.originalMedicalModel!.doctor;
@@ -419,7 +419,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                       files: _files,
                       remainImageUrls: _remainImageUrls,
                       deleteImageUrls: _deleteImageUrls,
-                      visitDate: _visitDateTEC.text,
+                      visitedDate: _visitDateTEC.text,
                       reason: _reasonTEC.text,
                       hospital: _hospitalTEC.text,
                       doctor: _doctorTEC.text,
@@ -434,7 +434,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                 // 진료기록 업로드 로직
                 await context.read<MedicalProvider>().uploadMedical(
                       files: _files,
-                      visitDate: _visitDateTEC.text,
+                      visitedDate: _visitDateTEC.text,
                       reason: _reasonTEC.text,
                       hospital: _hospitalTEC.text,
                       doctor: _doctorTEC.text,
