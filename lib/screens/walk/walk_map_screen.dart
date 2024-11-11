@@ -191,7 +191,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
   }
 
   Future<void> _handleExitConfirmation(double distance, int minutes) async {
-    if (minutes >= 0) {
+    if (minutes >= 5) {
       Navigator.pop(context);
 
       await _saveWalkData(distance);
@@ -199,7 +199,6 @@ class _WalkMapScreenState extends State<WalkMapScreen>
     if (mounted) {
       Navigator.of(context)
         ..pop(true)
-        ..pop()
         ..pop();
     }
   }

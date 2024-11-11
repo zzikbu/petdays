@@ -18,7 +18,6 @@ class PermissionUtils {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return CustomDialog(
-                hasCancelButton: false,
                 title: '사진 접근 권한 필요',
                 message: status.isPermanentlyDenied
                     ? '설정에서 사진 접근 권한을 허용해주세요.'
@@ -51,7 +50,6 @@ class PermissionUtils {
           barrierDismissible: false,
           builder: (BuildContext context) {
             return CustomDialog(
-              hasCancelButton: false,
               title: '위치 서비스 필요',
               message: '산책 기록을 위해 위치 서비스를 활성화해주세요.',
               onConfirm: () {
@@ -83,7 +81,6 @@ class PermissionUtils {
             barrierDismissible: false,
             builder: (BuildContext context) {
               return CustomDialog(
-                hasCancelButton: false,
                 title: '위치 권한 필요',
                 message: status.isPermanentlyDenied
                     ? '산책 기록을 위해 설정에서 위치 권한을 허용해주세요.'

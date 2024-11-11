@@ -32,7 +32,7 @@ class MyAuthProvider extends StateNotifier<AuthState> with LocatorMixin {
     // 유저 존재 여부에 따라 인증 상태 업데이트
     // 유저가 있으면 로그인 상태로, 없으면 로그아웃 상태로 변경
     if (user != null) {
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 500));
       state = state.copyWith(authStatus: AuthStatus.authenticated);
     } else {
       state = state.copyWith(authStatus: AuthStatus.unauthenticated);
