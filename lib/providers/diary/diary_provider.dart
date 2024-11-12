@@ -97,7 +97,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         return diary.diaryId == newDiaryModel.diaryId ? newDiaryModel : diary;
       }).toList();
 
-      List<DiaryModel> newOpenDiaryList = state.diaryList.map((diary) {
+      List<DiaryModel> newOpenDiaryList = state.openDiaryList.map((diary) {
         return diary.diaryId == newDiaryModel.diaryId ? newDiaryModel : diary;
       }).toList();
 

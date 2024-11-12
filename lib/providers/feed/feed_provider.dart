@@ -206,7 +206,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
           .getFeedList(currentUserUid: currentUserUid);
 
       List<DiaryModel> hotFeedList =
-          feedList.where((feed) => feed.likeCount >= 10).toList();
+          feedList.where((feed) => feed.likeCount >= 5).toList();
 
       state = state.copyWith(
         feedList: feedList,
