@@ -1,10 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:provider/provider.dart';
 
 class DeleteAccountScreen extends StatefulWidget {
@@ -76,7 +76,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  labelText: context.read<UserState>().userModel.email,
+                  labelText: context.read<User>().email,
                   labelStyle: TextStyle(color: Colors.black),
                   prefixIcon: Icon(Icons.email),
                   filled: true,

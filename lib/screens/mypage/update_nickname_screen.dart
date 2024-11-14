@@ -1,12 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/next_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/profile/profile_provider.dart';
-import 'package:petdays/providers/user/user_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:provider/provider.dart';
 
 class UpdateNicknameScreen extends StatefulWidget {
@@ -19,6 +17,7 @@ class UpdateNicknameScreen extends StatefulWidget {
 class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
   /// Properties
   final TextEditingController _nicknameTEC = TextEditingController();
+  late String currentUserUid = context.read<User>().uid;
 
   bool _isActive = false;
 
@@ -45,8 +44,6 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String uid = context.read<UserState>().userModel.uid;
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
@@ -133,13 +130,14 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
 
               // 수정 로직
               await context.read<ProfileProvider>().updateNickname(
-                    uid: uid,
+                    uid: currentUserUid,
                     newNickname: _nicknameTEC.text,
                   );
 
               // 상태관리하고 있는 userModel 갱신
-              await context.read<ProfileProvider>().getProfile(uid: uid);
-              await context.read<UserProvider>().getUserInfo();
+              await context
+                  .read<ProfileProvider>()
+                  .getProfile(uid: currentUserUid);
 
               Navigator.pop(context);
             } on CustomException catch (e) {

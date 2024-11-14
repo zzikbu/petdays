@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petdays/components/show_error_dialog.dart';
@@ -7,7 +8,6 @@ import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/like/like_provider.dart';
 import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -48,7 +48,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final currentUserId = context.read<UserState>().userModel.uid;
+    String currentUserUid = context.read<User>().uid;
 
     final likeState = context.watch<LikeState>();
     List<DiaryModel> likeList = likeState.likeList;
@@ -87,7 +87,8 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                   itemCount: likeList.length,
                   itemBuilder: (context, index) {
-                    bool isLike = likeList[index].likes.contains(currentUserId);
+                    bool isLike =
+                        likeList[index].likes.contains(currentUserUid);
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(

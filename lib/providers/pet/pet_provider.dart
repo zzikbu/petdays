@@ -6,7 +6,6 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/repositories/pet_repository.dart';
 
 class PetProvider extends StateNotifier<PetState> with LocatorMixin {
@@ -52,12 +51,12 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
     try {
       state = state.copyWith(petStatus: PetStatus.submitting);
 
-      String uid = read<UserState>().userModel.uid;
+      String currentUserUid = read<User>().uid;
 
       // 수정된 펫 데이터 가져오기
       PetModel updatedPet = await read<PetRepository>().updatePet(
         petId: petId,
-        uid: uid,
+        uid: currentUserUid,
         file: file,
         name: name,
         breed: breed,

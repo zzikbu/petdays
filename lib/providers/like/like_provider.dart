@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/repositories/like_repository.dart';
 
 class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
@@ -83,10 +83,10 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
     state = state.copyWith(likeStatus: LikeStatus.fetching);
 
     try {
-      String uid = read<UserState>().userModel.uid;
+      String currentUserUid = read<User>().uid;
 
       List<DiaryModel> likeList =
-          await read<LikeRepository>().getLikeList(uid: uid);
+          await read<LikeRepository>().getLikeList(uid: currentUserUid);
 
       state = state.copyWith(
         likeStatus: LikeStatus.success,

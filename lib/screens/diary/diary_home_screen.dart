@@ -8,7 +8,6 @@ import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/diary/diary_provider.dart';
 import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:petdays/screens/diary/diary_upload_screen.dart';
 import 'package:provider/provider.dart';
@@ -53,7 +52,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final currentUserId = context.read<UserState>().userModel.uid;
+    String currentUserUid = context.read<User>().uid;
 
     DiaryState diaryState = context.watch<DiaryState>();
     List<DiaryModel> diaryList = diaryState.diaryList;
@@ -93,7 +92,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                   itemCount: diaryList.length,
                   itemBuilder: (context, index) {
                     bool isLike =
-                        diaryList[index].likes.contains(currentUserId);
+                        diaryList[index].likes.contains(currentUserUid);
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(

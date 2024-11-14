@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:petdays/components/show_error_dialog.dart';
@@ -7,7 +8,6 @@ import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/diary/diary_provider.dart';
 import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +21,7 @@ class OpenDiaryHomeScreen extends StatefulWidget {
 class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
     with AutomaticKeepAliveClientMixin<OpenDiaryHomeScreen> {
   late final DiaryProvider diaryProvider;
+  late String currentUserUid = context.read<User>().uid;
 
   // 다른 화면에서 돌아올 때
   // 데이터를 매번 가져오지 않도록
@@ -35,12 +36,10 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
   }
 
   void _getFeedList() {
-    String uid = context.read<UserState>().userModel.uid;
-
     // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await diaryProvider.getDiaryList(uid: uid);
+        await diaryProvider.getDiaryList(uid: currentUserUid);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
@@ -50,8 +49,6 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    final currentUserId = context.read<UserState>().userModel.uid;
 
     DiaryState diaryState = context.watch<DiaryState>();
     List<DiaryModel> openDiaryList = diaryState.openDiaryList;
@@ -91,7 +88,7 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
                   itemCount: openDiaryList.length,
                   itemBuilder: (context, index) {
                     bool isLike =
-                        openDiaryList[index].likes.contains(currentUserId);
+                        openDiaryList[index].likes.contains(currentUserUid);
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(

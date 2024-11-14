@@ -1,22 +1,19 @@
 import 'dart:typed_data';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/main.dart';
-import 'package:petdays/models/user_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';
 import 'package:petdays/providers/profile/profile_provider.dart';
 import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/providers/user/user_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/mypage/delete_account_screen.dart';
 import 'package:petdays/screens/mypage/like_home_screen.dart';
 import 'package:petdays/screens/mypage/open_diary_home_screen.dart';
@@ -36,6 +33,7 @@ class MyPageScreen extends StatefulWidget {
 class _MyPageScreenState extends State<MyPageScreen>
     with AutomaticKeepAliveClientMixin<MyPageScreen> {
   late final ProfileProvider profileProvider;
+  late String currentUserUid = context.read<User>().uid;
 
   // 사진 선택 함수
   Future<void> selectImage() async {
@@ -55,18 +53,14 @@ class _MyPageScreenState extends State<MyPageScreen>
     if (file != null) {
       Uint8List uint8list = await file.readAsBytes();
 
-      final uid = context.read<UserState>().userModel.uid;
-
       try {
         // 프로필 이미지 수정 로직
         await context.read<ProfileProvider>().updateProfileImage(
-              uid: uid,
+              uid: currentUserUid,
               imageFile: uint8list,
             );
 
-        // 상태관리하고 있는 userModel 갱신
-        await profileProvider.getProfile(uid: uid);
-        await context.read<UserProvider>().getUserInfo();
+        await profileProvider.getProfile(uid: currentUserUid);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
@@ -76,7 +70,7 @@ class _MyPageScreenState extends State<MyPageScreen>
   void _getProfile() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        String uid = context.read<UserState>().userModel.uid;
+        String uid = FirebaseAuth.instance.currentUser!.uid;
 
         await profileProvider.getProfile(uid: uid);
       } on CustomException catch (e) {
@@ -103,16 +97,16 @@ class _MyPageScreenState extends State<MyPageScreen>
     super.build(context);
 
     ProfileState profileState = context.watch<ProfileState>();
-    UserModel userModel = profileState.userModel;
+    // UserModel userModel = profileState.userModel;
 
     bool isLoading = (profileState.profileStatus == ProfileStatus.fetching) ||
         (profileState.profileStatus == ProfileStatus.submitting);
 
     String? providerImageUrl;
 
-    if (userModel.providerId == "google.com") {
+    if (profileState.userModel.providerId == "google.com") {
       providerImageUrl = 'assets/icons/ic_login_google.svg';
-    } else if (userModel.providerId == "apple.com") {
+    } else if (profileState.userModel.providerId == "apple.com") {
       providerImageUrl = 'assets/icons/ic_login_apple.svg';
     }
 
@@ -143,11 +137,12 @@ class _MyPageScreenState extends State<MyPageScreen>
                                   width: 1.0,
                                 ),
                                 image: DecorationImage(
-                                  image: userModel.profileImage == null
+                                  image: profileState.userModel.profileImage ==
+                                          null
                                       ? ExtendedAssetImageProvider(
                                           "assets/icons/profile.png")
                                       : ExtendedNetworkImageProvider(
-                                          userModel.profileImage!),
+                                          profileState.userModel.profileImage!),
                                   fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
                                 ),
                               ),
@@ -181,7 +176,9 @@ class _MyPageScreenState extends State<MyPageScreen>
                                               await selectImage();
                                             },
                                           ),
-                                          if (!(userModel.profileImage == null))
+                                          if (!(profileState
+                                                  .userModel.profileImage ==
+                                              null))
                                             // 프로필 이미지 삭제
                                             CupertinoActionSheetAction(
                                               child: Text(
@@ -198,25 +195,18 @@ class _MyPageScreenState extends State<MyPageScreen>
                                                 Navigator.pop(context);
 
                                                 try {
-                                                  final uid = context
-                                                      .read<UserState>()
-                                                      .userModel
-                                                      .uid;
-
                                                   // 프로필 이미지 삭제 로직
                                                   await context
                                                       .read<ProfileProvider>()
                                                       .updateProfileImage(
-                                                        uid: uid,
+                                                        uid: currentUserUid,
                                                         imageFile: null,
                                                       );
 
                                                   // 상태관리하고 있는 userModel 갱신
                                                   await profileProvider
-                                                      .getProfile(uid: uid);
-                                                  await context
-                                                      .read<UserProvider>()
-                                                      .getUserInfo();
+                                                      .getProfile(
+                                                          uid: currentUserUid);
                                                 } on CustomException catch (e) {
                                                   showErrorDialog(context, e);
                                                 }
@@ -265,7 +255,7 @@ class _MyPageScreenState extends State<MyPageScreen>
 
                         // 닉네임
                         Text(
-                          userModel.nickname,
+                          profileState.userModel.nickname,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
@@ -494,7 +484,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                     SizedBox(height: 20),
 
                     // 비밀번호 재설정
-                    if (userModel.providerId == 'password')
+                    if (profileState.userModel.providerId == 'password')
                       Column(
                         children: [
                           GestureDetector(
@@ -505,13 +495,14 @@ class _MyPageScreenState extends State<MyPageScreen>
                                   return CustomDialog(
                                     title: '비밀번호 재설정',
                                     message:
-                                        '${userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
+                                        '${profileState.userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
                                     onConfirm: () async {
                                       try {
                                         await context
                                             .read<MyAuthProvider>()
                                             .sendPasswordResetEmail(
-                                                email: userModel.email!);
+                                                email: profileState
+                                                    .userModel.email!);
 
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
@@ -579,7 +570,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                     // 회원탈퇴
                     GestureDetector(
                       onTap: () async {
-                        if (userModel.providerId == 'password') {
+                        if (profileState.userModel.providerId == 'password') {
                           Navigator.push(
                               context,
                               MaterialPageRoute(

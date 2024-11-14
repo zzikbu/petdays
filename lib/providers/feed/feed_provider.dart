@@ -1,8 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/models/user_model.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/repositories/feed_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
@@ -17,7 +17,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     state = state.copyWith(feedStatus: FeedStatus.submitting);
 
     try {
-      String currentUserUid = read<UserState>().userModel.uid;
+      String currentUserUid = read<User>().uid;
 
       await read<FeedRepository>().blockUser(
         currentUserUid: currentUserUid,
@@ -38,11 +38,11 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     state = state.copyWith(feedStatus: FeedStatus.submitting);
 
     try {
-      String uid = read<UserState>().userModel.uid;
+      String currentUserUid = read<User>().uid;
 
       // 신고하기가 눌려서 내용물이 수정된 성장일기
       DiaryModel newDiaryModel = await read<FeedRepository>().reportDiary(
-        uid: uid,
+        uid: currentUserUid,
         diaryModel: diaryModel,
         countField: countField,
       );
@@ -138,14 +138,13 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     state = state.copyWith(feedStatus: FeedStatus.submitting);
 
     try {
-      UserModel userModel = read<UserState>().userModel;
+      String currentUserUid = read<User>().uid;
 
       // 좋아요가 눌려서 내용물이 수정된 성장일기
       DiaryModel diaryModel = await read<FeedRepository>().likeDiary(
         diaryId: diaryId,
         diaryLikes: diaryLikes,
-        uid: userModel.uid,
-        userLikes: userModel.likes,
+        uid: currentUserUid,
       );
 
       List<DiaryModel> newFeedList = state.feedList.map(
@@ -200,7 +199,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     try {
       state = state.copyWith(feedStatus: FeedStatus.fetching); // 상태 변경
 
-      String currentUserUid = read<UserState>().userModel.uid;
+      String currentUserUid = read<User>().uid;
 
       List<DiaryModel> feedList = await read<FeedRepository>()
           .getFeedList(currentUserUid: currentUserUid);

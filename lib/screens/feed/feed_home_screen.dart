@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -6,7 +7,6 @@ import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/feed/feed_provider.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +51,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final currentUserId = context.read<UserState>().userModel.uid;
+    String currentUserUid = context.read<User>().uid;
 
     FeedState feedState = context.watch<FeedState>();
     List<DiaryModel> feedList = feedState.feedList;
@@ -156,7 +156,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                 itemBuilder: (context, index) {
                   final feed =
                       _isHotFeed ? hotFeedList[index] : feedList[index];
-                  bool isLike = feed.likes.contains(currentUserId);
+                  bool isLike = feed.likes.contains(currentUserUid);
 
                   return GestureDetector(
                     onTap: () {

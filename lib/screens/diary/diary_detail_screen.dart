@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,8 +15,6 @@ import 'package:petdays/providers/feed/feed_provider.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
 import 'package:petdays/providers/like/like_provider.dart';
 import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/providers/user/user_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/screens/diary/diary_upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
@@ -73,10 +72,6 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       if (_currentUserId == diaryModel.uid) {
         context.read<DiaryProvider>().likeDiary(newDiaryModel: newDiaryModel);
       }
-
-      await context
-          .read<UserProvider>()
-          .getUserInfo(); // 좋아요 했기 때문에 상태관리하고 있는 userModel 갱신
     } on CustomException catch (e) {
       showErrorDialog(context, e);
     }
@@ -102,7 +97,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       diaryModel = context.watch<FeedState>().feedList[widget.index];
     }
 
-    _currentUserId = context.read<UserState>().userModel.uid;
+    _currentUserId = context.read<User>().uid;
     bool isLike = diaryModel.likes.contains(_currentUserId);
     _isLock = diaryModel.isLock;
     _isMyDiary = diaryModel.uid == _currentUserId;

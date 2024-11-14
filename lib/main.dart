@@ -22,8 +22,6 @@ import 'package:petdays/providers/pet/pet_provider.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/providers/profile/profile_provider.dart';
 import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/providers/user/user_provider.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/providers/walk/walk_provider.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:petdays/repositories/auth_repository.dart';
@@ -127,9 +125,6 @@ class _MyAppState extends State<MyApp> {
         ),
         StateNotifierProvider<MyAuthProvider, AuthState>(
           create: (context) => MyAuthProvider(),
-        ),
-        StateNotifierProvider<UserProvider, UserState>(
-          create: (context) => UserProvider(),
         ),
         StateNotifierProvider<PetProvider, PetState>(
           create: (context) => PetProvider(),

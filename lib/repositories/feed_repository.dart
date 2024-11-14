@@ -3,7 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/models/user_model.dart';
-import 'package:petdays/screens/diary/diary_detail_screen.dart';
 
 class FeedRepository {
   final FirebaseStorage firebaseStorage;
@@ -100,7 +99,6 @@ class FeedRepository {
     required String diaryId,
     required List<String> diaryLikes, // diaryId에 좋아요한 유저들의 목록
     required String uid, // 성장일기 좋아요 누른 유저
-    required List<String> userLikes, // 성장일기 좋아요 누른 유저의 좋아요한 성장일기 목록
   }) async {
     try {
       DocumentReference<Map<String, dynamic>> userDocRef =
@@ -122,6 +120,11 @@ class FeedRepository {
       // batch 처럼 commit을 사용할 필요가 없음
       await firebaseFirestore.runTransaction(
         (transaction) async {
+          DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+              await transaction.get(userDocRef);
+          List<String> userLikes =
+              List<String>.from(userSnapshot.data()?['likes'] ?? []);
+
           bool isDiaryContains = diaryLikes.contains(uid);
 
           transaction.update(diaryDocRef, {

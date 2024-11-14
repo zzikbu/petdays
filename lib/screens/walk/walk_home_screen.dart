@@ -1,4 +1,5 @@
 import 'package:extended_image/extended_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/custom_dialog.dart';
 import 'package:petdays/components/show_error_dialog.dart';
@@ -6,7 +7,6 @@ import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/providers/walk/walk_provider.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:petdays/screens/walk/walk_detail_screen.dart';
@@ -32,12 +32,12 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
   }
 
   void _getWalkList() {
-    String uid = context.read<UserState>().userModel.uid;
+    late String currentUserUid = context.read<User>().uid;
 
     // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await _walkProvider.getWalkList(uid: uid);
+        await _walkProvider.getWalkList(uid: currentUserUid);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }

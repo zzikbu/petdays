@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
-import 'package:petdays/providers/profile/profile_provider.dart';
-import 'package:petdays/providers/user/user_provider.dart';
 import 'package:petdays/screens/feed/feed_home_screen.dart';
 import 'package:petdays/screens/home/home_screen.dart';
 import 'package:petdays/screens/mypage/mypage_screen.dart';
-import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -29,8 +24,6 @@ class _MainScreenState extends State<MainScreen>
       vsync: this,
       initialIndex: 1,
     );
-
-    _getProfile(); // 접속 중인 사용자의 정보 상태관리 저장
   }
 
   void bottomNavigationItemOnTab(int index) {
@@ -43,16 +36,6 @@ class _MainScreenState extends State<MainScreen>
   void dispose() {
     tabController.dispose(); // tabController도 dispose 해줘야 메모리에서 사라짐
     super.dispose();
-  }
-
-  // 접속 중인 사용자의 정보 상태관리 저장
-  // 매번 user 데이터를 가져오는 것은 비효율이기 때문
-  Future<void> _getProfile() async {
-    try {
-      await context.read<UserProvider>().getUserInfo();
-    } on CustomException catch (e) {
-      showErrorDialog(context, e);
-    }
   }
 
   @override

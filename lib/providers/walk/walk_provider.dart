@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/walk_model.dart';
-import 'package:petdays/providers/user/user_state.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:petdays/repositories/walk_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
@@ -67,10 +67,10 @@ class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {
       state = state.copyWith(
           walkStatus: WalkStatus.submitting); // 게시글을 등록하는 중인 상태로 변경
 
-      String uid = read<UserState>().userModel.uid; // 작성자
+      String currentUserUid = read<User>().uid;
 
       WalkModel walkModel = await read<WalkRepository>().uploadWalk(
-        uid: uid,
+        uid: currentUserUid,
         mapImage: mapImage,
         distance: distance,
         duration: duration,
