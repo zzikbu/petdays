@@ -2,20 +2,21 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/next_button.dart';
-import 'package:petdays/components/textfield_with_title.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/palette.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:petdays/providers/diary/diary_provider.dart';
-import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/providers/feed/feed_provider.dart';
-import 'package:petdays/providers/like/like_provider.dart';
-import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/bottom_confirm_button_widget.dart';
+import '../../components/show_custom_dialog.dart';
+import '../../components/show_error_dialog.dart';
+import '../../components/textfield_with_title.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/diary_model.dart';
+import '../../palette.dart';
+import '../../providers/diary/diary_provider.dart';
+import '../../providers/diary/diary_state.dart';
+import '../../providers/feed/feed_provider.dart';
+import '../../providers/like/like_provider.dart';
+import '../../utils/permission_utils.dart';
 
 class DiaryUploadScreen extends StatefulWidget {
   final bool isEditMode;
@@ -237,31 +238,22 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                 child: GestureDetector(
                   onTap: () {
                     if (_isLock) {
-                      showDialog(
+                      showCustomDialog(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialog(
-                            title: '성장일기 공개',
-                            message:
-                                '성장일기를 공개하면 피드에 게시되고,\n업로드 후 이를 변경할 수 없습니다.',
-                            onConfirm: () {
-                              _lockTap();
-                            },
-                          );
+                        title: '성장일기 공개',
+                        message: '성장일기를 공개하면 피드에 게시되고,\n업로드 후 이를 변경할 수 없습니다.',
+                        onConfirm: () {
+                          _lockTap();
                         },
                       );
                     } else {
-                      showDialog(
+                      showCustomDialog(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialog(
-                            title: '성장일기 비공개',
-                            message:
-                                '성장일기를 비공개하면 작성자만 볼 수 있고,\n업로드 후 이를 변경할 수 없습니다.',
-                            onConfirm: () {
-                              _lockTap();
-                            },
-                          );
+                        title: '성장일기 비공개',
+                        message:
+                            '성장일기를 비공개하면 작성자만 볼 수 있고,\n업로드 후 이를 변경할 수 없습니다.',
+                        onConfirm: () {
+                          _lockTap();
                         },
                       );
                     }
@@ -354,9 +346,9 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
             ),
           ],
         ),
-        bottomNavigationBar: NextButton(
+        bottomNavigationBar: BottomConfirmButtonWidget(
           isActive: _isActive,
-          onTap: () async {
+          onConfirm: () async {
             try {
               setState(() {
                 _isActive = false;

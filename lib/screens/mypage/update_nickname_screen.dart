@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/next_button.dart';
+import 'package:petdays/components/bottom_confirm_button_widget.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/profile/profile_provider.dart';
@@ -119,10 +119,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
             ],
           ),
         ),
-        bottomNavigationBar: NextButton(
+        bottomNavigationBar: BottomConfirmButtonWidget(
           isActive: _isActive,
           buttonText: "수정하기",
-          onTap: () async {
+          onConfirm: () async {
             try {
               setState(() {
                 _isActive = false;

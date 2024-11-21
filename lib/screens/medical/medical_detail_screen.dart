@@ -2,15 +2,16 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/info_column.dart';
-import 'package:petdays/models/medical_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/medical/medical_provider.dart';
-import 'package:petdays/providers/medical/medical_state.dart';
-import 'package:petdays/screens/medical/medical_upload_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+
+import '../../components/info_column.dart';
+import '../../components/show_custom_dialog.dart';
+import '../../models/medical_model.dart';
+import '../../palette.dart';
+import '../../providers/medical/medical_provider.dart';
+import '../../providers/medical/medical_state.dart';
+import 'medical_upload_screen.dart';
 
 class MedicalDetailScreen extends StatefulWidget {
   final int index;
@@ -58,20 +59,16 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                   title: '삭제하기',
                   isDestructive: true,
                   onTap: () {
-                    showDialog(
+                    showCustomDialog(
                       context: context,
-                      builder: (BuildContext context) {
-                        return CustomDialog(
-                          title: '진료기록 삭제',
-                          message: '진료기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                          onConfirm: () {
-                            Navigator.pop(context);
-                            context
-                                .read<MedicalProvider>()
-                                .deleteMedical(medicalModel: medicalModel);
-                            Navigator.pop(context);
-                          },
-                        );
+                      title: '진료기록 삭제',
+                      message: '진료기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                      onConfirm: () {
+                        Navigator.pop(context);
+                        context
+                            .read<MedicalProvider>()
+                            .deleteMedical(medicalModel: medicalModel);
+                        Navigator.pop(context);
                       },
                     );
                   },

@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:petdays/components/custom_dialog.dart';
+import 'package:petdays/components/show_custom_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
@@ -174,11 +174,102 @@ class _WalkMapScreenState extends State<WalkMapScreen>
 
     return await showDialog<bool>(
           context: context,
-          builder: (context) => CustomDialog(
-            title: '산책 종료',
-            message: _getExitDialogMessage(distance, minutes),
-            onConfirm: () => _handleExitConfirmation(distance, minutes),
-          ),
+          builder: (context) {
+            return Dialog(
+              backgroundColor: Palette.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '산책 종료',
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Palette.black,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      _getExitDialogMessage(distance, minutes),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Palette.mediumGray,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Palette.lightGray,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '취소',
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Palette.black,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              _handleExitConfirmation(distance, minutes);
+                            },
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: Palette.mainGreen,
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '확인',
+                                  style: TextStyle(
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Palette.white,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         ) ??
         false;
   }

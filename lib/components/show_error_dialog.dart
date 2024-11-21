@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/palette.dart';
+
+import '../exceptions/custom_exception.dart';
+import '../palette.dart';
 
 void showErrorDialog(BuildContext context, CustomException e) {
   showDialog(

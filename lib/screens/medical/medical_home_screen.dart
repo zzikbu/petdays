@@ -1,17 +1,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/medical_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/medical/medical_provider.dart';
-import 'package:petdays/providers/medical/medical_state.dart';
-import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/screens/medical/medical_detail_screen.dart';
-import 'package:petdays/screens/select_pet_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/show_custom_dialog.dart';
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/medical_model.dart';
+import '../../palette.dart';
+import '../../providers/medical/medical_provider.dart';
+import '../../providers/medical/medical_state.dart';
+import '../../providers/pet/pet_state.dart';
+import '../select_pet_screen.dart';
+import 'medical_detail_screen.dart';
 
 class MedicalHomeScreen extends StatefulWidget {
   const MedicalHomeScreen({super.key});
@@ -209,16 +210,12 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (context.read<PetState>().petList.isEmpty) {
-            showDialog(
+            showCustomDialog(
               context: context,
-              builder: (context) {
-                return CustomDialog(
-                  title: '진료기록',
-                  message: '반려동물을 추가해주세요.',
-                  hasCancelButton: false,
-                  onConfirm: () => Navigator.pop(context),
-                );
-              },
+              title: '진료기록',
+              message: '반려동물을 추가해주세요.',
+              hasCancelButton: false,
+              onConfirm: () => Navigator.pop(context),
             );
           } else {
             Navigator.push(

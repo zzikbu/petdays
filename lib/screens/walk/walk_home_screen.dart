@@ -1,17 +1,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/walk_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/providers/walk/walk_provider.dart';
-import 'package:petdays/providers/walk/walk_state.dart';
 import 'package:petdays/screens/walk/walk_detail_screen.dart';
-import 'package:petdays/screens/select_pet_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/show_custom_dialog.dart';
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/walk_model.dart';
+import '../../palette.dart';
+import '../../providers/pet/pet_state.dart';
+import '../../providers/walk/walk_provider.dart';
+import '../../providers/walk/walk_state.dart';
+import '../select_pet_screen.dart';
 
 class WalkHomeScreen extends StatefulWidget {
   const WalkHomeScreen({super.key});
@@ -281,16 +282,12 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (context.read<PetState>().petList.isEmpty) {
-            showDialog(
+            showCustomDialog(
               context: context,
-              builder: (context) {
-                return CustomDialog(
-                  title: '산책',
-                  message: '반려동물을 추가해주세요.',
-                  hasCancelButton: false,
-                  onConfirm: () => Navigator.pop(context),
-                );
-              },
+              title: '산책',
+              message: '반려동물을 추가해주세요.',
+              hasCancelButton: false,
+              onConfirm: () => Navigator.pop(context),
             );
           } else {
             Navigator.push(

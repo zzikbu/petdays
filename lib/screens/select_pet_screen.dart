@@ -1,19 +1,18 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/next_button.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/pet_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/pet/pet_provider.dart';
-import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/screens/medical/medical_upload_screen.dart';
 import 'package:petdays/screens/walk/walk_map_screen.dart';
-import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
+
+import '../components/bottom_confirm_button_widget.dart';
+import '../components/show_error_dialog.dart';
+import '../exceptions/custom_exception.dart';
+import '../models/pet_model.dart';
+import '../palette.dart';
+import '../providers/pet/pet_provider.dart';
+import '../providers/pet/pet_state.dart';
+import '../utils/permission_utils.dart';
+import 'medical/medical_upload_screen.dart';
 
 class SelectPetScreen extends StatefulWidget {
   final bool isMedical;
@@ -192,9 +191,9 @@ class _SelectPetScreenState extends State<SelectPetScreen>
           ),
         ],
       ),
-      bottomNavigationBar: NextButton(
+      bottomNavigationBar: BottomConfirmButtonWidget(
         isActive: _isActive,
-        onTap: () async {
+        onConfirm: () async {
           if (widget.isMedical) {
             PetModel selectedPet = petList[selectedIndices[0]];
             Navigator.push(

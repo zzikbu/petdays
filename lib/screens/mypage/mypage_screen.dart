@@ -6,22 +6,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/main.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/providers/profile/profile_provider.dart';
-import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/screens/mypage/delete_account_screen.dart';
-import 'package:petdays/screens/mypage/like_home_screen.dart';
-import 'package:petdays/screens/mypage/open_diary_home_screen.dart';
 import 'package:petdays/screens/mypage/terms_policy_screen.dart';
-import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:petdays/screens/mypage/update_nickname_screen.dart';
-import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/show_custom_dialog.dart';
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../main.dart';
+import '../../palette.dart';
+import '../../providers/auth/my_auth_provider.dart';
+import '../../providers/profile/profile_provider.dart';
+import '../../providers/profile/profile_state.dart';
+import '../../utils/permission_utils.dart';
+import '../pet/pet_upload_screen.dart';
+import 'delete_account_screen.dart';
+import 'like_home_screen.dart';
+import 'open_diary_home_screen.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -489,31 +490,26 @@ class _MyPageScreenState extends State<MyPageScreen>
                         children: [
                           GestureDetector(
                             onTap: () {
-                              showDialog(
+                              showCustomDialog(
                                 context: context,
-                                builder: (BuildContext context) {
-                                  return CustomDialog(
-                                    title: '비밀번호 재설정',
-                                    message:
-                                        '${profileState.userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
-                                    onConfirm: () async {
-                                      try {
-                                        await context
-                                            .read<MyAuthProvider>()
-                                            .sendPasswordResetEmail(
-                                                email: profileState
-                                                    .userModel.email!);
+                                title: '비밀번호 재설정',
+                                message:
+                                    '${profileState.userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
+                                onConfirm: () async {
+                                  try {
+                                    await context
+                                        .read<MyAuthProvider>()
+                                        .sendPasswordResetEmail(
+                                            email:
+                                                profileState.userModel.email!);
 
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text("전송 완료")));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text("전송 완료")));
 
-                                        Navigator.pop(context);
-                                      } on CustomException catch (e) {
-                                        showErrorDialog(context, e);
-                                      }
-                                    },
-                                  );
+                                    Navigator.pop(context);
+                                  } on CustomException catch (e) {
+                                    showErrorDialog(context, e);
+                                  }
                                 },
                               );
                             },
@@ -535,22 +531,16 @@ class _MyPageScreenState extends State<MyPageScreen>
                     // 로그아웃
                     GestureDetector(
                       onTap: () {
-                        showDialog(
+                        showCustomDialog(
                           context: context,
-                          builder: (BuildContext context) {
-                            return CustomDialog(
-                              title: '로그아웃',
-                              message: '로그아웃 하시겠습니까?',
-                              onConfirm: () async {
-                                try {
-                                  await context
-                                      .read<MyAuthProvider>()
-                                      .signOut();
-                                } on CustomException catch (e) {
-                                  showErrorDialog(context, e);
-                                }
-                              },
-                            );
+                          title: '로그아웃',
+                          message: '로그아웃 하시겠습니까?',
+                          onConfirm: () async {
+                            try {
+                              await context.read<MyAuthProvider>().signOut();
+                            } on CustomException catch (e) {
+                              showErrorDialog(context, e);
+                            }
                           },
                         );
                       },
@@ -577,24 +567,19 @@ class _MyPageScreenState extends State<MyPageScreen>
                                 builder: (context) => DeleteAccountScreen(),
                               ));
                         } else {
-                          showDialog(
+                          showCustomDialog(
                             context: context,
-                            builder: (BuildContext context) {
-                              return CustomDialog(
-                                title: '회원탈퇴',
-                                message:
-                                    '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴하시겠습니까?',
-                                onConfirm: () async {
-                                  try {
-                                    await context
-                                        .read<MyAuthProvider>()
-                                        .deleteAccount();
-                                  } on CustomException catch (e) {
-                                    Navigator.pop(context);
-                                    showErrorDialog(context, e);
-                                  }
-                                },
-                              );
+                            title: '회원탈퇴',
+                            message: '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴하시겠습니까?',
+                            onConfirm: () async {
+                              try {
+                                await context
+                                    .read<MyAuthProvider>()
+                                    .deleteAccount();
+                              } on CustomException catch (e) {
+                                Navigator.pop(context);
+                                showErrorDialog(context, e);
+                              }
                             },
                           );
                         }

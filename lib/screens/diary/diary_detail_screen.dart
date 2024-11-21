@@ -4,20 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/diary/diary_provider.dart';
-import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/providers/feed/feed_provider.dart';
-import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/providers/like/like_provider.dart';
-import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/screens/diary/diary_upload_screen.dart';
+import 'package:petdays/components/show_custom_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/diary_model.dart';
+import '../../palette.dart';
+import '../../providers/diary/diary_provider.dart';
+import '../../providers/diary/diary_state.dart';
+import '../../providers/feed/feed_provider.dart';
+import '../../providers/feed/feed_state.dart';
+import '../../providers/like/like_provider.dart';
+import '../../providers/like/like_state.dart';
+import 'diary_upload_screen.dart';
 
 enum ReportType {
   ad('상업적 광고 및 판매', 'adReportCount'),
@@ -134,30 +135,26 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                     title: '삭제하기',
                     isDestructive: true,
                     onTap: () {
-                      showDialog(
+                      showCustomDialog(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialog(
-                            title: '성장일기 삭제',
-                            message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                            onConfirm: () async {
-                              try {
-                                Navigator.pop(context);
-                                await context
-                                    .read<DiaryProvider>()
-                                    .deleteDiary(diaryModel: diaryModel);
-                                context
-                                    .read<FeedProvider>()
-                                    .deleteDiary(diaryId: diaryModel.diaryId);
-                                context
-                                    .read<LikeProvider>()
-                                    .deleteDiary(diaryId: diaryModel.diaryId);
-                                Navigator.pop(context);
-                              } on CustomException catch (e) {
-                                showErrorDialog(context, e);
-                              }
-                            },
-                          );
+                        title: '성장일기 삭제',
+                        message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                        onConfirm: () async {
+                          try {
+                            Navigator.pop(context);
+                            await context
+                                .read<DiaryProvider>()
+                                .deleteDiary(diaryModel: diaryModel);
+                            context
+                                .read<FeedProvider>()
+                                .deleteDiary(diaryId: diaryModel.diaryId);
+                            context
+                                .read<LikeProvider>()
+                                .deleteDiary(diaryId: diaryModel.diaryId);
+                            Navigator.pop(context);
+                          } on CustomException catch (e) {
+                            showErrorDialog(context, e);
+                          }
                         },
                       );
                     },
@@ -210,18 +207,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
                                     Navigator.pop(context);
 
-                                    showDialog(
+                                    showCustomDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialog(
-                                          title: '신고하기',
-                                          message:
-                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
-                                          hasCancelButton: false,
-                                          onConfirm: () {
-                                            Navigator.pop(context);
-                                          },
-                                        );
+                                      title: '신고하기',
+                                      message:
+                                          '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                      hasCancelButton: false,
+                                      onConfirm: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       },
                                     );
                                   } on CustomException catch (e) {
@@ -254,18 +248,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
                                     Navigator.pop(context);
 
-                                    showDialog(
+                                    showCustomDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialog(
-                                          title: '신고하기',
-                                          message:
-                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
-                                          hasCancelButton: false,
-                                          onConfirm: () {
-                                            Navigator.pop(context);
-                                          },
-                                        );
+                                      title: '신고하기',
+                                      message:
+                                          '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                      hasCancelButton: false,
+                                      onConfirm: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       },
                                     );
                                   } on CustomException catch (e) {
@@ -298,18 +289,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
                                     Navigator.pop(context);
 
-                                    showDialog(
+                                    showCustomDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialog(
-                                          title: '신고하기',
-                                          message:
-                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
-                                          hasCancelButton: false,
-                                          onConfirm: () {
-                                            Navigator.pop(context);
-                                          },
-                                        );
+                                      title: '신고하기',
+                                      message:
+                                          '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                      hasCancelButton: false,
+                                      onConfirm: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       },
                                     );
                                   } on CustomException catch (e) {
@@ -340,20 +328,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                                               ReportType.other.countField,
                                         );
 
-                                    Navigator.pop(context);
-
-                                    showDialog(
+                                    showCustomDialog(
                                       context: context,
-                                      builder: (BuildContext context) {
-                                        return CustomDialog(
-                                          title: '신고하기',
-                                          message:
-                                              '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
-                                          hasCancelButton: false,
-                                          onConfirm: () {
-                                            Navigator.pop(context);
-                                          },
-                                        );
+                                      title: '신고하기',
+                                      message:
+                                          '신고가 접수되었습니다.\n검토까지는 최대 24시간 소요됩니다.',
+                                      hasCancelButton: false,
+                                      onConfirm: () {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
                                       },
                                     );
                                   } on CustomException catch (e) {
@@ -386,35 +369,26 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                   PullDownMenuItem(
                     title: '차단하기',
                     onTap: () {
-                      showDialog(
+                      showCustomDialog(
                         context: context,
-                        builder: (BuildContext context) {
-                          return CustomDialog(
-                            title: '차단하기',
-                            message:
-                                '이 작성자의 성장일기가 목록에 노출되지 않으며,\n다시 해제하실 수 없습니다.',
-                            onConfirm: () async {
-                              try {
-                                await context
-                                    .read<FeedProvider>()
-                                    .blockUser(targetUserUid: diaryModel.uid);
+                        title: '차단하기',
+                        message: '이 작성자의 성장일기가 목록에 노출되지 않으며,\n다시 해제하실 수 없습니다.',
+                        onConfirm: () async {
+                          try {
+                            await context
+                                .read<FeedProvider>()
+                                .blockUser(targetUserUid: diaryModel.uid);
 
-                                await context
-                                    .read<FeedProvider>()
-                                    .getFeedList();
+                            await context.read<FeedProvider>().getFeedList();
 
-                                await context
-                                    .read<LikeProvider>()
-                                    .getLikeList();
+                            await context.read<LikeProvider>().getLikeList();
 
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              } on CustomException catch (e) {
-                                Navigator.pop(context);
-                                showErrorDialog(context, e);
-                              }
-                            },
-                          );
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          } on CustomException catch (e) {
+                            Navigator.pop(context);
+                            showErrorDialog(context, e);
+                          }
                         },
                       );
                     },

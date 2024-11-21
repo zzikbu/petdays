@@ -1,15 +1,16 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/custom_dialog.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/pet_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/pet/pet_provider.dart';
-import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/show_custom_dialog.dart';
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/pet_model.dart';
+import '../../palette.dart';
+import '../../providers/pet/pet_provider.dart';
+import '../../providers/pet/pet_state.dart';
 
 class PetDetailScreen extends StatefulWidget {
   final int index;
@@ -56,25 +57,21 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              showDialog(
+              showCustomDialog(
                 context: context,
-                builder: (BuildContext context) {
-                  return CustomDialog(
-                    title: '반려동물 삭제',
-                    message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
-                    onConfirm: () async {
-                      try {
-                        await context
-                            .read<PetProvider>()
-                            .deletePet(petId: petModel.petId);
+                title: '반려동물 삭제',
+                message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
+                onConfirm: () async {
+                  try {
+                    await context
+                        .read<PetProvider>()
+                        .deletePet(petId: petModel.petId);
 
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      } on CustomException catch (e) {
-                        showErrorDialog(context, e);
-                      }
-                    },
-                  );
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  } on CustomException catch (e) {
+                    showErrorDialog(context, e);
+                  }
                 },
               );
             },

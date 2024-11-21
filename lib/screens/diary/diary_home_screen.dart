@@ -10,6 +10,7 @@ import '../../palette.dart';
 import '../../providers/diary/diary_provider.dart';
 import '../../providers/diary/diary_state.dart';
 import 'diary_detail_screen.dart';
+import 'diary_upload_screen.dart';
 
 class DiaryHomeScreen extends StatefulWidget {
   const DiaryHomeScreen({super.key});
@@ -110,6 +111,23 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                     },
                   ),
                 ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => DiaryUploadScreen()),
+          );
+        },
+        backgroundColor: Palette.darkGray,
+        elevation: 0, // 그림자 제거
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.edit,
+          color: Palette.white,
+        ),
+      ),
     );
   }
 }

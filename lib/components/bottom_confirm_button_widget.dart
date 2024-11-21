@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../palette.dart';
 
-class NextButton extends StatelessWidget {
+class BottomConfirmButtonWidget extends StatelessWidget {
   final bool isActive;
-  final VoidCallback onTap;
+  final VoidCallback onConfirm;
   final String buttonText;
 
-  const NextButton({
+  const BottomConfirmButtonWidget({
     super.key,
     required this.isActive,
-    required this.onTap,
+    required this.onConfirm,
     required this.buttonText,
   });
 
@@ -19,9 +19,9 @@ class NextButton extends StatelessWidget {
     Color textColor = isActive ? Palette.white : Palette.subGreen;
 
     return GestureDetector(
-      onTap: isActive ? onTap : null,
+      onTap: isActive ? onConfirm : null,
       child: Container(
-        height: 94,
+        height: 84,
         width: MediaQuery.of(context).size.width,
         color: Palette.mainGreen,
         child: Align(
