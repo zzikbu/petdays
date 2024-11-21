@@ -123,7 +123,6 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
               color: Palette.subGreen,
               backgroundColor: Palette.white,
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 1));
                 _getFeedList();
               },
               child: ListView.builder(
@@ -136,9 +135,9 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
                   return DiaryCardWidget(
                     diaryModel: diaryModel,
                     index: index,
-                    isLike: isLike,
                     diaryType:
                         _isHotFeed ? DiaryType.hotFeed : DiaryType.allFeed,
+                    isLike: isLike,
                     showLock: false,
                   );
                 },

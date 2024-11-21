@@ -19,7 +19,7 @@ class DiaryCardWidget extends StatelessWidget {
     required this.index,
     required this.diaryType,
     required this.isLike, // 좋아요 여부
-    this.showLock = true, // 자물쇠 표시 여부
+    required this.showLock, // 자물쇠 표시 여부
   });
 
   @override
