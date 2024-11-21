@@ -578,7 +578,7 @@ class _HomeScreenState extends State<HomeScreen>
                                               builder: (context) =>
                                                   DiaryDetailScreen(
                                                 index: index,
-                                                isDiary: true,
+                                                diaryType: DiaryType.my,
                                               ),
                                             ),
                                           );

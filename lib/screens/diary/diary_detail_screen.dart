@@ -34,20 +34,22 @@ enum ReportType {
   );
 }
 
+enum DiaryType {
+  my,
+  myLike,
+  myOpen,
+  allFeed,
+  hotFeed,
+}
+
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
-  final bool isDiary;
-  final bool isOpenDiary;
-  final bool isLike;
-  final bool isHotFeed;
+  final DiaryType diaryType;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
-    this.isDiary = false,
-    this.isOpenDiary = false,
-    this.isLike = false,
-    this.isHotFeed = false,
+    required this.diaryType,
   });
 
   @override
@@ -81,15 +83,15 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   Widget build(BuildContext context) {
     DiaryModel diaryModel;
 
-    if (widget.isDiary) {
+    if (widget.diaryType == DiaryType.my) {
       // DiaryHomeScreen OR HomeScreen에서 push
       diaryModel = context.watch<DiaryState>().diaryList[widget.index];
-    } else if (widget.isOpenDiary) {
+    } else if (widget.diaryType == DiaryType.myOpen) {
       diaryModel = context.watch<DiaryState>().openDiaryList[widget.index];
-    } else if (widget.isLike) {
+    } else if (widget.diaryType == DiaryType.myLike) {
       // LikeHomeScreen에서 push
       diaryModel = context.watch<LikeState>().likeList[widget.index];
-    } else if (widget.isHotFeed) {
+    } else if (widget.diaryType == DiaryType.hotFeed) {
       // FeedHomeScreen & HotFeed push
       diaryModel = context.watch<FeedState>().hotFeedList[widget.index];
     } else {

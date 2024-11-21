@@ -96,7 +96,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
                           MaterialPageRoute(
                             builder: (context) => DiaryDetailScreen(
                               index: index,
-                              isLike: true,
+                              diaryType: DiaryType.myLike,
                             ),
                           ),
                         );

@@ -1,14 +1,14 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/feed/feed_provider.dart';
-import 'package:petdays/providers/feed/feed_state.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
+
+import '../../components/diary_card_widget.dart';
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../palette.dart';
+import '../../providers/feed/feed_provider.dart';
+import '../../providers/feed/feed_state.dart';
 
 class FeedHomeScreen extends StatefulWidget {
   const FeedHomeScreen({super.key});
@@ -19,31 +19,58 @@ class FeedHomeScreen extends StatefulWidget {
 
 class _FeedHomeScreenState extends State<FeedHomeScreen>
     with AutomaticKeepAliveClientMixin<FeedHomeScreen> {
-  // 다른 화면에서 돌아올 때
-  // 데이터를 매번 가져오지 않도록
   @override
-  bool get wantKeepAlive => true; // AutomaticKeepAliveClientMixin
+  bool get wantKeepAlive => true;
 
-  /// Properties
-  late final FeedProvider feedProvider;
+  late final String _currentUserId;
   bool _isHotFeed = true;
 
   void _getFeedList() {
-    // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await feedProvider.getFeedList();
+        await context.read<FeedProvider>().getFeedList();
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
     });
   }
 
-  /// Lifecycle
+  /// HOT/전체 토글 버튼 위젯
+  Widget _buildToggleButton({
+    required bool isHot,
+    required VoidCallback onTap,
+    required String text,
+  }) {
+    final isSelected = isHot == _isHotFeed;
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 42,
+        width: 80,
+        decoration: BoxDecoration(
+          color: isSelected ? Palette.mainGreen : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: isSelected ? Palette.white : Palette.lightGray,
+              letterSpacing: -0.5,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    feedProvider = context.read<FeedProvider>();
+    _currentUserId = context.read<User>().uid;
     _getFeedList();
   }
 
@@ -51,13 +78,10 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
   Widget build(BuildContext context) {
     super.build(context);
 
-    String currentUserUid = context.read<User>().uid;
-
-    FeedState feedState = context.watch<FeedState>();
-    List<DiaryModel> feedList = feedState.feedList;
-    List<DiaryModel> hotFeedList = feedState.hotFeedList;
-
-    bool isLoading = feedState.feedStatus == FeedStatus.fetching;
+    final feedState = context.watch<FeedState>();
+    final currentFeedList =
+        _isHotFeed ? feedState.hotFeedList : feedState.feedList;
+    final isLoading = feedState.feedStatus == FeedStatus.fetching;
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -77,61 +101,15 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
             padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
             child: Row(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isHotFeed = true;
-                    });
-                  },
-                  child: Container(
-                    height: 42,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color:
-                          _isHotFeed ? Palette.mainGreen : Colors.transparent,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'HOT',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: _isHotFeed ? Palette.white : Palette.lightGray,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
+                _buildToggleButton(
+                  isHot: true,
+                  onTap: () => setState(() => _isHotFeed = true),
+                  text: 'HOT',
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isHotFeed = false;
-                    });
-                  },
-                  child: Container(
-                    height: 42,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      color:
-                          _isHotFeed ? Colors.transparent : Palette.mainGreen,
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '전체',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          color: _isHotFeed ? Palette.lightGray : Palette.white,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                    ),
-                  ),
+                _buildToggleButton(
+                  isHot: false,
+                  onTap: () => setState(() => _isHotFeed = false),
+                  text: '전체',
                 ),
               ],
             ),
@@ -139,179 +117,29 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(
+              child: CircularProgressIndicator(color: Palette.subGreen))
           : RefreshIndicator(
-              // 새로고침
               color: Palette.subGreen,
               backgroundColor: Palette.white,
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
+                await Future.delayed(Duration(seconds: 1));
                 _getFeedList();
               },
-
-              // 리스트뷰
               child: ListView.builder(
                 padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
-                itemCount: _isHotFeed ? hotFeedList.length : feedList.length,
+                itemCount: currentFeedList.length,
                 itemBuilder: (context, index) {
-                  final feed =
-                      _isHotFeed ? hotFeedList[index] : feedList[index];
-                  bool isLike = feed.likes.contains(currentUserUid);
+                  final diaryModel = currentFeedList[index];
+                  final isLike = diaryModel.likes.contains(_currentUserId);
 
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DiaryDetailScreen(
-                            index: index,
-                            isHotFeed: _isHotFeed ? true : false,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Stack(
-                      children: [
-                        // 사진
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          height: 220,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: Palette.feedBorder,
-                              width: 1,
-                            ),
-                            image: DecorationImage(
-                              image: ExtendedNetworkImageProvider(
-                                  feed.imageUrls[0]),
-                              fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Palette.black.withOpacity(0.05),
-                                offset: Offset(8, 8),
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 20,
-                          // 흰색 부분
-                          child: Container(
-                            height: 88,
-                            decoration: BoxDecoration(
-                              color: Palette.white.withOpacity(0.9),
-                              border: Border(
-                                left: BorderSide(
-                                  color: Palette.feedBorder,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                right: BorderSide(
-                                  color: Palette.feedBorder,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                                bottom: BorderSide(
-                                  color: Palette.feedBorder,
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
-                              ),
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                              ),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 2),
-                                    // 제목
-                                    child: Text(
-                                      feed.title,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontFamily: 'Pretendard',
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 18,
-                                        color: Palette.black,
-                                        letterSpacing: -0.4,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      // 좋아요 아이콘
-                                      isLike
-                                          ? Icon(
-                                              Icons.favorite,
-                                              color: Colors.red,
-                                              size: 16,
-                                            )
-                                          : Icon(
-                                              Icons.favorite_border,
-                                              color: Palette.darkGray,
-                                              size: 16,
-                                            ),
-                                      SizedBox(width: 4),
-
-                                      // 좋아요 개수
-                                      Text(
-                                        feed.likeCount.toString(),
-                                        style: TextStyle(
-                                          fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14,
-                                          color: Palette.darkGray,
-                                          letterSpacing: -0.4,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8), // 여유 공간 추가
-
-                                      // 세로 구분선
-                                      Container(
-                                        width: 1,
-                                        height: 10,
-                                        color: Palette.mediumGray, // 구분선 색상
-                                      ),
-                                      SizedBox(width: 8),
-
-                                      // 날짜
-                                      Text(
-                                        feed.createdAt
-                                            .toDate()
-                                            .toString()
-                                            .split(" ")[0],
-                                        style: TextStyle(
-                                          fontFamily: 'Pretendard',
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14,
-                                          color: Palette.mediumGray,
-                                          letterSpacing: -0.35,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  return DiaryCardWidget(
+                    diaryModel: diaryModel,
+                    index: index,
+                    isLike: isLike,
+                    diaryType:
+                        _isHotFeed ? DiaryType.hotFeed : DiaryType.allFeed,
+                    showLock: false,
                   );
                 },
               ),

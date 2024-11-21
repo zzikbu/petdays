@@ -21,31 +21,26 @@ class DiaryHomeScreen extends StatefulWidget {
 
 class _DiaryHomeScreenState extends State<DiaryHomeScreen>
     with AutomaticKeepAliveClientMixin<DiaryHomeScreen> {
-  late final DiaryProvider diaryProvider;
-
-  // 다른 화면에서 돌아올 때
-  // 데이터를 매번 가져오지 않도록
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-    diaryProvider = context.read<DiaryProvider>();
-    _getFeedList();
-  }
+  late final String _currentUserId;
 
   void _getFeedList() {
-    String uid = context.read<User>().uid;
-
-    // 위젯들이 만들어 진 후에
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await diaryProvider.getDiaryList(uid: uid);
+        await context.read<DiaryProvider>().getDiaryList(uid: _currentUserId);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _currentUserId = context.read<User>().uid;
+    _getFeedList();
   }
 
   @override
@@ -100,7 +95,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
                           MaterialPageRoute(
                             builder: (context) => DiaryDetailScreen(
                               index: index,
-                              isDiary: true,
+                              diaryType: DiaryType.my,
                             ),
                           ),
                         );

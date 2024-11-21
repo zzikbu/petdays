@@ -96,7 +96,7 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
                           MaterialPageRoute(
                             builder: (context) => DiaryDetailScreen(
                               index: index,
-                              isOpenDiary: true,
+                              diaryType: DiaryType.myOpen,
                             ),
                           ),
                         );
