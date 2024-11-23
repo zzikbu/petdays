@@ -150,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen>
               color: Palette.subGreen,
               backgroundColor: Palette.white,
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 1));
                 _getData();
               },
               child: SingleChildScrollView(

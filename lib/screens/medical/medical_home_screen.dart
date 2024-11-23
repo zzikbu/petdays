@@ -83,7 +83,6 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen>
               color: Palette.subGreen,
               backgroundColor: Palette.white,
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 1)); // 딜레이 추가
                 _getMedicalList();
               },
               child: Scrollbar(

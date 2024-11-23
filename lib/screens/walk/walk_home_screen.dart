@@ -76,7 +76,6 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
               color: Palette.subGreen,
               backgroundColor: Palette.white,
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 1));
                 _getWalkList();
               },
               child: Scrollbar(

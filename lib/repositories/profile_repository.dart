@@ -2,8 +2,9 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/user_model.dart';
+
+import '../exceptions/custom_exception.dart';
+import '../models/user_model.dart';
 
 class ProfileRepository {
   final FirebaseStorage firebaseStorage;
@@ -20,7 +21,7 @@ class ProfileRepository {
     required Uint8List? imageFile, // null이면 삭제
   }) async {
     try {
-      String? downloadURL = null;
+      String? downloadURL;
       final ref = firebaseStorage.ref().child('profile').child(uid);
 
       if (imageFile != null) {
@@ -35,12 +36,12 @@ class ProfileRepository {
       await firebaseFirestore.collection("users").doc(uid).update({
         "profileImage": downloadURL,
       });
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '프로필 이미지',
         message: '프로필 이미지 변경에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "프로필 이미지",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -72,12 +73,14 @@ class ProfileRepository {
       await firebaseFirestore.collection("users").doc(uid).update({
         "nickname": newNickname,
       });
-    } on FirebaseException catch (e) {
+    } on CustomException {
+      rethrow;
+    } on FirebaseException {
       throw CustomException(
         title: '닉네임',
         message: '닉네임 변경에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "닉네임",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -94,12 +97,12 @@ class ProfileRepository {
           await firebaseFirestore.collection("users").doc(uid).get();
 
       return UserModel.fromMap(snapshot.data()!);
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '사용자 정보',
         message: '사용자 정보 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "사용자 정보",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
