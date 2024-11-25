@@ -285,7 +285,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                       ),
                                       SizedBox(height: 4),
                                       Text(
-                                        petModel.gender == "mail" ? "수컷" : "암컷",
+                                        petModel.gender == "male" ? "수컷" : "암컷",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
