@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/screens/feed/feed_home_screen.dart';
-import 'package:petdays/screens/home/home_screen.dart';
-import 'package:petdays/screens/mypage/mypage_screen.dart';
+
+import '../palette.dart';
+import 'feed/feed_home_screen.dart';
+import 'home/s_home_screen.dart';
+import 'mypage/mypage_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

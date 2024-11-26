@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
-class HomeSectionHeader extends StatelessWidget {
+class HomeSectionHeaderWidget extends StatelessWidget {
   final String title;
-  final Function() onTap;
+  final VoidCallback onTap;
 
-  const HomeSectionHeader({
+  const HomeSectionHeaderWidget({
     super.key,
     required this.title,
     required this.onTap,
@@ -43,9 +43,7 @@ class HomeSectionHeader extends StatelessWidget {
                   letterSpacing: -0.3,
                 ),
               ),
-              SvgPicture.asset(
-                'assets/icons/ic_home_more.svg',
-              ),
+              SvgPicture.asset('assets/icons/ic_home_more.svg'),
             ],
           ),
         ],
