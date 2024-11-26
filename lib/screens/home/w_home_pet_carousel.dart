@@ -1,6 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/w_avatar.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -102,7 +102,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                 CarouselSlider(
                   carouselController: _carouselController,
                   items: widget.petList.map(
-                    (pet) {
+                    (petModel) {
                       return Builder(
                         builder: (context) {
                           return GestureDetector(
@@ -126,21 +126,10 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                                 child: Row(
                                   children: [
                                     // 사진
-                                    Container(
+                                    AvatarWidget(
+                                      imageUrl: petModel.image,
                                       width: 100,
                                       height: 100,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Palette.lightGray,
-                                          width: 0.4,
-                                        ),
-                                        image: DecorationImage(
-                                          image: ExtendedNetworkImageProvider(
-                                              pet.image),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
                                     ),
                                     SizedBox(width: 30),
 
@@ -153,9 +142,9 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                                         // 이름 & 만난 날 계산
                                         Text(
                                           _getNameAndDaysSinceMeeting(
-                                            name: pet.name,
+                                            name: petModel.name,
                                             meetingDateString:
-                                                pet.firstMeetingDate,
+                                                petModel.firstMeetingDate,
                                           ),
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',
@@ -171,8 +160,8 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                                         // 나이 계산 & 품종
                                         Text(
                                           _getAgeAndBreed(
-                                            birthDateString: pet.birthDay,
-                                            breed: pet.breed,
+                                            birthDateString: petModel.birthDay,
+                                            breed: petModel.breed,
                                           ),
                                           style: TextStyle(
                                             fontFamily: 'Pretendard',

@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/bottom_confirm_button_widget.dart';
+import '../../components/w_bottom_confirm_button.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
 import '../../components/textfield_with_title.dart';

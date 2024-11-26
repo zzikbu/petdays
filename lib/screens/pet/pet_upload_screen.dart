@@ -6,14 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/bottom_confirm_button_widget.dart';
+import 'package:petdays/components/w_bottom_confirm_button.dart';
 import 'package:petdays/components/textfield_with_title.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/pet/pet_provider.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/screens/sign_in/reset_password_screen.dart';
 import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/models/user_model.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
 import 'package:petdays/repositories/feed_repository.dart';
 import 'package:state_notifier/state_notifier.dart';

@@ -1,7 +1,7 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/models/medical_model.dart';
 
+import '../../components/w_avatar.dart';
 import '../../palette.dart';
 import '../medical/medical_detail_screen.dart';
 import '../medical/medical_home_screen.dart';
@@ -102,21 +102,12 @@ class HomeMedicalListWidget extends StatelessWidget {
                                 Row(
                                   children: [
                                     // 사진
-                                    Container(
-                                      width: 36,
-                                      height: 36,
-                                      margin: EdgeInsets.only(right: 4),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: Palette.lightGray,
-                                          width: 0.4,
-                                        ),
-                                        image: DecorationImage(
-                                          image: ExtendedNetworkImageProvider(
-                                              medicalModel.pet.image),
-                                          fit: BoxFit.cover,
-                                        ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: AvatarWidget(
+                                        imageUrl: medicalModel.pet.image,
+                                        width: 36,
+                                        height: 36,
                                       ),
                                     ),
 

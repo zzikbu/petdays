@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
+import '../../components/w_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../main.dart';
 import '../../palette.dart';
@@ -128,25 +128,10 @@ class _MyPageScreenState extends State<MyPageScreen>
                         // 프로필 이미지
                         Stack(
                           children: [
-                            Container(
+                            AvatarWidget(
+                              imageUrl: profileState.userModel.profileImage,
                               width: 60,
                               height: 60,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Palette.lightGray,
-                                  width: 1.0,
-                                ),
-                                image: DecorationImage(
-                                  image: profileState.userModel.profileImage ==
-                                          null
-                                      ? ExtendedAssetImageProvider(
-                                          "assets/icons/profile.png")
-                                      : ExtendedNetworkImageProvider(
-                                          profileState.userModel.profileImage!),
-                                  fit: BoxFit.cover, // 이미지를 적절히 맞추는 옵션
-                                ),
-                              ),
                             ),
                             Positioned(
                               bottom: 0,

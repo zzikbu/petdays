@@ -1,8 +1,8 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/models/walk_model.dart';
 
+import '../../components/w_avatar.dart';
 import '../../palette.dart';
 import '../walk/walk_detail_screen.dart';
 import '../walk/walk_home_screen.dart';
@@ -120,24 +120,13 @@ class HomeWalkListWidget extends StatelessWidget {
                                         (index) {
                                           final petModel =
                                               walkModel.pets[index];
-                                          return Container(
-                                            width: 36,
-                                            height: 36,
-                                            margin: EdgeInsets.only(right: 4),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Colors.grey,
-                                                  width: 0.4,
-                                                ),
-                                                image: DecorationImage(
-                                                  image:
-                                                      ExtendedNetworkImageProvider(
-                                                          petModel.image),
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 4),
+                                            child: AvatarWidget(
+                                              imageUrl: petModel.image,
+                                              width: 36,
+                                              height: 36,
                                             ),
                                           );
                                         },

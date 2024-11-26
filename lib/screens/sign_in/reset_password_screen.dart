@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/bottom_confirm_button_widget.dart';
+import 'package:petdays/components/w_bottom_confirm_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';

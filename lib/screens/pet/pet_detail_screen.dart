@@ -1,4 +1,3 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/screens/pet/pet_upload_screen.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
+import '../../components/w_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/pet_model.dart';
 import '../../palette.dart';
@@ -97,21 +97,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        AvatarWidget(
+                          imageUrl: petModel.image,
                           width: 100,
                           height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Palette.lightGray,
-                              width: 0.4,
-                            ),
-                            image: DecorationImage(
-                              image:
-                                  ExtendedNetworkImageProvider(petModel.image),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
                         ),
                         SizedBox(width: 16),
                         Expanded(

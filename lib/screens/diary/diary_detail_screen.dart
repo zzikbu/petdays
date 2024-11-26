@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../components/show_error_dialog.dart';
+import '../../components/w_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';
@@ -307,22 +308,10 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
   /// 프로필이미지
   Widget _buildProfileImage(String? profileImageUrl) {
-    return Container(
+    return AvatarWidget(
+      imageUrl: profileImageUrl,
       width: 36,
       height: 36,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Palette.lightGray,
-          width: 1.0,
-        ),
-        image: DecorationImage(
-          image: profileImageUrl == null
-              ? ExtendedAssetImageProvider("assets/icons/profile.png")
-              : ExtendedNetworkImageProvider(profileImageUrl),
-          fit: BoxFit.cover,
-        ),
-      ),
     );
   }
 

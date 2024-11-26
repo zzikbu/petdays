@@ -1,10 +1,10 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../components/bottom_confirm_button_widget.dart';
+import '../components/w_avatar.dart';
+import '../components/w_bottom_confirm_button.dart';
 import '../components/show_error_dialog.dart';
 import '../exceptions/custom_exception.dart';
 import '../models/pet_model.dart';
@@ -158,17 +158,10 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                       child: Column(
                         children: [
                           SizedBox(height: 10),
-                          Container(
+                          AvatarWidget(
+                            imageUrl: petList[index].image,
                             width: 100,
                             height: 100,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: ExtendedNetworkImageProvider(
-                                    petList[index].image),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
                           ),
                           SizedBox(height: 2),
                           Text(
