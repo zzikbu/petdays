@@ -1,29 +1,29 @@
 import 'dart:io';
 
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/w_bottom_confirm_button.dart';
-import 'package:petdays/components/textfield_with_title.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/medical_model.dart';
-import 'package:petdays/models/pet_model.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/medical/medical_provider.dart';
-import 'package:petdays/providers/medical/medical_state.dart';
-import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/show_error_dialog.dart';
+import '../../components/w_textfield_with_title.dart';
+import '../../components/w_bottom_confirm_button.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/medical_model.dart';
+import '../../models/pet_model.dart';
+import '../../palette.dart';
+import '../../providers/medical/medical_provider.dart';
+import '../../providers/medical/medical_state.dart';
+import '../../utils/permission_utils.dart';
+
 class MedicalUploadScreen extends StatefulWidget {
-  final bool isEditMode;
   final PetModel selectedPet;
   final MedicalModel? originalMedicalModel; // 수정
 
   const MedicalUploadScreen({
     super.key,
-    this.isEditMode = false,
     required this.selectedPet,
     this.originalMedicalModel, // 수정
   });
@@ -33,7 +33,6 @@ class MedicalUploadScreen extends StatefulWidget {
 }
 
 class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
-  /// Properties
   final TextEditingController _visitDateTEC = TextEditingController();
   final TextEditingController _reasonTEC = TextEditingController();
   final TextEditingController _hospitalTEC = TextEditingController();
@@ -44,13 +43,65 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
   final List<String> _remainImageUrls = []; // 유지할 기존 이미지들
   final List<String> _deleteImageUrls = []; // 삭제할 기존 이미지들
 
-  bool _isActive = false; // 작성하기 버튼 활성화 여부
+  bool _isEnabled = true;
+  bool _isBottomActive = false;
 
-  /// Method
   void _checkBottomActive() {
     setState(() {
-      _isActive = _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
+      _isBottomActive =
+          _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
     });
+  }
+
+  Future<void> _onConfirmButtonPressed() async {
+    try {
+      // 비활성화
+      setState(() {
+        _isEnabled = false;
+        _isBottomActive = false;
+      });
+
+      if (widget.originalMedicalModel != null) {
+        // 수정
+        await context.read<MedicalProvider>().updateMedical(
+              medicalId: widget.originalMedicalModel!.medicalId,
+              uid: widget.originalMedicalModel!.uid,
+              petId: widget.originalMedicalModel!.pet.petId,
+              files: _files,
+              remainImageUrls: _remainImageUrls,
+              deleteImageUrls: _deleteImageUrls,
+              visitedDate: _visitDateTEC.text,
+              reason: _reasonTEC.text,
+              hospital: _hospitalTEC.text,
+              doctor: _doctorTEC.text,
+              note: _noteTEC.text,
+            );
+
+        Navigator.pop(context);
+      } else {
+        // 업로드
+        await context.read<MedicalProvider>().uploadMedical(
+              files: _files,
+              visitedDate: _visitDateTEC.text,
+              reason: _reasonTEC.text,
+              hospital: _hospitalTEC.text,
+              doctor: _doctorTEC.text,
+              petId: widget.selectedPet.petId,
+              note: _noteTEC.text,
+            );
+
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    } on CustomException catch (e) {
+      showErrorDialog(context, e);
+
+      // 에러 발생시 활성화
+      setState(() {
+        _isEnabled = true;
+        _isBottomActive = true;
+      });
+    }
   }
 
   Future<List<String>> selectImages() async {
@@ -60,23 +111,23 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
     List<XFile> images = await ImagePicker().pickMultiImage(
       maxHeight: 1024,
       maxWidth: 1024,
-    ); // 여러 장
+    );
 
     return images.map((e) => e.path).toList(); // XFile.path를 갖는 문자열 리스트
   }
 
-  List<Widget> selectedImageList() {
-    final diaryStatus = context.watch<MedicalState>().medicalStatus;
+  List<Widget> _selectedImageList() {
+    final medicalStatus = context.watch<MedicalState>().medicalStatus;
 
-    return _files.map((data) {
+    return _files.map((filePath) {
       return Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Stack(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.file(
-                File(data),
+              child: Image(
+                image: ExtendedFileImageProvider(File(filePath)),
                 fit: BoxFit.cover,
                 height: 80,
                 width: 80,
@@ -87,11 +138,11 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
               top: 4,
               right: 4,
               child: InkWell(
-                onTap: diaryStatus == MedicalStatus.submitting
-                    ? null // 작성 중일때 버튼 막기
+                onTap: medicalStatus == MedicalStatus.submitting
+                    ? null // 작성 중일때 삭제 버튼 클릭 막기
                     : () {
                         setState(() {
-                          _files.remove(data); // 사진 삭제
+                          _files.remove(filePath);
                           _checkBottomActive();
                         });
                       },
@@ -116,19 +167,18 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
     }).toList();
   }
 
-  // 기존 이미지 표시를 위한 위젯 리스트
-  List<Widget> existingImageList() {
+  List<Widget> _existingImageList() {
     final medicalStatus = context.watch<MedicalState>().medicalStatus;
 
-    return _remainImageUrls.map((url) {
+    return _remainImageUrls.map((imageUrl) {
       return Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Stack(
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                url,
+              child: Image(
+                image: ExtendedNetworkImageProvider(imageUrl),
                 fit: BoxFit.cover,
                 height: 80,
                 width: 80,
@@ -142,8 +192,8 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                     ? null
                     : () {
                         setState(() {
-                          _remainImageUrls.remove(url); // 유지 목록에서 제거
-                          _deleteImageUrls.add(url); // 삭제 목록에 추가
+                          _remainImageUrls.remove(imageUrl); // 유지 목록에서 제거
+                          _deleteImageUrls.add(imageUrl); // 삭제 목록에 추가
                           _checkBottomActive();
                         });
                       },
@@ -168,14 +218,12 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
     }).toList();
   }
 
-  /// LifeCycle
   @override
   void initState() {
     super.initState();
 
-    // 수정 모드일 때 기존 데이터로 초기화
-    if (widget.isEditMode && widget.originalMedicalModel != null) {
-      // 기존 이미지 URLs를 유지할 이미지 목록에 추가
+    // 수정일 때
+    if (widget.originalMedicalModel != null) {
       _remainImageUrls.addAll(widget.originalMedicalModel!.imageUrls);
 
       _visitDateTEC.text = widget.originalMedicalModel!.visitedDate;
@@ -244,12 +292,10 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
             Expanded(
               child: Scrollbar(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 15),
-
                       // 사진
                       Text(
                         '사진',
@@ -267,13 +313,15 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                           children: [
                             // 이미지 추가 버튼
                             GestureDetector(
-                              onTap: () async {
-                                final _images = await selectImages();
-                                setState(() {
-                                  _files.addAll(_images);
-                                  _checkBottomActive();
-                                });
-                              },
+                              onTap: _isEnabled
+                                  ? () async {
+                                      final images = await selectImages();
+                                      setState(() {
+                                        _files.addAll(images);
+                                        _checkBottomActive();
+                                      });
+                                    }
+                                  : null,
                               child: Container(
                                 height: 80,
                                 width: 80,
@@ -291,8 +339,8 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                 ),
                               ),
                             ),
-                            ...existingImageList(), // 기존 이미지들 먼저 표시
-                            ...selectedImageList(), // 새로 선택된 이미지들 표시
+                            ..._existingImageList(), // 기존 이미지들 먼저 표시
+                            ..._selectedImageList(), // 새로 선택된 이미지들 표시
                           ],
                         ),
                       ),
@@ -317,13 +365,8 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: CupertinoButton(
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: Text(
-                                            '완료',
-                                            style: TextStyle(
-                                              color: CupertinoColors.systemBlue,
-                                            ),
-                                          ),
+                                          padding:
+                                              const EdgeInsets.only(right: 16),
                                           onPressed: () {
                                             setState(() {
                                               _visitDateTEC.text =
@@ -333,6 +376,12 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                             });
                                             Navigator.pop(context);
                                           },
+                                          child: const Text(
+                                            '완료',
+                                            style: TextStyle(
+                                                color:
+                                                    CupertinoColors.systemBlue),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -353,7 +402,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                             },
                           );
                         },
-                        child: TextFieldWithTitle(
+                        child: TextFieldWithTitleWidget(
                           labelText: '진료일 *',
                           hintText: '진료일을 선택해주세요',
                           controller: _visitDateTEC,
@@ -363,37 +412,40 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                       SizedBox(height: 40),
 
                       // 이유 (필수)
-                      TextFieldWithTitle(
+                      TextFieldWithTitleWidget(
                         controller: _reasonTEC,
                         labelText: '이유 *',
                         hintText: '병원에 간 이유를 입력해주세요',
+                        enabled: _isEnabled,
                       ),
                       SizedBox(height: 40),
 
                       // 병원
-                      TextFieldWithTitle(
+                      TextFieldWithTitleWidget(
                         controller: _hospitalTEC,
                         labelText: '병원',
                         hintText: '병원 이름을 입력해주세요',
+                        enabled: _isEnabled,
                       ),
                       SizedBox(height: 40),
 
                       // 수의사
-                      TextFieldWithTitle(
+                      TextFieldWithTitleWidget(
                         controller: _doctorTEC,
                         labelText: '수의사',
                         hintText: '수의사 이름을 입력해주세요',
+                        enabled: _isEnabled,
                       ),
                       SizedBox(height: 40),
 
-                      //메모
-                      TextFieldWithTitle(
+                      // 메모
+                      TextFieldWithTitleWidget(
                         controller: _noteTEC,
                         isMultiLine: true,
                         labelText: '메모',
                         hintText: '특이사항이나 메모를 입력해주세요',
+                        enabled: _isEnabled,
                       ),
-                      SizedBox(height: 15),
                     ],
                   ),
                 ),
@@ -402,62 +454,9 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
           ],
         ),
         bottomNavigationBar: BottomConfirmButtonWidget(
-          isActive: _isActive,
-          onConfirm: () async {
-            try {
-              // 버튼 비활성화
-              setState(() {
-                _isActive = false;
-              });
-
-              if (widget.isEditMode) {
-                // 진료기록 수정 로직
-                await context.read<MedicalProvider>().updateMedical(
-                      medicalId: widget.originalMedicalModel!.medicalId,
-                      uid: widget.originalMedicalModel!.uid,
-                      petId: widget.selectedPet.petId,
-                      files: _files,
-                      remainImageUrls: _remainImageUrls,
-                      deleteImageUrls: _deleteImageUrls,
-                      visitedDate: _visitDateTEC.text,
-                      reason: _reasonTEC.text,
-                      hospital: _hospitalTEC.text,
-                      doctor: _doctorTEC.text,
-                      note: _noteTEC.text,
-                    );
-
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("수정 완료")));
-
-                Navigator.pop(context);
-              } else {
-                // 진료기록 업로드 로직
-                await context.read<MedicalProvider>().uploadMedical(
-                      files: _files,
-                      visitedDate: _visitDateTEC.text,
-                      reason: _reasonTEC.text,
-                      hospital: _hospitalTEC.text,
-                      doctor: _doctorTEC.text,
-                      note: _noteTEC.text,
-                      petId: widget.selectedPet.petId,
-                    );
-
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("작성 완료")));
-
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }
-            } on CustomException catch (e) {
-              showErrorDialog(context, e);
-
-              // 에러 발생시 버튼 재활성화
-              setState(() {
-                _isActive = true;
-              });
-            }
-          },
-          buttonText: widget.isEditMode ? "수정하기" : "작성하기",
+          isActive: _isBottomActive,
+          onConfirm: _onConfirmButtonPressed,
+          buttonText: widget.originalMedicalModel != null ? "수정하기" : "작성하기",
         ),
       ),
     );

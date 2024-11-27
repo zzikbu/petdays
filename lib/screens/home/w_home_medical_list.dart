@@ -3,8 +3,8 @@ import 'package:petdays/models/medical_model.dart';
 
 import '../../components/w_avatar.dart';
 import '../../palette.dart';
-import '../medical/medical_detail_screen.dart';
-import '../medical/medical_home_screen.dart';
+import '../medical/s_medical_detail.dart';
+import '../medical/s_medical_home.dart';
 import 'w_home_section_header.dart';
 
 class HomeMedicalListWidget extends StatelessWidget {

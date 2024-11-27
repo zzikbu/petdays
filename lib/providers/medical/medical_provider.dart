@@ -118,8 +118,8 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
     required String reason,
     required String hospital,
     required String doctor,
-    required String note,
     required String petId,
+    required String note,
   }) async {
     try {
       state = state.copyWith(
@@ -135,8 +135,8 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
         reason: reason,
         hospital: hospital,
         doctor: doctor,
-        note: note,
         petId: petId,
+        note: note,
       );
 
       state = state.copyWith(

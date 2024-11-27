@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/info_column.dart';
+import '../../components/w_detail_info_with_title.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
@@ -104,22 +104,22 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20),
-            InfoColumn(
+            DetailInfoWithTitleWidget(
               title: '함께한 반려동물',
               content: walkModel.pets.map((pet) => pet.name).join(', '),
             ),
             SizedBox(height: 20),
-            InfoColumn(
+            DetailInfoWithTitleWidget(
               title: '날짜',
               content: _formatDate(walkModel.createdAt.toDate()),
             ),
             SizedBox(height: 20),
-            InfoColumn(
+            DetailInfoWithTitleWidget(
               title: '시간',
               content: _formatDuration(walkModel.duration),
             ),
             SizedBox(height: 20),
-            InfoColumn(
+            DetailInfoWithTitleWidget(
               title: '거리',
               content:
                   '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',

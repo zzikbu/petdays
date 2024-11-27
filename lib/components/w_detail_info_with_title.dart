@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 
 import '../palette.dart';
 
-class InfoColumn extends StatelessWidget {
+class DetailInfoWithTitleWidget extends StatelessWidget {
   final String title;
   final String content;
 
-  const InfoColumn({
+  const DetailInfoWithTitleWidget({
     super.key,
     required this.title,
     required this.content,
@@ -27,7 +27,7 @@ class InfoColumn extends StatelessWidget {
             letterSpacing: -0.35,
           ),
         ),
-        SizedBox(height: 4), // 텍스트 간의 간격 추가
+        SizedBox(height: 4),
         Text(
           content,
           style: TextStyle(

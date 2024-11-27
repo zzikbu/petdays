@@ -1,32 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../palette.dart';
 
-class TextFieldWithTitle extends StatefulWidget {
+class TextFieldWithTitleWidget extends StatefulWidget {
   final String labelText;
-  final int? maxLength; // 옵셔널
+  final int? maxLength;
   final String hintText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final bool isMultiLine;
   final bool? enabled;
 
-  const TextFieldWithTitle({
+  const TextFieldWithTitleWidget({
     super.key,
     required this.labelText,
     this.maxLength,
     required this.hintText,
-    this.keyboardType = TextInputType.text, // 기본값 설정
+    this.keyboardType = TextInputType.text,
     this.controller,
-    this.isMultiLine = false, // 기본값 false
+    this.isMultiLine = false,
     this.enabled = true,
   });
 
   @override
-  _TextFieldWithTitleState createState() => _TextFieldWithTitleState();
+  _TextFieldWithTitleWidgetState createState() =>
+      _TextFieldWithTitleWidgetState();
 }
 
-class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
+class _TextFieldWithTitleWidgetState extends State<TextFieldWithTitleWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -69,8 +70,6 @@ class _TextFieldWithTitleState extends State<TextFieldWithTitle> {
               letterSpacing: -0.4,
               color: Palette.lightGray,
             ),
-            // filled: true,
-            // fillColor: Colors.transparent,
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),

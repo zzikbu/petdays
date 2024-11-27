@@ -12,7 +12,7 @@ import '../palette.dart';
 import '../providers/pet/pet_provider.dart';
 import '../providers/pet/pet_state.dart';
 import '../utils/permission_utils.dart';
-import 'medical/medical_upload_screen.dart';
+import 'medical/s_medical_upload.dart';
 
 class SelectPetScreen extends StatefulWidget {
   final bool isMedical;

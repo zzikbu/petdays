@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/w_bottom_confirm_button.dart';
-import 'package:petdays/components/textfield_with_title.dart';
+import 'package:petdays/components/w_textfield_with_title.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
@@ -224,7 +224,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       SizedBox(height: 15),
 
                       // 이름
-                      TextFieldWithTitle(
+                      TextFieldWithTitleWidget(
                         labelText: '이름',
                         maxLength: 6,
                         hintText: '이름을 입력해주세요',
@@ -233,7 +233,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       SizedBox(height: 40),
 
                       // 품종
-                      TextFieldWithTitle(
+                      TextFieldWithTitleWidget(
                         labelText: '품종',
                         maxLength: 10,
                         hintText: '품종을 입력해주세요',
@@ -296,7 +296,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             },
                           );
                         },
-                        child: TextFieldWithTitle(
+                        child: TextFieldWithTitleWidget(
                           labelText: '생년월일',
                           hintText: '생년월일을 선택해주세요',
                           controller: _birthdayTEC,
@@ -360,7 +360,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             },
                           );
                         },
-                        child: TextFieldWithTitle(
+                        child: TextFieldWithTitleWidget(
                           labelText: '만난 날',
                           hintText: '만난 날을 선택해주세요',
                           controller: _firstMeetingDateTEC,
