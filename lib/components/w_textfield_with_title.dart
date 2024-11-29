@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../palette.dart';
 
-class TextFieldWithTitleWidget extends StatefulWidget {
+class TextFieldWithTitleWidget extends StatelessWidget {
   final String labelText;
   final int? maxLength;
   final String hintText;
@@ -10,6 +10,7 @@ class TextFieldWithTitleWidget extends StatefulWidget {
   final TextEditingController? controller;
   final bool isMultiLine;
   final bool? enabled;
+  final VoidCallback? onTap;
 
   const TextFieldWithTitleWidget({
     super.key,
@@ -20,21 +21,16 @@ class TextFieldWithTitleWidget extends StatefulWidget {
     this.controller,
     this.isMultiLine = false,
     this.enabled = true,
+    this.onTap,
   });
 
-  @override
-  _TextFieldWithTitleWidgetState createState() =>
-      _TextFieldWithTitleWidgetState();
-}
-
-class _TextFieldWithTitleWidgetState extends State<TextFieldWithTitleWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          widget.labelText,
+          labelText,
           style: TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
@@ -43,16 +39,18 @@ class _TextFieldWithTitleWidgetState extends State<TextFieldWithTitleWidget> {
             letterSpacing: -0.45,
           ),
         ),
-        TextFormField(
-          controller: widget.controller,
+        TextField(
+          controller: controller,
           autocorrect: false,
           enableSuggestions: false,
-          maxLength: widget.maxLength,
-          maxLines: widget.isMultiLine ? null : 1, // null이면 여러 줄 허용
-          enabled: widget.enabled,
-          keyboardType: widget.isMultiLine
+          maxLength: maxLength,
+          maxLines: isMultiLine ? null : 1, // null이면 여러 줄 허용
+          enabled: enabled,
+          readOnly: onTap != null,
+          onTap: onTap,
+          keyboardType: isMultiLine
               ? TextInputType.multiline
-              : widget.keyboardType, // multiline일 경우
+              : keyboardType, // multiline일 경우
           cursorColor: Palette.subGreen,
           style: TextStyle(
             fontFamily: 'Pretendard',
@@ -62,7 +60,7 @@ class _TextFieldWithTitleWidgetState extends State<TextFieldWithTitleWidget> {
             color: Palette.black,
           ),
           decoration: InputDecoration(
-            hintText: widget.hintText,
+            hintText: hintText,
             hintStyle: TextStyle(
               fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400,
