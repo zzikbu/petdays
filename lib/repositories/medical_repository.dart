@@ -99,14 +99,14 @@ class MedicalRepository {
 
       await batch.commit();
       return medicalModel;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
       throw CustomException(
         title: '진료기록',
         message: '진료기록 수정에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
       throw CustomException(
@@ -142,12 +142,12 @@ class MedicalRepository {
       });
 
       batch.commit();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '진료기록',
         message: '진료기록 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -186,12 +186,12 @@ class MedicalRepository {
           return MedicalModel.fromMap(data);
         },
       ).toList());
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '진료기록',
         message: '진료기록 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -280,14 +280,14 @@ class MedicalRepository {
       // 만약 작업 중 하나라도 실패하면 전체 작업이 취소되며, 이로 인해 데이터의 일관성이 유지
       batch.commit();
       return medicalModel;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
       throw CustomException(
         title: '진료기록',
         message: '진료기록 업로드에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
       throw CustomException(

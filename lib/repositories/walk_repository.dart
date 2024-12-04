@@ -41,12 +41,12 @@ class WalkRepository {
 
       // storage 이미지 삭제
       await firebaseStorage.ref('walks/${walkModel.walkId}').delete();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '산책',
         message: '산책 삭제하기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "산책",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -89,12 +89,12 @@ class WalkRepository {
           return WalkModel.fromMap(data);
         },
       ).toList());
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '산책',
         message: '산책 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "산책",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -174,14 +174,14 @@ class WalkRepository {
 
       await batch.commit();
       return walkModel;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       await _deleteImage(mapImageUrl);
 
       throw CustomException(
         title: '산책',
         message: '산책 삭제하기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       await _deleteImage(mapImageUrl);
 
       throw CustomException(

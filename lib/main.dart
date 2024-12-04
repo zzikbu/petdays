@@ -14,6 +14,8 @@ import 'package:petdays/providers/diary/diary_provider.dart';
 import 'package:petdays/providers/diary/diary_state.dart';
 import 'package:petdays/providers/feed/feed_provider.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
+import 'package:petdays/providers/home/home_provider.dart';
+import 'package:petdays/providers/home/home_state.dart';
 import 'package:petdays/providers/like/like_provider.dart';
 import 'package:petdays/providers/like/like_state.dart';
 import 'package:petdays/providers/medical/medical_provider.dart';
@@ -141,6 +143,9 @@ class _MyAppState extends State<MyApp> {
         StateNotifierProvider<MedicalProvider, MedicalState>(
           create: (context) => MedicalProvider(),
         ),
+        StateNotifierProvider<HomeProvider, HomeState>(
+          create: (context) => HomeProvider(),
+        ),
         StateNotifierProvider<ProfileProvider, ProfileState>(
           create: (context) => ProfileProvider(),
         ),
@@ -158,7 +163,6 @@ class _MyAppState extends State<MyApp> {
           Locale('ko', 'KR'),
         ],
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(useMaterial3: true),
         home: SplashScreen(),
       ),
     );

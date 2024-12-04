@@ -100,12 +100,12 @@ class AuthRepository {
   }) async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '메일 전송 실패',
         message: '비밀번호 재설정 메일 전송에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "메일 전송 실패",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -176,12 +176,12 @@ class AuthRepository {
             await user.reauthenticateWithCredential(credential);
           } on CustomException {
             rethrow;
-          } on FirebaseException catch (e) {
+          } on FirebaseException {
             throw CustomException(
               title: '회원탈퇴',
               message: '구글 로그인에 실패했습니다.\n다시 시도해주세요.',
             );
-          } catch (e) {
+          } catch (_) {
             throw CustomException(
               title: "회원탈퇴",
               message:
@@ -195,12 +195,12 @@ class AuthRepository {
           try {
             final appleProvider = AppleAuthProvider();
             await user.reauthenticateWithProvider(appleProvider);
-          } on FirebaseException catch (e) {
+          } on FirebaseException {
             throw CustomException(
               title: '회원탈퇴',
               message: '애플 로그인에 실패했습니다.\n다시 시도해주세요.',
             );
-          } catch (e) {
+          } catch (_) {
             throw CustomException(
               title: "회원탈퇴",
               message:
@@ -302,12 +302,12 @@ class AuthRepository {
       await batch.commit();
     } on CustomException {
       rethrow;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '회원탈퇴',
         message: '회원탈퇴에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "회원탈퇴",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -325,12 +325,12 @@ class AuthRepository {
       }
 
       await firebaseAuth.signOut();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '로그아웃',
         message: '로그아웃이 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "로그아웃",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -498,12 +498,12 @@ class AuthRepository {
       }
     } on CustomException {
       rethrow;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '구글 로그인',
         message: '구글 로그인에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "구글 로그인",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -542,12 +542,12 @@ class AuthRepository {
           "createdAt": Timestamp.now(),
         });
       }
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '애플 로그인',
         message: '애플 로그인에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "애플 로그인",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",

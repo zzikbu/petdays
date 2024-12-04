@@ -101,14 +101,14 @@ class DiaryRepository {
 
         return diaryModel;
       });
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
       throw CustomException(
         title: '성장일기',
         message: '성장일기 수정에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
       throw CustomException(
         title: "성장일기",
@@ -154,12 +154,12 @@ class DiaryRepository {
       });
 
       batch.commit();
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '성장일기',
         message: '성장일기 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -190,12 +190,12 @@ class DiaryRepository {
           return DiaryModel.fromMap(data);
         },
       ).toList());
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '성장일기',
         message: '성장일기 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -272,14 +272,14 @@ class DiaryRepository {
       // 만약 작업 중 하나라도 실패하면 전체 작업이 취소되며, 이로 인해 데이터의 일관성이 유지
       batch.commit();
       return diaryModel; // 등록한 성장일기를 리스트에 추가하기 위해 반환
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
       throw CustomException(
         title: '성장일기',
         message: '성장일기 업로드에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
       throw CustomException(

@@ -29,12 +29,12 @@ class FeedRepository {
           });
         },
       );
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '차단하기',
         message: '작성자 차단에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "차단하기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -81,12 +81,12 @@ class FeedRepository {
       return DiaryModel.fromMap(diaryMapData);
     } on CustomException {
       rethrow;
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '신고하기',
         message: '해당 게시물 신고하기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "신고하기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -154,12 +154,12 @@ class FeedRepository {
       UserModel userModel = UserModel.fromMap(userMapData);
       diaryMapData['writer'] = userModel;
       return DiaryModel.fromMap(diaryMapData);
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '피드',
         message: '해당 게시물 좋아요에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "피드",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
@@ -206,12 +206,12 @@ class FeedRepository {
           return DiaryModel.fromMap(data);
         }).toList(),
       ).then((list) => list.whereType<DiaryModel>().toList()); // null 값 제거
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       throw CustomException(
         title: '피드',
         message: '피드 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
-    } catch (e) {
+    } catch (_) {
       throw CustomException(
         title: "피드",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
