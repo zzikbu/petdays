@@ -68,15 +68,16 @@
 <br/>
 
 ## 기능 실행 화면
+
 | 로그인                                                          | 회원가입                                                         | 홈                                                            | 반려동물 추가                                                      |
 |:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|
-| <img alt="signin" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signin.gif?raw=true"> | <img alt="signup" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signup.gif?raw=true"> | <img alt="home" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/home.gif?raw=true"> | <img alt="pet" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/pet.gif?raw=true"> |
+| <img alt="signin" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signin.gif?raw=true"> | <img alt="signup" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signup.gif?raw=true"> | <img alt="home" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/home.gif?raw=true"> | <img alt="pet" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/pet.gif?raw=true"> |
 | 성장일기                                                         | 진료기록                                                         | 산책                                                           | 피드 / 좋아요                                                     |
-| <img alt="diary" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/diary.gif?raw=true"> | <img alt="medical" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/medical.gif?raw=true"> | <img alt="walk" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/walk.gif?raw=true"> | <img alt="feed" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/feed.gif?raw=true"> |
+| <img alt="diary" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/diary.gif?raw=true"> | <img alt="medical" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/medical.gif?raw=true"> | <img alt="walk" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/walk.gif?raw=true"> | <img alt="feed" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/feed.gif?raw=true"> |
 | 신고 / 차단                                                      | 닉네임 변경                                                       | 프로필 이미지 변경 / 삭제                                              | 공개한 성장일기                                                     |
-| <img alt="report_block" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/report_block.gif?raw=true"> | <img alt="nickname" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/nickname.gif?raw=true"> | <img alt="profile_image" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/profile_image.gif?raw=true"> | <img alt="open" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/open.PNG?raw=true"> |
+| <img alt="report_block" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/report_block.gif?raw=true"> | <img alt="nickname" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/nickname.gif?raw=true"> | <img alt="profile_image" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/profile_image.gif?raw=true"> | <img alt="open" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/open.PNG?raw=true"> |
 | 좋아요한 성장일기                                                    |                                                              |                                                              |                                                              |
-| <img alt="like" width="200" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/like.PNG?raw=true"> |                                                              |                                                              |                                                              |
+| <img alt="like" width="170" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/like.PNG?raw=true"> |                                                              |                                                              |                                                              |
 <br/>
 
 ## 주요 기술
@@ -101,3 +102,5 @@
 
 - 이를 통해 여러 사용자가 동시에 좋아요 작업을 수행하더라도 데이터의 불일치 문제를 방지하며, 데이터의 일관성을 유지했습니다.
 <img alt="transaction" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
+
+### **provider와 stateNotifier를 사용한 상태관리**
