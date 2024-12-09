@@ -58,12 +58,12 @@
 - [기획 \(IA & FlowChart\) 피그마](https://www.figma.com/board/bRJPGCggzClx0mkBAM67HK/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_IA-%26-FlowChart?node-id=0-1&t=zGr2xHekPnblou5w-1)
 - [디자인 피그마](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
 
-| <img alt="home" width="230" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="feed" width="284" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed.png?raw=true"> |
+| <img alt="home" width="240" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="feed" width="294" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed.png?raw=true"> |
 |:------------------------------------------------------------:|:------------------------------------------------------------:|
 
-| <img alt="walk" width="570" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk.png?raw=true"> |
+| <img alt="walk" width="580" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk.png?raw=true"> |
 |:------------------------------------------------------------:|
-| <img alt="plan" width="570" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/plan.png?raw=true"> |
+| <img alt="plan" width="580" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/plan.png?raw=true"> |
 
 <br/>
 
@@ -81,26 +81,35 @@
 <br/>
 
 ## 주요 기술
+### **Provider와 StateNotifier를 활용한 효율적인 상태 관리**
+* 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
+* `StateNotifier` 사용한 주요 개선점
+  - **불변성 기반의 상태 관리**: 각 상태 변경 시 새로운 상태 객체를 생성하여 상태 추적의 명확성 확보
+  - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
+  - **명시적인 상태 관리**: init, submitting, fetching 등 상태를 명확하게 표현
+<img alt="statenotifier" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_1.png?raw=true">
+<img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_2.png?raw=true">
+
+---
 ### **Batch**
-- 성장일기 삭제 기능에서 아래 작업을 **Batch**를 활용해 구현했습니다.
+- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.
   1. 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거
   2. 해당 성장일기 문서 삭제
   3. 작성자의 diaryCount 감소
 
-- **Batch**는 위 작업들을 하나로 묶어 실행하며, **모든 작업이 성공적으로 완료되지 않으면 롤백**되도록 설계했습니다.
+- `Batch`는 위 작업들을 하나로 묶어 실행하며, **모든 작업이 성공적으로 완료되지 않으면 롤백**되도록 설계했습니다.
 
 - 이를 통해 데이터베이스 작업 간 불일치 상태를 방지하며, 데이터의 일관성을 유지했습니다.
 <img alt="batch" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
 
+---
 ### **Transaction**
-- 성장일기 좋아요 기능에서 아래 작업을 **Transaction**을 활용해 구현했습니다.
+- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.
   1. 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거
   2. 해당 성장일기의 likeCount 증가 또는 감소
   3. 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
 
-- **Transaction**을 사용하여 **모든 작업이 성공적으로 처리되거나 실패 시 모두 취소**되도록 하고, 트랜잭션 중 데이터 변경(좋아요 수)이 감지되면 작업이 **자동 재시도** 되도록 설계했습니다.
+- `Transaction`을 사용하여 **모든 작업이 성공적으로 처리되거나 실패 시 모두 취소**되도록 하고, 트랜잭션 중 데이터 변경(좋아요 수)이 감지되면 작업이 **자동 재시도** 되도록 설계했습니다.
 
 - 이를 통해 여러 사용자가 동시에 좋아요 작업을 수행하더라도 데이터의 불일치 문제를 방지하며, 데이터의 일관성을 유지했습니다.
 <img alt="transaction" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
-
-### **provider와 stateNotifier를 사용한 상태관리**
