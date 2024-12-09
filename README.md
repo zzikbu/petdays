@@ -84,9 +84,9 @@
 ### **Provider와 StateNotifier를 활용한 효율적인 상태 관리**
 * 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
 * `StateNotifier` 사용한 주요 개선점
-  - **불변성 기반의 상태 관리**: 각 상태 변경 시 새로운 상태 객체를 생성하여 상태 추적의 명확성 확보
+  - **불변성 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
-  - **명시적인 상태 관리**: init, submitting, fetching 등 상태를 명확하게 표현
+  - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
 <img alt="statenotifier" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_1.png?raw=true">
 <img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_2.png?raw=true">
 
