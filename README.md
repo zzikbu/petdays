@@ -22,18 +22,18 @@
 
 ### 개발 기간
 - 2024.07.29 ~ 2024.08.28 ( 약 1개월 / FlowChart, IA, 디자인 구현 )
-- 2024.08.21 ~ 2024.11.12 (약 3개월 / 기능 개발 후 iOS 배포)
-- 2024.11.13 ~ (리팩토링 및 버그 수정 진행 중)
+- 2024.08.14 ~ 2024.11.12 ( 약 3개월 / 기능 개발 후 iOS 배포 )
+- 2024.11.13 ~ ( 현재 / 리팩토링 및 버그 수정 진행 중 )
 <br/><br/>
 
 ## 주요 기능
-1. 반려동물 등록 : 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
+1. **반려동물 등록:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
 
-2. 성장일기 : 반려동물과의 특별한 순간을 사진과 글로 기록하고, 다른 반려인들과 공유할 수 있습니다.
+2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록하고, 다른 반려인들과 공유할 수 있습니다.
 
-3. 진료기록 : 병원 방문 기록을 체계적으로 관리할 수 있습니다.
+3. **진료기록:** 병원 방문 기록을 체계적으로 관리할 수 있습니다.
 
-4. 산책 : 반려동물과의 산책 경로와 시간을 기록하고, 확인할 수 있습니다.
+4. **산책:** 반려동물과의 산책 경로와 시간을 기록하고, 확인할 수 있습니다.
 <br/><br/>
 
 ## 기술 스택
@@ -55,7 +55,7 @@
 ## 팀 구성 및 역할
 | 1인 기획 / 디자인 / 개발                                             |
 |:------------------------------------------------------------:|
-| <img alt="깃허브 프로필 이미지" width="170" src="https://avatars.githubusercontent.com/zzikbu"> |
+| <img alt="깃허브 프로필 이미지" width="160" src="https://avatars.githubusercontent.com/zzikbu"> |
 | [이승민](https://github.com/zzikbu)                             |
 <br/>
 
@@ -93,35 +93,36 @@
 <br/>
 
 ## 주요 기술
-### **Provider와 StateNotifier를 활용한 효율적인 상태 관리**
+### Provider와 StateNotifier를 활용한 효율적인 상태 관리
 * 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
+
 * `StateNotifier` 사용한 주요 개선점
-  - **불변성 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
+  - **Immutable 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
   - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
-<img alt="statenotifier" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_1.png?raw=true">
-<img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_2.png?raw=true">
+- 코드 이미지<br/>
+  <img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_1.png?raw=true">
+  <img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_2.png?raw=true">
 
 ---
-### **Batch**
-- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.
-  1. 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거
-  2. 해당 성장일기 문서 삭제
-  3. 작성자의 diaryCount 감소
+### Database Batch
+- `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
 
-- `Batch`는 위 작업들을 하나로 묶어 실행하며, **모든 작업이 성공적으로 완료되지 않으면 롤백**되도록 설계했습니다.
-
-- 이를 통해 데이터베이스 작업 간 불일치 상태를 방지하며, 데이터의 일관성을 유지했습니다.
-<img alt="batch" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
+- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.<br/>
+  ① 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거<br/>
+  ② 해당 성장일기 문서 삭제<br/>
+  ③ 작성자의 diaryCount 감소
+- 코드 이미지<br/>
+  <img alt="batch" width="470" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
 
 ---
-### **Transaction**
-- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.
-  1. 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거
-  2. 해당 성장일기의 likeCount 증가 또는 감소
-  3. 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
+### Database Transaction
+- `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
 
-- `Transaction`을 사용하여 **모든 작업이 성공적으로 처리되거나 실패 시 모두 취소**되도록 하고, 트랜잭션 중 데이터 변경(좋아요 수)이 감지되면 작업이 **자동 재시도** 되도록 설계했습니다.
+- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.<br/>
+  ① 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거<br/>
+  ② 해당 성장일기의 likeCount 증가 또는 감소<br/>
+  ③ 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
 
-- 이를 통해 여러 사용자가 동시에 좋아요 작업을 수행하더라도 데이터의 불일치 문제를 방지하며, 데이터의 일관성을 유지했습니다.
-<img alt="transaction" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
+- 코드 이미지 <br/>
+  <img alt="transaction" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
