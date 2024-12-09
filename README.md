@@ -1,6 +1,10 @@
 ## 🐶 펫데이즈 😺
 <img alt="petdays" width="1024" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/petdays.png?raw=true">
-<a target="_blank" href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038"> <img width="180" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/appstore.png?raw=true"> </a>
+<div align="center">
+    <a target="_blank" href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038">
+        <img width="180" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/appstore.png?raw=true" alt="App Store Link">
+    </a>
+</div>
 <br/>
 
 ## 목차
@@ -17,7 +21,8 @@
 <br/>
 
 ### 개발 기간
-- 2024.08.28 ~ 2024.11.12 (기능 개발 후 배포)
+- 2024.07.29 ~ 2024.08.28 ( 약 1개월 / FlowChart, IA, 디자인 구현 )
+- 2024.08.21 ~ 2024.11.12 (약 3개월 / 기능 개발 후 iOS 배포)
 - 2024.11.13 ~ (리팩토링 및 버그 수정 진행 중)
 <br/><br/>
 
@@ -58,12 +63,19 @@
 - [기획 \(IA & FlowChart\) 피그마](https://www.figma.com/board/bRJPGCggzClx0mkBAM67HK/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_IA-%26-FlowChart?node-id=0-1&t=zGr2xHekPnblou5w-1)
 - [디자인 피그마](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
 
-| <img alt="home" width="240" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="feed" width="294" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed.png?raw=true"> |
-|:------------------------------------------------------------:|:------------------------------------------------------------:|
-
-| <img alt="walk" width="580" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk.png?raw=true"> |
+| IA                                                           |
 |:------------------------------------------------------------:|
-| <img alt="plan" width="580" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/plan.png?raw=true"> |
+| <img alt="ia" width="350" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/ia.png?raw=true"> |
+
+| FlowChart                                                    |
+|:------------------------------------------------------------:|
+| <img alt="flowchart" width="660" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/flowchart.png?raw=true"> |
+
+| 홈                                                            | 반려동물 상세보기                                                    | 피드 홈                                                         | 성장일기 상세보기                                                    |
+|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|
+| <img alt="home" width="144" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="pet_detail" width="190" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/pet_detail.png?raw=true"> | <img alt="feed_home" width="178" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed_home.png?raw=true"> | <img alt="diary_detail" width="172" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/diary_detail.png?raw=true"> |
+| 산책 홈                                                         | 산책 상세보기                                                      | 산책 지도 트래킹                                                    |                                                              |
+| <img alt="walk_home" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_home.png?raw=true"> | <img alt="walk_detail" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_detail.png?raw=true"> | <img alt="walk_map" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_map.png?raw=true"> |                                                              |
 
 <br/>
 
