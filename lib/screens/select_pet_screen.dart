@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:petdays/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../components/show_custom_dialog.dart';
 import '../components/w_avatar.dart';
 import '../components/w_bottom_confirm_button.dart';
 import '../components/show_error_dialog.dart';
@@ -143,8 +146,7 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                         color: Palette.white,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color:
-                              isSelected ? Palette.black : Colors.transparent,
+                          color: isSelected ? Palette.black : Colors.transparent,
                           width: 2,
                         ),
                         boxShadow: [
@@ -192,26 +194,46 @@ class _SelectPetScreenState extends State<SelectPetScreen>
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    MedicalUploadScreen(selectedPet: selectedPet),
+                builder: (context) => MedicalUploadScreen(selectedPet: selectedPet),
               ),
             );
           } else {
-            List<PetModel> selectedPets =
-                selectedIndices.map((index) => petList[index]).toList();
+            List<PetModel> selectedPets = selectedIndices.map((index) => petList[index]).toList();
 
-            final hasPermission =
-                await PermissionUtils.checkLocationPermission(context);
-            if (!hasPermission) return;
+            if (Platform.isAndroid) {
+              showCustomDialog(
+                context: context,
+                hasCancelButton: false,
+                title: '백그라운드 위치',
+                message: '이 앱은 사용 중이 아닐 때도 위치 데이터를 수집하여 산책 경로를 추적합니다.',
+                onConfirm: () async {
+                  Navigator.pop(context);
+                  // 권한 체크 후 화면 이동
+                  final hasPermission = await PermissionUtils.checkLocationPermission(context);
+                  if (!hasPermission) return;
 
-            if (context.mounted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      WalkMapScreen(selectedPets: selectedPets),
-                ),
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WalkMapScreen(selectedPets: selectedPets),
+                      ),
+                    );
+                  }
+                },
               );
+            } else {
+              final hasPermission = await PermissionUtils.checkLocationPermission(context);
+              if (!hasPermission) return;
+
+              if (context.mounted) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WalkMapScreen(selectedPets: selectedPets),
+                  ),
+                );
+              }
             }
           }
         },
