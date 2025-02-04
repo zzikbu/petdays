@@ -1,10 +1,15 @@
-## 🐶 펫데이즈 😺
-<img alt="petdays" width="1024" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/petdays.png?raw=true">
-<div align="center">
-    <a target="_blank" href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038">
-        <img width="180" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/appstore.png?raw=true" alt="App Store Link">
-    </a>
-</div>
+## 펫데이즈
+<img alt="header" width="1024" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/header.png?raw=true">
+
+<p align="center">
+  <a href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038">
+    <img alt="app_store" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/app_store.png">
+  </a>
+
+  <a href="https://play.google.com/store/apps/details?id=com.devmoichi.petdays">
+    <img alt="play_store" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/play_store.png">
+  </a>
+</p>
 <br/>
 
 ## 목차
