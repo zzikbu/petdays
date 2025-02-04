@@ -3,33 +3,39 @@
 
 <p align="center">
   <a href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038">
-    <img alt="app_store" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/app_store.png">
+    <img alt="app_store" height="80" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/app_store.png">
   </a>
-
   <a href="https://play.google.com/store/apps/details?id=com.devmoichi.petdays">
-    <img alt="play_store" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/play_store.png">
+    <img alt="play_store" height="80" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/play_store.png">
   </a>
 </p>
-<br/>
 
 ## 목차
 - [프로젝트 소개](#프로젝트-소개)
-- [주요 기능](#주요-기능)
 - [팀 구성 및 역할](#팀-구성-및-역할)
+- [주요 기능](#주요-기능)
+- [기술 스택](#기술-스택)
 - [기획 및 디자인](#기획-및-디자인)
 - [기능 실행 화면](#기능-실행-화면)
 - [주요 기술](#주요-기술)
 <br/><br/>
 
 ## 프로젝트 소개
-1500만 반려인 시대에 맞춰, 반려동물과의 소중한 일상을 디지털로 기록하고 추억할 수 있는 모바일 애플리케이션입니다.
+1500만 반려인 시대에 맞춰, 반려동물의 성장일기, 진료기록, 산책기록을 한곳에 담아 보관하고, 공유할 수 있는 모바일 애플리케이션
 <br/>
 
 ### 개발 기간
 - 2024.07.29 ~ 2024.08.28 ( 약 1개월 / FlowChart, IA, 디자인 구현 )
-- 2024.08.14 ~ 2024.11.12 ( 약 3개월 / 기능 개발 후 iOS 배포 )
-- 2024.11.13 ~ ( 현재 / 리팩토링 및 버그 수정 진행 중 )
+- 2024.08.14 ~ 2024.12.01 ( 약 5개월 / 기능 개발 후 배포 )
+- 2024.12.01 ~  리팩토링 및 버그 수정 진행 중 )
 <br/><br/>
+
+## 팀 구성 및 역할
+| 1인 기획 / 디자인 / 개발                                             |
+|:------------------------------------------------------------:|
+| <img alt="깃허브 프로필 이미지" width="160" src="https://avatars.githubusercontent.com/zzikbu"> |
+| [이승민](https://github.com/zzikbu)                             |
+<br/>
 
 ## 주요 기능
 1. **반려동물 등록:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
@@ -57,13 +63,6 @@
   - 스플래시 화면: `flutter_native_splash` 
 <br/><br/>
 
-## 팀 구성 및 역할
-| 1인 기획 / 디자인 / 개발                                             |
-|:------------------------------------------------------------:|
-| <img alt="깃허브 프로필 이미지" width="160" src="https://avatars.githubusercontent.com/zzikbu"> |
-| [이승민](https://github.com/zzikbu)                             |
-<br/>
-
 ## 기획 및 디자인
 - [기획 \(IA & FlowChart\) 피그마](https://www.figma.com/board/bRJPGCggzClx0mkBAM67HK/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_IA-%26-FlowChart?node-id=0-1&t=zGr2xHekPnblou5w-1)
 - [디자인 피그마](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
@@ -81,7 +80,6 @@
 | <img alt="home" width="144" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="pet_detail" width="190" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/pet_detail.png?raw=true"> | <img alt="feed_home" width="178" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed_home.png?raw=true"> | <img alt="diary_detail" width="172" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/diary_detail.png?raw=true"> |
 | 산책 홈                                                         | 산책 상세보기                                                      | 산책 지도 트래킹                                                    |                                                              |
 | <img alt="walk_home" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_home.png?raw=true"> | <img alt="walk_detail" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_detail.png?raw=true"> | <img alt="walk_map" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_map.png?raw=true"> |                                                              |
-
 <br/>
 
 ## 기능 실행 화면
