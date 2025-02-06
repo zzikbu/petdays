@@ -21,10 +21,10 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
   bool isLoading = true;
 
   static const String _termsUri =
-      'https://firebasestorage.googleapis.com/v0/b/petdays-38ca6.firebasestorage.app/o/app_documents%2Fterms.html?alt=media&token=b7090ead-2ee7-4e70-94c4-55f988101008';
+      'https://ivy-badge-8b0.notion.site/137adee28c6580ac9842d2a634635002?pvs=4';
 
   static const String _policyUri =
-      'https://firebasestorage.googleapis.com/v0/b/petdays-38ca6.firebasestorage.app/o/app_documents%2Fpolicy.html?alt=media&token=788440b6-cbdf-4e1b-8131-437b9c12187c';
+      'https://ivy-badge-8b0.notion.site/136adee28c65809f8d69e62e604adf23?pvs=4';
 
   /// Method
   void _initializeController() {
