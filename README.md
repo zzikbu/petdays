@@ -92,7 +92,7 @@
 <br/>
 
 ## 주요 기술
-### Provider와 StateNotifier를 활용한 효율적인 상태 관리
+### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
 * 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
 
 * `StateNotifier` 사용한 주요 개선점
@@ -155,16 +155,41 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
       );
     } on CustomException catch (_) {
 	  // Immutable 상태 업데이트
-      state = state.copyWith(
-        medicalStatus: MedicalStatus.error
-      );
+      state = state.copyWith(medicalStatus: MedicalStatus.error);
       rethrow; 
     } 
   } 
 } 
 ```
+```dart
+// medical_home_screen.dart
+
+@override
+Widget build(BuildContext context) {
+ // MedicalState를 구독하여 실시간 상태 반영
+ MedicalState medicalState = context.watch<MedicalState>();
+ List<MedicalModel> medicalList = medicalState.medicalList;
+
+ bool isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
+ 
+ return Scaffold(
+   // ...
+   body: isLoading
+       ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+       : ListView.builder(
+           itemCount: medicalList.length,
+           itemBuilder: (context, index) {
+             return MedicalHomeCardWidget(
+               medicalModel: medicalList[index],
+               index: index,
+             );
+           },
+         ),
+ );
+}
+```
 ---
-### Database Batch
+### ✅ Database Batch
 - `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
 
 - 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.<br/>
@@ -174,7 +199,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
 - 코드 이미지<br/>
   <img alt="batch" width="470" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
 ---
-### Database Transaction
+### ✅ Database Transaction
 - `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
 
 - 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.<br/>
