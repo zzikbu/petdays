@@ -25,9 +25,9 @@
 <br/>
 
 ### 개발 기간
-- 2024.07.29 ~ 2024.08.28 ( 약 1개월 / FlowChart, IA, 디자인 구현 )
-- 2024.08.14 ~ 2024.12.01 ( 약 5개월 / 기능 개발 후 배포 )
-- 2024.12.01 ~  리팩토링 및 버그 수정 진행 중 )
+- 2024.07.29 ~ 2024.08.28 (약 1개월 / FlowChart, IA, 디자인 구현)
+- 2024.08.14 ~ 2024.12.01 (약 5개월 / 기능 개발 후 배포)
+- 2024.12.01 ~  (리팩토링 및 버그 수정 진행 중)
 <br/><br/>
 
 ## 팀 구성 및 역할
@@ -52,15 +52,11 @@
 - **프레임워크:** `Flutter`
 - **아키텍쳐**: `MVVM`
 - **사용한 패키지:**
-  - 파이어베이스: `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `google_sign_in`
-  - 상태관리: `provider`, `state_notifier`, `flutter_state_notifier`
-  - 지도 & 위치: `geolocator`, `google_maps_flutter`
-  - Carousel UI: `carousel_slider`, `smooth_page_indicator`
-  - 유효성: `uuid`, `string_validator`
-  - 이미지: `flutter_svg`, `image_picker`, `extended_image`
-  - 웹뷰: `webview_flutter`
-  - 앱 정보 & 권한: `package_info_plus`, `permission_handler`
-  - 스플래시 화면: `flutter_native_splash` 
+  - Firebase: `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `google_sign_in`
+  - State Management: `provider`, `state_notifier`, `flutter_state_notifier`
+  - Location: `geolocator`, `google_maps_flutter`
+  - UI/UX: `carousel_slider`, `smooth_page_indicator`, `flutter_svg`, `extended_image`
+  - Util:  `image_picker`, `permission_handler`, `flutter_native_splash`, `uuid`, `string_validator`, `package_info_plus`, `webview_flutter`
 <br/><br/>
 
 ## 기획 및 디자인
@@ -103,10 +99,70 @@
   - **Immutable 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
   - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
-- 코드 이미지<br/>
-  <img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_1.png?raw=true">
-  <img alt="statenotifier" width="480" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/statenotifier_2.png?raw=true">
+```dart
+// medical_state.dart
 
+enum MedicalStatus {
+  init,      // 초기 상태
+  submitting,// 데이터 제출 중
+  fetching,  // 데이터 로딩 중
+  success,   // 작업 성공
+  error      // 에러 상태
+}
+
+class MedicalState {
+  final MedicalStatus medicalStatus;
+  final List<MedicalModel> medicalList;
+
+  const MedicalState({
+    required this.medicalStatus,
+    required this.medicalList,
+  });
+
+  // Immutable state 복사 메서드
+  MedicalState copyWith({
+    MedicalStatus? medicalStatus,
+    List<MedicalModel>? medicalList,
+  }) {
+    return MedicalState(
+      medicalStatus: medicalStatus ?? this.medicalStatus,
+      medicalList: medicalList ?? this.medicalList,
+    );
+  }
+}
+```
+```dart
+// medical_provider.dart
+
+class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin { 
+  MedicalProvider() : super(MedicalState.init()); 
+
+  Future<void> getMedicalList({ 
+    required String uid,
+  }) async {
+    try {
+	  // Immutable 상태 업데이트
+      state = state.copyWith(medicalStatus: MedicalStatus.fetching);
+
+	  // 비지니스 로직 수행
+      List<MedicalModel> medicalList =
+          await read<MedicalRepository>().getMedicalList(uid: uid);
+
+	  // Immutable 상태 업데이트
+      state = state.copyWith(
+        medicalList: medicalList,
+        medicalStatus: MedicalStatus.success,
+      );
+    } on CustomException catch (_) {
+	  // Immutable 상태 업데이트
+      state = state.copyWith(
+        medicalStatus: MedicalStatus.error
+      );
+      rethrow; 
+    } 
+  } 
+} 
+```
 ---
 ### Database Batch
 - `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
@@ -117,7 +173,6 @@
   ③ 작성자의 diaryCount 감소
 - 코드 이미지<br/>
   <img alt="batch" width="470" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
-
 ---
 ### Database Transaction
 - `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
