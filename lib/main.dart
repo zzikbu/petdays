@@ -7,35 +7,37 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:petdays/firebase_options.dart';
-import 'package:petdays/providers/auth/auth_state.dart';
-import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/providers/diary/diary_provider.dart';
-import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/providers/feed/feed_provider.dart';
-import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/providers/home/home_provider.dart';
-import 'package:petdays/providers/home/home_state.dart';
-import 'package:petdays/providers/like/like_provider.dart';
-import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/providers/medical/medical_provider.dart';
-import 'package:petdays/providers/medical/medical_state.dart';
-import 'package:petdays/providers/pet/pet_provider.dart';
-import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/providers/profile/profile_provider.dart';
-import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/providers/walk/walk_provider.dart';
-import 'package:petdays/providers/walk/walk_state.dart';
-import 'package:petdays/repositories/auth_repository.dart';
-import 'package:petdays/repositories/diary_repository.dart';
-import 'package:petdays/repositories/feed_repository.dart';
-import 'package:petdays/repositories/like_repository.dart';
-import 'package:petdays/repositories/medical_repository.dart';
-import 'package:petdays/repositories/pet_repository.dart';
-import 'package:petdays/repositories/profile_repository.dart';
-import 'package:petdays/repositories/walk_repository.dart';
-import 'package:petdays/screens/spalash_screen.dart';
+import 'package:petdays/core/router/app_router.dart';
 import 'package:provider/provider.dart';
+
+import 'firebase_options.dart';
+import 'providers/auth/auth_state.dart';
+import 'providers/auth/my_auth_provider.dart';
+import 'providers/diary/diary_provider.dart';
+import 'providers/diary/diary_state.dart';
+import 'providers/feed/feed_provider.dart';
+import 'providers/feed/feed_state.dart';
+import 'providers/home/home_provider.dart';
+import 'providers/home/home_state.dart';
+import 'providers/like/like_provider.dart';
+import 'providers/like/like_state.dart';
+import 'providers/medical/medical_provider.dart';
+import 'providers/medical/medical_state.dart';
+import 'providers/pet/pet_provider.dart';
+import 'providers/pet/pet_state.dart';
+import 'providers/profile/profile_provider.dart';
+import 'providers/profile/profile_state.dart';
+import 'providers/walk/walk_provider.dart';
+import 'providers/walk/walk_state.dart';
+import 'repositories/auth_repository.dart';
+import 'repositories/diary_repository.dart';
+import 'repositories/feed_repository.dart';
+import 'repositories/like_repository.dart';
+import 'repositories/medical_repository.dart';
+import 'repositories/pet_repository.dart';
+import 'repositories/profile_repository.dart';
+import 'repositories/walk_repository.dart';
+import 'screens/spalash_screen.dart';
 
 late final PackageInfo packageInfo;
 
@@ -153,7 +155,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => LikeProvider(),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -162,8 +166,6 @@ class _MyAppState extends State<MyApp> {
         supportedLocales: const [
           Locale('ko', 'KR'),
         ],
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
       ),
     );
   }

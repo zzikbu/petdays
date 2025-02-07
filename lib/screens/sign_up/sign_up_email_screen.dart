@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
@@ -73,9 +74,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                         filled: true,
                       ),
                       validator: (value) {
-                        if (value == null ||
-                            value.trim().isEmpty ||
-                            !isEmail(value.trim())) {
+                        if (value == null || value.trim().isEmpty || !isEmail(value.trim())) {
                           return "이메일을 입력해주세요.";
                         }
                         return null;
@@ -153,8 +152,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                               // 검증 로직 후에
                               setState(() {
                                 _isEnabled = false;
-                                _autovalidateMode =
-                                    AutovalidateMode.always; // 실시간으로 변하게
+                                _autovalidateMode = AutovalidateMode.always; // 실시간으로 변하게
                               });
 
                               // 회원가입 로직
@@ -164,11 +162,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
                                       password: _passwordTEC.text,
                                     );
 
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SignInScreen(),
-                                    ));
+                                context.go('/');
 
                                 // 스낵바 띄우기
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -211,13 +205,7 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
 
                     // 로그인 하기 버튼
                     GestureDetector(
-                      onTap: _isEnabled
-                          ? () => Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignInScreen(),
-                              ))
-                          : null,
+                      onTap: _isEnabled ? () => context.go('/') : null,
                       child: Align(
                         alignment: Alignment.center,
                         child: RichText(

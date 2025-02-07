@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/screens/sign_in/reset_password_screen.dart';
-import 'package:petdays/screens/sign_up/sign_up_email_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:petdays/core/router/app_router.dart';
 import 'package:provider/provider.dart';
 import 'package:string_validator/string_validator.dart';
+
+import '../../components/show_error_dialog.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../palette.dart';
+import '../../providers/auth/my_auth_provider.dart';
+import '../sign_up/sign_up_email_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -61,8 +63,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         SizedBox(
                           width: 140,
                           height: 140,
-                          child:
-                              SvgPicture.asset('assets/icons/ic_app_logo.svg'),
+                          child: SvgPicture.asset('assets/icons/ic_app_logo.svg'),
                         ),
                         SizedBox(height: 40),
 
@@ -85,9 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             filled: true,
                           ),
                           validator: (value) {
-                            if (value == null ||
-                                value.trim().isEmpty ||
-                                !isEmail(value.trim())) {
+                            if (value == null || value.trim().isEmpty || !isEmail(value.trim())) {
                               return "이메일을 입력해주세요.";
                             }
                             return null;
@@ -185,14 +184,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           children: [
                             // 회원가입
                             GestureDetector(
-                              onTap: _isEnabled
-                                  ? () => Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            SignupEmailScreen(),
-                                      ))
-                                  : null,
+                              onTap: _isEnabled ? () => context.go('/sign_up_email') : null,
                               child: Align(
                                 alignment: Alignment.center,
                                 child: Text(
@@ -209,14 +201,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
                             // 비밀번호 재설정
                             GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ResetPasswordScreen(),
-                                    ));
-                              },
+                              onTap: () => context.go('/reset_password'),
                               child: Text(
                                 ' / 비밀번호 재설정',
                                 style: TextStyle(
@@ -242,9 +227,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               onTap: () async {
                                 FocusScope.of(context).unfocus();
                                 try {
-                                  await context
-                                      .read<MyAuthProvider>()
-                                      .signInWithGoogle();
+                                  await context.read<MyAuthProvider>().signInWithGoogle();
                                 } on CustomException catch (e) {
                                   showErrorDialog(context, e);
                                 }
@@ -252,8 +235,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               child: SizedBox(
                                 width: 56,
                                 height: 56,
-                                child: SvgPicture.asset(
-                                    'assets/icons/ic_login_google.svg'),
+                                child: SvgPicture.asset('assets/icons/ic_login_google.svg'),
                               ),
                             ),
 
@@ -266,9 +248,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     onTap: () async {
                                       FocusScope.of(context).unfocus();
                                       try {
-                                        await context
-                                            .read<MyAuthProvider>()
-                                            .signInWithApple();
+                                        await context.read<MyAuthProvider>().signInWithApple();
                                       } on CustomException catch (e) {
                                         showErrorDialog(context, e);
                                       }
@@ -276,8 +256,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                     child: SizedBox(
                                       width: 56,
                                       height: 56,
-                                      child: SvgPicture.asset(
-                                          'assets/icons/ic_login_apple.svg'),
+                                      child: SvgPicture.asset('assets/icons/ic_login_apple.svg'),
                                     ),
                                   ),
                                 ],
