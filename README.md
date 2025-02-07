@@ -3,16 +3,16 @@
 
 <p align="center">
   <a href="https://apps.apple.com/kr/app/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88/id6738037038">
-    <img alt="app_store" height="80" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/app_store.png">
+    <img alt="app_store" height="60" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/app_store.png">
   </a>
   <a href="https://play.google.com/store/apps/details?id=com.devmoichi.petdays">
-    <img alt="play_store" height="80" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/play_store.png">
+    <img alt="play_store" height="60" src="https://raw.githubusercontent.com/zzikbu/PetDays/main/readme_assets/play_store.png">
   </a>
 </p>
 
 ## 목차
 - [프로젝트 소개](#프로젝트-소개)
-- [팀 구성 및 역할](#팀-구성-및-역할)
+- [개발 기간](#개발-기간)
 - [주요 기능](#주요-기능)
 - [기술 스택](#기술-스택)
 - [기획 및 디자인](#기획-및-디자인)
@@ -20,37 +20,36 @@
 - [주요 기술](#주요-기술)
 <br/><br/>
 
-## 프로젝트 소개
-1500만 반려인 시대에 맞춰, 반려동물의 성장일기, 진료기록, 산책기록을 한곳에 담아 보관하고, 공유할 수 있는 모바일 애플리케이션
-<br/>
+## 프로젝트 소개  
+**1인 기획 / 디자인 / 개발**<br>
 
-### 개발 기간
-- 2024.07.29 ~ 2024.08.28 (약 1개월 / FlowChart, IA, 디자인 구현)
-- 2024.08.14 ~ 2024.12.01 (약 5개월 / 기능 개발 후 배포)
-- 2024.12.01 ~  (리팩토링 및 버그 수정 진행 중)
+반려동물의 성장일기, 진료기록, 산책기록을 한곳에 담아 보관하고 공유할 수 있는 모바일 애플리케이션입니다.
 <br/><br/>
-
-## 팀 구성 및 역할
-| 1인 기획 / 디자인 / 개발                                             |
-|:------------------------------------------------------------:|
-| <img alt="깃허브 프로필 이미지" width="160" src="https://avatars.githubusercontent.com/zzikbu"> |
-| [이승민](https://github.com/zzikbu)                             |
-<br/>
+  
+## 개발 기간
+- **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 _(약 1개월)_  
+- **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 _(약 5개월)_  
+- **리팩토링 & 유지보수:** 2024.12.01 ~ _(현재 진행 중)_  
+<br>
 
 ## 주요 기능
-1. **반려동물 등록:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
+1. **반려동물:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
 
-2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록하고, 다른 반려인들과 공유할 수 있습니다.
+2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록해 추억할 수 있습니다.
 
-3. **진료기록:** 병원 방문 기록을 체계적으로 관리할 수 있습니다.
+3. **진료기록:** 병원 방문 기록을 관리할 수 있습니다.
 
-4. **산책:** 반려동물과의 산책 경로와 시간을 기록하고, 확인할 수 있습니다.
+4. **산책:** 산책 시간,거리와 경로를 기록해 관리할 수 있습니다.
+
+5. **피드:** 공개된 성장일기를 통해 다른 반려인들과 경험을 공유하고 좋아요를 통해 공감할 수 있습니다.
 <br/><br/>
 
 ## 기술 스택
 - **언어:** `Dart`
 - **프레임워크:** `Flutter`
-- **아키텍쳐**: `MVVM`
+- **아키텍쳐**: `MVVM`<br>
+  <img alt="architecture" height="280" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/architecture.png?raw=true">
+
 - **사용한 패키지:**
   - Firebase: `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `google_sign_in`
   - State Management: `provider`, `state_notifier`, `flutter_state_notifier`
@@ -60,35 +59,30 @@
 <br/><br/>
 
 ## 기획 및 디자인
-- [기획 \(IA & FlowChart\) 피그마](https://www.figma.com/board/bRJPGCggzClx0mkBAM67HK/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_IA-%26-FlowChart?node-id=0-1&t=zGr2xHekPnblou5w-1)
-- [디자인 피그마](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
+### [🔗 기획 및 디자인 Figma 🔗](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
 
-| IA                                                           |
-|:------------------------------------------------------------:|
-| <img alt="ia" width="350" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/ia.png?raw=true"> |
-
-| FlowChart                                                    |
-|:------------------------------------------------------------:|
-| <img alt="flowchart" width="660" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/flowchart.png?raw=true"> |
+| IA                                                           | FlowChart                                                    |
+|:------------------------------------------------------------:|:------------------------------------------------------------:|
+| <img alt="ia" height="309" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/ia.png?raw=true"> | <img alt="flowchart" height="309" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/flowchart.png?raw=true"> |
 
 | 홈                                                            | 반려동물 상세보기                                                    | 피드 홈                                                         | 성장일기 상세보기                                                    |
 |:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|
-| <img alt="home" width="144" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/home.png?raw=true"> | <img alt="pet_detail" width="190" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/pet_detail.png?raw=true"> | <img alt="feed_home" width="178" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/feed_home.png?raw=true"> | <img alt="diary_detail" width="172" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/diary_detail.png?raw=true"> |
+| <img alt="home" width="144" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/home.png?raw=true"> | <img alt="pet_detail" width="190" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/pet_detail.png?raw=true"> | <img alt="feed_home" width="178" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/feed_home.png?raw=true"> | <img alt="diary_detail" width="172" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/diary_detail.png?raw=true"> |
 | 산책 홈                                                         | 산책 상세보기                                                      | 산책 지도 트래킹                                                    |                                                              |
-| <img alt="walk_home" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_home.png?raw=true"> | <img alt="walk_detail" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_detail.png?raw=true"> | <img alt="walk_map" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/1/walk_map.png?raw=true"> |                                                              |
+| <img alt="walk_home" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_home.png?raw=true"> | <img alt="walk_detail" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_detail.png?raw=true"> | <img alt="walk_map" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_map.png?raw=true"> |                                                              |
 <br/>
 
 ## 기능 실행 화면
 
 | 로그인                                                          | 회원가입                                                         | 홈                                                            | 반려동물 추가                                                      |
 |:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|:------------------------------------------------------------:|
-| <img alt="signin" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signin.gif?raw=true"> | <img alt="signup" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/signup.gif?raw=true"> | <img alt="home" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/home.gif?raw=true"> | <img alt="pet" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/pet.gif?raw=true"> |
+| <img alt="signin" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/signin.gif?raw=true"> | <img alt="signup" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/signup.gif?raw=true"> | <img alt="home" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/home.gif?raw=true"> | <img alt="pet" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/pet.gif?raw=true"> |
 | 성장일기                                                         | 진료기록                                                         | 산책                                                           | 피드 / 좋아요                                                     |
-| <img alt="diary" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/diary.gif?raw=true"> | <img alt="medical" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/medical.gif?raw=true"> | <img alt="walk" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/walk.gif?raw=true"> | <img alt="feed" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/feed.gif?raw=true"> |
+| <img alt="diary" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/diary.gif?raw=true"> | <img alt="medical" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/medical.gif?raw=true"> | <img alt="walk" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/walk.gif?raw=true"> | <img alt="feed" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/feed.gif?raw=true"> |
 | 신고 / 차단                                                      | 닉네임 변경                                                       | 프로필 이미지 변경 / 삭제                                              | 공개한 성장일기                                                     |
-| <img alt="report_block" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/report_block.gif?raw=true"> | <img alt="nickname" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/nickname.gif?raw=true"> | <img alt="profile_image" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/profile_image.gif?raw=true"> | <img alt="open" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/open.PNG?raw=true"> |
+| <img alt="report_block" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/report_block.gif?raw=true"> | <img alt="nickname" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/nickname.gif?raw=true"> | <img alt="profile_image" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/profile_image.gif?raw=true"> | <img alt="open" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/open.PNG?raw=true"> |
 | 좋아요한 성장일기                                                    |                                                              |                                                              |                                                              |
-| <img alt="like" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/2/like.PNG?raw=true"> |                                                              |                                                              |                                                              |
+| <img alt="like" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/like.PNG?raw=true"> |                                                              |                                                              |                                                              |
 <br/>
 
 ## 주요 기술
@@ -141,20 +135,20 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
     required String uid,
   }) async {
     try {
-	  // Immutable 상태 업데이트
+      // 상태 변경
       state = state.copyWith(medicalStatus: MedicalStatus.fetching);
 
-	  // 비지니스 로직 수행
+      // 비지니스 로직
       List<MedicalModel> medicalList =
           await read<MedicalRepository>().getMedicalList(uid: uid);
 
-	  // Immutable 상태 업데이트
+      // 상태 변경
       state = state.copyWith(
         medicalList: medicalList,
         medicalStatus: MedicalStatus.success,
       );
     } on CustomException catch (_) {
-	  // Immutable 상태 업데이트
+      // 상태 변경
       state = state.copyWith(medicalStatus: MedicalStatus.error);
       rethrow; 
     } 
