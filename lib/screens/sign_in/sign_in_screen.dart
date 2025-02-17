@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/show_error_dialog.dart';
+import '../../components/sign_text_form_field.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';
 import '../../providers/auth/my_auth_provider.dart';
 import 'widgets/sign_in_additional_links.dart';
 import 'widgets/sign_in_button.dart';
-import 'widgets/sign_in_email_text_form_field.dart';
 import 'widgets/sign_in_logo.dart';
-import 'widgets/sign_in_password_text_form_field.dart';
 import 'widgets/sign_in_social_buttons.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -112,16 +111,26 @@ class _SignInScreenState extends State<SignInScreen> {
                         const SizedBox(height: 40),
 
                         // 이메일
-                        SignInEmailTextFormField(
-                          isEnabled: _isEnabled,
+                        SignTextFormField(
                           controller: _emailTEC,
+                          isEnabled: _isEnabled,
+                          labelText: "이메일",
+                          prefixIcon: Icons.email,
+                          keyboardType: TextInputType.emailAddress,
+                          customValidator: SignTextFormField.emailValidator,
+                          textInputAction: TextInputAction.next,
                         ),
                         const SizedBox(height: 20),
 
                         // 비밀번호
-                        SignInPasswordTextFormField(
-                          isEnabled: _isEnabled,
+                        SignTextFormField(
                           controller: _passwordTEC,
+                          isEnabled: _isEnabled,
+                          labelText: "비밀번호",
+                          prefixIcon: Icons.lock,
+                          obscureText: true,
+                          customValidator: SignTextFormField.passwordValidator,
+                          textInputAction: TextInputAction.done,
                         ),
                         const SizedBox(height: 20),
 

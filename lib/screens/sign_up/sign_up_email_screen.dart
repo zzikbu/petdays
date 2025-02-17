@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/auth/my_auth_provider.dart';
-import 'package:petdays/screens/sign_in/sign_in_screen.dart';
+import 'package:petdays/screens/sign_up/widgets/sign_in_redirect_button.dart';
 import 'package:provider/provider.dart';
-import 'package:string_validator/string_validator.dart';
+
+import '../../components/show_error_dialog.dart';
+import '../../components/sign_text_form_field.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../palette.dart';
+import '../../providers/auth/my_auth_provider.dart';
+import '../sign_in/sign_in_screen.dart';
+import 'widgets/sign_up_button.dart';
 
 class SignupEmailScreen extends StatefulWidget {
   const SignupEmailScreen({super.key});
@@ -16,18 +18,55 @@ class SignupEmailScreen extends StatefulWidget {
 }
 
 class _SignupEmailScreenState extends State<SignupEmailScreen> {
-  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>(); // 검증 로직을 위한
-
+  final GlobalKey<FormState> _globalKey = GlobalKey<FormState>();
   final TextEditingController _emailTEC = TextEditingController();
   final TextEditingController _passwordTEC = TextEditingController();
 
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
+  bool _isEnabled = true;
 
-  bool _isEnabled = true; // 회원가입 버튼 누르면 텍스트필드 & 버튼 비활성화를 위한
+  // 회원가입 로직
+  Future<void> _handleSignUp() async {
+    final form = _globalKey.currentState;
+
+    if (form == null || !form.validate()) {
+      return;
+    }
+
+    setState(() {
+      _isEnabled = false;
+      _autovalidateMode = AutovalidateMode.always;
+    });
+
+    try {
+      await context.read<MyAuthProvider>().signUp(
+            email: _emailTEC.text,
+            password: _passwordTEC.text,
+          );
+
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignInScreen(),
+          ));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("인증 메일을 전송했습니다."),
+          duration: Duration(seconds: 120),
+        ),
+      );
+    } on CustomException catch (e) {
+      setState(() {
+        _isEnabled = true;
+      });
+
+      showErrorDialog(context, e);
+    }
+  }
 
   @override
   void dispose() {
-    // TextEditingController는 화면이 dispose되도 자동으로 메모리에서 사라지지 않음
     _emailTEC.dispose();
     _passwordTEC.dispose();
 
@@ -37,201 +76,67 @@ class _SignupEmailScreenState extends State<SignupEmailScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, // 뒤로가기 막기 (iOS는 확인해봐야할듯‼️)
+      onWillPop: () async => false,
       child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
+        onTap: () => FocusScope.of(context).unfocus(),
         child: Scaffold(
           backgroundColor: Palette.white,
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Form(
-                // 검증 로직을 위해 Form으로 감싸기
                 key: _globalKey,
                 autovalidateMode: _autovalidateMode,
                 child: ListView(
                   shrinkWrap: true,
                   reverse: true,
                   children: [
-                    // 로고
-
                     // 이메일
-                    TextFormField(
-                      enabled: _isEnabled,
+                    SignTextFormField(
                       controller: _emailTEC,
+                      isEnabled: _isEnabled,
+                      labelText: "이메일",
+                      prefixIcon: Icons.email,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        fillColor: Colors.transparent,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Palette.mainGreen),
-                        ),
-                        labelText: "이메일",
-                        labelStyle: TextStyle(color: Colors.black),
-                        prefixIcon: Icon(Icons.email),
-                        filled: true,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty || !isEmail(value.trim())) {
-                          return "이메일을 입력해주세요.";
-                        }
-                        return null;
-                      },
+                      customValidator: SignTextFormField.emailValidator,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // 비밀번호
-                    TextFormField(
-                      enabled: _isEnabled,
+                    SignTextFormField(
                       controller: _passwordTEC,
+                      isEnabled: _isEnabled,
+                      labelText: "비밀번호",
+                      prefixIcon: Icons.lock,
                       obscureText: true,
-                      decoration: InputDecoration(
-                        fillColor: Colors.transparent,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Palette.mainGreen),
-                        ),
-                        labelText: "비밀번호",
-                        labelStyle: TextStyle(color: Colors.black),
-                        prefixIcon: Icon(Icons.lock),
-                        filled: true,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "비밀번호를 입력해주세요.";
-                        }
-                        // 파이어베이스에서 비밀번호 6글자 이상 강제하기 때문에 미리 처리
-                        if (value.length < 6) {
-                          return "비밀번호는 6글자 이상 입력해주세요.";
-                        }
-                        return null;
-                      },
+                      customValidator: SignTextFormField.passwordValidator,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // 비밀번호 확인
-                    TextFormField(
-                      enabled: _isEnabled,
+                    SignTextFormField(
+                      isEnabled: _isEnabled,
+                      labelText: "비밀번호 확인",
+                      prefixIcon: Icons.lock,
                       obscureText: true,
-                      decoration: InputDecoration(
-                        fillColor: Colors.transparent,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Palette.mainGreen),
-                        ),
-                        labelText: "비밀번호 확인",
-                        labelStyle: TextStyle(color: Colors.black),
-                        prefixIcon: Icon(Icons.lock),
-                        filled: true,
-                      ),
-                      validator: (value) {
+                      customValidator: (value) {
                         if (_passwordTEC.text != value) {
                           return "비밀번호가 일치하지 않습니다.";
                         }
                         return null;
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
-                    // 회원가입 버튼
-                    GestureDetector(
-                      onTap: _isEnabled
-                          ? () async {
-                              final form = _globalKey.currentState;
-
-                              if (form == null || !form.validate()) {
-                                return; // 검증이 통과되지 않으면 멈춤
-                              }
-
-                              // 검증 로직 후에
-                              setState(() {
-                                _isEnabled = false;
-                                _autovalidateMode = AutovalidateMode.always; // 실시간으로 변하게
-                              });
-
-                              // 회원가입 로직
-                              try {
-                                await context.read<MyAuthProvider>().signUp(
-                                      email: _emailTEC.text,
-                                      password: _passwordTEC.text,
-                                    );
-
-                                context.go('/');
-
-                                // 스낵바 띄우기
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text("인증 메일을 전송했습니다."),
-                                    duration: Duration(seconds: 120),
-                                  ),
-                                );
-                              } on CustomException catch (e) {
-                                setState(() {
-                                  _isEnabled = true; // 다시 활성화
-                                });
-
-                                showErrorDialog(context, e);
-                              }
-                            }
-                          : null,
-                      child: Container(
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Palette.mainGreen,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            '회원가입',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18,
-                              color: Palette.white,
-                            ),
-                          ),
-                        ),
-                      ),
+                    // 회원가입
+                    SignUpButton(
+                      isEnabled: _isEnabled,
+                      onTap: _handleSignUp,
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
-                    // 로그인 하기 버튼
-                    GestureDetector(
-                      onTap: _isEnabled ? () => context.go('/') : null,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(
-                              color: Palette.mediumGray,
-                              fontFamily: 'Pretendard',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
-                            children: [
-                              TextSpan(text: "이미 회원이신가요? "),
-                              TextSpan(
-                                text: "로그인 하기",
-                                style: TextStyle(
-                                  color: Palette.subGreen,
-                                  fontFamily: 'Pretendard',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    // 로그인 하기
+                    SignInRedirectButton(isEnabled: _isEnabled),
                   ].reversed.toList(),
                 ),
               ),
