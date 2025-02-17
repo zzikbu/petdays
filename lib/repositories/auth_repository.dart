@@ -82,9 +82,8 @@ class AuthRepository {
       generatedNickname = '$randomEmotion$randomAnimal$randomNumber';
 
       // 닉네임 중복 확인
-      QuerySnapshot querySnapshot = await userCollection
-          .where('nickname', isEqualTo: generatedNickname)
-          .get();
+      QuerySnapshot querySnapshot =
+          await userCollection.where('nickname', isEqualTo: generatedNickname).get();
 
       if (querySnapshot.docs.isEmpty) {
         isUnique = true; // 중복되지 않는 닉네임이 발견되면 루프 탈출
@@ -149,8 +148,7 @@ class AuthRepository {
           } catch (e) {
             throw CustomException(
               title: "회원탈퇴",
-              message:
-                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+              message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
             );
           }
           break;
@@ -184,8 +182,7 @@ class AuthRepository {
           } catch (_) {
             throw CustomException(
               title: "회원탈퇴",
-              message:
-                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+              message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
             );
           }
           break;
@@ -203,8 +200,7 @@ class AuthRepository {
           } catch (_) {
             throw CustomException(
               title: "회원탈퇴",
-              message:
-                  "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+              message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
             );
           }
           break;
@@ -214,28 +210,16 @@ class AuthRepository {
       await user.delete();
 
       QuerySnapshot<Map<String, dynamic>> petQuerySnapshot =
-          await firebaseFirestore
-              .collection('pets')
-              .where('uid', isEqualTo: uid)
-              .get();
+          await firebaseFirestore.collection('pets').where('uid', isEqualTo: uid).get();
 
       QuerySnapshot<Map<String, dynamic>> diaryQuerySnapshot =
-          await firebaseFirestore
-              .collection('diaries')
-              .where('uid', isEqualTo: uid)
-              .get();
+          await firebaseFirestore.collection('diaries').where('uid', isEqualTo: uid).get();
 
       QuerySnapshot<Map<String, dynamic>> medicalQuerySnapshot =
-          await firebaseFirestore
-              .collection('medicals')
-              .where('uid', isEqualTo: uid)
-              .get();
+          await firebaseFirestore.collection('medicals').where('uid', isEqualTo: uid).get();
 
       QuerySnapshot<Map<String, dynamic>> walkQuerySnapshot =
-          await firebaseFirestore
-              .collection('walks')
-              .where('uid', isEqualTo: uid)
-              .get();
+          await firebaseFirestore.collection('walks').where('uid', isEqualTo: uid).get();
 
       WriteBatch batch = firebaseFirestore.batch();
 
@@ -273,8 +257,7 @@ class AuthRepository {
 
         batch.delete(diaryDoc.reference);
 
-        List<String> diaryImageUrls =
-            List<String>.from(diaryDoc.data()['imageUrls']);
+        List<String> diaryImageUrls = List<String>.from(diaryDoc.data()['imageUrls']);
         diaryImageUrls.forEach((element) async {
           await firebaseStorage.refFromURL(element).delete();
         });
@@ -284,8 +267,7 @@ class AuthRepository {
       medicalQuerySnapshot.docs.forEach((medicalDoc) async {
         batch.delete(medicalDoc.reference);
 
-        List<String> medicalImageUrls =
-            List<String>.from(medicalDoc.data()['imageUrls']);
+        List<String> medicalImageUrls = List<String>.from(medicalDoc.data()['imageUrls']);
         medicalImageUrls.forEach((element) async {
           await firebaseStorage.refFromURL(element).delete();
         });
@@ -344,8 +326,7 @@ class AuthRepository {
     required String password,
   }) async {
     try {
-      UserCredential userCredential =
-          await firebaseAuth.signInWithEmailAndPassword(
+      UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -396,8 +377,7 @@ class AuthRepository {
   }) async {
     try {
       // 회원가입과 동시에 로그인이 됨
-      UserCredential userCredential =
-          await firebaseAuth.createUserWithEmailAndPassword(
+      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -460,8 +440,7 @@ class AuthRepository {
       }
 
       // 구글 인증 정보 가져오기
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // 구글 인증 정보로 Firebase 인증 정보 생성
       final credential = GoogleAuthProvider.credential(
@@ -470,13 +449,11 @@ class AuthRepository {
       );
 
       // Firebase 인증
-      final UserCredential userCredential =
-          await firebaseAuth.signInWithCredential(credential);
+      final UserCredential userCredential = await firebaseAuth.signInWithCredential(credential);
       final User user = userCredential.user!;
 
       // Firestore에서 사용자 정보 확인
-      final userDoc =
-          await firebaseFirestore.collection("users").doc(user.uid).get();
+      final userDoc = await firebaseFirestore.collection("users").doc(user.uid).get();
 
       // 신규 사용자인 경우 Firestore에 사용자 정보 저장
       if (!userDoc.exists) {
@@ -521,8 +498,7 @@ class AuthRepository {
 
       final User user = userCredential.user!;
 
-      final userDoc =
-          await firebaseFirestore.collection("users").doc(user.uid).get();
+      final userDoc = await firebaseFirestore.collection("users").doc(user.uid).get();
 
       // 신규 사용자인 경우 Firestore에 사용자 정보 저장
       if (!userDoc.exists) {

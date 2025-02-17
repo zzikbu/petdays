@@ -155,9 +155,19 @@ class _MyAppState extends State<MyApp> {
           create: (context) => LikeProvider(),
         ),
       ],
-      child: MaterialApp.router(
-        routerConfig: appRouter,
-        debugShowCheckedModeBanner: false,
+      // child: MaterialApp.router(
+      //   routerConfig: appRouter,
+      //   debugShowCheckedModeBanner: false,
+      //   localizationsDelegates: const [
+      //     GlobalMaterialLocalizations.delegate,
+      //     GlobalWidgetsLocalizations.delegate,
+      //     GlobalCupertinoLocalizations.delegate,
+      //   ],
+      //   supportedLocales: const [
+      //     Locale('ko', 'KR'),
+      //   ],
+      // ),
+      child: MaterialApp(
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -166,6 +176,8 @@ class _MyAppState extends State<MyApp> {
         supportedLocales: const [
           Locale('ko', 'KR'),
         ],
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
       ),
     );
   }

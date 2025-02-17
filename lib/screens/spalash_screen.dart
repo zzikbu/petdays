@@ -21,9 +21,8 @@ class SplashScreen extends StatelessWidget {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (context) => authStatus == AuthStatus.authenticated
-              ? MainScreen()
-              : SignInScreen(),
+          builder: (context) =>
+              authStatus == AuthStatus.authenticated ? MainScreen() : SignInScreen(),
         ),
         (route) => route.isFirst, // 첫번째 화면은 남겨둔 채로 (splash 화면 남기기)
       );

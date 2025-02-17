@@ -20,8 +20,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with AutomaticKeepAliveClientMixin<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin<HomeScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -68,8 +67,7 @@ class _HomeScreenState extends State<HomeScreen>
                     HomePetCarouselWidget(petList: homeState.homePetList),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 40),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                       child: Column(
                         children: [
                           /// 산책
@@ -77,13 +75,11 @@ class _HomeScreenState extends State<HomeScreen>
                           SizedBox(height: 28),
 
                           /// 성장일기
-                          HomeDiaryListWidget(
-                              diaryList: homeState.homeDiaryList),
+                          HomeDiaryListWidget(diaryList: homeState.homeDiaryList),
                           SizedBox(height: 28),
 
                           /// 진료기록
-                          HomeMedicalListWidget(
-                              medicalList: homeState.homeMedicalList),
+                          HomeMedicalListWidget(medicalList: homeState.homeMedicalList),
                         ],
                       ),
                     ),
