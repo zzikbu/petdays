@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/w_bottom_confirm_button.dart';
-import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/palette.dart';
-import 'package:petdays/providers/auth/my_auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:string_validator/string_validator.dart';
+
+import '../../components/show_error_dialog.dart';
+import '../../components/w_bottom_confirm_button.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../palette.dart';
+import '../../providers/auth/my_auth_provider.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   const ResetPasswordScreen({super.key});
@@ -15,13 +16,11 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  /// Properties
   final TextEditingController _emailTEC = TextEditingController();
 
   bool _isActive = false;
   bool _isEnabled = true;
 
-  /// LifeCycle
   @override
   void dispose() {
     _emailTEC.dispose();
@@ -32,19 +31,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(backgroundColor: Palette.background),
         backgroundColor: Palette.background,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
 
               // 제목
-              Text(
+              const Text(
                 '이메일을 입력해주세요',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -54,10 +53,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
 
               // 설명
-              Text(
+              const Text(
                 '해당 이메일로 비밀번호 재설정 링크가 발송됩니다.',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -67,7 +66,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // 이메일
               TextFormField(
@@ -81,7 +80,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Palette.mainGreen),
                   ),
                   labelText: "이메일",
@@ -107,8 +106,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   .read<MyAuthProvider>()
                   .sendPasswordResetEmail(email: _emailTEC.text.trim());
 
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text("전송 완료")));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("전송 완료")));
 
               Navigator.pop(context);
             } on CustomException catch (e) {
