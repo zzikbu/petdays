@@ -85,8 +85,7 @@ class _HomePetCarouselState extends State<HomePetCarousel> {
                                     // 사진
                                     PDCircleAvatar(
                                       imageUrl: petModel.image,
-                                      width: 100,
-                                      height: 100,
+                                      size: 100,
                                     ),
                                     const SizedBox(width: 30),
 

@@ -130,8 +130,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                           children: [
                             PDCircleAvatar(
                               imageUrl: profileState.userModel.profileImage,
-                              width: 60,
-                              height: 60,
+                              size: 60,
                             ),
                             Positioned(
                               bottom: 0,

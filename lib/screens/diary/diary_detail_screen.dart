@@ -301,8 +301,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   Widget _buildProfileImage(String? profileImageUrl) {
     return PDCircleAvatar(
       imageUrl: profileImageUrl,
-      width: 36,
-      height: 36,
+      size: 36,
     );
   }
 

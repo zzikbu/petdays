@@ -97,8 +97,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       children: [
                         PDCircleAvatar(
                           imageUrl: petModel.image,
-                          width: 100,
-                          height: 100,
+                          size: 100,
                         ),
                         SizedBox(width: 16),
                         Expanded(

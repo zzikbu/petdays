@@ -75,8 +75,7 @@ class WalkListCard extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 4),
                             child: PDCircleAvatar(
                               imageUrl: petModel.image,
-                              width: 36,
-                              height: 36,
+                              size: 36,
                             ),
                           );
                         },

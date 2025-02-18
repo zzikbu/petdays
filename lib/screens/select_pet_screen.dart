@@ -162,8 +162,7 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                           SizedBox(height: 10),
                           PDCircleAvatar(
                             imageUrl: petList[index].image,
-                            width: 100,
-                            height: 100,
+                            size: 100,
                           ),
                           SizedBox(height: 2),
                           Text(
