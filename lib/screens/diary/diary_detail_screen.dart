@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../components/show_error_dialog.dart';
-import '../../components/w_avatar.dart';
+import '../../components/pd_ circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';
@@ -64,8 +64,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   late final String _currentUserId;
 
   /// watch를 통해 diaryModel 반환
-  DiaryModel _getDiaryModel(
-      BuildContext context, DiaryType diaryType, int index) {
+  DiaryModel _getDiaryModel(BuildContext context, DiaryType diaryType, int index) {
     if (diaryType == DiaryType.my) {
       return context.watch<DiaryState>().diaryList[index];
     } else if (diaryType == DiaryType.myLike) {
@@ -128,8 +127,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }
 
   /// 나의 성장일기 아닐 때 PullDownMenuItem 리스트 반환
-  List<PullDownMenuItem> _buildOtherDiaryActions(
-      BuildContext context, DiaryModel diaryModel) {
+  List<PullDownMenuItem> _buildOtherDiaryActions(BuildContext context, DiaryModel diaryModel) {
     return [
       PullDownMenuItem(
         title: '신고하기',
@@ -148,17 +146,14 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }
 
   /// 삭제하기
-  Future<void> _showDeleteDialog(
-      BuildContext context, DiaryModel diaryModel) async {
+  Future<void> _showDeleteDialog(BuildContext context, DiaryModel diaryModel) async {
     showCustomDialog(
       context: context,
       title: '성장일기 삭제',
       message: '성장일기를 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
       onConfirm: () async {
         try {
-          await context
-              .read<DiaryProvider>()
-              .deleteDiary(diaryModel: diaryModel);
+          await context.read<DiaryProvider>().deleteDiary(diaryModel: diaryModel);
           context.read<FeedProvider>().deleteDiary(diaryId: diaryModel.diaryId);
           context.read<LikeProvider>().deleteDiary(diaryId: diaryModel.diaryId);
           Navigator.pop(context);
@@ -171,8 +166,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }
 
   /// 신고하기
-  Future<void> _showReportDialog(
-      BuildContext context, DiaryModel diaryModel) async {
+  Future<void> _showReportDialog(BuildContext context, DiaryModel diaryModel) async {
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
@@ -199,17 +193,14 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }
 
   /// 차단하기
-  Future<void> _showBlockDialog(
-      BuildContext context, DiaryModel diaryModel) async {
+  Future<void> _showBlockDialog(BuildContext context, DiaryModel diaryModel) async {
     showCustomDialog(
       context: context,
       title: '차단하기',
       message: '이 작성자의 성장일기가 목록에 노출되지 않으며,\n다시 해제하실 수 없습니다.',
       onConfirm: () async {
         try {
-          await context
-              .read<FeedProvider>()
-              .blockUser(targetUserUid: diaryModel.uid);
+          await context.read<FeedProvider>().blockUser(targetUserUid: diaryModel.uid);
           await context.read<FeedProvider>().getFeedList();
 
           if (widget.diaryType == DiaryType.myLike) {
@@ -308,7 +299,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
   /// 프로필이미지
   Widget _buildProfileImage(String? profileImageUrl) {
-    return AvatarWidget(
+    return PDCircleAvatar(
       imageUrl: profileImageUrl,
       width: 36,
       height: 36,

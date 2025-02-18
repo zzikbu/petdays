@@ -6,7 +6,7 @@ import 'package:petdays/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../components/show_custom_dialog.dart';
-import '../components/w_avatar.dart';
+import '../components/pd_ circle_avatar.dart';
 import '../components/w_bottom_confirm_button.dart';
 import '../components/show_error_dialog.dart';
 import '../exceptions/custom_exception.dart';
@@ -160,7 +160,7 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                       child: Column(
                         children: [
                           SizedBox(height: 10),
-                          AvatarWidget(
+                          PDCircleAvatar(
                             imageUrl: petList[index].image,
                             width: 100,
                             height: 100,

@@ -1,30 +1,29 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/w_avatar.dart';
-import 'package:petdays/models/pet_model.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../palette.dart';
-import '../pet/pet_detail_screen.dart';
-import '../pet/pet_upload_screen.dart';
+import '../../../components/pd_ circle_avatar.dart';
+import '../../../models/pet_model.dart';
+import '../../../palette.dart';
+import '../../pet/pet_detail_screen.dart';
+import 'home_pet_empty.dart';
 
-class HomePetCarouselWidget extends StatefulWidget {
+class HomePetCarousel extends StatefulWidget {
   final List<PetModel> petList;
 
-  const HomePetCarouselWidget({
+  const HomePetCarousel({
     super.key,
     required this.petList,
   });
 
   @override
-  State<HomePetCarouselWidget> createState() => _HomePetCarouselWidgetState();
+  State<HomePetCarousel> createState() => _HomePetCarouselState();
 }
 
-class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
-  int _indicatorIndex = 0;
+class _HomePetCarouselState extends State<HomePetCarousel> {
+  final CarouselSliderController _carouselController = CarouselSliderController();
 
-  final CarouselSliderController _carouselController =
-      CarouselSliderController();
+  int _indicatorIndex = 0;
 
   // 이름 & 만난 날 계산
   String _getNameAndDaysSinceMeeting({
@@ -34,7 +33,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
     DateTime meetingDate = DateTime.parse(meetingDateString);
     DateTime currentDate = DateTime.now();
     Duration difference = currentDate.difference(meetingDate);
-    return '${name}\n만난 지 ${difference.inDays}일째';
+    return '$name\n만난 지 ${difference.inDays}일째';
   }
 
   // 나이 계산 & 품종
@@ -46,7 +45,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
     DateTime currentDate = DateTime.now();
     Duration ageDifference = currentDate.difference(birthDate);
     int ageInYears = ageDifference.inDays ~/ 365; // 연도로 변환
-    return '${ageInYears}살 ${breed}';
+    return '$ageInYears살 $breed';
   }
 
   @override
@@ -55,50 +54,10 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
       height: 260,
       color: Palette.mainGreen,
       child: widget.petList.isEmpty
-          ? Padding(
-              padding: const EdgeInsets.only(top: 68, bottom: 42),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PetUploadScreen()),
-                  );
-                },
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 24),
-                  decoration: BoxDecoration(
-                    color: Palette.white,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.add,
-                        size: 32,
-                        color: Palette.black,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        '반려동물 추가하기',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: Palette.black,
-                          letterSpacing: -0.5,
-                          height: 1.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
+          ? const HomePetEmpty()
           : Column(
               children: [
-                SizedBox(height: 68),
+                const SizedBox(height: 68),
                 CarouselSlider(
                   carouselController: _carouselController,
                   items: widget.petList.map(
@@ -110,43 +69,38 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => PetDetailScreen(
-                                        index: _indicatorIndex)),
+                                    builder: (context) => PetDetailScreen(index: _indicatorIndex)),
                               );
                             },
                             child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 24),
+                              margin: const EdgeInsets.symmetric(horizontal: 24),
                               decoration: BoxDecoration(
                                 color: Palette.white,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
                                 child: Row(
                                   children: [
                                     // 사진
-                                    AvatarWidget(
+                                    PDCircleAvatar(
                                       imageUrl: petModel.image,
                                       width: 100,
                                       height: 100,
                                     ),
-                                    SizedBox(width: 30),
+                                    const SizedBox(width: 30),
 
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         // 이름 & 만난 날 계산
                                         Text(
                                           _getNameAndDaysSinceMeeting(
                                             name: petModel.name,
-                                            meetingDateString:
-                                                petModel.firstMeetingDate,
+                                            meetingDateString: petModel.firstMeetingDate,
                                           ),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 20,
@@ -155,7 +109,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                                             height: 1.2,
                                           ),
                                         ),
-                                        SizedBox(height: 6),
+                                        const SizedBox(height: 6),
 
                                         // 나이 계산 & 품종
                                         Text(
@@ -163,7 +117,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                                             birthDateString: petModel.birthDay,
                                             breed: petModel.breed,
                                           ),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontFamily: 'Pretendard',
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
@@ -194,7 +148,7 @@ class _HomePetCarouselWidgetState extends State<HomePetCarouselWidget> {
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Indicator
                 AnimatedSmoothIndicator(

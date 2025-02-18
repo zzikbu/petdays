@@ -1,17 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_state_notifier/flutter_state_notifier.dart';
-import 'package:petdays/providers/home/home_provider.dart';
-import 'package:petdays/screens/home/w_home_diary_list.dart';
-import 'package:petdays/screens/home/w_home_medical_list.dart';
-import 'package:petdays/screens/home/w_home_pet_carousel.dart';
-import 'package:petdays/screens/home/w_home_walk_list.dart';
+import 'package:petdays/components/pd_loading_circular.dart';
+import 'package:petdays/components/pd_refresh_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';
+import '../../providers/home/home_provider.dart';
 import '../../providers/home/home_state.dart';
+import 'w_home_diary_list.dart';
+import 'w_home_medical_list.dart';
+import 'widgets/home_pet_carousel.dart';
+import 'widgets/home_walk_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -24,12 +25,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-  late final String _currentUserId;
-
   void _getData() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await context.read<HomeProvider>().getHomeData(uid: _currentUserId);
+        final String currentUserId = context.read<User>().uid;
+        await context.read<HomeProvider>().getHomeData(uid: currentUserId);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
@@ -39,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   void initState() {
     super.initState();
-    _currentUserId = context.read<User>().uid;
     _getData();
   }
 
@@ -53,30 +52,28 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     return Scaffold(
       backgroundColor: Palette.background,
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
-          : RefreshIndicator(
-              color: Palette.subGreen,
-              backgroundColor: Palette.white,
+          ? const PDLoadingCircular()
+          : PDRefreshIndicator(
               onRefresh: () async => _getData(),
               child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 primary: true,
                 child: Column(
                   children: [
                     /// 반려동물
-                    HomePetCarouselWidget(petList: homeState.homePetList),
+                    HomePetCarousel(petList: homeState.homePetList),
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
                       child: Column(
                         children: [
                           /// 산책
-                          HomeWalkListWidget(walkList: homeState.homeWalkList),
-                          SizedBox(height: 28),
+                          HomeWalkList(walkList: homeState.homeWalkList.take(3).toList()),
+                          const SizedBox(height: 28),
 
                           /// 성장일기
                           HomeDiaryListWidget(diaryList: homeState.homeDiaryList),
-                          SizedBox(height: 28),
+                          const SizedBox(height: 28),
 
                           /// 진료기록
                           HomeMedicalListWidget(medicalList: homeState.homeMedicalList),

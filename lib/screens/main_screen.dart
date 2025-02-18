@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../palette.dart';
 import 'feed/feed_home_screen.dart';
-import 'home/s_home.dart';
+import 'home/home_screen.dart';
 import 'mypage/mypage_screen.dart';
 
 class MainScreen extends StatefulWidget {

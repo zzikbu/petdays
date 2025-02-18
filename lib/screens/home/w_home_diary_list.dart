@@ -5,7 +5,7 @@ import 'package:petdays/models/diary_model.dart';
 import '../../palette.dart';
 import '../diary/diary_detail_screen.dart';
 import '../diary/diary_home_screen.dart';
-import 'w_home_section_header.dart';
+import '../../components/pd_title_with_more_button.dart';
 
 class HomeDiaryListWidget extends StatelessWidget {
   final List<DiaryModel> diaryList;
@@ -19,7 +19,7 @@ class HomeDiaryListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HomeSectionHeaderWidget(
+        PDTitleWithMoreButton(
           title: '성장일기',
           onTap: () {
             Navigator.push(
@@ -113,8 +113,7 @@ class HomeDiaryListWidget extends StatelessWidget {
 
                               // 날짜
                               Text(
-                                DateFormat('yyyy-MM-dd')
-                                    .format(diaryModel.createdAt.toDate()),
+                                DateFormat('yyyy-MM-dd').format(diaryModel.createdAt.toDate()),
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w400,

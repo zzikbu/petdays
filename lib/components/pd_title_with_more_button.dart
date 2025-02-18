@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../palette.dart';
+import '../palette.dart';
 
-class HomeSectionHeaderWidget extends StatelessWidget {
+class PDTitleWithMoreButton extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
 
-  const HomeSectionHeaderWidget({
+  const PDTitleWithMoreButton({
     super.key,
     required this.title,
     required this.onTap,
@@ -22,7 +22,7 @@ class HomeSectionHeaderWidget extends StatelessWidget {
           Expanded(
             child: Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'Pretendard',
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
@@ -31,21 +31,17 @@ class HomeSectionHeaderWidget extends StatelessWidget {
               ),
             ),
           ),
-          Row(
-            children: [
-              Text(
-                "더 보기",
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: Palette.mediumGray,
-                  letterSpacing: -0.3,
-                ),
-              ),
-              SvgPicture.asset('assets/icons/ic_home_more.svg'),
-            ],
+          const Text(
+            "더 보기",
+            style: TextStyle(
+              fontFamily: 'Pretendard',
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: Palette.mediumGray,
+              letterSpacing: -0.3,
+            ),
           ),
+          SvgPicture.asset('assets/icons/ic_home_more.svg'),
         ],
       ),
     );

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../palette.dart';
 
-class AvatarWidget extends StatelessWidget {
+class PDCircleAvatar extends StatelessWidget {
   final String? imageUrl;
   final double width;
   final double height;
 
-  const AvatarWidget({
+  const PDCircleAvatar({
     super.key,
     required this.imageUrl,
     required this.width,
@@ -28,7 +28,7 @@ class AvatarWidget extends StatelessWidget {
         ),
         image: DecorationImage(
           image: imageUrl == null
-              ? ExtendedAssetImageProvider('assets/icons/profile.png')
+              ? const ExtendedAssetImageProvider('assets/icons/profile.png')
               : ExtendedNetworkImageProvider(imageUrl!),
           fit: BoxFit.cover,
         ),

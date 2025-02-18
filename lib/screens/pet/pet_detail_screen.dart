@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
-import '../../components/w_avatar.dart';
+import '../../components/pd_ circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/pet_model.dart';
 import '../../palette.dart';
@@ -63,9 +63,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 message: '반려동물을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                 onConfirm: () async {
                   try {
-                    await context
-                        .read<PetProvider>()
-                        .deletePet(petId: petModel.petId);
+                    await context.read<PetProvider>().deletePet(petId: petModel.petId);
 
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -97,7 +95,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        AvatarWidget(
+                        PDCircleAvatar(
                           imageUrl: petModel.image,
                           width: 100,
                           height: 100,
@@ -169,8 +167,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   padding: const EdgeInsets.only(left: 16),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '생년월일',
@@ -212,8 +209,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   padding: const EdgeInsets.only(left: 16),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '나이',
@@ -226,8 +222,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                       ),
                                       SizedBox(height: 4),
                                       Text(
-                                        _getAge(
-                                            birthDateString: petModel.birthDay),
+                                        _getAge(birthDateString: petModel.birthDay),
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
@@ -260,8 +255,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   padding: const EdgeInsets.only(left: 16),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '성별',
@@ -303,8 +297,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   padding: const EdgeInsets.only(left: 16),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '중성화',
@@ -317,9 +310,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                       ),
                                       SizedBox(height: 4),
                                       Text(
-                                        petModel.isNeutering == true
-                                            ? "O"
-                                            : "X",
+                                        petModel.isNeutering == true ? "O" : "X",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
@@ -350,8 +341,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               ),
               child: Center(
                 child: Text(
-                  _getDaysSinceMeeting(
-                      meetingDateString: petModel.firstMeetingDate),
+                  _getDaysSinceMeeting(meetingDateString: petModel.firstMeetingDate),
                   style: TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,

@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
-import '../../components/w_avatar.dart';
+import '../../components/pd_ circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../main.dart';
 import '../../palette.dart';
@@ -128,7 +128,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         // 프로필 이미지
                         Stack(
                           children: [
-                            AvatarWidget(
+                            PDCircleAvatar(
                               imageUrl: profileState.userModel.profileImage,
                               width: 60,
                               height: 60,
@@ -149,8 +149,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                               '앨범에서 선택',
                                               style: TextStyle(
                                                 fontFamily: 'Pretendard',
-                                                color:
-                                                    CupertinoColors.systemBlue,
+                                                color: CupertinoColors.systemBlue,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 17,
                                               ),
@@ -162,17 +161,14 @@ class _MyPageScreenState extends State<MyPageScreen>
                                               await selectImage();
                                             },
                                           ),
-                                          if (!(profileState
-                                                  .userModel.profileImage ==
-                                              null))
+                                          if (!(profileState.userModel.profileImage == null))
                                             // 프로필 이미지 삭제
                                             CupertinoActionSheetAction(
                                               child: Text(
                                                 '프로필 이미지 삭제',
                                                 style: TextStyle(
                                                   fontFamily: 'Pretendard',
-                                                  color:
-                                                      CupertinoColors.systemRed,
+                                                  color: CupertinoColors.systemRed,
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: 17,
                                                 ),
@@ -190,9 +186,8 @@ class _MyPageScreenState extends State<MyPageScreen>
                                                       );
 
                                                   // 상태관리하고 있는 userModel 갱신
-                                                  await profileProvider
-                                                      .getProfile(
-                                                          uid: currentUserUid);
+                                                  await profileProvider.getProfile(
+                                                      uid: currentUserUid);
                                                 } on CustomException catch (e) {
                                                   showErrorDialog(context, e);
                                                 }
@@ -200,8 +195,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                             ),
                                         ],
                                         // 취소 버튼
-                                        cancelButton:
-                                            CupertinoActionSheetAction(
+                                        cancelButton: CupertinoActionSheetAction(
                                           isDefaultAction: true,
                                           child: Text(
                                             '취소',
@@ -291,8 +285,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => PetUploadScreen()),
+                          MaterialPageRoute(builder: (context) => PetUploadScreen()),
                         );
                       },
                       child: Text(
@@ -313,8 +306,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => OpenDiaryHomeScreen()),
+                          MaterialPageRoute(builder: (context) => OpenDiaryHomeScreen()),
                         );
                       },
                       child: Text(
@@ -335,8 +327,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => LikeHomeScreen()),
+                          MaterialPageRoute(builder: (context) => LikeHomeScreen()),
                         );
                       },
                       child: Text(
@@ -378,8 +369,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  TermsPolicyScreen(isTerms: true),
+                              builder: (context) => TermsPolicyScreen(isTerms: true),
                             ));
                       },
                       child: Text(
@@ -401,8 +391,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  TermsPolicyScreen(isTerms: false),
+                              builder: (context) => TermsPolicyScreen(isTerms: false),
                             ));
                       },
                       child: Text(
@@ -478,18 +467,14 @@ class _MyPageScreenState extends State<MyPageScreen>
                               showCustomDialog(
                                 context: context,
                                 title: '비밀번호 재설정',
-                                message:
-                                    '${profileState.userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
+                                message: '${profileState.userModel.email}로\n비밀번호 재설정 링크가 발송됩니다.',
                                 onConfirm: () async {
                                   try {
-                                    await context
-                                        .read<MyAuthProvider>()
-                                        .sendPasswordResetEmail(
-                                            email:
-                                                profileState.userModel.email!);
+                                    await context.read<MyAuthProvider>().sendPasswordResetEmail(
+                                        email: profileState.userModel.email!);
 
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text("전송 완료")));
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(content: Text("전송 완료")));
 
                                     Navigator.pop(context);
                                   } on CustomException catch (e) {
@@ -558,9 +543,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                             message: '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.\n탈퇴하시겠습니까?',
                             onConfirm: () async {
                               try {
-                                await context
-                                    .read<MyAuthProvider>()
-                                    .deleteAccount();
+                                await context.read<MyAuthProvider>().deleteAccount();
                               } on CustomException catch (e) {
                                 Navigator.pop(context);
                                 showErrorDialog(context, e);

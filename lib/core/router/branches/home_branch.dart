@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import '../../../screens/home/s_home.dart';
+import '../../../screens/home/home_screen.dart';
 import '../navigator_keys.dart';
 
 final StatefulShellBranch homeBranch = StatefulShellBranch(

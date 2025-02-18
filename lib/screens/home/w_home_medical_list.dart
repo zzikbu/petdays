@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:petdays/models/medical_model.dart';
 
-import '../../components/w_avatar.dart';
+import '../../components/pd_ circle_avatar.dart';
 import '../../palette.dart';
 import '../medical/s_medical_detail.dart';
 import '../medical/s_medical_home.dart';
-import 'w_home_section_header.dart';
+import '../../components/pd_title_with_more_button.dart';
 
 class HomeMedicalListWidget extends StatelessWidget {
   final List<MedicalModel> medicalList;
@@ -20,7 +20,7 @@ class HomeMedicalListWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        HomeSectionHeaderWidget(
+        PDTitleWithMoreButton(
           title: '진료기록',
           onTap: () {
             Navigator.push(
@@ -72,8 +72,7 @@ class HomeMedicalListWidget extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    MedicalDetailScreen(index: index)),
+                                builder: (context) => MedicalDetailScreen(index: index)),
                           );
                         },
 
@@ -94,8 +93,7 @@ class HomeMedicalListWidget extends StatelessWidget {
                             ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 20),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -104,7 +102,7 @@ class HomeMedicalListWidget extends StatelessWidget {
                                     // 사진
                                     Padding(
                                       padding: const EdgeInsets.only(right: 4),
-                                      child: AvatarWidget(
+                                      child: PDCircleAvatar(
                                         imageUrl: medicalModel.pet.image,
                                         width: 36,
                                         height: 36,
