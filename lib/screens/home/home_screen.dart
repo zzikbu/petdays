@@ -9,8 +9,8 @@ import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';
 import '../../providers/home/home_provider.dart';
 import '../../providers/home/home_state.dart';
-import 'w_home_diary_list.dart';
-import 'w_home_medical_list.dart';
+import 'widgets/home_diary_list.dart';
+import 'widgets/home_medical_list.dart';
 import 'widgets/home_pet_carousel.dart';
 import 'widgets/home_walk_list.dart';
 
@@ -72,11 +72,11 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           const SizedBox(height: 28),
 
                           /// 성장일기
-                          HomeDiaryListWidget(diaryList: homeState.homeDiaryList),
+                          HomeDiaryList(diaryList: homeState.homeDiaryList.take(3).toList()),
                           const SizedBox(height: 28),
 
                           /// 진료기록
-                          HomeMedicalListWidget(medicalList: homeState.homeMedicalList),
+                          HomeMedicalList(medicalList: homeState.homeMedicalList.take(7).toList()),
                         ],
                       ),
                     ),
