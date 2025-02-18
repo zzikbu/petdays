@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/show_error_dialog.dart';
-import '../../components/sign_text_form_field.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/sign_text_form_field.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';
 import '../../providers/auth/my_auth_provider.dart';

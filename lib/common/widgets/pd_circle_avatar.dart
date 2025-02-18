@@ -1,7 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class PDCircleAvatar extends StatelessWidget {
   final String? imageUrl;

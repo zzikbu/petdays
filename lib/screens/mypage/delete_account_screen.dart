@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/pd_app_bar.dart';
-import 'package:petdays/components/show_error_dialog.dart';
-import 'package:petdays/components/w_bottom_confirm_button.dart';
+import 'package:petdays/common/widgets/pd_app_bar.dart';
+import 'package:petdays/common/widgets/show_error_dialog.dart';
+import 'package:petdays/common/widgets/w_bottom_confirm_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/palette.dart';
 import 'package:petdays/providers/auth/my_auth_provider.dart';

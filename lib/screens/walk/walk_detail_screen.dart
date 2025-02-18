@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/w_detail_info_with_title.dart';
-import '../../components/show_custom_dialog.dart';
-import '../../components/show_error_dialog.dart';
+import '../../common/widgets/w_detail_info_with_title.dart';
+import '../../common/widgets/show_custom_dialog.dart';
+import '../../common/widgets/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/walk_model.dart';
 import '../../palette.dart';

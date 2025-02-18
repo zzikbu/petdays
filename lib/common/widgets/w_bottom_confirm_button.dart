@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class BottomConfirmButtonWidget extends StatelessWidget {
   final bool isActive;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../exceptions/custom_exception.dart';
-import '../palette.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../palette.dart';
 
 void showErrorDialog(BuildContext context, CustomException e) {
   showDialog(

@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/pd_app_bar.dart';
+import 'package:petdays/common/widgets/pd_app_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/show_error_dialog.dart';
-import '../../components/w_textfield_with_title.dart';
-import '../../components/w_bottom_confirm_button.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/w_textfield_with_title.dart';
+import '../../common/widgets/w_bottom_confirm_button.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/medical_model.dart';
 import '../../models/pet_model.dart';

@@ -1,19 +1,20 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/pd_app_bar.dart';
-import 'package:petdays/screens/walk/walk_detail_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/show_custom_dialog.dart';
-import '../../components/show_error_dialog.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/show_custom_dialog.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../core/enums/select_pet_for.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/walk_model.dart';
 import '../../palette.dart';
 import '../../providers/pet/pet_state.dart';
 import '../../providers/walk/walk_provider.dart';
 import '../../providers/walk/walk_state.dart';
-import '../select_pet_screen.dart';
+import '../../common/screens/select_pet_screen.dart';
+import 'walk_detail_screen.dart';
 
 class WalkHomeScreen extends StatefulWidget {
   const WalkHomeScreen({super.key});
@@ -268,7 +269,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SelectPetScreen(isMedical: false),
+                builder: (context) => const SelectPetScreen(type: SelectPetFor.walk),
               ),
             );
           }

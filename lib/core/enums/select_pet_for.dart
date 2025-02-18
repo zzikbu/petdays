@@ -1,0 +1,4 @@
+enum SelectPetFor {
+  medical,
+  walk;
+}

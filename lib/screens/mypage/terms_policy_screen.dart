@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petdays/palette.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../components/pd_app_bar.dart';
+import '../../common/widgets/pd_app_bar.dart';
 
 class TermsPolicyScreen extends StatefulWidget {
   final bool isTerms;

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:string_validator/string_validator.dart';
 
-import '../../components/pd_app_bar.dart';
-import '../../components/show_error_dialog.dart';
-import '../../components/w_bottom_confirm_button.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/w_bottom_confirm_button.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';
 import '../../providers/auth/my_auth_provider.dart';

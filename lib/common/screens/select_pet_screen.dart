@@ -2,41 +2,37 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../components/show_custom_dialog.dart';
-import '../components/pd_circle_avatar.dart';
-import '../components/w_bottom_confirm_button.dart';
-import '../components/show_error_dialog.dart';
-import '../exceptions/custom_exception.dart';
-import '../models/pet_model.dart';
-import '../palette.dart';
-import '../providers/pet/pet_provider.dart';
-import '../providers/pet/pet_state.dart';
-import '../utils/permission_utils.dart';
-import 'medical/medical_upload_screen.dart';
+import '../widgets/show_custom_dialog.dart';
+import '../widgets/pd_circle_avatar.dart';
+import '../widgets/w_bottom_confirm_button.dart';
+import '../widgets/show_error_dialog.dart';
+import '../../core/enums/select_pet_for.dart';
+import '../../exceptions/custom_exception.dart';
+import '../../models/pet_model.dart';
+import '../../palette.dart';
+import '../../providers/pet/pet_provider.dart';
+import '../../providers/pet/pet_state.dart';
+import '../../utils/permission_utils.dart';
+import '../../screens/medical/medical_upload_screen.dart';
+import '../../screens/walk/walk_map_screen.dart';
 
 class SelectPetScreen extends StatefulWidget {
-  final bool isMedical;
+  final SelectPetFor type;
 
   const SelectPetScreen({
     super.key,
-    required this.isMedical,
+    required this.type,
   });
 
   @override
   State<SelectPetScreen> createState() => _SelectPetScreenState();
 }
 
-class _SelectPetScreenState extends State<SelectPetScreen>
-    with AutomaticKeepAliveClientMixin<SelectPetScreen> {
-  late final PetProvider petProvider;
+class _SelectPetScreenState extends State<SelectPetScreen> {
   List<int> selectedIndices = [];
   bool _isActive = false;
-
-  @override
-  bool get wantKeepAlive => true;
 
   void _checkBottomActive() {
     setState(() {
@@ -46,25 +42,100 @@ class _SelectPetScreenState extends State<SelectPetScreen>
 
   void _toggleSelection(int index) {
     setState(() {
-      if (widget.isMedical) {
-        selectedIndices = [index];
-      } else {
-        if (selectedIndices.contains(index)) {
-          selectedIndices.remove(index);
-        } else {
-          selectedIndices.add(index);
-        }
+      switch (widget.type) {
+        case SelectPetFor.medical:
+          selectedIndices = [index];
+        case SelectPetFor.walk:
+          if (selectedIndices.contains(index)) {
+            selectedIndices.remove(index);
+          } else {
+            selectedIndices.add(index);
+          }
       }
       _checkBottomActive();
     });
   }
 
-  void _getData() {
-    String uid = context.read<User>().uid;
+  String get _titleText {
+    switch (widget.type) {
+      case SelectPetFor.medical:
+        return '누구와 병원에 갔나요?';
+      case SelectPetFor.walk:
+        return '누구와 산책하나요?';
+    }
+  }
 
+  String get _subTitleText {
+    switch (widget.type) {
+      case SelectPetFor.medical:
+        return '중복 선택이 불가능합니다.';
+      case SelectPetFor.walk:
+        return '중복 선택이 가능합니다.';
+    }
+  }
+
+  String get _buttonText {
+    switch (widget.type) {
+      case SelectPetFor.medical:
+        return '다음';
+      case SelectPetFor.walk:
+        return '시작하기';
+    }
+  }
+
+  void _handleConfirm(List<PetModel> petList) async {
+    switch (widget.type) {
+      case SelectPetFor.medical:
+        final selectedPet = petList[selectedIndices[0]];
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MedicalUploadScreen(selectedPet: selectedPet),
+          ),
+        );
+
+      case SelectPetFor.walk:
+        final selectedPets = selectedIndices.map((index) => petList[index]).toList();
+        await _handleWalkStart(selectedPets);
+    }
+  }
+
+  Future<void> _handleWalkStart(List<PetModel> selectedPets) async {
+    if (Platform.isAndroid) {
+      showCustomDialog(
+        context: context,
+        hasCancelButton: false,
+        title: '백그라운드 위치',
+        message: '이 앱은 사용 중이 아닐 때도 위치 데이터를 수집하여 산책 경로를 추적합니다.',
+        onConfirm: () async {
+          Navigator.pop(context);
+          await _navigateToWalkMap(selectedPets);
+        },
+      );
+    } else {
+      await _navigateToWalkMap(selectedPets);
+    }
+  }
+
+  Future<void> _navigateToWalkMap(List<PetModel> selectedPets) async {
+    final hasPermission = await PermissionUtils.checkLocationPermission(context);
+    if (!hasPermission) return;
+
+    if (context.mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WalkMapScreen(selectedPets: selectedPets),
+        ),
+      );
+    }
+  }
+
+  void _getData() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await petProvider.getPetList(uid: uid);
+        final currentUserId = context.read<User>().uid;
+        await context.read<PetProvider>().getPetList(uid: currentUserId);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
@@ -74,16 +145,13 @@ class _SelectPetScreenState extends State<SelectPetScreen>
   @override
   void initState() {
     super.initState();
-    petProvider = context.read<PetProvider>();
     _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    PetState petState = context.watch<PetState>();
-    List<PetModel> petList = petState.petList;
+    final petState = context.watch<PetState>();
+    final petList = petState.petList;
 
     return Scaffold(
       backgroundColor: Palette.background,
@@ -99,10 +167,10 @@ class _SelectPetScreenState extends State<SelectPetScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Text(
-                  widget.isMedical ? '누구와 병원에 갔나요?' : '누구와 산책하나요?',
-                  style: TextStyle(
+                  _titleText,
+                  style: const TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
                     fontSize: 24,
@@ -110,10 +178,10 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                     letterSpacing: -0.6,
                   ),
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Text(
-                  widget.isMedical ? '중복 선택이 불가능합니다.' : '중복 선택이 가능합니다.',
-                  style: TextStyle(
+                  _subTitleText,
+                  style: const TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
@@ -121,14 +189,14 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                     letterSpacing: -0.4,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
           Expanded(
             child: Scrollbar(
               child: GridView.builder(
-                padding: EdgeInsets.fromLTRB(24, 0, 24, 30),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 30),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 14,
@@ -152,22 +220,22 @@ class _SelectPetScreenState extends State<SelectPetScreen>
                         boxShadow: [
                           BoxShadow(
                             color: Palette.black.withOpacity(0.05),
-                            offset: Offset(8, 8),
+                            offset: const Offset(8, 8),
                             blurRadius: 8,
                           ),
                         ],
                       ),
                       child: Column(
                         children: [
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           PDCircleAvatar(
                             imageUrl: petList[index].image,
                             size: 100,
                           ),
-                          SizedBox(height: 2),
+                          const SizedBox(height: 2),
                           Text(
                             petList[index].name,
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w600,
                               fontSize: 20,
@@ -187,56 +255,8 @@ class _SelectPetScreenState extends State<SelectPetScreen>
       ),
       bottomNavigationBar: BottomConfirmButtonWidget(
         isActive: _isActive,
-        onConfirm: () async {
-          if (widget.isMedical) {
-            PetModel selectedPet = petList[selectedIndices[0]];
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MedicalUploadScreen(selectedPet: selectedPet),
-              ),
-            );
-          } else {
-            List<PetModel> selectedPets = selectedIndices.map((index) => petList[index]).toList();
-
-            if (Platform.isAndroid) {
-              showCustomDialog(
-                context: context,
-                hasCancelButton: false,
-                title: '백그라운드 위치',
-                message: '이 앱은 사용 중이 아닐 때도 위치 데이터를 수집하여 산책 경로를 추적합니다.',
-                onConfirm: () async {
-                  Navigator.pop(context);
-                  // 권한 체크 후 화면 이동
-                  final hasPermission = await PermissionUtils.checkLocationPermission(context);
-                  if (!hasPermission) return;
-
-                  if (context.mounted) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => WalkMapScreen(selectedPets: selectedPets),
-                      ),
-                    );
-                  }
-                },
-              );
-            } else {
-              final hasPermission = await PermissionUtils.checkLocationPermission(context);
-              if (!hasPermission) return;
-
-              if (context.mounted) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WalkMapScreen(selectedPets: selectedPets),
-                  ),
-                );
-              }
-            }
-          }
-        },
-        buttonText: widget.isMedical ? "다음" : "시작하기",
+        onConfirm: () => _handleConfirm(petList),
+        buttonText: _buttonText,
       ),
     );
   }

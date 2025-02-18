@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class PDLoadingCircular extends StatelessWidget {
   const PDLoadingCircular({super.key});

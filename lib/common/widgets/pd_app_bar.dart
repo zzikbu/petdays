@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class PDAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color backgroundColor;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../components/pd_circle_avatar.dart';
+import '../../../common/widgets/pd_circle_avatar.dart';
 import '../../../models/medical_model.dart';
 import '../../../palette.dart';
 import '../../medical/medical_detail_screen.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../components/show_custom_dialog.dart';
+import '../common/widgets/show_custom_dialog.dart';
 
 class PermissionUtils {
   static Future<bool> checkPhotoPermission(BuildContext context) async {
@@ -37,8 +37,7 @@ class PermissionUtils {
 
   static Future<bool> checkLocationPermission(BuildContext context) async {
     // 위치 서비스 활성화 확인
-    bool serviceEnabled =
-        await Permission.locationWhenInUse.serviceStatus.isEnabled;
+    bool serviceEnabled = await Permission.locationWhenInUse.serviceStatus.isEnabled;
     if (!serviceEnabled) {
       if (context.mounted) {
         showCustomDialog(

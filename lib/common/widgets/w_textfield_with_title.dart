@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class TextFieldWithTitleWidget extends StatelessWidget {
   final String labelText;
@@ -48,9 +48,7 @@ class TextFieldWithTitleWidget extends StatelessWidget {
           enabled: enabled,
           readOnly: onTap != null,
           onTap: onTap,
-          keyboardType: isMultiLine
-              ? TextInputType.multiline
-              : keyboardType, // multiline일 경우
+          keyboardType: isMultiLine ? TextInputType.multiline : keyboardType, // multiline일 경우
           cursorColor: Palette.subGreen,
           style: TextStyle(
             fontFamily: 'Pretendard',

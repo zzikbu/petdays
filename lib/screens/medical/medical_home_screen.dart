@@ -2,19 +2,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/pd_app_bar.dart';
-import '../../components/pd_floating_button.dart';
-import '../../components/pd_loading_circular.dart';
-import '../../components/pd_refresh_indicator.dart';
-import '../../components/show_custom_dialog.dart';
-import '../../components/show_error_dialog.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/pd_floating_button.dart';
+import '../../common/widgets/pd_loading_circular.dart';
+import '../../common/widgets/pd_refresh_indicator.dart';
+import '../../common/widgets/show_custom_dialog.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../core/enums/select_pet_for.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/medical_model.dart';
 import '../../palette.dart';
 import '../../providers/medical/medical_provider.dart';
 import '../../providers/medical/medical_state.dart';
 import '../../providers/pet/pet_state.dart';
-import '../select_pet_screen.dart';
+import '../../common/screens/select_pet_screen.dart';
 import 'widgets/medical_home_list_card.dart';
 
 class MedicalHomeScreen extends StatefulWidget {
@@ -49,7 +50,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const SelectPetScreen(isMedical: true),
+          builder: (context) => const SelectPetScreen(type: SelectPetFor.medical),
         ),
       );
     }

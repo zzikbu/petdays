@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:string_validator/string_validator.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class SignTextFormField extends StatelessWidget {
   final TextEditingController? controller;

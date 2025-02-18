@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class DetailInfoWithTitleWidget extends StatelessWidget {
   final String title;

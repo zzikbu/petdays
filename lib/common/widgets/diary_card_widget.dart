@@ -2,9 +2,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../models/diary_model.dart';
-import '../palette.dart';
-import '../screens/diary/diary_detail_screen.dart';
+import '../../models/diary_model.dart';
+import '../../palette.dart';
+import '../../screens/diary/diary_detail_screen.dart';
 
 class DiaryCardWidget extends StatelessWidget {
   final DiaryModel diaryModel;
@@ -140,10 +140,7 @@ class DiaryCardWidget extends StatelessWidget {
                           SizedBox(width: 8),
                         ],
                         Text(
-                          diaryModel.createdAt
-                              .toDate()
-                              .toString()
-                              .split(" ")[0],
+                          diaryModel.createdAt.toDate().toString().split(" ")[0],
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w400,

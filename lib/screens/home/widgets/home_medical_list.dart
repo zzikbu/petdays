@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/medical_model.dart';
 import '../../medical/medical_home_screen.dart';
-import '../../../components/pd_title_with_more_button.dart';
+import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_medical_list_card.dart';
 

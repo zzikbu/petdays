@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:petdays/components/show_custom_dialog.dart';
+import 'package:petdays/common/widgets/show_custom_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../components/pd_app_bar.dart';
-import '../../components/show_error_dialog.dart';
-import '../../components/pd_circle_avatar.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/pd_circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';

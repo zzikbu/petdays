@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/walk_model.dart';
 import '../../walk/walk_home_screen.dart';
-import '../../../components/pd_title_with_more_button.dart';
+import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_walk_list_card.dart';
 

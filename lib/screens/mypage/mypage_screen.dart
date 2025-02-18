@@ -9,9 +9,9 @@ import 'package:petdays/screens/mypage/terms_policy_screen.dart';
 import 'package:petdays/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/show_custom_dialog.dart';
-import '../../components/show_error_dialog.dart';
-import '../../components/pd_circle_avatar.dart';
+import '../../common/widgets/show_custom_dialog.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/pd_circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../main.dart';
 import '../../palette.dart';

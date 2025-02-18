@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class PDTitleWithMoreButton extends StatelessWidget {
   final String title;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../models/diary_model.dart';
 import '../../diary/diary_home_screen.dart';
-import '../../../components/pd_title_with_more_button.dart';
+import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_diary_list_card.dart';
 

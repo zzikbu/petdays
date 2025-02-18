@@ -5,9 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
-import '../../components/pd_app_bar.dart';
-import '../../components/w_detail_info_with_title.dart';
-import '../../components/show_custom_dialog.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/w_detail_info_with_title.dart';
+import '../../common/widgets/show_custom_dialog.dart';
 import '../../models/medical_model.dart';
 import '../../palette.dart';
 import '../../providers/medical/medical_provider.dart';

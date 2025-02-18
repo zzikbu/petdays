@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/pd_app_bar.dart';
+import 'package:petdays/common/widgets/pd_app_bar.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/diary_card_widget.dart';
-import '../../components/show_error_dialog.dart';
+import '../../common/widgets/diary_card_widget.dart';
+import '../../common/widgets/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';

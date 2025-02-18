@@ -5,11 +5,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../../components/pd_app_bar.dart';
-import '../../components/w_bottom_confirm_button.dart';
-import '../../components/show_custom_dialog.dart';
-import '../../components/show_error_dialog.dart';
-import '../../components/w_textfield_with_title.dart';
+import '../../common/widgets/pd_app_bar.dart';
+import '../../common/widgets/w_bottom_confirm_button.dart';
+import '../../common/widgets/show_custom_dialog.dart';
+import '../../common/widgets/show_error_dialog.dart';
+import '../../common/widgets/w_textfield_with_title.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';
