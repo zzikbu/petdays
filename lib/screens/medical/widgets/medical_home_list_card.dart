@@ -1,15 +1,15 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/models/medical_model.dart';
 
-import '../../palette.dart';
-import 's_medical_detail.dart';
+import '../../../components/pd_ circle_avatar.dart';
+import '../../../models/medical_model.dart';
+import '../../../palette.dart';
+import '../medical_detail_screen.dart';
 
-class MedicalHomeCardWidget extends StatelessWidget {
+class MedicalHomeListCard extends StatelessWidget {
   final MedicalModel medicalModel;
   final int index;
 
-  const MedicalHomeCardWidget({
+  const MedicalHomeListCard({
     super.key,
     required this.medicalModel,
     required this.index,
@@ -21,14 +21,13 @@ class MedicalHomeCardWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(
-              builder: (context) => MedicalDetailScreen(index: index)),
+          MaterialPageRoute(builder: (context) => MedicalDetailScreen(index: index)),
         );
       },
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             height: 110,
             decoration: BoxDecoration(
               color: Palette.white,
@@ -36,7 +35,7 @@ class MedicalHomeCardWidget extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Palette.black.withOpacity(0.05),
-                  offset: Offset(8, 8),
+                  offset: const Offset(8, 8),
                   blurRadius: 8,
                 ),
               ],
@@ -50,29 +49,16 @@ class MedicalHomeCardWidget extends StatelessWidget {
                   Row(
                     children: [
                       // 사진
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Palette.lightGray,
-                            width: 0.4,
-                          ),
-                          image: DecorationImage(
-                            image: ExtendedNetworkImageProvider(
-                              medicalModel.pet.image,
-                            ),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                      PDCircleAvatar(
+                        imageUrl: medicalModel.pet.image,
+                        size: 36,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
 
                       // 이름
                       Text(
                         medicalModel.pet.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
@@ -80,12 +66,12 @@ class MedicalHomeCardWidget extends StatelessWidget {
                           letterSpacing: -0.5,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
 
                       // 방문날짜
                       Text(
                         medicalModel.visitedDate,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
@@ -95,14 +81,14 @@ class MedicalHomeCardWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 14),
+                  const SizedBox(height: 14),
 
                   // 이유
                   Text(
                     medicalModel.reason,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Pretendard',
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
@@ -117,10 +103,13 @@ class MedicalHomeCardWidget extends StatelessWidget {
 
           // 메모가 있을 경우 아이콘 표시
           if (medicalModel.note.isNotEmpty)
-            Positioned(
+            const Positioned(
               top: 10,
               right: 16,
-              child: Icon(Icons.sticky_note_2_outlined),
+              child: Icon(
+                size: 22,
+                Icons.sticky_note_2_outlined,
+              ),
             ),
         ],
       ),

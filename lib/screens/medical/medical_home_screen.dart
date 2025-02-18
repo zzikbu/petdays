@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/screens/medical/w_medical_home_card.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_floating_button.dart';
+import '../../components/pd_loading_circular.dart';
+import '../../components/pd_refresh_indicator.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
@@ -12,6 +14,7 @@ import '../../providers/medical/medical_provider.dart';
 import '../../providers/medical/medical_state.dart';
 import '../../providers/pet/pet_state.dart';
 import '../select_pet_screen.dart';
+import 'widgets/medical_home_list_card.dart';
 
 class MedicalHomeScreen extends StatefulWidget {
   const MedicalHomeScreen({super.key});
@@ -21,20 +24,18 @@ class MedicalHomeScreen extends StatefulWidget {
 }
 
 class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
-  late final String _currentUserId;
-  late final MedicalProvider _medicalProvider;
-
-  void _getMedicalList() {
+  void _getData() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        await _medicalProvider.getMedicalList(uid: _currentUserId);
+        final currentUserId = context.read<User>().uid;
+        await context.read<MedicalProvider>().getMedicalList(uid: currentUserId);
       } on CustomException catch (e) {
         showErrorDialog(context, e);
       }
     });
   }
 
-  void _onFloatingButtonPressed() {
+  void _onAddPress() {
     if (context.read<PetState>().petList.isEmpty) {
       showCustomDialog(
         context: context,
@@ -47,7 +48,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SelectPetScreen(isMedical: true),
+          builder: (context) => const SelectPetScreen(isMedical: true),
         ),
       );
     }
@@ -56,9 +57,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
   @override
   void initState() {
     super.initState();
-    _currentUserId = context.read<User>().uid;
-    _medicalProvider = context.read<MedicalProvider>();
-    _getMedicalList();
+    _getData();
   }
 
   @override
@@ -74,7 +73,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
         backgroundColor: Palette.background,
         scrolledUnderElevation: 0,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "진료기록",
           style: TextStyle(
             fontFamily: 'Pretendard',
@@ -86,17 +85,15 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
-          : RefreshIndicator(
-              color: Palette.subGreen,
-              backgroundColor: Palette.white,
-              onRefresh: () async => _getMedicalList(),
+          ? const PDLoadingCircular()
+          : PDRefreshIndicator(
+              onRefresh: () async => _getData(),
               child: Scrollbar(
                 child: ListView.builder(
                   padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
                   itemCount: medicalList.length,
                   itemBuilder: (context, index) {
-                    return MedicalHomeCardWidget(
+                    return MedicalHomeListCard(
                       medicalModel: medicalList[index],
                       index: index,
                     );
@@ -104,13 +101,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _onFloatingButtonPressed,
-        backgroundColor: Palette.darkGray,
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-        child: Icon(Icons.edit, color: Palette.white),
-      ),
+      floatingActionButton: PDFloatingButton(onPressed: _onAddPress),
     );
   }
 }

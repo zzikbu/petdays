@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/components/pd_loading_circular.dart';
-import 'package:petdays/components/pd_refresh_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_loading_circular.dart';
+import '../../components/pd_refresh_indicator.dart';
 import '../../components/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../palette.dart';

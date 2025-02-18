@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../components/pd_ circle_avatar.dart';
 import '../../../models/medical_model.dart';
 import '../../../palette.dart';
-import '../../medical/s_medical_detail.dart';
+import '../../medical/medical_detail_screen.dart';
 
 class HomeMedicalListCard extends StatelessWidget {
   final MedicalModel medicalModel;
