@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_app_bar.dart';
 import '../../components/w_bottom_confirm_button.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
@@ -57,8 +58,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
           ? (_remainImageUrls.isNotEmpty || _files.isNotEmpty)
           : _files.isNotEmpty;
 
-      _isActive =
-          hasImages && _titleTEC.text.isNotEmpty && _descTEC.text.isNotEmpty;
+      _isActive = hasImages && _titleTEC.text.isNotEmpty && _descTEC.text.isNotEmpty;
     });
   }
 
@@ -217,20 +217,8 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Palette.background,
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: Palette.background,
-          centerTitle: true,
-          title: Text(
-            "성장일기",
-            style: TextStyle(
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-              color: Palette.black,
-              letterSpacing: -0.5,
-            ),
-          ),
+        appBar: PDAppBar(
+          titleText: '성장일기',
           actions: [
             if (!widget.isEditMode) // 성장일기 업로드 일 때
               Padding(
@@ -250,8 +238,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                       showCustomDialog(
                         context: context,
                         title: '성장일기 비공개',
-                        message:
-                            '성장일기를 비공개하면 작성자만 볼 수 있고,\n업로드 후 이를 변경할 수 없습니다.',
+                        message: '성장일기를 비공개하면 작성자만 볼 수 있고,\n업로드 후 이를 변경할 수 없습니다.',
                         onConfirm: () {
                           _lockTap();
                         },
@@ -270,9 +257,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
             LinearProgressIndicator(
               value: diaryStatus == DiaryStatus.submitting ? null : 1,
               backgroundColor: Colors.transparent,
-              color: diaryStatus == DiaryStatus.submitting
-                  ? Palette.subGreen
-                  : Colors.transparent,
+              color: diaryStatus == DiaryStatus.submitting ? Palette.subGreen : Colors.transparent,
             ),
             Expanded(
               child: Scrollbar(
@@ -356,41 +341,33 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
 
               if (widget.isEditMode && widget.originalDiaryModel != null) {
                 // 수정 로직
-                DiaryModel updatedDiary =
-                    await context.read<DiaryProvider>().updateDiary(
-                          diaryId: widget.originalDiaryModel!.diaryId,
-                          files: _files,
-                          remainImageUrls: _remainImageUrls,
-                          deleteImageUrls: _deleteImageUrls,
-                          title: _titleTEC.text,
-                          desc: _descTEC.text,
-                        );
+                DiaryModel updatedDiary = await context.read<DiaryProvider>().updateDiary(
+                      diaryId: widget.originalDiaryModel!.diaryId,
+                      files: _files,
+                      remainImageUrls: _remainImageUrls,
+                      deleteImageUrls: _deleteImageUrls,
+                      title: _titleTEC.text,
+                      desc: _descTEC.text,
+                    );
 
                 // 내가 좋아요 한 성장일기 리스트 갱신
-                context
-                    .read<LikeProvider>()
-                    .updateDiary(updatedDiaryModel: updatedDiary);
+                context.read<LikeProvider>().updateDiary(updatedDiaryModel: updatedDiary);
 
                 // 공개 상태에 따른 처리
                 if (!updatedDiary.isLock) {
-                  context
-                      .read<FeedProvider>()
-                      .updateDiary(updatedDiaryModel: updatedDiary);
+                  context.read<FeedProvider>().updateDiary(updatedDiaryModel: updatedDiary);
                 }
               } else {
                 // 새로운 일기 업로드 로직
-                DiaryModel diaryModel =
-                    await context.read<DiaryProvider>().uploadDiary(
-                          files: _files,
-                          title: _titleTEC.text,
-                          desc: _descTEC.text,
-                          isLock: _isLock,
-                        );
+                DiaryModel diaryModel = await context.read<DiaryProvider>().uploadDiary(
+                      files: _files,
+                      title: _titleTEC.text,
+                      desc: _descTEC.text,
+                      isLock: _isLock,
+                    );
 
                 if (!_isLock) {
-                  context
-                      .read<FeedProvider>()
-                      .uploadFeed(diaryModel: diaryModel);
+                  context.read<FeedProvider>().uploadFeed(diaryModel: diaryModel);
                 }
               }
 

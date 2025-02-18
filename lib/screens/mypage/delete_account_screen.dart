@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/w_bottom_confirm_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -34,7 +35,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
-        appBar: AppBar(backgroundColor: Palette.background),
+        appBar: const PDAppBar(),
         backgroundColor: Palette.background,
         body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 24),
@@ -119,9 +120,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                 _isEnabled = false;
               });
 
-              await context
-                  .read<MyAuthProvider>()
-                  .deleteAccount(password: _passwordTEC.text);
+              await context.read<MyAuthProvider>().deleteAccount(password: _passwordTEC.text);
             } on CustomException catch (e) {
               showErrorDialog(context, e);
               setState(() {

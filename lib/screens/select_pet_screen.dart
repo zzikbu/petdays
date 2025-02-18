@@ -6,7 +6,7 @@ import 'package:petdays/screens/walk/walk_map_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../components/show_custom_dialog.dart';
-import '../components/pd_ circle_avatar.dart';
+import '../components/pd_circle_avatar.dart';
 import '../components/w_bottom_confirm_button.dart';
 import '../components/show_error_dialog.dart';
 import '../exceptions/custom_exception.dart';
@@ -15,7 +15,7 @@ import '../palette.dart';
 import '../providers/pet/pet_provider.dart';
 import '../providers/pet/pet_state.dart';
 import '../utils/permission_utils.dart';
-import 'medical/s_medical_upload.dart';
+import 'medical/medical_upload_screen.dart';
 
 class SelectPetScreen extends StatefulWidget {
   final bool isMedical;

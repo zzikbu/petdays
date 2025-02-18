@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/palette.dart';
@@ -24,8 +25,7 @@ class WalkMapScreen extends StatefulWidget {
   State<WalkMapScreen> createState() => _WalkMapScreenState();
 }
 
-class _WalkMapScreenState extends State<WalkMapScreen>
-    with WidgetsBindingObserver {
+class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserver {
   /// Properties
   bool isSubmitting = false;
   late StreamSubscription<Position> _positionStreamSubscription;
@@ -141,8 +141,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
     if (_routeCoordinates.isEmpty) return null;
 
     final bounds = _calculateMapBounds();
-    await _mapController
-        ?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
+    await _mapController?.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50));
     await Future.delayed(const Duration(milliseconds: 1500));
     return await _mapController?.takeSnapshot();
   }
@@ -322,9 +321,8 @@ class _WalkMapScreenState extends State<WalkMapScreen>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _startTimer();
-    _positionStreamSubscription =
-        Geolocator.getPositionStream(locationSettings: _locationSettings)
-            .listen(_handleLocationUpdate);
+    _positionStreamSubscription = Geolocator.getPositionStream(locationSettings: _locationSettings)
+        .listen(_handleLocationUpdate);
   }
 
   @override
@@ -350,7 +348,7 @@ class _WalkMapScreenState extends State<WalkMapScreen>
     return WillPopScope(
       onWillPop: _showExitDialog,
       child: Scaffold(
-        appBar: AppBar(
+        appBar: PDAppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios),

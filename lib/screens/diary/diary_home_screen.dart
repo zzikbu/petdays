@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/diary_card_widget.dart';
+import '../../components/pd_app_bar.dart';
 import '../../components/show_error_dialog.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
@@ -51,29 +52,13 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
     List<DiaryModel> diaryList = diaryState.diaryList;
 
     bool isLoading = diaryState.diaryStatus == DiaryStatus.fetching;
-    bool isEmpty =
-        diaryState.diaryStatus == DiaryStatus.success && diaryList.isEmpty;
+    bool isEmpty = diaryState.diaryStatus == DiaryStatus.success && diaryList.isEmpty;
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          "성장일기",
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Palette.black,
-            letterSpacing: -0.5,
-          ),
-        ),
-      ),
+      appBar: const PDAppBar(titleText: '성장일기'),
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : isEmpty
               ? Center(
                   child: Text(

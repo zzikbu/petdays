@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/diary_card_widget.dart';
@@ -50,29 +51,13 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
     List<DiaryModel> likeList = likeState.likeList;
 
     bool isLoading = likeState.likeStatus == LikeStatus.fetching;
-    bool isEmpty =
-        likeState.likeStatus == LikeStatus.success && likeList.isEmpty;
+    bool isEmpty = likeState.likeStatus == LikeStatus.success && likeList.isEmpty;
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          '좋아요한 성장일기',
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Palette.black,
-            letterSpacing: -0.5,
-          ),
-        ),
-      ),
+      appBar: const PDAppBar(titleText: '좋아요한 성장일기'),
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : isEmpty
               ? Center(
                   child: Text(

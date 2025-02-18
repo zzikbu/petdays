@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/show_error_dialog.dart';
@@ -48,8 +49,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
 
   void _checkBottomActive() {
     setState(() {
-      _isBottomActive =
-          _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
+      _isBottomActive = _visitDateTEC.text.isNotEmpty && _reasonTEC.text.isNotEmpty;
     });
   }
 
@@ -265,29 +265,14 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
         backgroundColor: Palette.background,
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          backgroundColor: Palette.background,
-          centerTitle: true,
-          title: Text(
-            "진료기록",
-            style: TextStyle(
-              fontFamily: 'Pretendard',
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
-              color: Palette.black,
-              letterSpacing: -0.5,
-            ),
-          ),
-        ),
+        appBar: const PDAppBar(titleText: '진료기록'),
         body: Column(
           children: [
             LinearProgressIndicator(
               value: medicalStatus == MedicalStatus.submitting ? null : 1,
               backgroundColor: Colors.transparent,
-              color: medicalStatus == MedicalStatus.submitting
-                  ? Palette.subGreen
-                  : Colors.transparent,
+              color:
+                  medicalStatus == MedicalStatus.submitting ? Palette.subGreen : Colors.transparent,
             ),
             Expanded(
               child: Scrollbar(
@@ -365,22 +350,18 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: CupertinoButton(
-                                          padding:
-                                              const EdgeInsets.only(right: 16),
+                                          padding: const EdgeInsets.only(right: 16),
                                           onPressed: () {
                                             setState(() {
                                               _visitDateTEC.text =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .format(selectedDate);
+                                                  DateFormat('yyyy-MM-dd').format(selectedDate);
                                               _checkBottomActive();
                                             });
                                             Navigator.pop(context);
                                           },
                                           child: const Text(
                                             '완료',
-                                            style: TextStyle(
-                                                color:
-                                                    CupertinoColors.systemBlue),
+                                            style: TextStyle(color: CupertinoColors.systemBlue),
                                           ),
                                         ),
                                       ),

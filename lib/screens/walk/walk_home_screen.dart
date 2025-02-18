@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:petdays/screens/walk/walk_detail_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -53,21 +54,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
     bool isLoading = walkState.walkStatus == WalkStatus.fetching;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: Text(
-          "산책",
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Palette.black,
-            letterSpacing: -0.5,
-          ),
-        ),
-      ),
+      appBar: const PDAppBar(titleText: '산책'),
       backgroundColor: Palette.background,
       body: isLoading
           ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
@@ -90,8 +77,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                WalkDetailScreen(index: index),
+                            builder: (context) => WalkDetailScreen(index: index),
                           ),
                         );
                       },
@@ -116,8 +102,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                             SizedBox(
                               height: 36,
                               child: ListView.builder(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 24),
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
                                 scrollDirection: Axis.horizontal, // 수평
                                 itemCount: walkModel.pets.length,
                                 itemBuilder: (context, index) {
@@ -130,8 +115,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: ExtendedNetworkImageProvider(
-                                            petModel.image),
+                                        image: ExtendedNetworkImageProvider(petModel.image),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -143,15 +127,12 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                               height: 10,
                             ),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 24),
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "날짜",
@@ -165,10 +146,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                       ),
                                       SizedBox(height: 4),
                                       Text(
-                                        walkModel.createdAt
-                                            .toDate()
-                                            .toString()
-                                            .substring(0, 10),
+                                        walkModel.createdAt.toDate().toString().substring(0, 10),
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
@@ -180,8 +158,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                     ],
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "거리",
@@ -224,8 +201,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                     ],
                                   ),
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "시간",

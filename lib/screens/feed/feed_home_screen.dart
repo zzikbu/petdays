@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/screens/diary/diary_detail_screen.dart';
 import 'package:provider/provider.dart';
@@ -52,12 +53,8 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        title: Container(
+      appBar: PDAppBar(
+        titleWidget: Container(
           height: 48,
           width: 170,
           decoration: BoxDecoration(
@@ -86,8 +83,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen>
         ),
       ),
       body: isLoading
-          ? const Center(
-              child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : Stack(
               children: [
                 // offstage: true => 위젯을 화면에서 숨김

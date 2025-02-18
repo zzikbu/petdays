@@ -8,8 +8,9 @@ import 'package:petdays/components/show_custom_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../components/pd_app_bar.dart';
 import '../../components/show_error_dialog.dart';
-import '../../components/pd_ circle_avatar.dart';
+import '../../components/pd_circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/diary_model.dart';
 import '../../palette.dart';
@@ -473,9 +474,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        backgroundColor: Palette.background,
+      appBar: PDAppBar(
         actions: [
           if (isMyDiary) ...[
             Padding(

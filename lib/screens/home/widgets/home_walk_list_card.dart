@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../components/pd_ circle_avatar.dart';
+import '../../../components/pd_circle_avatar.dart';
 import '../../../models/walk_model.dart';
 import '../../../palette.dart';
 import '../../walk/walk_detail_screen.dart';

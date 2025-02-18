@@ -16,6 +16,8 @@ import 'package:petdays/providers/pet/pet_state.dart';
 import 'package:petdays/utils/permission_utils.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_app_bar.dart';
+
 class PetUploadScreen extends StatefulWidget {
   final PetModel? originalPetModel;
 
@@ -61,8 +63,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
     );
 
     if (file != null) {
-      Uint8List uint8list =
-          await file.readAsBytes(); // 선택한 이미지를 코드로 조작할 수 있게 반환
+      Uint8List uint8list = await file.readAsBytes(); // 선택한 이미지를 코드로 조작할 수 있게 반환
       setState(() {
         _image = uint8list;
         _checkBottomActive();
@@ -84,8 +85,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
 
   // 네트워크 이미지를 Uint8List로 변환
   Future<void> loadNetworkImage(String imageUrl) async {
-    final Uint8List? bytes =
-        await ExtendedNetworkImageProvider(imageUrl).getNetworkImageData();
+    final Uint8List? bytes = await ExtendedNetworkImageProvider(imageUrl).getNetworkImageData();
     if (bytes != null) {
       setState(() {
         _image = bytes;
@@ -107,8 +107,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
       _birthdayTEC.text = widget.originalPetModel!.birthDay;
       _firstMeetingDateTEC.text = widget.originalPetModel!.firstMeetingDate;
       _selectedGender = widget.originalPetModel!.gender == "male" ? "수컷" : "암컷";
-      _selectedNeutering =
-          widget.originalPetModel!.isNeutering ? "했어요" : "안했어요";
+      _selectedNeutering = widget.originalPetModel!.isNeutering ? "했어요" : "안했어요";
     }
 
     _nameTEC.addListener(_checkBottomActive);
@@ -140,18 +139,13 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
         backgroundColor: Palette.background,
-        appBar: AppBar(
-          backgroundColor: Palette.background,
-          scrolledUnderElevation: 0,
-        ),
+        appBar: const PDAppBar(),
         body: Column(
           children: [
             LinearProgressIndicator(
               value: petStatus == PetStatus.submitting ? null : 1,
               backgroundColor: Colors.transparent,
-              color: petStatus == PetStatus.submitting
-                  ? Palette.subGreen
-                  : Colors.transparent,
+              color: petStatus == PetStatus.submitting ? Palette.subGreen : Colors.transparent,
             ),
             Expanded(
               child: Scrollbar(
@@ -270,8 +264,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                                           onPressed: () {
                                             setState(() {
                                               _birthdayTEC.text =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .format(selectedDate);
+                                                  DateFormat('yyyy-MM-dd').format(selectedDate);
                                               _checkBottomActive();
                                             });
                                             Navigator.pop(context);
@@ -334,8 +327,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                                           onPressed: () {
                                             setState(() {
                                               _firstMeetingDateTEC.text =
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .format(selectedDate);
+                                                  DateFormat('yyyy-MM-dd').format(selectedDate);
                                               _checkBottomActive();
                                             });
                                             Navigator.pop(context);
@@ -389,9 +381,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
-                                color: _selectedGender == e
-                                    ? Palette.subGreen
-                                    : Palette.lightGray,
+                                color: _selectedGender == e ? Palette.subGreen : Palette.lightGray,
                                 width: 1.0,
                               ),
                             ),
@@ -402,13 +392,9 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             showCheckmark: false,
                             labelStyle: TextStyle(
                               fontFamily: 'Pretendard',
-                              fontWeight: _selectedGender == e
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              fontWeight: _selectedGender == e ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 16,
-                              color: _selectedGender == e
-                                  ? Palette.white
-                                  : Palette.lightGray,
+                              color: _selectedGender == e ? Palette.white : Palette.lightGray,
                             ),
                             onSelected: (bool isSelected) {
                               setState(() {
@@ -441,9 +427,8 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                               side: BorderSide(
-                                color: _selectedNeutering == e
-                                    ? Palette.subGreen
-                                    : Palette.lightGray,
+                                color:
+                                    _selectedNeutering == e ? Palette.subGreen : Palette.lightGray,
                                 width: 1.0,
                               ),
                             ),
@@ -454,13 +439,10 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             showCheckmark: false,
                             labelStyle: TextStyle(
                               fontFamily: 'Pretendard',
-                              fontWeight: _selectedNeutering == e
-                                  ? FontWeight.w600
-                                  : FontWeight.w400,
+                              fontWeight:
+                                  _selectedNeutering == e ? FontWeight.w600 : FontWeight.w400,
                               fontSize: 16,
-                              color: _selectedNeutering == e
-                                  ? Palette.white
-                                  : Palette.lightGray,
+                              color: _selectedNeutering == e ? Palette.white : Palette.lightGray,
                             ),
                             onSelected: (bool isSelected) {
                               setState(() {
@@ -503,8 +485,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       createdAt: widget.originalPetModel!.createdAt,
                     );
 
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("수정 완료")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("수정 완료")));
               } else {
                 // 펫 업로드 로직
                 await context.read<PetProvider>().uploadPet(
@@ -518,8 +499,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                     );
 
                 // 스낵바
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text("추가 완료")));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("추가 완료")));
               }
               Navigator.pop(context);
             } on CustomException catch (e) {

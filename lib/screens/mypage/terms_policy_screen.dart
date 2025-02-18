@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:petdays/palette.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../components/pd_app_bar.dart';
+
 class TermsPolicyScreen extends StatefulWidget {
   final bool isTerms;
 
@@ -56,7 +58,7 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
-      appBar: AppBar(backgroundColor: Palette.white),
+      appBar: const PDAppBar(),
       body: Column(
         children: [
           LinearProgressIndicator(

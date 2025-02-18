@@ -70,8 +70,6 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
         actions: [
           IconButton(
             onPressed: () {
@@ -81,9 +79,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
                 message: '산책기록을 삭제하면 복구 할 수 없습니다.\n삭제하시겠습니까?',
                 onConfirm: () async {
                   try {
-                    await context
-                        .read<WalkProvider>()
-                        .deleteWalk(walkModel: walkModel);
+                    await context.read<WalkProvider>().deleteWalk(walkModel: walkModel);
 
                     Navigator.pop(context);
                     Navigator.pop(context);
@@ -121,8 +117,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
             SizedBox(height: 20),
             DetailInfoWithTitleWidget(
               title: '거리',
-              content:
-                  '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',
+              content: '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',
             ),
             SizedBox(height: 20),
             Container(

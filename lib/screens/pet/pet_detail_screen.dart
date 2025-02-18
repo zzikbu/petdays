@@ -1,16 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:petdays/screens/pet/pet_upload_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_app_bar.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
-import '../../components/pd_ circle_avatar.dart';
+import '../../components/pd_circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../models/pet_model.dart';
 import '../../palette.dart';
 import '../../providers/pet/pet_provider.dart';
 import '../../providers/pet/pet_state.dart';
+import 'pet_upload_screen.dart';
 
 class PetDetailScreen extends StatefulWidget {
   final int index;
@@ -52,8 +53,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     PetModel petModel = context.watch<PetState>().petList[widget.index];
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Palette.background,
+      appBar: PDAppBar(
         actions: [
           IconButton(
             onPressed: () {
@@ -73,7 +73,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 },
               );
             },
-            icon: Icon(CupertinoIcons.delete),
+            icon: const Icon(CupertinoIcons.delete),
           ),
         ],
       ),

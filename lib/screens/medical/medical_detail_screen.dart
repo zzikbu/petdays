@@ -5,13 +5,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
+import '../../components/pd_app_bar.dart';
 import '../../components/w_detail_info_with_title.dart';
 import '../../components/show_custom_dialog.dart';
 import '../../models/medical_model.dart';
 import '../../palette.dart';
 import '../../providers/medical/medical_provider.dart';
 import '../../providers/medical/medical_state.dart';
-import 's_medical_upload.dart';
+import 'medical_upload_screen.dart';
 
 class MedicalDetailScreen extends StatefulWidget {
   final int index;
@@ -28,14 +29,11 @@ class MedicalDetailScreen extends StatefulWidget {
 class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
   @override
   Widget build(BuildContext context) {
-    MedicalModel medicalModel =
-        context.watch<MedicalState>().medicalList[widget.index];
+    MedicalModel medicalModel = context.watch<MedicalState>().medicalList[widget.index];
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
+      appBar: PDAppBar(
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -111,15 +109,13 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
 
               DetailInfoWithTitleWidget(
                 title: '병원',
-                content:
-                    medicalModel.hospital.isEmpty ? '-' : medicalModel.hospital,
+                content: medicalModel.hospital.isEmpty ? '-' : medicalModel.hospital,
               ),
               SizedBox(height: 20),
 
               DetailInfoWithTitleWidget(
                 title: '수의사',
-                content:
-                    medicalModel.doctor.isEmpty ? '-' : medicalModel.doctor,
+                content: medicalModel.doctor.isEmpty ? '-' : medicalModel.doctor,
               ),
               SizedBox(height: 20),
 
@@ -143,8 +139,7 @@ class _MedicalDetailScreenState extends State<MedicalDetailScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(0),
                       image: DecorationImage(
-                        image: ExtendedNetworkImageProvider(
-                            medicalModel.imageUrls[index]),
+                        image: ExtendedNetworkImageProvider(medicalModel.imageUrls[index]),
                         fit: BoxFit.cover,
                       ),
                     ),

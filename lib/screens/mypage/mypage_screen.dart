@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../components/show_custom_dialog.dart';
 import '../../components/show_error_dialog.dart';
-import '../../components/pd_ circle_avatar.dart';
+import '../../components/pd_circle_avatar.dart';
 import '../../exceptions/custom_exception.dart';
 import '../../main.dart';
 import '../../palette.dart';

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/pd_app_bar.dart';
 import '../../components/pd_floating_button.dart';
 import '../../components/pd_loading_circular.dart';
 import '../../components/pd_refresh_indicator.dart';
@@ -69,21 +70,7 @@ class _MedicalHomeScreenState extends State<MedicalHomeScreen> {
 
     return Scaffold(
       backgroundColor: Palette.background,
-      appBar: AppBar(
-        backgroundColor: Palette.background,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: const Text(
-          "진료기록",
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.w600,
-            fontSize: 20,
-            color: Palette.black,
-            letterSpacing: -0.5,
-          ),
-        ),
-      ),
+      appBar: const PDAppBar(titleText: '진료기록'),
       body: isLoading
           ? const PDLoadingCircular()
           : PDRefreshIndicator(

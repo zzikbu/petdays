@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petdays/components/pd_app_bar.dart';
 import 'package:petdays/components/show_error_dialog.dart';
 import 'package:petdays/components/w_bottom_confirm_button.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
@@ -48,9 +49,7 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
       onTap: () => FocusScope.of(context).unfocus(), // 다른 곳 클릭 시 키보드 내리기
       child: Scaffold(
         backgroundColor: Palette.white,
-        appBar: AppBar(
-          backgroundColor: Palette.white,
-        ),
+        appBar: const PDAppBar(backgroundColor: Palette.white),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
@@ -107,12 +106,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                     color: Palette.lightGray,
                   ),
                   focusedBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Palette.black, width: 2), // 활성화
+                    borderSide: BorderSide(color: Palette.black, width: 2), // 활성화
                   ),
                   enabledBorder: UnderlineInputBorder(
-                    borderSide:
-                        BorderSide(color: Palette.black, width: 2), // 비활성화
+                    borderSide: BorderSide(color: Palette.black, width: 2), // 비활성화
                   ),
                 ),
               ),
@@ -135,9 +132,7 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                   );
 
               // 상태관리하고 있는 userModel 갱신
-              await context
-                  .read<ProfileProvider>()
-                  .getProfile(uid: currentUserUid);
+              await context.read<ProfileProvider>().getProfile(uid: currentUserUid);
 
               Navigator.pop(context);
             } on CustomException catch (e) {
