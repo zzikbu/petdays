@@ -18,19 +18,19 @@
 - [기획 및 디자인](#기획-및-디자인)
 - [기능 실행 화면](#기능-실행-화면)
 - [주요 기술](#주요-기술)
-<br/><br/>
+  <br/><br/>
 
-## 프로젝트 소개  
+## 프로젝트 소개
 **1인 기획 / 디자인 / 개발**<br>
 
 반려동물의 성장일기, 진료기록, 산책기록을 한곳에 담아 보관하고 공유할 수 있는 모바일 애플리케이션입니다.
 <br/><br/>
-  
+
 ## 개발 기간
-- **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 _(약 1개월)_  
-- **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 _(약 5개월)_  
+- **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 _(약 1개월)_
+- **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 _(약 5개월)_
 - **리팩토링 & 유지보수:** 2024.12.01 ~ _(현재 진행 중)_  
-<br>
+  <br>
 
 ## 주요 기능
 1. **반려동물:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
@@ -42,7 +42,7 @@
 4. **산책:** 산책 시간,거리와 경로를 기록해 관리할 수 있습니다.
 
 5. **피드:** 공개된 성장일기를 통해 다른 반려인들과 경험을 공유하고 좋아요를 통해 공감할 수 있습니다.
-<br/><br/>
+   <br/><br/>
 
 ## 기술 스택
 - **언어:** `Dart`
@@ -56,7 +56,7 @@
   - Location: `geolocator`, `google_maps_flutter`
   - UI/UX: `carousel_slider`, `smooth_page_indicator`, `flutter_svg`, `extended_image`
   - Util:  `image_picker`, `permission_handler`, `flutter_native_splash`, `uuid`, `string_validator`, `package_info_plus`, `webview_flutter`
-<br/><br/>
+    <br/><br/>
 
 ## 기획 및 디자인
 ### [🔗 기획 및 디자인 Figma 🔗](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
@@ -128,10 +128,10 @@ class MedicalState {
 ```dart
 // medical_provider.dart
 
-class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin { 
-  MedicalProvider() : super(MedicalState.init()); 
+class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
+  MedicalProvider() : super(MedicalState.init());
 
-  Future<void> getMedicalList({ 
+  Future<void> getMedicalList({
     required String uid,
   }) async {
     try {
@@ -140,7 +140,7 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
 
       // 비지니스 로직
       List<MedicalModel> medicalList =
-          await read<MedicalRepository>().getMedicalList(uid: uid);
+      await read<MedicalRepository>().getMedicalList(uid: uid);
 
       // 상태 변경
       state = state.copyWith(
@@ -150,9 +150,9 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
     } on CustomException catch (_) {
       // 상태 변경
       state = state.copyWith(medicalStatus: MedicalStatus.error);
-      rethrow; 
-    } 
-  } 
+      rethrow;
+    }
+  }
 } 
 ```
 ```dart
@@ -160,26 +160,26 @@ class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
 
 @override
 Widget build(BuildContext context) {
- // MedicalState를 구독하여 실시간 상태 반영
- MedicalState medicalState = context.watch<MedicalState>();
- List<MedicalModel> medicalList = medicalState.medicalList;
+  // MedicalState를 구독하여 실시간 상태 반영
+  MedicalState medicalState = context.watch<MedicalState>();
+  List<MedicalModel> medicalList = medicalState.medicalList;
 
- bool isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
- 
- return Scaffold(
-   // ...
-   body: isLoading
-       ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
-       : ListView.builder(
-           itemCount: medicalList.length,
-           itemBuilder: (context, index) {
-             return MedicalHomeCardWidget(
-               medicalModel: medicalList[index],
-               index: index,
-             );
-           },
-         ),
- );
+  bool isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
+
+  return Scaffold(
+    // ...
+    body: isLoading
+            ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+            : ListView.builder(
+      itemCount: medicalList.length,
+      itemBuilder: (context, index) {
+        return MedicalHomeCardWidget(
+          medicalModel: medicalList[index],
+          index: index,
+        );
+      },
+    ),
+  );
 }
 ```
 ---
@@ -191,7 +191,7 @@ Widget build(BuildContext context) {
   ② 해당 성장일기 문서 삭제<br/>
   ③ 작성자의 diaryCount 감소
 - 코드 이미지<br/>
-  <img alt="batch" width="470" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
+  <img alt="batch" height="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
 ---
 ### ✅ Database Transaction
 - `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
@@ -202,4 +202,4 @@ Widget build(BuildContext context) {
   ③ 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
 
 - 코드 이미지 <br/>
-  <img alt="transaction" width="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
+  <img alt="transaction" height="440" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
