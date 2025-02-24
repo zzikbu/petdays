@@ -190,8 +190,33 @@ Widget build(BuildContext context) {
   ① 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거<br/>
   ② 해당 성장일기 문서 삭제<br/>
   ③ 작성자의 diaryCount 감소
-- 코드 이미지<br/>
-  <img alt="batch" height="400" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/batch.png?raw=true">
+- Code<br/>
+  ```dart
+    WriteBatch batch = firebaseFirestore.batch();
+
+    // 성장일기 좋아요 누른 사용자 찾기
+    List<String> likes = await diaryDocRef
+        .get()
+        .then((value) => List<String>.from(value.data()!['likes']));
+
+    // ① 해당 사용자들의 likes 필드에서 성장일기 ID 제거  
+    likes.forEach((uid) {
+      batch.update(firebaseFirestore.collection('users').doc(uid), {
+        'likes': FieldValue.arrayRemove([diaryModel.diaryId]),
+      });
+    });
+
+    // ② 성장일기 문서 삭제
+    batch.delete(diaryDocRef);
+
+    // ③ 작성자의 diaryCount 감소
+    batch.update(writerDocRef, {
+      'diaryCount': FieldValue.increment(-1),
+    });
+
+    // 실행
+    batch.commit();
+  ```
 ---
 ### ✅ Database Transaction
 - `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
@@ -201,5 +226,26 @@ Widget build(BuildContext context) {
   ② 해당 성장일기의 likeCount 증가 또는 감소<br/>
   ③ 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
 
-- 코드 이미지 <br/>
-  <img alt="transaction" height="440" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/3/transaction.png?raw=true">
+- Code <br/>
+  ```dart
+  // 성장일기 likes에 사용자 ID가 있는지 확인
+  bool isDiaryContains = diaryLikes.contains(uid);
+
+  transaction.update(diaryDocRef, {
+    // ① 해당 성장일기 likes 업데이트
+    'likes': isDiaryContains
+        ? FieldValue.arrayRemove([uid])
+        : FieldValue.arrayUnion([uid]),
+    // ② 성장일기 likeCount 업데이트
+    'likeCount': isDiaryContains
+        ? FieldValue.increment(-1)
+        : FieldValue.increment(1),
+  });
+
+  // ③ 좋아요 누른 사용자의 likes 업데이트
+  transaction.update(userDocRef, {
+    'likes': userLikes.contains(diaryId)
+        ? FieldValue.arrayRemove([diaryId])
+        : FieldValue.arrayUnion([diaryId]),
+  });
+  ```
