@@ -128,6 +128,7 @@ class _MyAppState extends State<MyApp> {
           // authStateChanges 함수를 최초로 호출해서 데이터를 가져오기 까지 시간이 걸림
           // 그 시간 동안에 미리 전달해 줄 데이터 지정
           initialData: null,
+          lazy: false,
         ),
         StateNotifierProvider<MyAuthProvider, AuthState>(
           create: (context) => MyAuthProvider(),
