@@ -2,15 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:petdays/core/router/app_router.dart';
 import 'package:provider/provider.dart';
 
+import 'core/router/app_router.dart';
 import 'firebase_options.dart';
 import 'providers/auth/auth_state.dart';
 import 'providers/auth/my_auth_provider.dart';
@@ -38,13 +37,11 @@ import 'repositories/medical_repository.dart';
 import 'repositories/pet_repository.dart';
 import 'repositories/profile_repository.dart';
 import 'repositories/walk_repository.dart';
-import 'screens/spalash_screen.dart';
 
 late final PackageInfo packageInfo;
 
 void main() async {
-  WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized(); // main 함수에서 async 사용하기 위함
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -52,6 +49,10 @@ void main() async {
   packageInfo = await PackageInfo.fromPlatform();
 
   FlutterNativeSplash.remove();
+
+  FirebaseAuth.instance.authStateChanges().listen((User? user) {
+    appRouter.refresh();
+  });
 
   runApp(const MyApp());
 }
@@ -156,29 +157,17 @@ class _MyAppState extends State<MyApp> {
           create: (context) => LikeProvider(),
         ),
       ],
-      // child: MaterialApp.router(
-      //   routerConfig: appRouter,
-      //   debugShowCheckedModeBanner: false,
-      //   localizationsDelegates: const [
-      //     GlobalMaterialLocalizations.delegate,
-      //     GlobalWidgetsLocalizations.delegate,
-      //     GlobalCupertinoLocalizations.delegate,
-      //   ],
-      //   supportedLocales: const [
-      //     Locale('ko', 'KR'),
-      //   ],
-      // ),
-      child: const MaterialApp(
-        localizationsDelegates: [
+      child: MaterialApp.router(
+        routerConfig: appRouter,
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
-        supportedLocales: [
+        supportedLocales: const [
           Locale('ko', 'KR'),
         ],
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
       ),
     );
   }

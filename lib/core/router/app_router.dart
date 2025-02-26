@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
-import 'package:petdays/screens/spalash_screen.dart';
 
 import '../../screens/frame_screen.dart';
 import '../../screens/sign_in/reset_password_screen.dart';
@@ -12,8 +11,21 @@ import 'branches/my_branch.dart';
 import 'navigator_keys.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/home',
   navigatorKey: NavigatorKeys.root,
+  redirect: (context, state) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null && state.matchedLocation != '/') {
+      return '/';
+    }
+
+    if (user != null && state.matchedLocation == '/') {
+      return '/home';
+    }
+
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',
