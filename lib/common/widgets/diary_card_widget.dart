@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/diary_model.dart';
 import '../../palette.dart';
@@ -26,15 +27,23 @@ class DiaryCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiaryDetailScreen(
-              index: index,
-              diaryType: diaryType,
-            ),
-          ),
-        );
+        switch (diaryType) {
+          case DiaryType.hotFeed:
+            context.go('/feed/hot/detail/$index');
+            break;
+          case DiaryType.allFeed:
+            context.go('/feed/all/detail/$index');
+            break;
+          case DiaryType.my:
+            context.go('/diary/my/detail/$index');
+            break;
+          case DiaryType.myLike:
+            context.go('/diary/my_like/detail/$index');
+            break;
+          case DiaryType.myOpen:
+            context.go('/diary/my_open/detail/$index');
+            break;
+        }
       },
       child: Stack(
         children: [
