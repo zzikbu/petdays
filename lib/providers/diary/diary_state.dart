@@ -20,7 +20,7 @@ class DiaryState {
   });
 
   factory DiaryState.init() {
-    return DiaryState(
+    return const DiaryState(
       diaryStatus: DiaryStatus.init,
       diaryList: [],
       openDiaryList: [],

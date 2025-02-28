@@ -18,7 +18,7 @@ class WalkState {
   });
 
   factory WalkState.init() {
-    return WalkState(
+    return const WalkState(
       walkStatus: WalkStatus.init,
       walkList: [],
     );

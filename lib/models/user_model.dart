@@ -45,17 +45,17 @@ class UserModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': this.uid,
-      'nickname': this.nickname,
-      'email': this.email,
-      'profileImage': this.profileImage,
-      'providerId': this.providerId,
-      'walkCount': this.walkCount,
-      'diaryCount': this.diaryCount,
-      'medicalCount': this.medicalCount,
-      'blocks': this.blocks,
-      'likes': this.likes,
-      'createdAt': this.createdAt,
+      'uid': uid,
+      'nickname': nickname,
+      'email': email,
+      'profileImage': profileImage,
+      'providerId': providerId,
+      'walkCount': walkCount,
+      'diaryCount': diaryCount,
+      'medicalCount': medicalCount,
+      'blocks': blocks,
+      'likes': likes,
+      'createdAt': createdAt,
     };
   }
 

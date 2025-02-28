@@ -59,7 +59,7 @@ class _OpenDiaryHomeScreenState extends State<OpenDiaryHomeScreen>
       body: isLoading
           ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : isEmpty
-              ? Center(
+              ? const Center(
                   child: Text(
                     '공개한 성장일기가\n없습니다',
                     textAlign: TextAlign.center,

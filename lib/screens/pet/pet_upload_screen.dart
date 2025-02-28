@@ -52,7 +52,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
     final hasPermission = await PermissionUtils.checkPhotoPermission(context);
     if (!hasPermission) return;
 
-    ImagePicker imagePicker = new ImagePicker();
+    ImagePicker imagePicker = ImagePicker();
     // XFile: 기기의 파일시스템에 접근할 수 있는 클래스
     // 사진을 선택하지 안했을 때는 null 반환
     XFile? file = await imagePicker.pickImage(
@@ -154,8 +154,8 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 30),
-                      Text(
+                      const SizedBox(height: 30),
+                      const Text(
                         '반려동물의 상세정보를\n입력해주세요',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -165,7 +165,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           letterSpacing: -0.6,
                         ),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // 사진
                       Center(
@@ -204,7 +204,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                                     color: Colors.grey.withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(60),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     color: Colors.white,
                                     size: 24,
                                     Icons.camera_alt,
@@ -215,7 +215,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
 
                       // 이름
                       TextFieldWithTitleWidget(
@@ -224,7 +224,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                         hintText: '이름을 입력해주세요',
                         controller: _nameTEC,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 품종
                       TextFieldWithTitleWidget(
@@ -233,7 +233,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                         hintText: '품종을 입력해주세요',
                         controller: _breedTEC,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 생년월일
                       GestureDetector(
@@ -245,17 +245,17 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             builder: (BuildContext context) {
                               return Container(
                                 height: 260,
-                                color: Color(0xFFCED1D8),
+                                color: const Color(0xFFCED1D8),
                                 child: Column(
                                   children: [
                                     Container(
-                                      color: Color(0xFFF7F7F7),
+                                      color: const Color(0xFFF7F7F7),
                                       height: 40,
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: CupertinoButton(
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: Text(
+                                          padding: const EdgeInsets.only(right: 16),
+                                          child: const Text(
                                             '완료',
                                             style: TextStyle(
                                               color: CupertinoColors.systemBlue,
@@ -296,7 +296,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           enabled: false,
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 만난 날
                       GestureDetector(
@@ -308,17 +308,17 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                             builder: (BuildContext context) {
                               return Container(
                                 height: 260,
-                                color: Color(0xFFCED1D8),
+                                color: const Color(0xFFCED1D8),
                                 child: Column(
                                   children: [
                                     Container(
-                                      color: Color(0xFFF7F7F7),
+                                      color: const Color(0xFFF7F7F7),
                                       height: 40,
                                       child: Align(
                                         alignment: Alignment.centerRight,
                                         child: CupertinoButton(
-                                          padding: EdgeInsets.only(right: 16),
-                                          child: Text(
+                                          padding: const EdgeInsets.only(right: 16),
+                                          child: const Text(
                                             '완료',
                                             style: TextStyle(
                                               color: CupertinoColors.systemBlue,
@@ -359,10 +359,10 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           enabled: false,
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 성별
-                      Text(
+                      const Text(
                         '성별',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -372,7 +372,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           letterSpacing: -0.45,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Wrap(
                         runSpacing: 8.0, // 상하
                         spacing: 8.0, // 좌우
@@ -405,10 +405,10 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           );
                         }).toList(),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
 
                       // 중성화
-                      Text(
+                      const Text(
                         '중성화',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -418,7 +418,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           letterSpacing: -0.45,
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Wrap(
                         runSpacing: 8.0, // 상하
                         spacing: 8.0, // 좌우
@@ -453,7 +453,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                           );
                         }).toList(),
                       ),
-                      SizedBox(height: 30),
+                      const SizedBox(height: 30),
                     ],
                   ),
                 ),
@@ -485,7 +485,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                       createdAt: widget.originalPetModel!.createdAt,
                     );
 
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("수정 완료")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("수정 완료")));
               } else {
                 // 펫 업로드 로직
                 await context.read<PetProvider>().uploadPet(
@@ -499,7 +499,7 @@ class _PetUploadScreenState extends State<PetUploadScreen> {
                     );
 
                 // 스낵바
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("추가 완료")));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("추가 완료")));
               }
               Navigator.pop(context);
             } on CustomException catch (e) {

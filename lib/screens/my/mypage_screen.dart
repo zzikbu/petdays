@@ -5,8 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:petdays/screens/mypage/terms_policy_screen.dart';
-import 'package:petdays/screens/mypage/update_nickname_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widgets/show_custom_dialog.dart';
@@ -23,6 +21,8 @@ import '../pet/pet_upload_screen.dart';
 import 'delete_account_screen.dart';
 import 'like_home_screen.dart';
 import 'open_diary_home_screen.dart';
+import 'terms_policy_screen.dart';
+import 'update_nickname_screen.dart';
 
 class MyPageScreen extends StatefulWidget {
   const MyPageScreen({super.key});
@@ -31,8 +31,7 @@ class MyPageScreen extends StatefulWidget {
   State<MyPageScreen> createState() => _MyPageScreenState();
 }
 
-class _MyPageScreenState extends State<MyPageScreen>
-    with AutomaticKeepAliveClientMixin<MyPageScreen> {
+class _MyPageScreenState extends State<MyPageScreen> {
   late final ProfileProvider profileProvider;
   late String currentUserUid = context.read<User>().uid;
 
@@ -41,12 +40,10 @@ class _MyPageScreenState extends State<MyPageScreen>
     final hasPermission = await PermissionUtils.checkPhotoPermission(context);
     if (!hasPermission) return;
 
-    ImagePicker imagePicker = new ImagePicker();
-    // XFile: 기기의 파일시스템에 접근할 수 있는 클래스
-    // 사진을 선택하지 안했을 때는 null 반환
+    ImagePicker imagePicker = ImagePicker();
+
     XFile? file = await imagePicker.pickImage(
       source: ImageSource.gallery,
-      // 용량 줄이기
       maxHeight: 512,
       maxWidth: 512,
     );
@@ -80,11 +77,6 @@ class _MyPageScreenState extends State<MyPageScreen>
     });
   }
 
-  // 다른 화면에서 돌아올 때
-  // 데이터를 매번 가져오지 않도록
-  @override
-  bool get wantKeepAlive => true;
-
   @override
   void initState() {
     super.initState();
@@ -95,10 +87,7 @@ class _MyPageScreenState extends State<MyPageScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     ProfileState profileState = context.watch<ProfileState>();
-    // UserModel userModel = profileState.userModel;
 
     bool isLoading = (profileState.profileStatus == ProfileStatus.fetching) ||
         (profileState.profileStatus == ProfileStatus.submitting);
@@ -114,14 +103,14 @@ class _MyPageScreenState extends State<MyPageScreen>
     return Scaffold(
       backgroundColor: Palette.background,
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : SafeArea(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     Row(
                       children: [
@@ -144,7 +133,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                         actions: [
                                           // 앨범에서 선택
                                           CupertinoActionSheetAction(
-                                            child: Text(
+                                            child: const Text(
                                               '앨범에서 선택',
                                               style: TextStyle(
                                                 fontFamily: 'Pretendard',
@@ -163,7 +152,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                           if (!(profileState.userModel.profileImage == null))
                                             // 프로필 이미지 삭제
                                             CupertinoActionSheetAction(
-                                              child: Text(
+                                              child: const Text(
                                                 '프로필 이미지 삭제',
                                                 style: TextStyle(
                                                   fontFamily: 'Pretendard',
@@ -196,7 +185,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                         // 취소 버튼
                                         cancelButton: CupertinoActionSheetAction(
                                           isDefaultAction: true,
-                                          child: Text(
+                                          child: const Text(
                                             '취소',
                                             style: TextStyle(
                                               fontFamily: 'Pretendard',
@@ -220,7 +209,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                     color: Colors.grey.withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(60),
                                   ),
-                                  child: Icon(
+                                  child: const Icon(
                                     color: Colors.white,
                                     size: 15,
                                     Icons.camera_alt,
@@ -230,12 +219,12 @@ class _MyPageScreenState extends State<MyPageScreen>
                             ),
                           ],
                         ),
-                        SizedBox(width: 12),
+                        const SizedBox(width: 12),
 
                         // 닉네임
                         Text(
                           profileState.userModel.nickname,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w600,
                             fontSize: 20,
@@ -250,24 +239,24 @@ class _MyPageScreenState extends State<MyPageScreen>
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => UpdateNicknameScreen(),
+                                  builder: (context) => const UpdateNicknameScreen(),
                                 ));
                           },
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                         ),
                       ],
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // 구분선
                     Container(
                       height: 1,
                       color: Palette.lightGray,
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // MY
-                    Text(
+                    const Text(
                       'MY',
                       style: TextStyle(
                         fontFamily: 'Pretendard',
@@ -277,17 +266,17 @@ class _MyPageScreenState extends State<MyPageScreen>
                         letterSpacing: -0.5,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // 펫추가
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PetUploadScreen()),
+                          MaterialPageRoute(builder: (context) => const PetUploadScreen()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         '반려동물 추가',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -298,17 +287,17 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // 공개한 성장일기
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => OpenDiaryHomeScreen()),
+                          MaterialPageRoute(builder: (context) => const OpenDiaryHomeScreen()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         '공개한 성장일기',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -319,17 +308,17 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // 공감한 성장일기
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LikeHomeScreen()),
+                          MaterialPageRoute(builder: (context) => const LikeHomeScreen()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         '좋아요한 성장일기',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -340,17 +329,17 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // 구분선
                     Container(
                       height: 1,
                       color: Palette.lightGray,
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // 앱
-                    Text(
+                    const Text(
                       '앱',
                       style: TextStyle(
                         fontFamily: 'Pretendard',
@@ -360,7 +349,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         letterSpacing: -0.5,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // 이용약관
                     GestureDetector(
@@ -368,10 +357,10 @@ class _MyPageScreenState extends State<MyPageScreen>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TermsPolicyScreen(isTerms: true),
+                              builder: (context) => const TermsPolicyScreen(isTerms: true),
                             ));
                       },
-                      child: Text(
+                      child: const Text(
                         '이용약관',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -382,7 +371,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // 개인정보 처리방침
                     GestureDetector(
@@ -390,10 +379,10 @@ class _MyPageScreenState extends State<MyPageScreen>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TermsPolicyScreen(isTerms: false),
+                              builder: (context) => const TermsPolicyScreen(isTerms: false),
                             ));
                       },
-                      child: Text(
+                      child: const Text(
                         '개인정보 처리방침',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -404,12 +393,12 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // 앱 버전
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           '앱 버전',
                           style: TextStyle(
                             fontFamily: 'Pretendard',
@@ -419,23 +408,23 @@ class _MyPageScreenState extends State<MyPageScreen>
                             letterSpacing: -0.5,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text('v${packageInfo.version}'),
                       ],
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // 구분선
                     Container(
                       height: 1,
                       color: Palette.lightGray,
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
 
                     // 계정
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           '계정',
                           style: TextStyle(
                             fontFamily: 'Pretendard',
@@ -445,17 +434,17 @@ class _MyPageScreenState extends State<MyPageScreen>
                             letterSpacing: -0.5,
                           ),
                         ),
-                        SizedBox(width: 4),
+                        const SizedBox(width: 4),
                         SizedBox(
                           width: 24,
                           height: 24,
                           child: providerImageUrl == null
-                              ? Icon(Icons.email)
+                              ? const Icon(Icons.email)
                               : SvgPicture.asset(providerImageUrl),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
 
                     // 비밀번호 재설정
                     if (profileState.userModel.providerId == 'password')
@@ -473,7 +462,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                         email: profileState.userModel.email!);
 
                                     ScaffoldMessenger.of(context)
-                                        .showSnackBar(SnackBar(content: Text("전송 완료")));
+                                        .showSnackBar(const SnackBar(content: Text("전송 완료")));
 
                                     Navigator.pop(context);
                                   } on CustomException catch (e) {
@@ -482,7 +471,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                                 },
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               '비밀번호 재설정',
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
@@ -493,7 +482,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                               ),
                             ),
                           ),
-                          SizedBox(height: 14),
+                          const SizedBox(height: 14),
                         ],
                       ),
 
@@ -513,7 +502,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                           },
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         '로그아웃',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -524,7 +513,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 14),
+                    const SizedBox(height: 14),
 
                     // 회원탈퇴
                     GestureDetector(
@@ -533,7 +522,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => DeleteAccountScreen(),
+                                builder: (context) => const DeleteAccountScreen(),
                               ));
                         } else {
                           showCustomDialog(
@@ -551,7 +540,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                           );
                         }
                       },
-                      child: Text(
+                      child: const Text(
                         '회원탈퇴',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -562,7 +551,7 @@ class _MyPageScreenState extends State<MyPageScreen>
                         ),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),

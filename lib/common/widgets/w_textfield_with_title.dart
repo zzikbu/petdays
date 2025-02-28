@@ -31,7 +31,7 @@ class TextFieldWithTitleWidget extends StatelessWidget {
       children: [
         Text(
           labelText,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w600,
             fontSize: 18,
@@ -50,7 +50,7 @@ class TextFieldWithTitleWidget extends StatelessWidget {
           onTap: onTap,
           keyboardType: isMultiLine ? TextInputType.multiline : keyboardType, // multiline일 경우
           cursorColor: Palette.subGreen,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w400,
             fontSize: 16,
@@ -59,20 +59,20 @@ class TextFieldWithTitleWidget extends StatelessWidget {
           ),
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               fontFamily: 'Pretendard',
               fontWeight: FontWeight.w400,
               fontSize: 16,
               letterSpacing: -0.4,
               color: Palette.lightGray,
             ),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),
-            enabledBorder: UnderlineInputBorder(
+            enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),
-            disabledBorder: UnderlineInputBorder(
+            disabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: Palette.black, width: 2),
             ),
           ),

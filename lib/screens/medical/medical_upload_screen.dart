@@ -282,7 +282,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 사진
-                      Text(
+                      const Text(
                         '사진',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -318,7 +318,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                                     width: 1,
                                   ),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.add,
                                   color: Palette.lightGray,
                                 ),
@@ -329,7 +329,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 진료일 (필수)
                       GestureDetector(
@@ -341,11 +341,11 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                             builder: (BuildContext context) {
                               return Container(
                                 height: 260,
-                                color: Color(0xFFCED1D8),
+                                color: const Color(0xFFCED1D8),
                                 child: Column(
                                   children: [
                                     Container(
-                                      color: Color(0xFFF7F7F7),
+                                      color: const Color(0xFFF7F7F7),
                                       height: 40,
                                       child: Align(
                                         alignment: Alignment.centerRight,
@@ -390,7 +390,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                           enabled: false,
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 이유 (필수)
                       TextFieldWithTitleWidget(
@@ -399,7 +399,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                         hintText: '병원에 간 이유를 입력해주세요',
                         enabled: _isEnabled,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 병원
                       TextFieldWithTitleWidget(
@@ -408,7 +408,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                         hintText: '병원 이름을 입력해주세요',
                         enabled: _isEnabled,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 수의사
                       TextFieldWithTitleWidget(
@@ -417,7 +417,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
                         hintText: '수의사 이름을 입력해주세요',
                         enabled: _isEnabled,
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
 
                       // 메모
                       TextFieldWithTitleWidget(

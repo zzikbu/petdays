@@ -266,8 +266,8 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 15),
-                      Text(
+                      const SizedBox(height: 15),
+                      const Text(
                         '사진 *',
                         style: TextStyle(
                           fontFamily: 'Pretendard',
@@ -283,9 +283,9 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                final _images = await selectImages();
+                                final images = await selectImages();
                                 setState(() {
-                                  _files.addAll(_images);
+                                  _files.addAll(images);
                                   _checkBottomActive();
                                 });
                               },
@@ -300,7 +300,7 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                                     width: 1,
                                   ),
                                 ),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.add,
                                   color: Palette.lightGray,
                                 ),
@@ -310,20 +310,20 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       TextFieldWithTitleWidget(
                         controller: _titleTEC,
                         labelText: '제목 *',
                         hintText: '제목을 입력해주세요',
                       ),
-                      SizedBox(height: 40),
+                      const SizedBox(height: 40),
                       TextFieldWithTitleWidget(
                         controller: _descTEC,
                         isMultiLine: true,
                         labelText: '내용 *',
                         hintText: '내용을 입력해주세요',
                       ),
-                      SizedBox(height: 15),
+                      const SizedBox(height: 15),
                     ],
                   ),
                 ),

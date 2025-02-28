@@ -55,7 +55,7 @@ class MedicalRepository {
             firebaseStorage.ref().child("medicals").child(medicalId);
 
         newImageUrls = await Future.wait(files.map((e) async {
-          String imageId = Uuid().v1();
+          String imageId = const Uuid().v1();
           TaskSnapshot taskSnapshot = await ref.child(imageId).putFile(File(e));
           return await taskSnapshot.ref.getDownloadURL();
         }).toList());
@@ -102,14 +102,14 @@ class MedicalRepository {
     } on FirebaseException {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: '진료기록',
         message: '진료기록 수정에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -143,12 +143,12 @@ class MedicalRepository {
 
       batch.commit();
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '진료기록',
         message: '진료기록 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -187,12 +187,12 @@ class MedicalRepository {
         },
       ).toList());
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '진료기록',
         message: '진료기록 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -217,7 +217,7 @@ class MedicalRepository {
       // 실행되지 않고, 큐에 대기 상태로 존재
       WriteBatch batch = firebaseFirestore.batch();
 
-      String medicalId = Uuid().v1(); // Generate a v1 (time-based) id
+      String medicalId = const Uuid().v1(); // Generate a v1 (time-based) id
 
       // firestore 문서 참조
       DocumentReference<Map<String, dynamic>> medicalDocRef =
@@ -233,7 +233,7 @@ class MedicalRepository {
       Reference ref = firebaseStorage.ref().child("medicals").child(medicalId);
 
       imageUrls = await Future.wait(files.map((e) async {
-        String imageId = Uuid().v1();
+        String imageId = const Uuid().v1();
         TaskSnapshot taskSnapshot =
             await ref.child(imageId).putFile(File(e)); // stoage에 저장
         return await taskSnapshot.ref
@@ -283,14 +283,14 @@ class MedicalRepository {
     } on FirebaseException {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: '진료기록',
         message: '진료기록 업로드에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: "진료기록",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );

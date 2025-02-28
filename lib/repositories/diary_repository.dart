@@ -39,7 +39,7 @@ class DiaryRepository {
         Reference ref = firebaseStorage.ref().child("diaries").child(diaryId);
 
         newImageUrls = await Future.wait(files.map((e) async {
-          String imageId = Uuid().v1();
+          String imageId = const Uuid().v1();
           TaskSnapshot taskSnapshot = await ref.child(imageId).putFile(File(e));
           return await taskSnapshot.ref.getDownloadURL();
         }).toList());
@@ -64,7 +64,7 @@ class DiaryRepository {
             await transaction.get(userDocRef);
 
         if (!diarySnapshot.exists) {
-          throw CustomException(
+          throw const CustomException(
             title: "not-found",
             message: "Diary does not exist",
           );
@@ -104,13 +104,13 @@ class DiaryRepository {
     } on FirebaseException {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: '성장일기',
         message: '성장일기 수정에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
       _deleteImage(newImageUrls); // 에러 발생시 새로 업로드된 이미지 삭제
-      throw CustomException(
+      throw const CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -134,11 +134,11 @@ class DiaryRepository {
           .then((value) => List<String>.from(value.data()!['likes']));
 
       // 해당 성장일기에 좋아요를 누른 users 문서의 likes 필드에서 diaryId 삭제
-      likes.forEach((uid) {
+      for (var uid in likes) {
         batch.update(firebaseFirestore.collection('users').doc(uid), {
           'likes': FieldValue.arrayRemove([diaryModel.diaryId]),
         });
-      });
+      }
 
       // diaries 컬렉션에서 문서 삭제
       batch.delete(diaryDocRef);
@@ -155,12 +155,12 @@ class DiaryRepository {
 
       batch.commit();
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '성장일기',
         message: '성장일기 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -191,12 +191,12 @@ class DiaryRepository {
         },
       ).toList());
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '성장일기',
         message: '성장일기 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -218,7 +218,7 @@ class DiaryRepository {
       // 실행되지 않고, 큐에 대기 상태로 존재
       WriteBatch batch = firebaseFirestore.batch();
 
-      String diaryId = Uuid().v1(); // Generate a v1 (time-based) id
+      String diaryId = const Uuid().v1(); // Generate a v1 (time-based) id
 
       // firestore 문서 참조
       DocumentReference<Map<String, dynamic>> diaryDocRef =
@@ -231,7 +231,7 @@ class DiaryRepository {
       Reference ref = firebaseStorage.ref().child("diaries").child(diaryId);
 
       imageUrls = await Future.wait(files.map((e) async {
-        String imageId = Uuid().v1();
+        String imageId = const Uuid().v1();
         TaskSnapshot taskSnapshot =
             await ref.child(imageId).putFile(File(e)); // stoage에 저장
         return await taskSnapshot.ref
@@ -275,14 +275,14 @@ class DiaryRepository {
     } on FirebaseException {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: '성장일기',
         message: '성장일기 업로드에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
       _deleteImage(imageUrls); // 에러 발생시 Storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: "성장일기",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );

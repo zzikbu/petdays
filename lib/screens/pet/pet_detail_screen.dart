@@ -34,7 +34,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     DateTime currentDate = DateTime.now();
     Duration ageDifference = currentDate.difference(birthDate);
     int ageInYears = ageDifference.inDays ~/ 365;
-    return '${ageInYears}살';
+    return '$ageInYears살';
   }
 
   // 만난 날 계산
@@ -99,7 +99,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                           imageUrl: petModel.image,
                           size: 100,
                         ),
-                        SizedBox(width: 16),
+                        const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +108,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                 petModel.name,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w700,
                                   fontSize: 24,
@@ -116,12 +116,12 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   letterSpacing: -0.5,
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 petModel.breed,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontFamily: 'Pretendard',
                                   fontWeight: FontWeight.w500,
                                   fontSize: 14,
@@ -142,11 +142,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                   ),
                                 ));
                           },
-                          icon: Icon(Icons.edit),
+                          icon: const Icon(Icons.edit),
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Column(
                       children: [
                         Row(
@@ -168,7 +168,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '생년월일',
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -177,10 +177,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                           color: Palette.black,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         petModel.birthDay,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
@@ -192,7 +192,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Container(
                                 height: 86,
@@ -210,7 +210,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '나이',
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -219,10 +219,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                           color: Palette.black,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         _getAge(birthDateString: petModel.birthDay),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
@@ -236,7 +236,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Row(
                           children: [
                             Expanded(
@@ -256,7 +256,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '성별',
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -265,10 +265,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                           color: Palette.black,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         petModel.gender == "male" ? "수컷" : "암컷",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
@@ -280,7 +280,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Container(
                                 height: 86,
@@ -298,7 +298,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         '중성화',
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -307,10 +307,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                                           color: Palette.black,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         petModel.isNeutering == true ? "O" : "X",
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 20,
@@ -330,7 +330,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
               height: 60,
               width: double.infinity,
@@ -341,7 +341,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
               child: Center(
                 child: Text(
                   _getDaysSinceMeeting(meetingDateString: petModel.firstMeetingDate),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: 'Pretendard',
                     fontWeight: FontWeight.w600,
                     fontSize: 22,

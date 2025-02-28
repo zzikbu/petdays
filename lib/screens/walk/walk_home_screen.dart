@@ -58,7 +58,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
       appBar: const PDAppBar(titleText: '산책'),
       backgroundColor: Palette.background,
       body: isLoading
-          ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+          ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : RefreshIndicator(
               // 새로고침
               color: Palette.subGreen,
@@ -83,7 +83,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                         );
                       },
                       child: Container(
-                        margin: EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 20),
                         height: 130,
                         decoration: BoxDecoration(
                           color: Palette.white,
@@ -91,7 +91,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                           boxShadow: [
                             BoxShadow(
                               color: Palette.black.withOpacity(0.05),
-                              offset: Offset(8, 8),
+                              offset: const Offset(8, 8),
                               blurRadius: 8,
                             ),
                           ],
@@ -99,7 +99,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 14),
+                            const SizedBox(height: 14),
                             SizedBox(
                               height: 36,
                               child: ListView.builder(
@@ -112,7 +112,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                   return Container(
                                     width: 36,
                                     height: 36,
-                                    margin: EdgeInsets.only(right: 4),
+                                    margin: const EdgeInsets.only(right: 4),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
@@ -124,7 +124,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                 },
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Padding(
@@ -135,7 +135,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "날짜",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -145,10 +145,10 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                           letterSpacing: -0.4,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text(
                                         walkModel.createdAt.toDate().toString().substring(0, 10),
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontFamily: 'Pretendard',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
@@ -161,7 +161,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "거리",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -171,14 +171,14 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                           letterSpacing: -0.4,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text.rich(
                                         TextSpan(
                                           children: [
                                             TextSpan(
                                               text:
-                                                  '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}',
-                                              style: TextStyle(
+                                                  (double.parse(walkModel.distance) / 1000).toStringAsFixed(2),
+                                              style: const TextStyle(
                                                 fontFamily: 'Pretendard',
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 16, // 기본 폰트 크기
@@ -186,7 +186,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                                 letterSpacing: -0.4,
                                               ),
                                             ),
-                                            TextSpan(
+                                            const TextSpan(
                                               text: 'KM',
                                               style: TextStyle(
                                                 fontFamily: 'Pretendard',
@@ -204,7 +204,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "시간",
                                         style: TextStyle(
                                           fontFamily: 'Pretendard',
@@ -214,14 +214,14 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                           letterSpacing: -0.4,
                                         ),
                                       ),
-                                      SizedBox(height: 4),
+                                      const SizedBox(height: 4),
                                       Text.rich(
                                         TextSpan(
                                           children: [
                                             TextSpan(
                                               text:
                                                   '${(int.parse(walkModel.duration.split(':')[1]) + int.parse(walkModel.duration.split(':')[0]) * 60)}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 fontFamily: 'Pretendard',
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 16,
@@ -229,7 +229,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                                 letterSpacing: -0.4,
                                               ),
                                             ),
-                                            TextSpan(
+                                            const TextSpan(
                                               text: '분',
                                               style: TextStyle(
                                                 fontFamily: 'Pretendard',
@@ -279,7 +279,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.add,
           color: Palette.white,
         ),

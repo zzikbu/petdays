@@ -55,10 +55,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // 제목
-              Text(
+              const Text(
                 '닉네임을 입력해주세요',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -68,10 +68,10 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
 
               // 설명
-              Text(
+              const Text(
                 '2글자 이상 10글자 이하로 입력해주세요.',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -81,7 +81,7 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 100),
+              const SizedBox(height: 100),
 
               // 입력 칸
               TextField(
@@ -90,13 +90,13 @@ class _UpdateNicknameScreenState extends State<UpdateNicknameScreen> {
                 enableSuggestions: false,
                 maxLength: 10, // 10 글자 제한
                 cursorColor: Palette.mainGreen,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w500,
                   fontSize: 20,
                   letterSpacing: -0.5,
                 ),
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: '홍길동',
                   hintStyle: TextStyle(
                     fontFamily: 'Pretendard',

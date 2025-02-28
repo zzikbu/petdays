@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import '../../../screens/mypage/mypage_screen.dart';
+import '../../../screens/my/mypage_screen.dart';
 import '../navigator_keys.dart';
 
 final StatefulShellBranch myBranch = StatefulShellBranch(

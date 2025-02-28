@@ -34,17 +34,17 @@ class MedicalModel {
     required DocumentReference<Map<String, dynamic>> petDocRef,
   }) {
     return {
-      'uid': this.uid,
-      'medicalId': this.medicalId,
-      'visitedDate': this.visitedDate,
-      'reason': this.reason,
-      'hospital': this.hospital,
-      'doctor': this.doctor,
-      'note': this.note,
-      'imageUrls': this.imageUrls,
+      'uid': uid,
+      'medicalId': medicalId,
+      'visitedDate': visitedDate,
+      'reason': reason,
+      'hospital': hospital,
+      'doctor': doctor,
+      'note': note,
+      'imageUrls': imageUrls,
       'writer': userDocRef,
       'pet': petDocRef,
-      'createdAt': this.createdAt,
+      'createdAt': createdAt,
     };
   }
 

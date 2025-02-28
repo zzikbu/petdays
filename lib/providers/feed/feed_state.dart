@@ -20,7 +20,7 @@ class FeedState {
   });
 
   factory FeedState.init() {
-    return FeedState(
+    return const FeedState(
       feedStatus: FeedStatus.init,
       feedList: [],
       hotFeedList: [],

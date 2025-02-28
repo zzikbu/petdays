@@ -37,12 +37,12 @@ class ProfileRepository {
         "profileImage": downloadURL,
       });
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '프로필 이미지',
         message: '프로필 이미지 변경에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "프로필 이미지",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -64,7 +64,7 @@ class ProfileRepository {
 
       // 중복되면 throw
       if (duplicateCheck.docs.isNotEmpty) {
-        throw CustomException(
+        throw const CustomException(
           title: "닉네임 중복",
           message: "이미 사용 중인 닉네임입니다.",
         );
@@ -76,12 +76,12 @@ class ProfileRepository {
     } on CustomException {
       rethrow;
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '닉네임',
         message: '닉네임 변경에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "닉네임",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -98,12 +98,12 @@ class ProfileRepository {
 
       return UserModel.fromMap(snapshot.data()!);
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '사용자 정보',
         message: '사용자 정보 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "사용자 정보",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );

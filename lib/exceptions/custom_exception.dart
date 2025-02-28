@@ -9,6 +9,6 @@ class CustomException implements Exception {
 
   @override
   String toString() {
-    return this.message;
+    return message;
   }
 }

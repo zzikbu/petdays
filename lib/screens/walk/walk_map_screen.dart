@@ -183,7 +183,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       '산책 종료',
                       style: TextStyle(
                         fontFamily: 'Pretendard',
@@ -193,11 +193,11 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                         letterSpacing: -0.5,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       _getExitDialogMessage(distance, minutes),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontFamily: 'Pretendard',
                         fontWeight: FontWeight.w400,
                         fontSize: 14,
@@ -205,7 +205,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                         letterSpacing: -0.5,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Expanded(
@@ -219,7 +219,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                                 color: Palette.lightGray,
                                 borderRadius: BorderRadius.circular(18),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   '취소',
                                   style: TextStyle(
@@ -234,7 +234,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                             ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
@@ -246,7 +246,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
                                 color: Palette.mainGreen,
                                 borderRadius: BorderRadius.circular(18),
                               ),
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   '확인',
                                   style: TextStyle(
@@ -357,7 +357,7 @@ class _WalkMapScreenState extends State<WalkMapScreen> with WidgetsBindingObserv
         ),
         extendBodyBehindAppBar: true,
         body: isSubmitting
-            ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
+            ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
             : _buildMainContent(),
       ),
     );

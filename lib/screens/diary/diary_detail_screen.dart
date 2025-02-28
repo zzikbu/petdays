@@ -179,8 +179,8 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   /// 신고하기 CupertinoActionSheet
   Widget _buildReportDialog(BuildContext context, DiaryModel diaryModel) {
     return CupertinoActionSheet(
-      title: Text('신고 사유를 선택해주세요.'),
-      message: Text(
+      title: const Text('신고 사유를 선택해주세요.'),
+      message: const Text(
         '신고는 반대의견을 나타내는 기능이 아닙니다.\n신고 사유에 맞지 않는 신고를 햇을 경우, 해당 신고는 처리되지 않습니다.',
       ),
       actions: [
@@ -222,7 +222,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   Widget _buildCancelAction(BuildContext context) {
     return CupertinoActionSheetAction(
       isDefaultAction: true,
-      child: Text(
+      child: const Text(
         '취소',
         style: TextStyle(
           fontFamily: 'Pretendard',
@@ -242,7 +242,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
     return CupertinoActionSheetAction(
       child: Text(
         reportType.label,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Pretendard',
           color: CupertinoColors.systemBlue,
           fontWeight: FontWeight.w400,
@@ -287,7 +287,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Pretendard',
           fontWeight: FontWeight.w600,
           fontSize: 22,
@@ -316,7 +316,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       children: [
         Text(
           nickname,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w500,
             fontSize: 14,
@@ -326,7 +326,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
         ),
         Text(
           DateFormat('yyyy-MM-dd HH:mm:ss').format(createdAt),
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Pretendard',
             fontWeight: FontWeight.w400,
             fontSize: 10,
@@ -362,7 +362,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
               }
             },
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         transitionBuilder: (child, animation) {
           return ScaleTransition(
             scale: animation,
@@ -370,7 +370,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           );
         },
         child: _isLiking
-            ? SizedBox(
+            ? const SizedBox(
                 key: ValueKey('processing'),
                 height: 24,
                 width: 24,
@@ -380,13 +380,13 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                 ),
               )
             : isLike
-                ? Icon(
+                ? const Icon(
                     key: ValueKey('liked'),
                     Icons.favorite,
                     color: Colors.red,
                     size: 24,
                   )
-                : Icon(
+                : const Icon(
                     key: ValueKey('unliked'),
                     Icons.favorite_border,
                     color: Palette.darkGray,
@@ -402,7 +402,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }) {
     return Text(
       likeCount.toString(),
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'Pretendard',
         fontWeight: FontWeight.w500,
         fontSize: 22,
@@ -418,7 +418,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
   }) {
     return Text(
       desc,
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'Pretendard',
         fontWeight: FontWeight.w400,
         fontSize: 16,
@@ -441,7 +441,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       itemBuilder: (context, index) {
         return Container(
           height: 300,
-          margin: EdgeInsets.only(bottom: 12),
+          margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
             image: DecorationImage(
@@ -492,7 +492,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
               ),
             ),
           ] else ...[
-            SizedBox(width: 14),
+            const SizedBox(width: 14),
             Padding(
               padding: const EdgeInsets.only(right: 16),
               child: PullDownButton(
@@ -517,22 +517,22 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               /// 제목
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildTitle(title: diaryModel.title),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               Row(
                 children: [
                   /// 프로필 이미지
                   _buildProfileImage(diaryModel.writer.profileImage),
-                  SizedBox(width: 6),
+                  const SizedBox(width: 6),
 
                   /// 닉네임 & 작성 날짜
                   _buildNicknameAndDate(
                     nickname: diaryModel.writer.nickname,
                     createdAt: diaryModel.createdAt.toDate(),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   if (!isLock)
                     Row(
                       children: [
@@ -541,7 +541,7 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                           diaryModel: diaryModel,
                           isLike: isLike,
                         ),
-                        SizedBox(width: 5),
+                        const SizedBox(width: 5),
 
                         /// 좋아요 카운트
                         _buildLikeCount(likeCount: diaryModel.likeCount),
@@ -551,14 +551,14 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
               ),
 
               /// 구분선
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
                 child: Divider(color: Palette.lightGray),
               ),
 
               /// 내용
               _buildDesc(desc: diaryModel.desc),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
 
               /// 사진
               _buildImageList(imageUrls: diaryModel.imageUrls),

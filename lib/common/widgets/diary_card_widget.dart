@@ -39,7 +39,7 @@ class DiaryCardWidget extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 20),
+            margin: const EdgeInsets.only(bottom: 20),
             height: 220,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -54,7 +54,7 @@ class DiaryCardWidget extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   color: Palette.black.withOpacity(0.05),
-                  offset: Offset(8, 8),
+                  offset: const Offset(8, 8),
                   blurRadius: 8,
                 ),
               ],
@@ -68,7 +68,7 @@ class DiaryCardWidget extends StatelessWidget {
               height: 88,
               decoration: BoxDecoration(
                 color: Palette.white.withOpacity(0.9),
-                border: Border(
+                border: const Border(
                   left: BorderSide(
                     color: Palette.feedBorder,
                     width: 1,
@@ -85,7 +85,7 @@ class DiaryCardWidget extends StatelessWidget {
                     style: BorderStyle.solid,
                   ),
                 ),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
                 ),
@@ -102,7 +102,7 @@ class DiaryCardWidget extends StatelessWidget {
                         diaryModel.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.w500,
                           fontSize: 18,
@@ -111,7 +111,7 @@ class DiaryCardWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Row(
                       children: [
                         if (!diaryModel.isLock) ...[
@@ -120,10 +120,10 @@ class DiaryCardWidget extends StatelessWidget {
                             color: isLike ? Colors.red : Palette.darkGray,
                             size: 16,
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
                             diaryModel.likeCount.toString(),
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Pretendard',
                               fontWeight: FontWeight.w400,
                               fontSize: 14,
@@ -131,17 +131,17 @@ class DiaryCardWidget extends StatelessWidget {
                               letterSpacing: -0.4,
                             ),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           Container(
                             width: 1,
                             height: 10,
                             color: Palette.mediumGray,
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                         ],
                         Text(
                           diaryModel.createdAt.toDate().toString().split(" ")[0],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Pretendard',
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
@@ -150,7 +150,7 @@ class DiaryCardWidget extends StatelessWidget {
                           ),
                         ),
                         if (showLock) ...[
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           SvgPicture.asset(
                             diaryModel.isLock
                                 ? 'assets/icons/ic_lock.svg'

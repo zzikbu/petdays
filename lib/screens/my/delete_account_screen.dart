@@ -38,14 +38,14 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
         appBar: const PDAppBar(),
         backgroundColor: Palette.background,
         body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
 
               // 제목
-              Text(
+              const Text(
                 '비밀번호를 입력해주세요',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -55,10 +55,10 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
 
               // 설명
-              Text(
+              const Text(
                 '탈퇴 시 사용자가 기록한 모든 정보가 삭제됩니다.',
                 style: TextStyle(
                   fontFamily: 'Pretendard',
@@ -68,7 +68,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   letterSpacing: -0.6,
                 ),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // 이메일
               TextFormField(
@@ -78,12 +78,12 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     borderRadius: BorderRadius.circular(6),
                   ),
                   labelText: context.read<User>().email,
-                  labelStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Icon(Icons.email),
+                  labelStyle: const TextStyle(color: Colors.black),
+                  prefixIcon: const Icon(Icons.email),
                   filled: true,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // 비밀번호
               TextFormField(
@@ -98,12 +98,12 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Palette.mainGreen),
                   ),
                   labelText: "비밀번호",
-                  labelStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Icon(Icons.lock),
+                  labelStyle: const TextStyle(color: Colors.black),
+                  prefixIcon: const Icon(Icons.lock),
                   filled: true,
                 ),
               ),

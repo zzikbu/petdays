@@ -29,17 +29,17 @@ class PetModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'uid': this.uid,
-      'petId': this.petId,
-      'image': this.image,
-      'name': this.name,
-      'breed': this.breed,
-      'birthDay': this.birthDay,
-      'firstMeetingDate': this.firstMeetingDate,
-      'gender': this.gender,
-      'isNeutering': this.isNeutering,
-      'isDeleted': this.isDeleted,
-      'createdAt': this.createdAt,
+      'uid': uid,
+      'petId': petId,
+      'image': image,
+      'name': name,
+      'breed': breed,
+      'birthDay': birthDay,
+      'firstMeetingDate': firstMeetingDate,
+      'gender': gender,
+      'isNeutering': isNeutering,
+      'isDeleted': isDeleted,
+      'createdAt': createdAt,
     };
   }
 

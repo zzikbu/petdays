@@ -20,7 +20,7 @@ void showErrorDialog(BuildContext context, CustomException e) {
             children: [
               Text(
                 e.title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -28,11 +28,11 @@ void showErrorDialog(BuildContext context, CustomException e) {
                   letterSpacing: -0.5,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 e.message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -40,7 +40,7 @@ void showErrorDialog(BuildContext context, CustomException e) {
                   letterSpacing: -0.5,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: Container(
@@ -49,7 +49,7 @@ void showErrorDialog(BuildContext context, CustomException e) {
                     color: Palette.mainGreen,
                     borderRadius: BorderRadius.circular(18),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       '확인',
                       style: TextStyle(

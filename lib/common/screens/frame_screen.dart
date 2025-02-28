@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../palette.dart';
+import '../../palette.dart';
 
 class FrameScreen extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
@@ -30,7 +30,7 @@ class FrameScreen extends StatelessWidget {
                 initialLocation: index == navigationShell.currentIndex,
               );
             },
-            destinations: [
+            destinations: const [
               NavigationDestination(
                 icon: Icon(Icons.feed_outlined),
                 selectedIcon: Icon(Icons.feed),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/models/medical_model.dart';
 import 'package:petdays/models/walk_model.dart';
@@ -28,7 +27,7 @@ class HomeState {
   });
 
   factory HomeState.init() {
-    return HomeState(
+    return const HomeState(
       homeStatus: HomeStatus.init,
       homePetList: [],
       homeWalkList: [],

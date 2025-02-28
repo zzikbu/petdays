@@ -25,7 +25,7 @@ void showCustomDialog({
             children: [
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -33,11 +33,11 @@ void showCustomDialog({
                   letterSpacing: -0.5,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Pretendard',
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -45,7 +45,7 @@ void showCustomDialog({
                   letterSpacing: -0.5,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Row(
                 children: [
                   if (hasCancelButton) ...[
@@ -60,7 +60,7 @@ void showCustomDialog({
                             color: Palette.lightGray,
                             borderRadius: BorderRadius.circular(18),
                           ),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               '취소',
                               style: TextStyle(
@@ -75,7 +75,7 @@ void showCustomDialog({
                         ),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                   ],
                   Expanded(
                     child: GestureDetector(
@@ -86,7 +86,7 @@ void showCustomDialog({
                           color: Palette.mainGreen,
                           borderRadius: BorderRadius.circular(18),
                         ),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             '확인',
                             style: TextStyle(

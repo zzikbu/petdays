@@ -24,12 +24,12 @@ class PetRepository {
         'isDeleted': true,
       });
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '반려동물',
         message: '반려동물 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "반려동물",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -98,7 +98,7 @@ class PetRepository {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
 
-      throw CustomException(
+      throw const CustomException(
         title: '반려동물',
         message: '반려동물 삭제에 실패했습니다.\n다시 시도해주세요.',
       );
@@ -108,7 +108,7 @@ class PetRepository {
         await firebaseStorage.refFromURL(downloadURL).delete();
       }
 
-      throw CustomException(
+      throw const CustomException(
         title: "반려동물",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -134,12 +134,12 @@ class PetRepository {
         },
       ).toList());
     } on FirebaseException {
-      throw CustomException(
+      throw const CustomException(
         title: '반려동물',
         message: '반려동물 가져오기에 실패했습니다.\n다시 시도해주세요.',
       );
     } catch (_) {
-      throw CustomException(
+      throw const CustomException(
         title: "반려동물",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );
@@ -160,7 +160,7 @@ class PetRepository {
     String downloadURL = "";
 
     try {
-      String petId = Uuid().v1(); // Generate a v1 (time-based) id
+      String petId = const Uuid().v1(); // Generate a v1 (time-based) id
 
       // firestore 문서 참조
       DocumentReference<Map<String, dynamic>> petDocRef =
@@ -195,7 +195,7 @@ class PetRepository {
           .refFromURL(downloadURL)
           .delete(); // 에러 발생시 storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: '반려동물',
         message: '반려동물 추가하기에 실패했습니다.\n다시 시도해주세요.',
       );
@@ -204,7 +204,7 @@ class PetRepository {
           .refFromURL(downloadURL)
           .delete(); // 에러 발생시 storage에 등록된 이미지 삭제
 
-      throw CustomException(
+      throw const CustomException(
         title: "반려동물",
         message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
       );

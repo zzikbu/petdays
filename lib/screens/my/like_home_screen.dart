@@ -59,7 +59,7 @@ class _LikeHomeScreenState extends State<LikeHomeScreen>
       body: isLoading
           ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : isEmpty
-              ? Center(
+              ? const Center(
                   child: Text(
                     '좋아요한 성장일기가\n없습니다',
                     textAlign: TextAlign.center,

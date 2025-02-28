@@ -89,7 +89,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
                 },
               );
             },
-            icon: Icon(CupertinoIcons.delete),
+            icon: const Icon(CupertinoIcons.delete),
           ),
         ],
       ),
@@ -99,27 +99,27 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             PDContentWithTitle(
               title: '함께한 반려동물',
               content: walkModel.pets.map((pet) => pet.name).join(', '),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             PDContentWithTitle(
               title: '날짜',
               content: _formatDate(walkModel.createdAt.toDate()),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             PDContentWithTitle(
               title: '시간',
               content: _formatDuration(walkModel.duration),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             PDContentWithTitle(
               title: '거리',
               content: '${(double.parse(walkModel.distance) / 1000).toStringAsFixed(2)}KM',
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
@@ -131,7 +131,7 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
                 fit: BoxFit.fitHeight,
               ),
             ),
-            SizedBox(height: 60),
+            const SizedBox(height: 60),
           ],
         ),
       ),
@@ -143,6 +143,6 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
     final hours = int.parse(parts[0]);
     final minutes = int.parse(parts[1]);
     final seconds = int.parse(parts[2]);
-    return '${hours}시간 ${minutes}분 ${seconds}초';
+    return '$hours시간 $minutes분 $seconds초';
   }
 }

@@ -60,7 +60,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
       body: isLoading
           ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
           : isEmpty
-              ? Center(
+              ? const Center(
                   child: Text(
                     '작성한 성장일기가\n없습니다',
                     textAlign: TextAlign.center,
@@ -100,7 +100,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => DiaryUploadScreen()),
+            MaterialPageRoute(builder: (context) => const DiaryUploadScreen()),
           );
         },
         backgroundColor: Palette.darkGray,
@@ -108,7 +108,7 @@ class _DiaryHomeScreenState extends State<DiaryHomeScreen>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.edit,
           color: Palette.white,
         ),

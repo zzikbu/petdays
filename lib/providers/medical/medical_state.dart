@@ -18,7 +18,7 @@ class MedicalState {
   });
 
   factory MedicalState.init() {
-    return MedicalState(
+    return const MedicalState(
       medicalStatus: MedicalStatus.init,
       medicalList: [],
     );

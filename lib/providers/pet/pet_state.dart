@@ -18,7 +18,7 @@ class PetState {
   });
 
   factory PetState.init() {
-    return PetState(
+    return const PetState(
       petStatus: PetStatus.init,
       petList: [],
     );

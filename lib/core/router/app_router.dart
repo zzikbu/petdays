@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../screens/frame_screen.dart';
+import '../../common/screens/frame_screen.dart';
 import '../../screens/sign_in/reset_password_screen.dart';
 import '../../screens/sign_in/sign_in_screen.dart';
 import '../../screens/sign_up/sign_up_email_screen.dart';

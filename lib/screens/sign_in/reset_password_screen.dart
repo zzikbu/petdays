@@ -85,8 +85,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     borderSide: BorderSide(color: Palette.mainGreen),
                   ),
                   labelText: "이메일",
-                  labelStyle: TextStyle(color: Colors.black),
-                  prefixIcon: Icon(Icons.lock),
+                  labelStyle: const TextStyle(color: Colors.black),
+                  prefixIcon: const Icon(Icons.lock),
                   filled: true,
                 ),
               ),
@@ -107,7 +107,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   .read<MyAuthProvider>()
                   .sendPasswordResetEmail(email: _emailTEC.text.trim());
 
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("전송 완료")));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("전송 완료")));
 
               Navigator.pop(context);
             } on CustomException catch (e) {

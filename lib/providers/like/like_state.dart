@@ -18,7 +18,7 @@ class LikeState {
   });
 
   factory LikeState.init() {
-    return LikeState(
+    return const LikeState(
       likeStatus: LikeStatus.init,
       likeList: [],
     );
