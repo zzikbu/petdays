@@ -69,7 +69,9 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
     WalkModel walkModel = context.read<WalkState>().walkList[widget.index];
 
     return Scaffold(
+      backgroundColor: Palette.background,
       appBar: AppBar(
+        backgroundColor: Palette.background,
         actions: [
           IconButton(
             onPressed: () {
@@ -93,7 +95,6 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
           ),
         ],
       ),
-      backgroundColor: Palette.background,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(

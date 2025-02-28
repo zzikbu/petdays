@@ -58,7 +58,7 @@ class _TermsPolicyScreenState extends State<TermsPolicyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.white,
-      appBar: const PDAppBar(),
+      appBar: const PDAppBar(backgroundColor: Palette.white),
       body: Column(
         children: [
           LinearProgressIndicator(
