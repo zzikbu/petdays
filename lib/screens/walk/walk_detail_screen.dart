@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widgets/pd_content_with_title.dart';
@@ -13,10 +14,12 @@ import '../../providers/walk/walk_state.dart';
 
 class WalkDetailScreen extends StatefulWidget {
   final int index;
+  final bool isFromHome;
 
   const WalkDetailScreen({
     super.key,
     required this.index,
+    required this.isFromHome,
   });
 
   @override
@@ -49,21 +52,6 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
     }
   }
 
-  void _deleteWalk() async {
-    try {
-      // await _walkProvider.deleteWalk(context.read<WalkState>().walkList[widget.index].walkId);
-      if (context.mounted) {
-        Navigator.pop(context);
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('산책 기록 삭제 실패: $e'),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     WalkModel walkModel = context.read<WalkState>().walkList[widget.index];
@@ -83,8 +71,11 @@ class _WalkDetailScreenState extends State<WalkDetailScreen> {
                   try {
                     await context.read<WalkProvider>().deleteWalk(walkModel: walkModel);
 
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    if (widget.isFromHome) {
+                      context.go('/home');
+                    } else {
+                      context.go('/home/walk');
+                    }
                   } on CustomException catch (e) {
                     showErrorDialog(context, e);
                   }

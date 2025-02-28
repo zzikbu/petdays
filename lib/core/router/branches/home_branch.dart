@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:petdays/models/walk_model.dart';
 
 import '../../../common/screens/select_pet_screen.dart';
 import '../../../models/medical_model.dart';
@@ -13,6 +14,7 @@ import '../../../screens/pet/pet_detail_screen.dart';
 import '../../../screens/pet/pet_upload_screen.dart';
 import '../../../screens/walk/walk_detail_screen.dart';
 import '../../../screens/walk/walk_home_screen.dart';
+import '../../../screens/walk/walk_map_screen.dart';
 import '../../enums/select_pet_for.dart';
 import '../navigator_keys.dart';
 
@@ -45,15 +47,46 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
         // 산책
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
-          path: 'walk_home',
+          path: 'walk',
           builder: (_, __) => const WalkHomeScreen(),
+          routes: [
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'select_pet',
+              builder: (_, __) => const SelectPetScreen(type: SelectPetFor.walk),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: NavigatorKeys.root,
+                  path: 'map',
+                  builder: (_, state) {
+                    final selectedPets = state.extra as List<PetModel>;
+                    return WalkMapScreen(selectedPets: selectedPets);
+                  },
+                ),
+              ],
+            ),
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'detail/:index',
+              builder: (_, state) {
+                final index = int.parse(state.pathParameters['index'] ?? '0');
+                return WalkDetailScreen(
+                  index: index,
+                  isFromHome: false,
+                );
+              },
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
           path: 'walk_detail/:index',
           builder: (_, state) {
             final index = int.parse(state.pathParameters['index'] ?? '0');
-            return WalkDetailScreen(index: index);
+            return WalkDetailScreen(
+              index: index,
+              isFromHome: true,
+            );
           },
         ),
 

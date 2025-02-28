@@ -121,11 +121,9 @@ class _SelectPetScreenState extends State<SelectPetScreen> {
     if (!hasPermission) return;
 
     if (context.mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => WalkMapScreen(selectedPets: selectedPets),
-        ),
+      context.go(
+        '/home/walk/select_pet/map',
+        extra: selectedPets,
       );
     }
   }

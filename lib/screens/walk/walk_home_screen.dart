@@ -1,6 +1,7 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widgets/pd_app_bar.dart';
@@ -74,14 +75,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                     final walkModel = walkList[index];
 
                     return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WalkDetailScreen(index: index),
-                          ),
-                        );
-                      },
+                      onTap: () => context.go('/home/walk/detail/$index'),
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 20),
                         height: 130,
@@ -176,8 +170,8 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
                                         TextSpan(
                                           children: [
                                             TextSpan(
-                                              text:
-                                                  (double.parse(walkModel.distance) / 1000).toStringAsFixed(2),
+                                              text: (double.parse(walkModel.distance) / 1000)
+                                                  .toStringAsFixed(2),
                                               style: const TextStyle(
                                                 fontFamily: 'Pretendard',
                                                 fontWeight: FontWeight.w600,
@@ -266,12 +260,7 @@ class _WalkHomeScreenState extends State<WalkHomeScreen> {
               onConfirm: () => Navigator.pop(context),
             );
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SelectPetScreen(type: SelectPetFor.walk),
-              ),
-            );
+            context.go('/home/walk/select_pet');
           }
         },
         backgroundColor: Palette.darkGray,

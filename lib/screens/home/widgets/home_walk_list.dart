@@ -20,7 +20,7 @@ class HomeWalkList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '산책',
-          onTap: () => context.go('/home/walk_home'),
+          onTap: () => context.go('/home/walk'),
         ),
         const SizedBox(height: 10),
         walkList.isEmpty
