@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/common/widgets/show_custom_dialog.dart';
 import 'package:provider/provider.dart';
@@ -48,11 +49,13 @@ enum DiaryType {
 class DiaryDetailScreen extends StatefulWidget {
   final int index;
   final DiaryType diaryType;
+  final bool? isFromHome;
 
   const DiaryDetailScreen({
     super.key,
     required this.index,
     required this.diaryType,
+    this.isFromHome,
   });
 
   @override
@@ -106,14 +109,9 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
       PullDownMenuItem(
         title: '수정하기',
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DiaryUploadScreen(
-                isEditMode: true,
-                originalDiaryModel: diaryModel,
-              ),
-            ),
+          context.go(
+            '/home/diary/detail/${widget.index}/edit',
+            extra: diaryModel,
           );
         },
       ),
@@ -157,8 +155,19 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
           await context.read<DiaryProvider>().deleteDiary(diaryModel: diaryModel);
           context.read<FeedProvider>().deleteDiary(diaryId: diaryModel.diaryId);
           context.read<LikeProvider>().deleteDiary(diaryId: diaryModel.diaryId);
-          Navigator.pop(context);
-          Navigator.pop(context);
+
+          switch (widget.diaryType) {
+            case DiaryType.my:
+              context.go(widget.isFromHome == true ? '/home' : '/home/diary');
+            case DiaryType.myLike:
+              context.go('/my/like_diary');
+              break;
+            case DiaryType.myOpen:
+              context.go('/my/open_diary');
+              break;
+            default:
+              context.go('/feed');
+          }
         } on CustomException catch (e) {
           showErrorDialog(context, e);
         }
@@ -208,8 +217,13 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
             await context.read<LikeProvider>().getLikeList();
           }
 
-          Navigator.pop(context);
-          Navigator.pop(context);
+          switch (widget.diaryType) {
+            case DiaryType.myLike:
+              context.go('/my/like_diary');
+              break;
+            default:
+              context.go('/feed');
+          }
         } on CustomException catch (e) {
           Navigator.pop(context);
           showErrorDialog(context, e);
@@ -256,7 +270,13 @@ class _DiaryDetailScreenState extends State<DiaryDetailScreen> {
                 countField: reportType.countField,
               );
 
-          Navigator.pop(context);
+          switch (widget.diaryType) {
+            case DiaryType.myLike:
+              context.go('/my/like_diary');
+              break;
+            default:
+              context.go('/feed');
+          }
           _showReportSuccessDialog(context);
         } on CustomException catch (e) {
           Navigator.pop(context);

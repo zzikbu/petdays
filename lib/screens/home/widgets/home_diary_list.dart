@@ -20,7 +20,7 @@ class HomeDiaryList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '성장일기',
-          onTap: () => context.go('/home/diary_home'),
+          onTap: () => context.go('/home/diary'),
         ),
         const SizedBox(height: 10),
         diaryList.isEmpty

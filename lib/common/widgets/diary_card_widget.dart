@@ -35,13 +35,13 @@ class DiaryCardWidget extends StatelessWidget {
             context.go('/feed/all/detail/$index');
             break;
           case DiaryType.my:
-            context.go('/diary/my/detail/$index');
+            context.go('/home/diary/detail/$index');
             break;
           case DiaryType.myLike:
-            context.go('/diary/my_like/detail/$index');
+            context.go('/my/diary/my_like/detail/$index');
             break;
           case DiaryType.myOpen:
-            context.go('/diary/my_open/detail/$index');
+            context.go('/my/diary/my_open/detail/$index');
             break;
         }
       },

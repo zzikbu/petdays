@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
-import 'package:petdays/models/walk_model.dart';
+import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/screens/diary/diary_upload_screen.dart';
 
 import '../../../common/screens/select_pet_screen.dart';
 import '../../../models/medical_model.dart';
@@ -93,8 +94,40 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
         // 성장일기
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
-          path: 'diary_home',
+          path: 'diary',
           builder: (_, __) => const DiaryHomeScreen(),
+          routes: [
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'upload',
+              builder: (_, __) => const DiaryUploadScreen(),
+            ),
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'detail/:index',
+              builder: (_, state) {
+                final index = int.parse(state.pathParameters['index'] ?? '0');
+                return DiaryDetailScreen(
+                  index: index,
+                  diaryType: DiaryType.my,
+                  isFromHome: false,
+                );
+              },
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: NavigatorKeys.root,
+                  path: 'edit',
+                  builder: (_, state) {
+                    final dialyModel = state.extra as DiaryModel;
+                    return DiaryUploadScreen(
+                      isEditMode: true,
+                      originalDiaryModel: dialyModel,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
@@ -104,6 +137,7 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
             return DiaryDetailScreen(
               index: index,
               diaryType: DiaryType.my,
+              isFromHome: true,
             );
           },
         ),

@@ -18,15 +18,18 @@ import '../../providers/diary/diary_state.dart';
 import '../../providers/feed/feed_provider.dart';
 import '../../providers/like/like_provider.dart';
 import '../../utils/permission_utils.dart';
+import 'diary_detail_screen.dart';
 
 class DiaryUploadScreen extends StatefulWidget {
   final bool isEditMode;
   final DiaryModel? originalDiaryModel;
+  final DiaryType? diaryType;
 
   const DiaryUploadScreen({
     super.key,
     this.isEditMode = false,
     this.originalDiaryModel,
+    this.diaryType,
   });
 
   @override
@@ -374,6 +377,8 @@ class _DiaryUploadScreenState extends State<DiaryUploadScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(widget.isEditMode ? "수정 완료" : "작성 완료")),
               );
+
+              if (widget.isEditMode) {}
 
               Navigator.pop(context);
             } on CustomException catch (e) {
