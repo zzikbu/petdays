@@ -1,15 +1,19 @@
 import 'package:go_router/go_router.dart';
-import 'package:petdays/screens/pet/pet_upload_screen.dart';
 
+import '../../../common/screens/select_pet_screen.dart';
+import '../../../models/medical_model.dart';
 import '../../../models/pet_model.dart';
 import '../../../screens/diary/diary_detail_screen.dart';
 import '../../../screens/diary/diary_home_screen.dart';
 import '../../../screens/home/home_screen.dart';
 import '../../../screens/medical/medical_detail_screen.dart';
 import '../../../screens/medical/medical_home_screen.dart';
+import '../../../screens/medical/medical_upload_screen.dart';
 import '../../../screens/pet/pet_detail_screen.dart';
+import '../../../screens/pet/pet_upload_screen.dart';
 import '../../../screens/walk/walk_detail_screen.dart';
 import '../../../screens/walk/walk_home_screen.dart';
+import '../../enums/select_pet_for.dart';
 import '../navigator_keys.dart';
 
 final StatefulShellBranch homeBranch = StatefulShellBranch(
@@ -31,13 +35,14 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
               parentNavigatorKey: NavigatorKeys.root,
               path: 'edit',
               builder: (_, state) {
-                // extra 파라미터에서 petModel을 가져옴
                 final petModel = state.extra as PetModel;
                 return PetUploadScreen(originalPetModel: petModel);
               },
             ),
           ],
         ),
+
+        // 산책
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
           path: 'walk_home',
@@ -51,6 +56,8 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
             return WalkDetailScreen(index: index);
           },
         ),
+
+        // 성장일기
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
           path: 'diary_home',
@@ -67,18 +74,77 @@ final StatefulShellBranch homeBranch = StatefulShellBranch(
             );
           },
         ),
+
+        // 진료기록
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
-          path: 'medical_home',
+          path: 'medical',
           builder: (_, __) => const MedicalHomeScreen(),
+          routes: [
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'select_pet',
+              builder: (_, __) => const SelectPetScreen(type: SelectPetFor.medical),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: NavigatorKeys.root,
+                  path: 'upload',
+                  builder: (_, state) {
+                    final selectedPet = state.extra as PetModel;
+                    return MedicalUploadScreen(selectedPet: selectedPet);
+                  },
+                ),
+              ],
+            ),
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'detail/:index',
+              builder: (_, state) {
+                final index = int.parse(state.pathParameters['index'] ?? '0');
+                return MedicalDetailScreen(
+                  index: index,
+                  fromHome: false,
+                );
+              },
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: NavigatorKeys.root,
+                  path: 'edit',
+                  builder: (_, state) {
+                    final medicalModel = state.extra as MedicalModel;
+                    return MedicalUploadScreen(
+                      originalMedicalModel: medicalModel,
+                      selectedPet: medicalModel.pet,
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: NavigatorKeys.root,
           path: 'medical_detail/:index',
           builder: (_, state) {
             final index = int.parse(state.pathParameters['index'] ?? '0');
-            return MedicalDetailScreen(index: index);
+            return MedicalDetailScreen(
+              index: index,
+              fromHome: true,
+            );
           },
+          routes: [
+            GoRoute(
+              parentNavigatorKey: NavigatorKeys.root,
+              path: 'edit',
+              builder: (_, state) {
+                final medicalModel = state.extra as MedicalModel;
+                return MedicalUploadScreen(
+                  originalMedicalModel: medicalModel,
+                  selectedPet: medicalModel.pet,
+                );
+              },
+            ),
+          ],
         ),
       ],
     ),

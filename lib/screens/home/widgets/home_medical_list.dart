@@ -21,7 +21,7 @@ class HomeMedicalList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '진료기록',
-          onTap: () => context.go('/home/medical_home'),
+          onTap: () => context.go('/home/medical'),
         ),
         const SizedBox(height: 10),
         medicalList.isEmpty

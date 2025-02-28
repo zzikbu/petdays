@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:petdays/common/widgets/pd_app_bar.dart';
@@ -90,8 +91,7 @@ class _MedicalUploadScreenState extends State<MedicalUploadScreen> {
               note: _noteTEC.text,
             );
 
-        Navigator.pop(context);
-        Navigator.pop(context);
+        context.go('/home/medical');
       }
     } on CustomException catch (e) {
       showErrorDialog(context, e);

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/show_custom_dialog.dart';
@@ -87,11 +88,9 @@ class _SelectPetScreenState extends State<SelectPetScreen> {
     switch (widget.type) {
       case SelectPetFor.medical:
         final selectedPet = petList[selectedIndices[0]];
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MedicalUploadScreen(selectedPet: selectedPet),
-          ),
+        context.go(
+          '/home/medical/select_pet/upload',
+          extra: selectedPet,
         );
 
       case SelectPetFor.walk:

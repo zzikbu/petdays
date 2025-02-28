@@ -1,5 +1,6 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
@@ -10,14 +11,15 @@ import '../../models/medical_model.dart';
 import '../../palette.dart';
 import '../../providers/medical/medical_provider.dart';
 import '../../providers/medical/medical_state.dart';
-import 'medical_upload_screen.dart';
 
 class MedicalDetailScreen extends StatelessWidget {
   final int index;
+  final bool fromHome;
 
   const MedicalDetailScreen({
     super.key,
     required this.index,
+    required this.fromHome,
   });
 
   PreferredSizeWidget _buildAppBar(
@@ -62,15 +64,17 @@ class MedicalDetailScreen extends StatelessWidget {
   }
 
   void _onEditTap(BuildContext context, MedicalModel medicalModel) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MedicalUploadScreen(
-          selectedPet: medicalModel.pet,
-          originalMedicalModel: medicalModel,
-        ),
-      ),
-    );
+    if (fromHome) {
+      context.go(
+        '/home/medical_detail/$index/edit',
+        extra: medicalModel,
+      );
+    } else {
+      context.go(
+        '/home/medical/detail/$index/edit',
+        extra: medicalModel,
+      );
+    }
   }
 
   void _onDeleteTap(BuildContext context, MedicalModel medicalModel) {
@@ -81,7 +85,11 @@ class MedicalDetailScreen extends StatelessWidget {
       onConfirm: () async {
         Navigator.pop(context);
         await context.read<MedicalProvider>().deleteMedical(medicalModel: medicalModel);
-        Navigator.pop(context);
+        if (fromHome) {
+          context.go('/home');
+        } else {
+          context.go('/home/medical');
+        }
       },
     );
   }
