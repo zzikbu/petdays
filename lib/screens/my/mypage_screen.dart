@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -235,13 +236,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
                         // 닉네임 수정
                         IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const UpdateNicknameScreen(),
-                                ));
-                          },
+                          onPressed: () => context.go('/my/update_nickname'),
                           icon: const Icon(Icons.edit),
                         ),
                       ],
@@ -268,14 +263,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     ),
                     const SizedBox(height: 20),
 
-                    // 펫추가
+                    // 반려동물 추가
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const PetUploadScreen()),
-                        );
-                      },
+                      onTap: () => context.go('/my/add_pet'),
                       child: const Text(
                         '반려동물 추가',
                         style: TextStyle(
@@ -291,12 +281,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
                     // 공개한 성장일기
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const OpenDiaryHomeScreen()),
-                        );
-                      },
+                      onTap: () => context.go('/my/open_diary'),
                       child: const Text(
                         '공개한 성장일기',
                         style: TextStyle(
@@ -312,12 +297,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
                     // 공감한 성장일기
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const LikeHomeScreen()),
-                        );
-                      },
+                      onTap: () => context.go('/my/like_diary'),
                       child: const Text(
                         '좋아요한 성장일기',
                         style: TextStyle(
@@ -353,13 +333,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
                     // 이용약관
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TermsPolicyScreen(isTerms: true),
-                            ));
-                      },
+                      onTap: () => context.go('/my/terms'),
                       child: const Text(
                         '이용약관',
                         style: TextStyle(
@@ -375,13 +349,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
                     // 개인정보 처리방침
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const TermsPolicyScreen(isTerms: false),
-                            ));
-                      },
+                      onTap: () => context.go('/my/policy'),
                       child: const Text(
                         '개인정보 처리방침',
                         style: TextStyle(
@@ -519,11 +487,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     GestureDetector(
                       onTap: () async {
                         if (profileState.userModel.providerId == 'password') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const DeleteAccountScreen(),
-                              ));
+                          context.go('/my/delete_account');
                         } else {
                           showCustomDialog(
                             context: context,
