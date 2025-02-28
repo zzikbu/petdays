@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../models/medical_model.dart';
-import '../../medical/medical_home_screen.dart';
 import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_medical_list_card.dart';
@@ -21,12 +21,7 @@ class HomeMedicalList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '진료기록',
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const MedicalHomeScreen()),
-            );
-          },
+          onTap: () => context.go('/home/medical_home'),
         ),
         const SizedBox(height: 10),
         medicalList.isEmpty

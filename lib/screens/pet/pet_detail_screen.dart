@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/widgets/pd_app_bar.dart';
@@ -64,9 +65,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                 onConfirm: () async {
                   try {
                     await context.read<PetProvider>().deletePet(petId: petModel.petId);
-
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    context.go('/home');
                   } on CustomException catch (e) {
                     showErrorDialog(context, e);
                   }
@@ -133,15 +132,10 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PetUploadScreen(
-                                    originalPetModel: petModel,
-                                  ),
-                                ));
-                          },
+                          onPressed: () => context.go(
+                            '/home/pet_detail/${widget.index}/edit',
+                            extra: petModel,
+                          ),
                           icon: const Icon(Icons.edit),
                         ),
                       ],

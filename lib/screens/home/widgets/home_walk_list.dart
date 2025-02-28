@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../models/walk_model.dart';
-import '../../walk/walk_home_screen.dart';
 import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_walk_list_card.dart';
@@ -20,12 +20,7 @@ class HomeWalkList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '산책',
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const WalkHomeScreen()),
-            );
-          },
+          onTap: () => context.go('/home/walk_home'),
         ),
         const SizedBox(height: 10),
         walkList.isEmpty

@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../common/widgets/pd_circle_avatar.dart';
 import '../../../models/pet_model.dart';
 import '../../../palette.dart';
-import '../../pet/pet_detail_screen.dart';
 import 'home_pet_empty.dart';
 
 class HomePetCarousel extends StatefulWidget {
@@ -65,13 +65,7 @@ class _HomePetCarouselState extends State<HomePetCarousel> {
                       return Builder(
                         builder: (context) {
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PetDetailScreen(index: _indicatorIndex)),
-                              );
-                            },
+                            onTap: () => context.go('/home/pet_detail/$_indicatorIndex'),
                             child: Container(
                               margin: const EdgeInsets.symmetric(horizontal: 24),
                               decoration: BoxDecoration(

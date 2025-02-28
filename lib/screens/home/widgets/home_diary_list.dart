@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../models/diary_model.dart';
-import '../../diary/diary_home_screen.dart';
 import '../../../common/widgets/pd_title_with_more_button.dart';
 import 'home_content_empty.dart';
 import 'home_diary_list_card.dart';
@@ -20,12 +20,7 @@ class HomeDiaryList extends StatelessWidget {
       children: [
         PDTitleWithMoreButton(
           title: '성장일기',
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DiaryHomeScreen()),
-            );
-          },
+          onTap: () => context.go('/home/diary_home'),
         ),
         const SizedBox(height: 10),
         diaryList.isEmpty

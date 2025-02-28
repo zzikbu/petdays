@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../common/widgets/pd_circle_avatar.dart';
 import '../../../models/walk_model.dart';
 import '../../../palette.dart';
-import '../../walk/walk_detail_screen.dart';
 
 class WalkListCard extends StatelessWidget {
   final WalkModel walkModel;
@@ -19,14 +19,7 @@ class WalkListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WalkDetailScreen(index: index),
-          ),
-        );
-      },
+      onTap: () => context.go('/home/walk_detail/$index'),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         height: 70,

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../common/widgets/pd_circle_avatar.dart';
 import '../../../models/medical_model.dart';
 import '../../../palette.dart';
-import '../../medical/medical_detail_screen.dart';
 
 class HomeMedicalListCard extends StatelessWidget {
   final MedicalModel medicalModel;
@@ -18,14 +18,7 @@ class HomeMedicalListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MedicalDetailScreen(index: index),
-          ),
-        );
-      },
+      onTap: () => context.go('/home/medical_detail/$index'),
       child: Container(
         margin: const EdgeInsets.only(right: 12, bottom: 10),
         height: 150,

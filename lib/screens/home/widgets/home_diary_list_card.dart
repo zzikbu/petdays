@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '../../../models/diary_model.dart';
 import '../../../palette.dart';
-import '../../diary/diary_detail_screen.dart';
 
 class HomeDiaryListCard extends StatelessWidget {
   final DiaryModel diaryModel;
@@ -18,17 +18,7 @@ class HomeDiaryListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DiaryDetailScreen(
-              index: index,
-              diaryType: DiaryType.my,
-            ),
-          ),
-        );
-      },
+      onTap: () => context.go('/home/diary_detail/$index'),
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         height: 70,
