@@ -87,76 +87,78 @@
 
 ## 주요 기술
 ### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
-* 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
+- 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
 
-* `StateNotifier` 사용한 주요 개선점
+- `StateNotifier` 사용한 주요 개선점
   - **Immutable 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
   - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
-```dart
-// Status 정의
-enum MedicalStatus { init, submitting, fetching, success, error }
-
-// 불변 상태 클래스 정의
-class MedicalState {
-  final MedicalStatus medicalStatus;
-  final List<MedicalModel> medicalList;
-
-  const MedicalState({
-    required this.medicalStatus, 
-    required this.medicalList
-  });
+ 
+- Code<br/>
+  ```dart
+  // Status 정의
+  enum MedicalStatus { init, submitting, fetching, success, error }
   
-  MedicalState copyWith({
-    MedicalStatus? medicalStatus, 
-    List<MedicalModel>? medicalList
-  }) {
-    return MedicalState(
-      medicalStatus: medicalStatus ?? this.medicalStatus,
-      medicalList: medicalList ?? this.medicalList,
-    );
-  }
-}
-
-// Provider 구현
-class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
-  MedicalProvider() : super(MedicalState.init());
-
-  Future<void> getMedicalList({required String uid}) async {
-    try {
-      // fetching 상태로 변경
-      state = state.copyWith(medicalStatus: MedicalStatus.fetching);
-      
-      // 데이터 요청 로직
-      final medicalList = await read<MedicalRepository>().getMedicalList(uid: uid);
-      
-      // success 상태로 변경 및 medicalList 업데이트
-      state = state.copyWith(
-        medicalList: medicalList,
-        medicalStatus: MedicalStatus.success,
+  // 불변 상태 클래스 정의
+  class MedicalState {
+    final MedicalStatus medicalStatus;
+    final List<MedicalModel> medicalList;
+  
+    const MedicalState({
+      required this.medicalStatus, 
+      required this.medicalList
+    });
+    
+    MedicalState copyWith({
+      MedicalStatus? medicalStatus, 
+      List<MedicalModel>? medicalList
+    }) {
+      return MedicalState(
+        medicalStatus: medicalStatus ?? this.medicalStatus,
+        medicalList: medicalList ?? this.medicalList,
       );
-    } on CustomException catch (_) {
-      // error 상태로 변경
-      state = state.copyWith(medicalStatus: MedicalStatus.error);
-      rethrow;
     }
   }
-}
-
-// UI에서 상태 구독 후 활용
-Widget build(BuildContext context) {
-  final medicalState = context.watch<MedicalState>();
-  final isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
   
-  return isLoading
-    ? CircularProgressIndicator()
-    : ListView.builder(
-        itemCount: medicalState.medicalList.length,
-        itemBuilder: (context, index) => 
-          MedicalCard(medicalState.medicalList[index]),
-      );
-}
-```
+  // Provider 구현
+  class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
+    MedicalProvider() : super(MedicalState.init());
+  
+    Future<void> getMedicalList({required String uid}) async {
+      try {
+        // fetching 상태로 변경
+        state = state.copyWith(medicalStatus: MedicalStatus.fetching);
+        
+        // 데이터 요청 로직
+        final medicalList = await read<MedicalRepository>().getMedicalList(uid: uid);
+        
+        // success 상태로 변경 및 medicalList 업데이트
+        state = state.copyWith(
+          medicalList: medicalList,
+          medicalStatus: MedicalStatus.success,
+        );
+      } on CustomException catch (_) {
+        // error 상태로 변경
+        state = state.copyWith(medicalStatus: MedicalStatus.error);
+        rethrow;
+      }
+    }
+  }
+  
+  // UI에서 상태 구독 후 활용
+  Widget build(BuildContext context) {
+    final medicalState = context.watch<MedicalState>();
+    final isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
+    
+    return isLoading
+      ? CircularProgressIndicator()
+      : ListView.builder(
+          itemCount: medicalState.medicalList.length,
+          itemBuilder: (context, index) => 
+            MedicalCard(medicalState.medicalList[index]),
+        );
+  }
+  ```
 ---
 ### ✅ Database Batch
 - `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
