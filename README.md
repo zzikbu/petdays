@@ -94,29 +94,22 @@
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
   - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
 ```dart
-// medical_state.dart
+// Status 정의
+enum MedicalStatus { init, submitting, fetching, success, error }
 
-enum MedicalStatus {
-  init,      // 초기 상태
-  submitting,// 데이터 제출 중
-  fetching,  // 데이터 로딩 중
-  success,   // 작업 성공
-  error      // 에러 상태
-}
-
+// 불변 상태 클래스 정의
 class MedicalState {
   final MedicalStatus medicalStatus;
   final List<MedicalModel> medicalList;
 
   const MedicalState({
-    required this.medicalStatus,
-    required this.medicalList,
+    required this.medicalStatus, 
+    required this.medicalList
   });
-
-  // Immutable state 복사 메서드
+  
   MedicalState copyWith({
-    MedicalStatus? medicalStatus,
-    List<MedicalModel>? medicalList,
+    MedicalStatus? medicalStatus, 
+    List<MedicalModel>? medicalList
   }) {
     return MedicalState(
       medicalStatus: medicalStatus ?? this.medicalStatus,
@@ -124,62 +117,44 @@ class MedicalState {
     );
   }
 }
-```
-```dart
-// medical_provider.dart
 
+// Provider 구현
 class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
   MedicalProvider() : super(MedicalState.init());
 
-  Future<void> getMedicalList({
-    required String uid,
-  }) async {
+  Future<void> getMedicalList({required String uid}) async {
     try {
-      // 상태 변경
+      // fetching 상태로 변경
       state = state.copyWith(medicalStatus: MedicalStatus.fetching);
-
-      // 비지니스 로직
-      List<MedicalModel> medicalList =
-      await read<MedicalRepository>().getMedicalList(uid: uid);
-
-      // 상태 변경
+      
+      // 데이터 요청 로직
+      final medicalList = await read<MedicalRepository>().getMedicalList(uid: uid);
+      
+      // success 상태로 변경 및 medicalList 업데이트
       state = state.copyWith(
         medicalList: medicalList,
         medicalStatus: MedicalStatus.success,
       );
     } on CustomException catch (_) {
-      // 상태 변경
+      // error 상태로 변경
       state = state.copyWith(medicalStatus: MedicalStatus.error);
       rethrow;
     }
   }
-} 
-```
-```dart
-// medical_home_screen.dart
+}
 
-@override
+// UI에서 상태 구독 후 활용
 Widget build(BuildContext context) {
-  // MedicalState를 구독하여 실시간 상태 반영
-  MedicalState medicalState = context.watch<MedicalState>();
-  List<MedicalModel> medicalList = medicalState.medicalList;
-
-  bool isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
-
-  return Scaffold(
-    // ...
-    body: isLoading
-            ? Center(child: CircularProgressIndicator(color: Palette.subGreen))
-            : ListView.builder(
-      itemCount: medicalList.length,
-      itemBuilder: (context, index) {
-        return MedicalHomeCardWidget(
-          medicalModel: medicalList[index],
-          index: index,
-        );
-      },
-    ),
-  );
+  final medicalState = context.watch<MedicalState>();
+  final isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
+  
+  return isLoading
+    ? CircularProgressIndicator()
+    : ListView.builder(
+        itemCount: medicalState.medicalList.length,
+        itemBuilder: (context, index) => 
+          MedicalCard(medicalState.medicalList[index]),
+      );
 }
 ```
 ---
