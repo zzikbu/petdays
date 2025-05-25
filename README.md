@@ -18,31 +18,36 @@
 - [기획 및 디자인](#기획-및-디자인)
 - [기능 실행 화면](#기능-실행-화면)
 - [주요 기술](#주요-기술)
-  <br/><br/>
+<br><br>
 
 ## 프로젝트 소개
-**1인 기획 / 디자인 / 개발**<br>
+**1인 기획 / 디자인 / 개발**
+<br><br>
 
 반려동물의 성장일기, 진료기록, 산책기록을 한곳에 담아 보관하고 공유할 수 있는 모바일 애플리케이션입니다.
-<br/><br/>
+<br><br>
 
 ## 개발 기간
-- **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 _(약 1개월)_
-- **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 _(약 5개월)_
-- **리팩토링 & 유지보수:** 2024.12.01 ~ _(현재 진행 중)_  
-  <br>
+- **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 (약 1개월)
+- **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 (약 5개월)
+- **리팩토링 & 유지보수:** 2024.12.01 ~ 진행 중
+<br>
 
 ## 주요 기능
-1. **반려동물:** 반려동물의 기본 정보를 등록하고, 함께한 소중한 시간을 확인할 수 있습니다.
+1. **반려동물:** 반려동물의 기본 정보(이름, 품종, 생년월일, 성별, 중성화 여부)를 등록하고, 함께한 소중한 시간을 일 단위로 확인할 수 있습니다.
+<br><br>
 
-2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록해 추억할 수 있습니다.
+2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록해 추억을 간직할 수 있습니다. 공개/비공개 설정을 통해 다른 반려인들과 경험을 공유하거나 개인적으로 보관할 수 있습니다.
+<br><br>
 
-3. **진료기록:** 병원 방문 기록을 관리할 수 있습니다.
+3. **진료기록:** 병원 방문 기록을 체계적으로 관리할 수 있습니다. 진료일, 이유, 병원명, 수의사명, 관련 사진 및 메모를 함께 기록하여 반려동물의 건강 이력을 추적할 수 있습니다.
+<br><br>
 
-4. **산책:** 산책 시간,거리와 경로를 기록해 관리할 수 있습니다.
+4. **산책:** GPS를 활용하여 산책 시간, 거리, 경로를 실시간으로 기록하고 관리할 수 있습니다. 산책 경로는 지도 이미지로 저장되어 추후 확인이 가능합니다.
+<br><br>
 
-5. **피드:** 공개된 성장일기를 통해 다른 반려인들과 경험을 공유하고 좋아요를 통해 공감할 수 있습니다.
-   <br/><br/>
+5. **피드:** 공개된 성장일기를 통해 다른 반려인들과 경험을 공유하고, 좋아요를 통해 공감할 수 있습니다. HOT 피드를 통해 인기 있는 게시물을 쉽게 확인할 수 있습니다.
+<br><br>
 
 ## 기술 스택
 - **언어:** `Dart`
@@ -50,13 +55,45 @@
 - **아키텍쳐**: `MVVM`<br>
   <img alt="architecture" height="280" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/architecture.png?raw=true">
 
-- **사용한 패키지:**
-  - Firebase: `firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `google_sign_in`
-  - State Management: `provider`, `state_notifier`, `flutter_state_notifier`
-  - Location: `geolocator`, `google_maps_flutter`
-  - UI/UX: `carousel_slider`, `smooth_page_indicator`, `flutter_svg`, `extended_image`
-  - Util:  `image_picker`, `permission_handler`, `flutter_native_splash`, `uuid`, `string_validator`, `package_info_plus`, `webview_flutter`
-    <br/><br/>
+- **사용한 패키지**
+  ```yaml
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.3
+  firebase_storage: ^12.3.2
+  google_sign_in: ^6.2.1
+  
+  # State Management
+  provider: ^6.1.2
+  state_notifier: ^1.0.0
+  flutter_state_notifier: ^1.0.0
+  
+  # Navigation
+  go_router: ^14.7.2
+  
+  # Location
+  geolocator: ^13.0.1
+  google_maps_flutter: ^2.9.0
+  
+  # UI/UX
+  carousel_slider: ^5.0.0
+  smooth_page_indicator: ^1.2.0+3
+  extended_image: ^8.3.1
+  flutter_svg: ^2.0.10+1
+  pull_down_button: ^0.10.1
+  cupertino_icons: ^1.0.6
+  
+  # Utils
+  intl: ^0.19.0
+  uuid: ^4.5.1
+  string_validator: ^1.1.0
+  image_picker: ^1.1.2
+  webview_flutter: ^4.10.0
+  package_info_plus: ^8.1.0
+  permission_handler: ^11.3.1
+  ```
+<br>
 
 ## 기획 및 디자인
 ### [🔗 기획 및 디자인 Figma 🔗](https://www.figma.com/design/LbVM8DvEcGfaR47cfpLk0c/%ED%8E%AB%EB%8D%B0%EC%9D%B4%EC%A6%88_%EB%94%94%EC%9E%90%EC%9D%B8?node-id=3-219&t=x3TuifRTAZvSPb8Z-1)
