@@ -125,155 +125,108 @@
 
 ## 주요 기술
 ### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
-- 기존 `ChangeNotifier`의 한계를 보완하고, 더 효율적인 상태 관리를 위해 `StateNotifier`를 도입했습니다.
-
-- `StateNotifier` 사용한 주요 개선점
-  - **Immutable 기반의 상태 관리**: 상태 변경 시 새로운 상태 객체를 생성하여 변경 과정을 명확히 추적
-  - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
-  - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
+복잡한 데이터 구조와 다양한 상태를 효율적으로 관리하기 위해 기존 `ChangeNotifier`에서 `StateNotifier`로 전환했습니다. `StateNotifier`는 불변 객체 기반의 상태 관리를 통해 상태 변경을 명확히 추적할 수 있게 해주며, init, submitting, fetching, success, error 등의 세분화된 상태 구분으로 UI에서 로딩 상태나 에러 처리를 직관적으로 구현할 수 있었습니다. 또한 `copyWith` 패턴을 통한 명확한 상태 변경과 엄격한 타입 정의로 런타임 에러를 사전에 방지하여 앱의 안정성과 유지보수성을 크게 향상시켰습니다.
  
-- Code<br>
-  ```dart
-  // Status 정의
-  enum MedicalStatus { init, submitting, fetching, success, error }
-  
-  // 불변 상태 클래스 정의
-  class MedicalState {
-    final MedicalStatus medicalStatus;
-    final List<MedicalModel> medicalList;
-  
-    const MedicalState({
-      required this.medicalStatus, 
-      required this.medicalList
-    });
-    
-    MedicalState copyWith({
-      MedicalStatus? medicalStatus, 
-      List<MedicalModel>? medicalList
-    }) {
-      return MedicalState(
-        medicalStatus: medicalStatus ?? this.medicalStatus,
-        medicalList: medicalList ?? this.medicalList,
-      );
-    }
-  }
-  
-  // Provider 구현
-  class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
-    MedicalProvider() : super(MedicalState.init());
-  
-    Future<void> getMedicalList({required String uid}) async {
-      try {
-        // fetching 상태로 변경
-        state = state.copyWith(medicalStatus: MedicalStatus.fetching);
-        
-        // 데이터 요청 로직
-        final medicalList = await read<MedicalRepository>().getMedicalList(uid: uid);
-        
-        // success 상태로 변경 및 medicalList 업데이트
-        state = state.copyWith(
-          medicalList: medicalList,
-          medicalStatus: MedicalStatus.success,
-        );
-      } on CustomException catch (_) {
-        // error 상태로 변경
-        state = state.copyWith(medicalStatus: MedicalStatus.error);
-        rethrow;
-      }
-    }
-  }
-  
-  // UI에서 상태 구독 후 활용
-  Widget build(BuildContext context) {
-    final medicalState = context.watch<MedicalState>();
-    final isLoading = medicalState.medicalStatus == MedicalStatus.fetching;
-    
-    return isLoading
-      ? CircularProgressIndicator()
-      : ListView.builder(
-          itemCount: medicalState.medicalList.length,
-          itemBuilder: (context, index) => 
-            MedicalCard(medicalState.medicalList[index]),
-        );
-  }
-  ```
+```dart
+// 상태 정의
+enum MedicalStatus { init, submitting, fetching, success, error }
+
+class MedicalState {
+ final MedicalStatus medicalStatus;
+ final List<MedicalModel> medicalList;
+ 
+ MedicalState copyWith({MedicalStatus? medicalStatus, List<MedicalModel>? medicalList}) {
+   return MedicalState(
+     medicalStatus: medicalStatus ?? this.medicalStatus,
+     medicalList: medicalList ?? this.medicalList,
+   );
+ }
+}
+
+// Provider
+class MedicalProvider extends StateNotifier<MedicalState> with LocatorMixin {
+ Future<void> getMedicalList({required String uid}) async {
+   try {
+     state = state.copyWith(medicalStatus: MedicalStatus.fetching);
+     final medicalList = await read<MedicalRepository>().getMedicalList(uid: uid);
+     state = state.copyWith(medicalList: medicalList, medicalStatus: MedicalStatus.success);
+   } on CustomException catch (_) {
+     state = state.copyWith(medicalStatus: MedicalStatus.error);
+     rethrow;
+   }
+ }
+}
+
+// UI 사용
+final isLoading = context.watch<MedicalState>().medicalStatus == MedicalStatus.fetching;
+final medicalList = context.watch<MedicalState>().medicalList;
+```
 <br>
 
 ### ✅ Database Batch
-- `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
+`Batch`를 활용하여 성장일기 삭제 시 발생하는 복잡한 연관 데이터 처리를 원자적으로 관리했습니다. 성장일기가 삭제될 때는 단순히 해당 문서만 제거하는 것이 아니라, 해당 게시물에 좋아요를 누른 모든 사용자의 좋아요 목록에서 해당 게시물 ID를 제거하고, 작성자의 게시물 카운트를 감소시켜야 합니다. 이러한 여러 문서의 변경 작업을 `Batch`로 묶어 처리함으로써 작업 중 일부가 실패하더라도 전체가 롤백되어 데이터 일관성을 보장하고, 단일 네트워크 요청으로 모든 작업을 완료하여 성능 효율성을 높였습니다.
 
-- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.<br>
-  ① 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거<br>
-  ② 해당 성장일기 문서 삭제<br>
-  ③ 작성자의 diaryCount 감소
-- Code<br>
-  ```dart
-    WriteBatch batch = firebaseFirestore.batch();
+```dart
+WriteBatch batch = firebaseFirestore.batch();
 
-    // 성장일기 좋아요 누른 사용자 찾기
-    List<String> likes = await diaryDocRef
-        .get()
-        .then((value) => List<String>.from(value.data()!['likes']));
+// 성장일기 좋아요 누른 사용자 찾기
+List<String> likes = await diaryDocRef
+   .get()
+   .then((value) => List<String>.from(value.data()!['likes']));
 
-    // ① 해당 사용자들의 likes 필드에서 성장일기 ID 제거  
-    likes.forEach((uid) {
-      batch.update(firebaseFirestore.collection('users').doc(uid), {
-        'likes': FieldValue.arrayRemove([diaryModel.diaryId]),
-      });
-    });
+// ① 해당 사용자들의 likes 필드에서 성장일기 ID 제거  
+likes.forEach((uid) {
+ batch.update(firebaseFirestore.collection('users').doc(uid), {
+   'likes': FieldValue.arrayRemove([diaryModel.diaryId]),
+ });
+});
 
-    // ② 성장일기 문서 삭제
-    batch.delete(diaryDocRef);
+// ② 성장일기 문서 삭제
+batch.delete(diaryDocRef);
 
-    // ③ 작성자의 diaryCount 감소
-    batch.update(writerDocRef, {
-      'diaryCount': FieldValue.increment(-1),
-    });
+// ③ 작성자의 diaryCount 감소
+batch.update(writerDocRef, {
+ 'diaryCount': FieldValue.increment(-1),
+});
 
-    // 실행
-    batch.commit();
-  ```
+// 실행
+batch.commit();
+```
 <br>
 
 ### ✅ Database Transaction
-- `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
+`Transaction`을 활용하여 성장일기 좋아요 기능에서 발생할 수 있는 동시성 문제를 해결했습니다. 여러 사용자가 동시에 같은 게시물에 좋아요를 누르거나, 한 사용자가 빠르게 연속으로 좋아요 버튼을 클릭할 때 데이터 불일치가 발생할 수 있습니다. `Transaction`은 좋아요 상태 확인, 카운트 증감, 사용자 좋아요 목록 업데이트를 하나의 원자적 연산으로 처리하며, 동시 접근으로 인한 충돌 시 자동으로 최대 5회까지 재시도하여 데이터 일관성을 보장합니다. 이를 통해 좋아요 카운트가 부정확하게 집계되거나 사용자의 좋아요 상태가 의도와 다르게 저장되는 문제를 방지할 수 있었습니다.
 
-- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.<br>
-  ① 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거<br>
-  ② 해당 성장일기의 likeCount 증가 또는 감소<br>
-  ③ 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
+```dart
+// 성장일기 likes에 사용자 ID가 있는지 확인
+bool isDiaryContains = diaryLikes.contains(uid);
 
-- Code <br>
-  ```dart
-  // 성장일기 likes에 사용자 ID가 있는지 확인
-  bool isDiaryContains = diaryLikes.contains(uid);
+transaction.update(diaryDocRef, {
+ // ① 해당 성장일기 likes 업데이트
+ 'likes': isDiaryContains
+     ? FieldValue.arrayRemove([uid])
+     : FieldValue.arrayUnion([uid]),
+ // ② 성장일기 likeCount 업데이트
+ 'likeCount': isDiaryContains
+     ? FieldValue.increment(-1)
+     : FieldValue.increment(1),
+});
 
-  transaction.update(diaryDocRef, {
-    // ① 해당 성장일기 likes 업데이트
-    'likes': isDiaryContains
-        ? FieldValue.arrayRemove([uid])
-        : FieldValue.arrayUnion([uid]),
-    // ② 성장일기 likeCount 업데이트
-    'likeCount': isDiaryContains
-        ? FieldValue.increment(-1)
-        : FieldValue.increment(1),
-  });
-
-  // ③ 좋아요 누른 사용자의 likes 업데이트
-  transaction.update(userDocRef, {
-    'likes': userLikes.contains(diaryId)
-        ? FieldValue.arrayRemove([diaryId])
-        : FieldValue.arrayUnion([diaryId]),
-  });
-  ```
+// ③ 좋아요 누른 사용자의 likes 업데이트
+transaction.update(userDocRef, {
+ 'likes': userLikes.contains(diaryId)
+     ? FieldValue.arrayRemove([diaryId])
+     : FieldValue.arrayUnion([diaryId]),
+});
+```
 <br>
 
 ## 트러블슈팅
-### 🔍 탭 전환 시 스크롤 위치 동기화 문제
+### 💥 탭 전환 시 스크롤 위치 동기화 문제
 
 **문제 상황**
 
-피드 화면에서 HOT/전체 탭 간 전환 시 스크롤 위치가 동기화되는 문제가 발생했습니다. 기존에는 하나의 ListView.builder를 사용하여 currentFeedList 변수로 데이터만 교체하는 방식이었는데, 동일한 ScrollController를 공유하면서 HOT 피드에서 스크롤한 위치가 전체 피드에도 그대로 적용되었습니다. (사용자가 HOT 피드에서 하단까지 스크롤 → 전체 피드로 전환 → 동일한 스크롤 위치에서 시작)
+피드 화면에서 HOT/전체 탭 간 전환 시 스크롤 위치가 동기화되는 문제가 발생했습니다. 기존에는 `하나의 ListView.builder를 사용`하여 currentFeedList 변수로 데이터만 교체하는 방식이었는데, 동일한 ScrollController를 공유하면서 HOT 피드에서 스크롤한 위치가 전체 피드에도 그대로 적용되었습니다. (사용자가 HOT 피드에서 하단까지 스크롤 → 전체 피드로 전환 → 동일한 스크롤 위치에서 시작)
 
 **기존 문제 코드**
 
@@ -309,7 +262,7 @@ class _FeedHomeScreenState extends State<FeedHomeScreen> {
 
 **해결 방법**
 
-Offstage 위젯을 활용하여 HOT 피드와 전체 피드를 각각 독립적인 FeedListView로 분리하고, 각각 고유한 ScrollController를 가지도록 구현했습니다. Offstage 위젯은 위젯을 조건부로 숨기면서도 위젯 트리에는 유지하여 상태를 보존하는 특징이 있습니다. offstage 속성이 true일 때는 위젯을 화면에서 숨기고 렌더링하지 않으며, false일 때는 위젯을 화면에 정상적으로 표시합니다. 이를 통해 각 탭이 독립적인 스크롤 상태를 유지하게 되어 HOT 피드와 전체 피드 간의 스크롤 위치 동기화 문제를 해결할 수 있었습니다.
+`Offstage` 위젯을 활용하여 HOT 피드와 전체 피드를 각각 독립적인 FeedListView로 분리하고, 각각 고유한 ScrollController를 가지도록 구현했습니다. `Offstage` 위젯은 위젯을 조건부로 숨기면서도 위젯 트리에는 유지하여 상태를 보존하는 특징이 있습니다. offstage 속성이 true일 때는 위젯을 화면에서 숨기고 렌더링하지 않으며, false일 때는 위젯을 화면에 정상적으로 표시합니다. 이를 통해 각 탭이 독립적인 스크롤 상태를 유지하게 되어 HOT 피드와 전체 피드 간의 스크롤 위치 동기화 문제를 해결할 수 있었습니다.
 
 **해결 코드**
 
