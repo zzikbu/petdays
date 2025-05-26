@@ -18,6 +18,7 @@
 - [기획 및 디자인](#기획-및-디자인)
 - [기능 실행 화면](#기능-실행-화면)
 - [주요 기술](#주요-기술)
+- [트러블슈팅](#트러블슈팅)
 <br><br>
 
 ## 프로젝트 소개
@@ -107,7 +108,7 @@
 | <img alt="home" width="144" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/home.png?raw=true"> | <img alt="pet_detail" width="190" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/pet_detail.png?raw=true"> | <img alt="feed_home" width="178" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/feed_home.png?raw=true"> | <img alt="diary_detail" width="172" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/diary_detail.png?raw=true"> |
 | 산책 홈                                                         | 산책 상세보기                                                      | 산책 지도 트래킹                                                    |                                                              |
 | <img alt="walk_home" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_home.png?raw=true"> | <img alt="walk_detail" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_detail.png?raw=true"> | <img alt="walk_map" width="174" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/plan_design/walk_map.png?raw=true"> |                                                              |
-<br/>
+<br>
 
 ## 기능 실행 화면
 
@@ -120,7 +121,7 @@
 | <img alt="report_block" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/report_block.gif?raw=true"> | <img alt="nickname" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/nickname.gif?raw=true"> | <img alt="profile_image" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/profile_image.gif?raw=true"> | <img alt="open" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/open.PNG?raw=true"> |
 | 좋아요한 성장일기                                                    |                                                              |                                                              |                                                              |
 | <img alt="like" width="180" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/gif/like.PNG?raw=true"> |                                                              |                                                              |                                                              |
-<br/>
+<br>
 
 ## 주요 기술
 ### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
@@ -131,7 +132,7 @@
   - **타입 안전성 강화**: 엄격한 상태 타입 정의를 통한 런타임 에러 방지
   - **상태의 Status 구분**: 각 상태의 Status를 직관적으로 알 수 있도록 init, submitting, fetching 등으로 구체적으로 정의
  
-- Code<br/>
+- Code<br>
   ```dart
   // Status 정의
   enum MedicalStatus { init, submitting, fetching, success, error }
@@ -196,15 +197,16 @@
         );
   }
   ```
----
+<br>
+
 ### ✅ Database Batch
 - `Batch`는 여러 데이터베이스 작업을 하나로 묶어 실행하며, 작업 중 하나라도 실패하면 롤백되어 데이터의 일관성과 무결성을 보장합니다.
 
-- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.<br/>
-  ① 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거<br/>
-  ② 해당 성장일기 문서 삭제<br/>
+- 성장일기 삭제 기능에서 아래 작업을 `Batch`를 활용해 구현했습니다.<br>
+  ① 해당 문서에 좋아요를 누른 사용자들의 likes 필드에서 성장일기 ID 제거<br>
+  ② 해당 성장일기 문서 삭제<br>
   ③ 작성자의 diaryCount 감소
-- Code<br/>
+- Code<br>
   ```dart
     WriteBatch batch = firebaseFirestore.batch();
 
@@ -231,16 +233,17 @@
     // 실행
     batch.commit();
   ```
----
+<br>
+
 ### ✅ Database Transaction
 - `Transaction`은 데이터 변경 시 자동 재시도(최대 5회)를 통해 모든 작업이 성공하거나 실패 시 모두 취소되도록 하여 동시 작업 간 데이터 일관성을 유지합니다.
 
-- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.<br/>
-  ① 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거<br/>
-  ② 해당 성장일기의 likeCount 증가 또는 감소<br/>
+- 성장일기 좋아요 기능에서 아래 작업을 `Transaction`을 활용해 구현했습니다.<br>
+  ① 해당 성장일기의 likes 필드에서 유저 ID 추가 또는 제거<br>
+  ② 해당 성장일기의 likeCount 증가 또는 감소<br>
   ③ 좋아요를 누른 유저 문서의 likes 필드에 성장일기 ID 추가 또는 제거
 
-- Code <br/>
+- Code <br>
   ```dart
   // 성장일기 likes에 사용자 ID가 있는지 확인
   bool isDiaryContains = diaryLikes.contains(uid);
@@ -263,3 +266,90 @@
         : FieldValue.arrayUnion([diaryId]),
   });
   ```
+<br>
+
+## 트러블슈팅
+### 🔍 탭 전환 시 스크롤 위치 동기화 문제
+
+**문제 상황**
+
+피드 화면에서 HOT/전체 탭 간 전환 시 스크롤 위치가 동기화되는 문제가 발생했습니다. 기존에는 하나의 ListView.builder를 사용하여 currentFeedList 변수로 데이터만 교체하는 방식이었는데, 동일한 ScrollController를 공유하면서 HOT 피드에서 스크롤한 위치가 전체 피드에도 그대로 적용되었습니다. (사용자가 HOT 피드에서 하단까지 스크롤 → 전체 피드로 전환 → 동일한 스크롤 위치에서 시작)
+
+**기존 문제 코드**
+
+```dart
+class _FeedHomeScreenState extends State<FeedHomeScreen> {
+  bool _isHotFeed = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final feedState = context.watch<FeedState>();
+    // 탭 상태에 따라 데이터만 변경
+    final currentFeedList = _isHotFeed ? feedState.hotFeedList : feedState.feedList;
+    
+    return Scaffold(
+      body: ListView.builder(  // 동일한 ListView 인스턴스 사용
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        itemCount: currentFeedList.length,  // 데이터만 교체
+        itemBuilder: (context, index) {
+          final diaryModel = currentFeedList[index];
+          return DiaryCardWidget(
+            diaryModel: diaryModel,
+            index: index,
+            diaryType: _isHotFeed ? DiaryType.hotFeed : DiaryType.allFeed,
+            isLike: isLike,
+            showLock: false,
+          );
+        },
+      ),
+    );
+  }
+}
+```
+
+**해결 방법**
+
+Offstage 위젯을 활용하여 HOT 피드와 전체 피드를 각각 독립적인 FeedListView로 분리하고, 각각 고유한 ScrollController를 가지도록 구현했습니다. Offstage 위젯은 위젯을 조건부로 숨기면서도 위젯 트리에는 유지하여 상태를 보존하는 특징이 있습니다. offstage 속성이 true일 때는 위젯을 화면에서 숨기고 렌더링하지 않으며, false일 때는 위젯을 화면에 정상적으로 표시합니다. 이를 통해 각 탭이 독립적인 스크롤 상태를 유지하게 되어 HOT 피드와 전체 피드 간의 스크롤 위치 동기화 문제를 해결할 수 있었습니다.
+
+**해결 코드**
+
+```dart
+class _FeedHomeScreenState extends State<FeedHomeScreen> {
+  bool _isHotFeed = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final feedState = context.watch<FeedState>();
+    final isLoading = feedState.feedStatus == FeedStatus.fetching;
+
+    return Scaffold(
+      body: isLoading
+        ? const Center(child: CircularProgressIndicator(color: Palette.subGreen))
+        : Stack(  // Stack으로 두 개의 독립적인 ListView 관리
+            children: [
+              // HOT 피드 - 독립적인 FeedListView 인스턴스
+              Offstage(
+                offstage: !_isHotFeed,  // false일 때 화면에 표시
+                child: FeedListView(
+                  feedList: feedState.hotFeedList,
+                  currentUserId: _currentUserId,
+                  isHotFeed: true,
+                  onRefresh: _getFeedList,
+                ),
+              ),
+              // 전체 피드 - 독립적인 FeedListView 인스턴스
+              Offstage(
+                offstage: _isHotFeed,   // true일 때 화면에서 숨김
+                child: FeedListView(
+                  feedList: feedState.feedList,
+                  currentUserId: _currentUserId,
+                  isHotFeed: false,
+                  onRefresh: _getFeedList,
+                ),
+              ),
+            ],
+          ),
+    );
+  }
+}
+```
