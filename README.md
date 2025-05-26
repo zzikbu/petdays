@@ -125,7 +125,9 @@
 
 ## 주요 기술
 ### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
-복잡한 데이터 구조와 다양한 상태를 효율적으로 관리하기 위해 기존 `ChangeNotifier`에서 `StateNotifier`로 전환했습니다. `StateNotifier`는 불변 객체 기반의 상태 관리를 통해 상태 변경을 명확히 추적할 수 있게 해주며, init, submitting, fetching, success, error 등의 세분화된 상태 구분으로 UI에서 로딩 상태나 에러 처리를 직관적으로 구현할 수 있었습니다. 또한 `copyWith` 패턴을 통한 명확한 상태 변경과 엄격한 타입 정의로 런타임 에러를 사전에 방지하여 앱의 안정성과 유지보수성을 크게 향상시켰습니다.
+- ChangeNotifier에서 StateNotifier로 전환하여 불변 객체 기반 상태 관리 구현
+- init, submitting, fetching, success, error 등 세분화된 상태 구분
+- copyWith 패턴으로 명확한 상태 변경 및 타입 안정성 확보
 
 ```dart
 // 상태 정의
@@ -164,7 +166,8 @@ final medicalList = context.watch<MedicalState>().medicalList;
 <br>
 
 ### ✅ Database Batch
-`Batch`를 활용하여 성장일기 삭제 시 발생하는 복잡한 연관 데이터 처리를 원자적으로 관리했습니다. 성장일기가 삭제될 때는 단순히 해당 문서만 제거하는 것이 아니라, 해당 게시물에 좋아요를 누른 모든 사용자의 좋아요 목록에서 해당 게시물 ID를 제거하고, 작성자의 게시물 카운트를 감소시켜야 합니다. 이러한 여러 문서의 변경 작업을 `Batch`로 묶어 처리함으로써 작업 중 일부가 실패하더라도 전체가 롤백되어 데이터 일관성을 보장하고, 단일 네트워크 요청으로 모든 작업을 완료하여 성능 효율성을 높였습니다.
+- 성장일기 삭제 시 연관 데이터를 Batch로 일괄 처리
+- 좋아요 목록, 게시물 카운트 등 여러 문서 변경을 하나의 작업으로 묶어 단일 네트워크 요청으로 처리
 
 ```dart
 WriteBatch batch = firebaseFirestore.batch();
@@ -195,10 +198,10 @@ batch.commit();
 <br>
 
 ### ✅ Go Router를 활용한 체계적인 라우팅 관리
-`StatefulShellRoute`를 사용하여 탭 기반 네비게이션을 구현했습니다. 각 탭이 독립적인 네비게이션 스택을 유지하면서도 탭 전환 시 상태가 보존되어 사용자가 이전 화면으로 돌아갈 때 스크롤 위치나 입력 내용이 유지됩니다. 또한 `중첩 라우팅`을 통해 탭 내부의 복잡한 화면 구조를 체계적으로 관리하고, 파라미터 전달을 통한 효율적인 데이터 흐름을 구현했습니다.
+- StatefulShellRoute로 탭 기반 네비게이션 구현
+- 중첩 라우팅을 통한 복잡한 화면 구조 관리
 - [frame_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/common/screens/frame_screen.dart)
 - [app_router.dart](https://github.com/zzikbu/petdays/blob/main/lib/core/router/app_router.dart)
-- [/lib/core/router/branches](https://github.com/zzikbu/petdays/tree/main/lib/core/router/branches)
 ```dart
 StatefulShellRoute.indexedStack(
   parentNavigatorKey: NavigatorKeys.root,
@@ -215,13 +218,15 @@ StatefulShellRoute.indexedStack(
 <br>
 
 ### ✅ 실시간 위치 추적과 GPS 데이터 처리
-GPS를 활용한 산책 기능에서 실시간 위치 추적, 경로 시각화, 거리/시간 계산을 구현했습니다. Geolocator로 위치 데이터를 스트림으로 받아 Google Maps의 Polyline으로 실시간 경로를 그리고, 산책 완료 시 지도를 캡처하여 이미지로 저장합니다. 또한 앱 생명주기 관리를 통해 산책 중 앱 종료나 백그라운드 전환 시에도 안정적으로 데이터를 보존할 수 있도록 구현했습니다.
+- Geolocator 스트림으로 실시간 위치 추적
+- Google Maps Polyline을 이용해 경로 시각화 및 지도 캡처 후 이미지 저장
 - [walk_map_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/screens/walk/walk_map_screen.dart)
 <img alt="walk_detail" width="260" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/walk_detail.png?raw=true">
 <br>
 
 ### ✅ Custom Exception을 활용한 체계적인 에러 처리
-앱 전반에 걸쳐 일관성 있는 에러 처리를 위해 `CustomException` 클래스를 구현했습니다. title과 message로 구조화하여 에러 다이얼로그에서 일관된 형태로 표시할 수 있도록 했습니다. 모든 Repository 레이어에서 Firebase 에러를 catch하여 적절한 메시지로 변환하고, Provider와 UI에서는 `rethrow`를 통해 에러를 전파하여 사용자에게 명확한 피드백을 제공할 수 있었습니다.
+- title과 message로 구조화된 Exception 클래스 구현
+- Repository에서 에러 변환 후 UI까지 전파
 
 ```dart
 // CustomException 정의
