@@ -194,6 +194,26 @@ batch.commit();
 ```
 <br>
 
+### ✅ Go Router를 활용한 체계적인 라우팅 관리
+`StatefulShellRoute`를 사용하여 탭 기반 네비게이션을 구현했습니다. 각 탭이 독립적인 네비게이션 스택을 유지하면서도 탭 전환 시 상태가 보존되어 사용자가 이전 화면으로 돌아갈 때 스크롤 위치나 입력 내용이 유지됩니다. 또한 `중첩 라우팅`을 통해 탭 내부의 복잡한 화면 구조를 체계적으로 관리하고, 파라미터 전달을 통한 효율적인 데이터 흐름을 구현했습니다.
+- [frame_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/common/screens/frame_screen.dart)
+- [app_router.dart](https://github.com/zzikbu/petdays/blob/main/lib/core/router/app_router.dart)
+- [/lib/core/router/branches](https://github.com/zzikbu/petdays/tree/main/lib/core/router/branches)
+```dart
+StatefulShellRoute.indexedStack(
+  parentNavigatorKey: NavigatorKeys.root,
+  builder: (_, __, navigationShell) {
+    return FrameScreen(navigationShell: navigationShell);
+  },
+  branches: [
+    feedBranch,   // 피드 탭
+    homeBranch,   // 홈 탭  
+    myBranch,     // 마이 탭
+  ],
+),
+```
+<br>
+
 ### ✅ 실시간 위치 추적과 GPS 데이터 처리
 GPS를 활용한 산책 기능에서 실시간 위치 추적, 경로 시각화, 거리/시간 계산을 구현했습니다. Geolocator로 위치 데이터를 스트림으로 받아 Google Maps의 Polyline으로 실시간 경로를 그리고, 산책 완료 시 지도를 캡처하여 이미지로 저장합니다. 또한 앱 생명주기 관리를 통해 산책 중 앱 종료나 백그라운드 전환 시에도 안정적으로 데이터를 보존할 수 있도록 구현했습니다.
 - [walk_map_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/screens/walk/walk_map_screen.dart)
