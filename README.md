@@ -194,31 +194,9 @@ batch.commit();
 ```
 <br>
 
-### ✅ Database Transaction
-`Transaction`을 활용하여 성장일기 좋아요 기능에서 발생할 수 있는 동시성 문제를 해결했습니다. 여러 사용자가 동시에 같은 게시물에 좋아요를 누르거나, 한 사용자가 빠르게 연속으로 좋아요 버튼을 클릭할 때 데이터 불일치가 발생할 수 있습니다. `Transaction`은 좋아요 상태 확인, 카운트 증감, 사용자 좋아요 목록 업데이트를 하나의 연산으로 처리하며, 동시 접근으로 인한 충돌 시 자동으로 최대 5회까지 재시도하여 데이터 일관성을 보장합니다. 이를 통해 좋아요 카운트가 부정확하게 집계되거나 사용자의 좋아요 상태가 의도와 다르게 저장되는 문제를 방지할 수 있었습니다.
-
-```dart
-// 성장일기 likes에 사용자 ID가 있는지 확인
-bool isDiaryContains = diaryLikes.contains(uid);
-
-transaction.update(diaryDocRef, {
- // ① 해당 성장일기 likes 업데이트
- 'likes': isDiaryContains
-     ? FieldValue.arrayRemove([uid])
-     : FieldValue.arrayUnion([uid]),
- // ② 성장일기 likeCount 업데이트
- 'likeCount': isDiaryContains
-     ? FieldValue.increment(-1)
-     : FieldValue.increment(1),
-});
-
-// ③ 좋아요 누른 사용자의 likes 업데이트
-transaction.update(userDocRef, {
- 'likes': userLikes.contains(diaryId)
-     ? FieldValue.arrayRemove([diaryId])
-     : FieldValue.arrayUnion([diaryId]),
-});
-```
+### ✅ 실시간 위치 추적과 GPS 데이터 처리
+GPS를 활용한 산책 기능에서 실시간 위치 추적, 경로 시각화, 거리/시간 계산을 구현했습니다. Geolocator로 위치 데이터를 스트림으로 받아 Google Maps의 Polyline으로 실시간 경로를 그리고, 산책 완료 시 지도를 캡처하여 이미지로 저장합니다. 또한 앱 생명주기 관리를 통해 산책 중 앱 종료나 백그라운드 전환 시에도 안정적으로 데이터를 보존할 수 있도록 구현했습니다.
+- [walk_map_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/screens/walk/walk_map_screen.dart)
 <br>
 
 ### ✅ Custom Exception을 활용한 체계적인 에러 처리
@@ -232,7 +210,7 @@ class CustomException implements Exception {
  const CustomException({required this.title, required this.message});
 }
 
-// 성장일기 목록 가져오기 시 에러 처리
+// 에러 처리
 Future<List<DiaryModel>> getDiaryList({required String uid}) async {
  try {
    // Firestore에서 사용자의 성장일기 목록 조회
@@ -352,4 +330,35 @@ class _FeedHomeScreenState extends State<FeedHomeScreen> {
     );
   }
 }
+```
+<br>
+
+### 💥 좋아요 기능에서 동시성 문제
+**문제 상황**
+
+성장일기 좋아요 기능에서 여러 사용자가 동시에 같은 게시물에 좋아요를 누르거나, 한 사용자가 빠르게 연속으로 좋아요 버튼을 클릭할 때 데이터 불일치 문제가 발생했습니다. 좋아요 상태 확인, 카운트 증감, 사용자 좋아요 목록 업데이트가 개별적으로 처리되면서 동시 접근 시 좋아요 카운트가 부정확하게 집계되거나 사용자의 좋아요 상태가 의도와 다르게 저장되는 문제가 있었습니다.
+
+**해결 방법**
+
+Database Transaction을 활용하여 좋아요 관련 모든 작업을 하나의 원자적 연산으로 처리했습니다. Transaction은 동시 접근으로 인한 충돌 시 자동으로 최대 5회까지 재시도하여 데이터 일관성을 보장합니다. UI에서는 중복 클릭 방지를 위한 _isLiking 플래그를 사용하여 좋아요 처리 중에는 버튼을 비활성화했습니다.
+
+**해결 코드**
+```dart
+// Database Transaction
+bool isDiaryContains = diaryLikes.contains(uid);
+
+transaction.update(diaryDocRef, {
+  'likes': isDiaryContains
+      ? FieldValue.arrayRemove([uid])
+      : FieldValue.arrayUnion([uid]),
+  'likeCount': isDiaryContains
+      ? FieldValue.increment(-1)
+      : FieldValue.increment(1),
+});
+
+transaction.update(userDocRef, {
+  'likes': userLikes.contains(diaryId)
+      ? FieldValue.arrayRemove([diaryId])
+      : FieldValue.arrayUnion([diaryId]),
+});
 ```
