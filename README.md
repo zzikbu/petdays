@@ -19,7 +19,7 @@
 - [기능 실행 화면](#기능-실행-화면)
 - [주요 기술](#주요-기술)
 - [트러블슈팅](#트러블슈팅)
-<br><br>
+  <br><br>
 
 ## 프로젝트 소개
 **1인 기획 / 디자인 / 개발**
@@ -32,23 +32,23 @@
 - **기획 & 디자인:** 2024.07.29 ~ 2024.08.28 (약 1개월)
 - **기능 개발 & 배포:** 2024.08.14 ~ 2024.12.01 (약 5개월)
 - **리팩토링 & 유지보수:** 2024.12.01 ~ 진행 중
-<br>
+  <br>
 
 ## 주요 기능
 1. **반려동물:** 반려동물의 기본 정보(이름, 품종, 생년월일, 성별, 중성화 여부)를 등록하고, 함께한 소중한 시간을 일 단위로 확인할 수 있습니다.
-<br><br>
+   <br><br>
 
 2. **성장일기:** 반려동물과의 특별한 순간을 사진과 글로 기록해 추억을 간직할 수 있습니다. 공개/비공개 설정을 통해 다른 반려인들과 경험을 공유하거나 개인적으로 보관할 수 있습니다.
-<br><br>
+   <br><br>
 
 3. **진료기록:** 병원 방문 기록을 체계적으로 관리할 수 있습니다. 진료일, 이유, 병원명, 수의사명, 관련 사진 및 메모를 함께 기록하여 반려동물의 건강 이력을 추적할 수 있습니다.
-<br><br>
+   <br><br>
 
 4. **산책:** GPS를 활용하여 산책 시간, 거리, 경로를 실시간으로 기록하고 관리할 수 있습니다. 산책 경로는 지도 이미지로 저장되어 추후 확인이 가능합니다.
-<br><br>
+   <br><br>
 
 5. **피드:** 공개된 성장일기를 통해 다른 반려인들과 경험을 공유하고, 좋아요를 통해 공감할 수 있습니다. HOT 피드를 통해 인기 있는 게시물을 쉽게 확인할 수 있습니다.
-<br><br>
+   <br><br>
 
 ## 기술 스택
 - **언어:** `Dart`
@@ -126,7 +126,7 @@
 ## 주요 기술
 ### ✅ Provider와 StateNotifier를 활용한 효율적인 상태 관리
 복잡한 데이터 구조와 다양한 상태를 효율적으로 관리하기 위해 기존 `ChangeNotifier`에서 `StateNotifier`로 전환했습니다. `StateNotifier`는 불변 객체 기반의 상태 관리를 통해 상태 변경을 명확히 추적할 수 있게 해주며, init, submitting, fetching, success, error 등의 세분화된 상태 구분으로 UI에서 로딩 상태나 에러 처리를 직관적으로 구현할 수 있었습니다. 또한 `copyWith` 패턴을 통한 명확한 상태 변경과 엄격한 타입 정의로 런타임 에러를 사전에 방지하여 앱의 안정성과 유지보수성을 크게 향상시켰습니다.
- 
+
 ```dart
 // 상태 정의
 enum MedicalStatus { init, submitting, fetching, success, error }
@@ -217,7 +217,8 @@ StatefulShellRoute.indexedStack(
 ### ✅ 실시간 위치 추적과 GPS 데이터 처리
 GPS를 활용한 산책 기능에서 실시간 위치 추적, 경로 시각화, 거리/시간 계산을 구현했습니다. Geolocator로 위치 데이터를 스트림으로 받아 Google Maps의 Polyline으로 실시간 경로를 그리고, 산책 완료 시 지도를 캡처하여 이미지로 저장합니다. 또한 앱 생명주기 관리를 통해 산책 중 앱 종료나 백그라운드 전환 시에도 안정적으로 데이터를 보존할 수 있도록 구현했습니다.
 - [walk_map_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/screens/walk/walk_map_screen.dart)
-<br>
+  <img alt="walk_detail" width="260" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/walk_detail.png?raw=true">
+  <br>
 
 ### ✅ Custom Exception을 활용한 체계적인 에러 처리
 앱 전반에 걸쳐 일관성 있는 에러 처리를 위해 `CustomException` 클래스를 구현했습니다. title과 message로 구조화하여 에러 다이얼로그에서 일관된 형태로 표시할 수 있도록 했습니다. 모든 Repository 레이어에서 Firebase 에러를 catch하여 적절한 메시지로 변환하고, Provider와 UI에서는 `rethrow`를 통해 에러를 전파하여 사용자에게 명확한 피드백을 제공할 수 있었습니다.
@@ -368,20 +369,20 @@ class _FeedHomeScreenState extends State<FeedHomeScreen> {
 bool isDiaryContains = diaryLikes.contains(uid);
 
 transaction.update(diaryDocRef, {
-  // 좋아요 목록에서 사용자 ID 추가/제거
-  'likes': isDiaryContains
-      ? FieldValue.arrayRemove([uid])
-      : FieldValue.arrayUnion([uid]),
-  // 좋아요 카운트 증감
-  'likeCount': isDiaryContains
-      ? FieldValue.increment(-1)
-      : FieldValue.increment(1),
+// 좋아요 목록에서 사용자 ID 추가/제거
+'likes': isDiaryContains
+? FieldValue.arrayRemove([uid])
+        : FieldValue.arrayUnion([uid]),
+// 좋아요 카운트 증감
+'likeCount': isDiaryContains
+? FieldValue.increment(-1)
+        : FieldValue.increment(1),
 });
 
 // 사용자 문서의 좋아요한 게시물 목록 업데이트
 transaction.update(userDocRef, {
-  'likes': userLikes.contains(diaryId)
-      ? FieldValue.arrayRemove([diaryId])
-      : FieldValue.arrayUnion([diaryId]),
+'likes': userLikes.contains(diaryId)
+? FieldValue.arrayRemove([diaryId])
+        : FieldValue.arrayUnion([diaryId]),
 });
 ```
