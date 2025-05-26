@@ -217,8 +217,8 @@ StatefulShellRoute.indexedStack(
 ### ✅ 실시간 위치 추적과 GPS 데이터 처리
 GPS를 활용한 산책 기능에서 실시간 위치 추적, 경로 시각화, 거리/시간 계산을 구현했습니다. Geolocator로 위치 데이터를 스트림으로 받아 Google Maps의 Polyline으로 실시간 경로를 그리고, 산책 완료 시 지도를 캡처하여 이미지로 저장합니다. 또한 앱 생명주기 관리를 통해 산책 중 앱 종료나 백그라운드 전환 시에도 안정적으로 데이터를 보존할 수 있도록 구현했습니다.
 - [walk_map_screen.dart](https://github.com/zzikbu/petdays/blob/main/lib/screens/walk/walk_map_screen.dart)
-  <img alt="walk_detail" width="260" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/walk_detail.png?raw=true">
-  <br>
+<img alt="walk_detail" width="260" src="https://github.com/zzikbu/PetDays/blob/main/readme_assets/walk_detail.png?raw=true">
+<br>
 
 ### ✅ Custom Exception을 활용한 체계적인 에러 처리
 앱 전반에 걸쳐 일관성 있는 에러 처리를 위해 `CustomException` 클래스를 구현했습니다. title과 message로 구조화하여 에러 다이얼로그에서 일관된 형태로 표시할 수 있도록 했습니다. 모든 Repository 레이어에서 Firebase 에러를 catch하여 적절한 메시지로 변환하고, Provider와 UI에서는 `rethrow`를 통해 에러를 전파하여 사용자에게 명확한 피드백을 제공할 수 있었습니다.
