@@ -195,7 +195,7 @@ batch.commit();
 <br>
 
 ### ✅ Database Transaction
-`Transaction`을 활용하여 성장일기 좋아요 기능에서 발생할 수 있는 동시성 문제를 해결했습니다. 여러 사용자가 동시에 같은 게시물에 좋아요를 누르거나, 한 사용자가 빠르게 연속으로 좋아요 버튼을 클릭할 때 데이터 불일치가 발생할 수 있습니다. `Transaction`은 좋아요 상태 확인, 카운트 증감, 사용자 좋아요 목록 업데이트를 하나의 원자적 연산으로 처리하며, 동시 접근으로 인한 충돌 시 자동으로 최대 5회까지 재시도하여 데이터 일관성을 보장합니다. 이를 통해 좋아요 카운트가 부정확하게 집계되거나 사용자의 좋아요 상태가 의도와 다르게 저장되는 문제를 방지할 수 있었습니다.
+`Transaction`을 활용하여 성장일기 좋아요 기능에서 발생할 수 있는 동시성 문제를 해결했습니다. 여러 사용자가 동시에 같은 게시물에 좋아요를 누르거나, 한 사용자가 빠르게 연속으로 좋아요 버튼을 클릭할 때 데이터 불일치가 발생할 수 있습니다. `Transaction`은 좋아요 상태 확인, 카운트 증감, 사용자 좋아요 목록 업데이트를 하나의 연산으로 처리하며, 동시 접근으로 인한 충돌 시 자동으로 최대 5회까지 재시도하여 데이터 일관성을 보장합니다. 이를 통해 좋아요 카운트가 부정확하게 집계되거나 사용자의 좋아요 상태가 의도와 다르게 저장되는 문제를 방지할 수 있었습니다.
 
 ```dart
 // 성장일기 likes에 사용자 ID가 있는지 확인
@@ -218,6 +218,53 @@ transaction.update(userDocRef, {
      ? FieldValue.arrayRemove([diaryId])
      : FieldValue.arrayUnion([diaryId]),
 });
+```
+<br>
+
+### ✅ Custom Exception을 활용한 체계적인 에러 처리
+앱 전반에 걸쳐 일관성 있는 에러 처리를 위해 `CustomException` 클래스를 구현했습니다. title과 message로 구조화하여 에러 다이얼로그에서 일관된 형태로 표시할 수 있도록 했습니다. 모든 Repository 레이어에서 Firebase 에러를 catch하여 적절한 메시지로 변환하고, Provider와 UI에서는 `rethrow`를 통해 에러를 전파하여 사용자에게 명확한 피드백을 제공할 수 있었습니다.
+
+```dart
+// CustomException 정의
+class CustomException implements Exception {
+ final String title;
+ final String message;
+ const CustomException({required this.title, required this.message});
+}
+
+// 성장일기 목록 가져오기 시 에러 처리
+Future<List<DiaryModel>> getDiaryList({required String uid}) async {
+ try {
+   // Firestore에서 사용자의 성장일기 목록 조회
+   return diaryList;
+ } on FirebaseException {
+   throw const CustomException(
+     title: '성장일기',
+     message: '성장일기 가져오기에 실패했습니다.\n다시 시도해주세요.',
+   );
+ } catch (_) {
+   throw const CustomException(
+     title: "성장일기",
+     message: "알 수 없는 오류가 발생했습니다.\n다시 시도해주세요.\n문의: devmoichi@gmail.com",
+   );
+ }
+}
+
+// UI에서 일관된 에러 다이얼로그 표시
+void showErrorDialog(BuildContext context, CustomException e) {
+ showDialog(
+   context: context,
+   builder: (context) => Dialog(
+     child: Column(
+       children: [
+         Text(e.title),
+         Text(e.message),
+         // 확인 버튼...
+       ],
+     ),
+   ),
+ );
+}
 ```
 <br>
 
