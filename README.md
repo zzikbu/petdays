@@ -344,17 +344,21 @@ class _FeedHomeScreenState extends State<FeedHomeScreen> {
 
 **해결 코드**
 ```dart
+// 현재 사용자가 이미 좋아요를 눌렀는지 확인
 bool isDiaryContains = diaryLikes.contains(uid);
 
 transaction.update(diaryDocRef, {
+  // 좋아요 목록에서 사용자 ID 추가/제거
   'likes': isDiaryContains
       ? FieldValue.arrayRemove([uid])
       : FieldValue.arrayUnion([uid]),
+  // 좋아요 카운트 증감
   'likeCount': isDiaryContains
       ? FieldValue.increment(-1)
       : FieldValue.increment(1),
 });
 
+// 사용자 문서의 좋아요한 게시물 목록 업데이트
 transaction.update(userDocRef, {
   'likes': userLikes.contains(diaryId)
       ? FieldValue.arrayRemove([diaryId])
