@@ -1,5 +1,5 @@
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/repositories/auth_repository.dart';
+import 'package:petdays/repository/auth_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 import 'auth_state.dart';

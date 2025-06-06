@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/providers/diary/diary_state.dart';
-import 'package:petdays/repositories/diary_repository.dart';
+import 'package:petdays/repository/diary_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
@@ -69,9 +69,8 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
           .where((element) => element.diaryId != diaryModel.diaryId)
           .toList(); // 삭제하지 않은 모델만 뽑아 새로운 리스트 생성
 
-      List<DiaryModel> newOpenDiaryList = state.diaryList
-          .where((element) => element.diaryId != diaryModel.diaryId)
-          .toList();
+      List<DiaryModel> newOpenDiaryList =
+          state.diaryList.where((element) => element.diaryId != diaryModel.diaryId).toList();
 
       state = state.copyWith(
         diaryStatus: DiaryStatus.success,
@@ -79,8 +78,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         openDiaryList: newOpenDiaryList,
       );
     } on CustomException catch (_) {
-      state = state.copyWith(
-          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -107,8 +105,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         openDiaryList: newOpenDiaryList,
       );
     } on CustomException catch (_) {
-      state = state.copyWith(
-          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -122,11 +119,9 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
 
       List<DiaryModel> diaryList;
 
-      diaryList = await read<DiaryRepository>()
-          .getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
+      diaryList = await read<DiaryRepository>().getDiaryList(uid: uid); // 접속 중인 사용자 필터해서 가져오기
 
-      List<DiaryModel> openDiaryList =
-          diaryList.where((diary) => diary.isLock == false).toList();
+      List<DiaryModel> openDiaryList = diaryList.where((diary) => diary.isLock == false).toList();
 
       state = state.copyWith(
         diaryList: diaryList,
@@ -134,8 +129,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
         diaryStatus: DiaryStatus.success, // 상태 변경
       );
     } on CustomException catch (_) {
-      state = state.copyWith(
-          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -148,8 +142,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
     required bool isLock, // 공개여부
   }) async {
     try {
-      state = state.copyWith(
-          diaryStatus: DiaryStatus.submitting); // 게시글을 등록하는 중인 상태로 변경
+      state = state.copyWith(diaryStatus: DiaryStatus.submitting); // 게시글을 등록하는 중인 상태로 변경
 
       String uid = read<User>().uid; // 작성자
 
@@ -172,8 +165,7 @@ class DiaryProvider extends StateNotifier<DiaryState> with LocatorMixin {
 
       return diaryModel;
     } on CustomException catch (_) {
-      state = state.copyWith(
-          diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(diaryStatus: DiaryStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }

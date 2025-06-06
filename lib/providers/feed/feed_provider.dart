@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/repositories/feed_repository.dart';
+import 'package:petdays/repository/feed_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
@@ -23,8 +23,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         targetUserUid: targetUserUid,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -64,8 +63,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -79,15 +77,11 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     try {
       // 기존 LikeList 특정 diaryId와 동일한 항목을 찾아 새로운 diaryModel로 교체
       List<DiaryModel> newFeedList = state.feedList.map((diary) {
-        return diary.diaryId == updatedDiaryModel.diaryId
-            ? updatedDiaryModel
-            : diary;
+        return diary.diaryId == updatedDiaryModel.diaryId ? updatedDiaryModel : diary;
       }).toList();
 
       List<DiaryModel> newHotFeedList = state.hotFeedList.map((diary) {
-        return diary.diaryId == updatedDiaryModel.diaryId
-            ? updatedDiaryModel
-            : diary;
+        return diary.diaryId == updatedDiaryModel.diaryId ? updatedDiaryModel : diary;
       }).toList();
 
       state = state.copyWith(
@@ -96,8 +90,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -109,13 +102,11 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
     try {
       state = state.copyWith(feedStatus: FeedStatus.submitting);
 
-      List<DiaryModel> newFeedList = state.feedList
-          .where((element) => element.diaryId != diaryId)
-          .toList();
+      List<DiaryModel> newFeedList =
+          state.feedList.where((element) => element.diaryId != diaryId).toList();
 
-      List<DiaryModel> newHotFeedList = state.hotFeedList
-          .where((element) => element.diaryId != diaryId)
-          .toList();
+      List<DiaryModel> newHotFeedList =
+          state.hotFeedList.where((element) => element.diaryId != diaryId).toList();
 
       state = state.copyWith(
         feedStatus: FeedStatus.success,
@@ -123,8 +114,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         hotFeedList: newHotFeedList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -166,8 +156,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
 
       return diaryModel;
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -187,8 +176,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         ], // 공개로 등록한 성장일기를 리스트 맨앞에 추가
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -200,11 +188,10 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
 
       String currentUserUid = read<User>().uid;
 
-      List<DiaryModel> feedList = await read<FeedRepository>()
-          .getFeedList(currentUserUid: currentUserUid);
+      List<DiaryModel> feedList =
+          await read<FeedRepository>().getFeedList(currentUserUid: currentUserUid);
 
-      List<DiaryModel> hotFeedList =
-          feedList.where((feed) => feed.likeCount >= 5).toList();
+      List<DiaryModel> hotFeedList = feedList.where((feed) => feed.likeCount >= 5).toList();
 
       state = state.copyWith(
         feedList: feedList,
@@ -212,8 +199,7 @@ class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {
         feedStatus: FeedStatus.success, // 상태 변경
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(feedStatus: FeedStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }

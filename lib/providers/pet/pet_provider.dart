@@ -6,7 +6,7 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/pet_model.dart';
 import 'package:petdays/providers/pet/pet_state.dart';
-import 'package:petdays/repositories/pet_repository.dart';
+import 'package:petdays/repository/pet_repository.dart';
 
 class PetProvider extends StateNotifier<PetState> with LocatorMixin {
   // PetProvider 만들어질 때 PetState 같이 만들기
@@ -22,8 +22,7 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
       await read<PetRepository>().deletePet(petId: petId);
 
       // 삭제된 펫을 제외한 새로운 리스트 생성
-      List<PetModel> newPetList =
-          state.petList.where((pet) => pet.petId != petId).toList();
+      List<PetModel> newPetList = state.petList.where((pet) => pet.petId != petId).toList();
 
       state = state.copyWith(
         petStatus: PetStatus.success,
@@ -92,16 +91,14 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
     try {
       state = state.copyWith(petStatus: PetStatus.fetching); // 상태 변경
 
-      List<PetModel> petList =
-          await read<PetRepository>().getDiaryList(uid: uid);
+      List<PetModel> petList = await read<PetRepository>().getDiaryList(uid: uid);
 
       state = state.copyWith(
         petList: petList,
         petStatus: PetStatus.success,
       ); // 상태 변경
     } on CustomException catch (_) {
-      state =
-          state.copyWith(petStatus: PetStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(petStatus: PetStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -138,8 +135,7 @@ class PetProvider extends StateNotifier<PetState> with LocatorMixin {
         petList: [...state.petList, petModel], // 새로 등록한 펫을 리스트 맨뒤에 추가
       ); // 등록 완료 상태로 변경
     } on CustomException catch (_) {
-      state =
-          state.copyWith(petStatus: PetStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(petStatus: PetStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }

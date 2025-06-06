@@ -29,14 +29,22 @@ import 'providers/profile/profile_provider.dart';
 import 'providers/profile/profile_state.dart';
 import 'providers/walk/walk_provider.dart';
 import 'providers/walk/walk_state.dart';
-import 'repositories/auth_repository.dart';
-import 'repositories/diary_repository.dart';
-import 'repositories/feed_repository.dart';
-import 'repositories/like_repository.dart';
-import 'repositories/medical_repository.dart';
-import 'repositories/pet_repository.dart';
-import 'repositories/profile_repository.dart';
-import 'repositories/walk_repository.dart';
+import 'repository/auth_repository.dart';
+import 'repository/auth_repository_impl.dart';
+import 'repository/diary_repository.dart';
+import 'repository/diary_repository_impl.dart';
+import 'repository/feed_repository.dart';
+import 'repository/feed_repository_impl.dart';
+import 'repository/like_repository.dart';
+import 'repository/like_repository_impl.dart';
+import 'repository/medical_repository.dart';
+import 'repository/medical_repository_impl.dart';
+import 'repository/pet_repository.dart';
+import 'repository/pet_repository_impl.dart';
+import 'repository/profile_repository.dart';
+import 'repository/profile_repository_impl.dart';
+import 'repository/walk_repository.dart';
+import 'repository/walk_repository_impl.dart';
 
 late final PackageInfo packageInfo;
 
@@ -71,50 +79,49 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         Provider<AuthRepository>(
-          create: (context) => AuthRepository(
+          create: (context) => AuthRepositoryImpl(
             firebaseAuth: FirebaseAuth.instance,
             firebaseFirestore: FirebaseFirestore.instance,
             firebaseStorage: FirebaseStorage.instance,
           ),
         ),
         Provider<PetRepository>(
-          create: (context) => PetRepository(
+          create: (context) => PetRepositoryImpl(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<WalkRepository>(
-          create: (context) => WalkRepository(
+          create: (context) => WalkRepositoryImpl(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<FeedRepository>(
-          create: (context) => FeedRepository(
-            firebaseStorage: FirebaseStorage.instance,
+          create: (context) => FeedRepositoryImpl(
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<DiaryRepository>(
-          create: (context) => DiaryRepository(
+          create: (context) => DiaryRepositoryImpl(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<MedicalRepository>(
-          create: (context) => MedicalRepository(
+          create: (context) => MedicalRepositoryImpl(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<ProfileRepository>(
-          create: (context) => ProfileRepository(
+          create: (context) => ProfileRepositoryImpl(
             firebaseStorage: FirebaseStorage.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),
         Provider<LikeRepository>(
-          create: (context) => LikeRepository(
+          create: (context) => LikeRepositoryImpl(
             firebaseFirestore: FirebaseFirestore.instance,
           ),
         ),

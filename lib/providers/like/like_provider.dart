@@ -3,7 +3,7 @@ import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/diary_model.dart';
 import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/repositories/like_repository.dart';
+import 'package:petdays/repository/like_repository.dart';
 
 class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
   LikeProvider() : super(LikeState.init());
@@ -17,9 +17,7 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
     try {
       // 기존 LikeList 특정 diaryId와 동일한 항목을 찾아 새로운 diaryModel로 교체
       List<DiaryModel> newLikeList = state.likeList.map((diary) {
-        return diary.diaryId == updatedDiaryModel.diaryId
-            ? updatedDiaryModel
-            : diary;
+        return diary.diaryId == updatedDiaryModel.diaryId ? updatedDiaryModel : diary;
       }).toList();
 
       state = state.copyWith(
@@ -27,8 +25,7 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
         likeList: newLikeList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -40,17 +37,15 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
     try {
       state = state.copyWith(likeStatus: LikeStatus.submitting);
 
-      List<DiaryModel> newLikeList = state.likeList
-          .where((element) => element.diaryId != diaryId)
-          .toList();
+      List<DiaryModel> newLikeList =
+          state.likeList.where((element) => element.diaryId != diaryId).toList();
 
       state = state.copyWith(
         likeStatus: LikeStatus.success,
         likeList: newLikeList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -72,8 +67,7 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
         likeList: newLikeList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }
@@ -85,16 +79,14 @@ class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
     try {
       String currentUserUid = read<User>().uid;
 
-      List<DiaryModel> likeList =
-          await read<LikeRepository>().getLikeList(uid: currentUserUid);
+      List<DiaryModel> likeList = await read<LikeRepository>().getLikeList(uid: currentUserUid);
 
       state = state.copyWith(
         likeStatus: LikeStatus.success,
         likeList: likeList,
       );
     } on CustomException catch (_) {
-      state =
-          state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
+      state = state.copyWith(likeStatus: LikeStatus.error); // 문제가 생기면 error로 상태 변경
       rethrow; // 호출한 곳에다가 다시 rethrow
     }
   }

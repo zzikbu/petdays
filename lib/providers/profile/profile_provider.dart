@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:petdays/exceptions/custom_exception.dart';
 import 'package:petdays/models/user_model.dart';
 import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/repositories/profile_repository.dart';
+import 'package:petdays/repository/profile_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {
@@ -56,8 +56,7 @@ class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {
     state = state.copyWith(profileStatus: ProfileStatus.fetching); // 상태 변경
 
     try {
-      UserModel userModel =
-          await read<ProfileRepository>().getProfile(uid: uid); // 접속 중인 사용자 정보
+      UserModel userModel = await read<ProfileRepository>().getProfile(uid: uid); // 접속 중인 사용자 정보
 
       state = state.copyWith(
         profileStatus: ProfileStatus.success, // 상태 변경
