@@ -1,21 +1,21 @@
 import 'package:go_router/go_router.dart';
-import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/screens/diary/diary_upload_screen.dart';
+import 'package:petdays/domain/model/diary_model.dart';
 
 import '../../../common/screens/select_pet_screen.dart';
-import '../../../models/medical_model.dart';
-import '../../../models/pet_model.dart';
-import '../../../screens/diary/diary_detail_screen.dart';
-import '../../../screens/diary/diary_home_screen.dart';
-import '../../../screens/home/home_screen.dart';
-import '../../../screens/medical/medical_detail_screen.dart';
-import '../../../screens/medical/medical_home_screen.dart';
-import '../../../screens/medical/medical_upload_screen.dart';
-import '../../../screens/pet/pet_detail_screen.dart';
-import '../../../screens/pet/pet_upload_screen.dart';
-import '../../../screens/walk/walk_detail_screen.dart';
-import '../../../screens/walk/walk_home_screen.dart';
-import '../../../screens/walk/walk_map_screen.dart';
+import '../../../domain/model/medical_model.dart';
+import '../../../domain/model/pet_model.dart';
+import '../../../presentation/diary/diary_detail_screen.dart';
+import '../../../presentation/diary/diary_home_screen.dart';
+import '../../../presentation/diary/diary_upload_screen.dart';
+import '../../../presentation/home/home_screen.dart';
+import '../../../presentation/medical/medical_detail_screen.dart';
+import '../../../presentation/medical/medical_home_screen.dart';
+import '../../../presentation/medical/medical_upload_screen.dart';
+import '../../../presentation/pet/pet_detail_screen.dart';
+import '../../../presentation/pet/pet_upload_screen.dart';
+import '../../../presentation/walk/walk_detail_screen.dart';
+import '../../../presentation/walk/walk_home_screen.dart';
+import '../../../presentation/walk/walk_map_screen.dart';
 import '../../enums/select_pet_for.dart';
 import '../navigator_keys.dart';
 

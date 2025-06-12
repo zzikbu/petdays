@@ -1,4 +1,4 @@
-import 'package:petdays/models/user_model.dart';
+import 'package:petdays/domain/model/user_model.dart';
 
 enum ProfileStatus {
   init,

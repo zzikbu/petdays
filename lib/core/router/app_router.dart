@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../common/screens/frame_screen.dart';
-import '../../screens/sign_in/reset_password_screen.dart';
-import '../../screens/sign_in/sign_in_screen.dart';
-import '../../screens/sign_up/sign_up_email_screen.dart';
+import '../../presentation/sign_in/reset_password_screen.dart';
+import '../../presentation/sign_in/sign_in_screen.dart';
+import '../../presentation/sign_up/sign_up_email_screen.dart';
 import 'branches/feed_branch.dart';
 import 'branches/home_branch.dart';
 import 'branches/my_branch.dart';

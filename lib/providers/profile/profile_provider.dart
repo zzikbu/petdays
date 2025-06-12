@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/user_model.dart';
+import 'package:petdays/domain/model/user_model.dart';
 import 'package:petdays/providers/profile/profile_state.dart';
-import 'package:petdays/repository/profile_repository.dart';
+import 'package:petdays/domain/repository/profile_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class ProfileProvider extends StateNotifier<ProfileState> with LocatorMixin {

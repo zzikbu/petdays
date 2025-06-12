@@ -1,4 +1,4 @@
-import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/domain/model/diary_model.dart';
 
 enum DiaryStatus {
   init, // DiaryState를 최초로 객체 생성한 상태

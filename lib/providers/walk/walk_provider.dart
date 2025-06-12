@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/walk_model.dart';
+import 'package:petdays/domain/model/walk_model.dart';
 import 'package:petdays/providers/walk/walk_state.dart';
-import 'package:petdays/repository/walk_repository.dart';
+import 'package:petdays/domain/repository/walk_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class WalkProvider extends StateNotifier<WalkState> with LocatorMixin {

@@ -1,8 +1,8 @@
-import 'package:petdays/models/diary_model.dart';
-import 'package:petdays/models/medical_model.dart';
-import 'package:petdays/models/walk_model.dart';
+import 'package:petdays/domain/model/diary_model.dart';
+import 'package:petdays/domain/model/medical_model.dart';
+import 'package:petdays/domain/model/walk_model.dart';
 
-import '../../models/pet_model.dart';
+import '../../domain/model/pet_model.dart';
 
 enum HomeStatus {
   init,

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../models/diary_model.dart';
+import '../../domain/model/diary_model.dart';
 import '../../palette.dart';
-import '../../screens/diary/diary_detail_screen.dart';
+import '../../presentation/diary/diary_detail_screen.dart';
 
 class DiaryCardWidget extends StatelessWidget {
   final DiaryModel diaryModel;

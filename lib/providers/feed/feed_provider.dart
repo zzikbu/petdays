@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/domain/model/diary_model.dart';
 import 'package:petdays/providers/feed/feed_state.dart';
-import 'package:petdays/repository/feed_repository.dart';
+import 'package:petdays/domain/repository/feed_repository.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class FeedProvider extends StateNotifier<FeedState> with LocatorMixin {

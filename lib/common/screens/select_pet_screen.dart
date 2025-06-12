@@ -11,13 +11,11 @@ import '../widgets/w_bottom_confirm_button.dart';
 import '../widgets/show_error_dialog.dart';
 import '../../core/enums/select_pet_for.dart';
 import '../../exceptions/custom_exception.dart';
-import '../../models/pet_model.dart';
+import '../../domain/model/pet_model.dart';
 import '../../palette.dart';
 import '../../providers/pet/pet_provider.dart';
 import '../../providers/pet/pet_state.dart';
 import '../../utils/permission_utils.dart';
-import '../../screens/medical/medical_upload_screen.dart';
-import '../../screens/walk/walk_map_screen.dart';
 
 class SelectPetScreen extends StatefulWidget {
   final SelectPetFor type;

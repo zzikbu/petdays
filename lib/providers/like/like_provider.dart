@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_state_notifier/flutter_state_notifier.dart';
 import 'package:petdays/exceptions/custom_exception.dart';
-import 'package:petdays/models/diary_model.dart';
+import 'package:petdays/domain/model/diary_model.dart';
 import 'package:petdays/providers/like/like_state.dart';
-import 'package:petdays/repository/like_repository.dart';
+import 'package:petdays/domain/repository/like_repository.dart';
 
 class LikeProvider extends StateNotifier<LikeState> with LocatorMixin {
   LikeProvider() : super(LikeState.init());

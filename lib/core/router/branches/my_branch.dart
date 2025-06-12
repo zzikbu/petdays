@@ -1,12 +1,12 @@
 import 'package:go_router/go_router.dart';
 
-import '../../../screens/my/delete_account_screen.dart';
-import '../../../screens/my/like_home_screen.dart';
-import '../../../screens/my/mypage_screen.dart';
-import '../../../screens/my/open_diary_home_screen.dart';
-import '../../../screens/my/terms_policy_screen.dart';
-import '../../../screens/my/update_nickname_screen.dart';
-import '../../../screens/pet/pet_upload_screen.dart';
+import '../../../presentation/my/delete_account_screen.dart';
+import '../../../presentation/my/like_home_screen.dart';
+import '../../../presentation/my/mypage_screen.dart';
+import '../../../presentation/my/open_diary_home_screen.dart';
+import '../../../presentation/my/terms_policy_screen.dart';
+import '../../../presentation/my/update_nickname_screen.dart';
+import '../../../presentation/pet/pet_upload_screen.dart';
 import '../navigator_keys.dart';
 
 final StatefulShellBranch myBranch = StatefulShellBranch(

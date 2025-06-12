@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 
-import '../../../screens/diary/diary_detail_screen.dart';
-import '../../../screens/feed/feed_home_screen.dart';
+import '../../../presentation/diary/diary_detail_screen.dart';
+import '../../../presentation/feed/feed_home_screen.dart';
 import '../navigator_keys.dart';
 
 final StatefulShellBranch feedBranch = StatefulShellBranch(

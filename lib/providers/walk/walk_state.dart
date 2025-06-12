@@ -1,4 +1,4 @@
-import 'package:petdays/models/walk_model.dart';
+import 'package:petdays/domain/model/walk_model.dart';
 
 enum WalkStatus {
   init,
